@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   Modal,
 } from 'react-native';
-import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
 import * as Clipboard from 'expo-clipboard';
 import * as Sharing from 'expo-sharing';
@@ -68,7 +68,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
     setIsPlaying(true);
 
     try {
-      // 1. Synthesize audio file via Google Speech API
+      // 1. Synthesize audio file via Google Speech API with SSML
       const fileUri = await generateGoogleGeminiAudio(outputText, selectedVoice.id);
       if (fileUri) {
         const sound = await playGoogleAudioFile(fileUri);
@@ -205,53 +205,56 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
         <Text style={styles.outputText}>{outputText}</Text>
       </View>
 
-      {/* Action Bar */}
-      <View style={styles.actionsBar}>
-        {/* Play Audio Button */}
-        <TouchableOpacity
-          style={[styles.actionBtn, isPlaying && styles.actionBtnActive]}
-          onPress={handlePlayTTS}
-          activeOpacity={0.7}
-        >
-          <Ionicons
-            name={isPlaying ? 'square' : 'volume-high'}
-            size={18}
-            color={isPlaying ? '#BA1A1A' : Colors.secondary}
-          />
-          <Text style={[styles.actionText, isPlaying && styles.actionTextActive]}>
-            {isPlaying ? 'Stop' : 'Play Audio'}
-          </Text>
-        </TouchableOpacity>
-
-        {/* Copy Button */}
-        <TouchableOpacity style={styles.actionBtn} onPress={handleCopy} activeOpacity={0.7}>
-          <Ionicons
-            name={copied ? 'checkmark' : 'copy-outline'}
-            size={18}
-            color={copied ? Colors.tertiary : Colors.onSurfaceVariant}
-          />
-          <Text style={[styles.actionText, copied && styles.actionTextSuccess]}>
-            {copied ? 'Copied' : 'Copy'}
-          </Text>
-        </TouchableOpacity>
-
-        {/* Save Button */}
-        {onSave && (
-          <TouchableOpacity style={styles.actionBtn} onPress={onSave} activeOpacity={0.7}>
+      {/* Action Bar Container */}
+      <View style={styles.actionsBarContainer}>
+        {/* Row 1: Quick Utility Controls */}
+        <View style={styles.topUtilityRow}>
+          {/* Play Audio Button */}
+          <TouchableOpacity
+            style={[styles.actionBtn, isPlaying && styles.actionBtnActive]}
+            onPress={handlePlayTTS}
+            activeOpacity={0.7}
+          >
             <Ionicons
-              name={isSaved ? 'bookmark' : 'bookmark-outline'}
-              size={18}
-              color={isSaved ? Colors.tertiary : Colors.onSurfaceVariant}
+              name={isPlaying ? 'square' : 'volume-high'}
+              size={16}
+              color={isPlaying ? '#BA1A1A' : Colors.secondary}
             />
-            <Text style={[styles.actionText, isSaved && styles.actionTextSuccess]}>
-              {isSaved ? 'Saved' : 'Save'}
+            <Text style={[styles.actionText, isPlaying && styles.actionTextActive]}>
+              {isPlaying ? 'Stop' : 'Play Audio'}
             </Text>
           </TouchableOpacity>
-        )}
 
-        {/* Send Voice Note to WhatsApp Button */}
+          {/* Copy Button */}
+          <TouchableOpacity style={styles.actionBtn} onPress={handleCopy} activeOpacity={0.7}>
+            <Ionicons
+              name={copied ? 'checkmark' : 'copy-outline'}
+              size={16}
+              color={copied ? Colors.tertiary : Colors.onSurfaceVariant}
+            />
+            <Text style={[styles.actionText, copied && styles.actionTextSuccess]}>
+              {copied ? 'Copied' : 'Copy'}
+            </Text>
+          </TouchableOpacity>
+
+          {/* Save Button */}
+          {onSave && (
+            <TouchableOpacity style={styles.actionBtn} onPress={onSave} activeOpacity={0.7}>
+              <Ionicons
+                name={isSaved ? 'bookmark' : 'bookmark-outline'}
+                size={16}
+                color={isSaved ? Colors.tertiary : Colors.onSurfaceVariant}
+              />
+              <Text style={[styles.actionText, isSaved && styles.actionTextSuccess]}>
+                {isSaved ? 'Saved' : 'Save'}
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Row 2: Prominent Full-Width Send Voice Note CTA */}
         <TouchableOpacity
-          style={styles.whatsappBtn}
+          style={styles.fullWidthWhatsappBtn}
           onPress={handleSendWhatsAppVoiceNote}
           disabled={isSharingVoice}
           activeOpacity={0.8}
@@ -260,8 +263,8 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
             <ActivityIndicator color="#FFF" size="small" />
           ) : (
             <>
-              <FontAwesome5 name="whatsapp" size={16} color="#FFF" />
-              <Text style={styles.whatsappBtnText}>Send Voice Note</Text>
+              <FontAwesome5 name="whatsapp" size={18} color="#FFF" />
+              <Text style={styles.fullWidthWhatsappBtnText}>Send Voice Note to WhatsApp</Text>
             </>
           )}
         </TouchableOpacity>
@@ -422,29 +425,33 @@ const styles = StyleSheet.create({
     color: Colors.onBackground,
     lineHeight: 24,
   },
-  actionsBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  actionsBarContainer: {
     marginTop: 16,
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: Colors.surfaceContainer,
+    gap: 10,
   },
-  actionBtn: {
+  topUtilityRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 8,
+  },
+  actionBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
     backgroundColor: Colors.surfaceContainer,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderRadius: 14,
   },
   actionBtnActive: {
     backgroundColor: '#FDE8E8',
   },
   actionText: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '600',
     color: Colors.onSurfaceVariant,
   },
@@ -456,19 +463,22 @@ const styles = StyleSheet.create({
     color: Colors.tertiary,
     fontWeight: '700',
   },
-  whatsappBtn: {
-    flex: 1,
+  fullWidthWhatsappBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
+    gap: 8,
     backgroundColor: Colors.whatsapp,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderRadius: 16,
+    paddingVertical: 14,
+    borderRadius: 18,
+    shadowColor: Colors.whatsapp,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 3,
   },
-  whatsappBtnText: {
-    fontSize: 12,
+  fullWidthWhatsappBtnText: {
+    fontSize: 14,
     fontWeight: '800',
     color: '#FFF',
   },

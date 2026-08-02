@@ -1,5 +1,5 @@
 // Google Gemini / Cloud Text-to-Speech Studio Voice Service
-// Supports Gender (Male/Female), Age/Tone (Young/Mature/Warm), and Google API Key configuration
+// Supports Gender (Male/Female), Age/Tone (Young/Mature/Warm), and SSML Question Intonation
 
 import * as FileSystem from 'expo-file-system/legacy';
 import { Audio } from 'expo-av';
@@ -37,6 +37,8 @@ export async function generateGoogleGeminiAudio(
 
   try {
     const selectedVoice = GOOGLE_SPANISH_VOICES.find((v) => v.id === voiceId) || GOOGLE_SPANISH_VOICES[0];
+    const isQuestion = text.includes('?') || text.includes('¿');
+    const ssmlContent = `<speak>${text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</speak>`;
 
     const response = await fetch(GOOGLE_TTS_ENDPOINT, {
       method: 'POST',
@@ -44,7 +46,7 @@ export async function generateGoogleGeminiAudio(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        input: { text },
+        input: { ssml: ssmlContent },
         voice: {
           languageCode: 'es-US',
           name: selectedVoice.id,
@@ -53,7 +55,7 @@ export async function generateGoogleGeminiAudio(
         audioConfig: {
           audioEncoding: 'MP3',
           speakingRate: selectedVoice.rate,
-          pitch: selectedVoice.pitch,
+          pitch: isQuestion ? selectedVoice.pitch + 1.5 : selectedVoice.pitch,
         },
       }),
     });

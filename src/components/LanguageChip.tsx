@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.secondaryLight,
   },
   flag: {
-    fontSize: 16,
+    fontSize: 20,
+    lineHeight: 24,
   },
   langName: {
     fontSize: 14,
