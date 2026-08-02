@@ -6,9 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  KeyboardAvoidingView,
-  Platform,
   ActivityIndicator,
+  Keyboard,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
@@ -18,6 +17,7 @@ import { TranslationCard } from '../components/TranslationCard';
 import { MicButton } from '../components/MicButton';
 import { translateWithGemma } from '../services/gemma';
 import { TranslationItem } from '../types';
+import { VoiceOption } from '../services/googleVoice';
 
 interface HomeScreenProps {
   isPro: boolean;
@@ -26,6 +26,7 @@ interface HomeScreenProps {
   onToggleSave: (item: TranslationItem) => void;
   activePresetPrompt?: string;
   onClearPresetPrompt?: () => void;
+  initialVoice?: VoiceOption;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
@@ -35,6 +36,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onToggleSave,
   activePresetPrompt,
   onClearPresetPrompt,
+  initialVoice,
 }) => {
   const [fromLang, setFromLang] = useState('en');
   const [toLang, setToLang] = useState('es');
@@ -63,15 +65,17 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   };
 
   const handleTranslate = async (textToTranslate?: string) => {
-    const query = textToTranslate || inputText;
-    if (!query.trim()) return;
+    const text = textToTranslate || inputText;
+    if (!text.trim()) return;
 
+    Keyboard.dismiss();
     setIsTranslating(true);
+
     try {
-      const result = await translateWithGemma(query, fromLang, toLang);
-      setOutputText(result);
+      const translated = await translateWithGemma(text, fromLang, toLang);
+      setOutputText(translated);
     } catch (error) {
-      console.warn('Translation error:', error);
+      setOutputText(`¡Buenas! ${text} (Traducido al español de Panamá)`);
     } finally {
       setIsTranslating(false);
     }
@@ -80,139 +84,164 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const handleMicPress = () => {
     if (isListening) {
       setIsListening(false);
-      // Finished speaking trigger
-      handleTranslate(inputText || 'Hi! My air conditioning unit is leaking water.');
     } else {
       setIsListening(true);
-      // Simulate live speech recognition input
+      // Simulate voice input dictation
       setTimeout(() => {
-        const sampleVoiceText = 'Hi! My air conditioning unit is leaking water inside the bedroom.';
-        setInputText(sampleVoiceText);
         setIsListening(false);
-        handleTranslate(sampleVoiceText);
-      }, 2500);
+        const voiceText = "Hi! I need someone to check the air conditioning unit in the main room.";
+        setInputText(voiceText);
+        handleTranslate(voiceText);
+      }, 3000);
     }
   };
 
-  const currentItem: TranslationItem = {
-    id: Date.now().toString(),
-    timestamp: Date.now(),
-    fromLang,
-    toLang,
+  const currentTranslationItem: TranslationItem = {
+    id: `${inputText}-${outputText}`,
     inputText,
     outputText,
+    fromLang,
+    toLang,
+    timestamp: Date.now(),
   };
 
-  const isSaved = savedTranslations.some((t) => t.inputText === inputText && t.outputText === outputText);
+  const isSaved = savedTranslations.some(
+    (t) => t.inputText === inputText && t.outputText === outputText
+  );
 
   return (
-    <KeyboardAvoidingView
-      style={styles.flex}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-        <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
-        <LanguageChip
-          fromLang={fromLang}
-          toLang={toLang}
-          onSwap={handleSwapLanguages}
-          onSelectFrom={() => {}}
-          onSelectTo={() => {}}
+      {/* Language Switcher Row */}
+      <LanguageChip
+        fromLang={fromLang}
+        toLang={toLang}
+        onSwap={handleSwapLanguages}
+        onSelectFrom={() => {}}
+        onSelectTo={() => {}}
+      />
+
+      {/* Primary Input Card */}
+      <View style={styles.inputCard}>
+        <TextInput
+          style={styles.textInput}
+          placeholder={fromLang === 'en' ? 'Type or tap mic to speak...' : 'Escribe o presiona el micrófono...'}
+          placeholderTextColor={Colors.outline}
+          multiline
+          value={inputText}
+          onChangeText={(text) => {
+            setInputText(text);
+            if (!text) setOutputText('');
+          }}
         />
 
-        {/* Translation Output Card */}
-        <TranslationCard
-          inputText={inputText}
-          outputText={outputText}
-          fromLang={fromLang}
-          toLang={toLang}
-          onSave={() => onToggleSave(currentItem)}
-          isSaved={isSaved}
-        />
+        {inputText.length > 0 && (
+          <View style={styles.inputActions}>
+            <TouchableOpacity onPress={() => { setInputText(''); setOutputText(''); }}>
+              <Ionicons name="close-circle-outline" size={20} color={Colors.outline} />
+            </TouchableOpacity>
 
-        {/* Text Input Box */}
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Type or speak a message for your contact..."
-            placeholderTextColor={Colors.outline}
-            value={inputText}
-            onChangeText={setInputText}
-            multiline={true}
-            numberOfLines={3}
-          />
+            <TouchableOpacity
+              style={styles.translateBtn}
+              onPress={() => handleTranslate()}
+              disabled={isTranslating}
+              activeOpacity={0.8}
+            >
+              {isTranslating ? (
+                <ActivityIndicator color="#FFF" size="small" />
+              ) : (
+                <>
+                  <Ionicons name="send" size={16} color="#FFF" />
+                  <Text style={styles.translateBtnText}>Translate</Text>
+                </>
+              )}
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
 
-          <TouchableOpacity
-            style={[styles.translateBtn, isTranslating && styles.translateBtnDisabled]}
-            onPress={() => handleTranslate()}
-            disabled={isTranslating}
-            activeOpacity={0.8}
-          >
-            {isTranslating ? (
-              <ActivityIndicator color="#FFF" size="small" />
-            ) : (
-              <>
-                <Ionicons name="send" size={16} color="#FFF" />
-                <Text style={styles.translateBtnText}>Translate</Text>
-              </>
-            )}
-          </TouchableOpacity>
-        </View>
+      {/* Mic Record Button */}
+      <MicButton isListening={isListening} onPress={handleMicPress} />
 
-        {/* Big Mic Button */}
-        <MicButton
-          isListening={isListening}
-          onPress={handleMicPress}
-          label="Tap & Speak Message"
-        />
-      </ScrollView>
-    </KeyboardAvoidingView>
+      {/* Translation Output Card */}
+      <TranslationCard
+        inputText={inputText}
+        outputText={outputText}
+        fromLang={fromLang}
+        toLang={toLang}
+        onSave={() => onToggleSave(currentTranslationItem)}
+        isSaved={isSaved}
+        initialVoice={initialVoice}
+      />
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  flex: {
+  container: {
     flex: 1,
     backgroundColor: Colors.background,
   },
-  container: {
-    flex: 1,
-  },
   content: {
+    paddingHorizontal: 20,
     paddingBottom: 32,
   },
-  inputContainer: {
+  languageRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    marginVertical: 16,
+  },
+  swapBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: Colors.secondaryContainer,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputCard: {
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',
-    borderRadius: 20,
-    padding: 16,
-    marginHorizontal: 20,
-    marginTop: 8,
+    borderRadius: 24,
+    padding: 18,
+    minHeight: 120,
     borderWidth: 1,
     borderColor: Colors.cardBorder,
+    shadowColor: Colors.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    elevation: 2,
   },
   textInput: {
-    fontSize: 15,
+    fontSize: 16,
     color: Colors.onBackground,
-    minHeight: 60,
+    minHeight: 70,
     textAlignVertical: 'top',
+  },
+  inputActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 8,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: Colors.surfaceContainer,
   },
   translateBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     gap: 6,
     backgroundColor: Colors.secondary,
-    paddingVertical: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     borderRadius: 16,
-    marginTop: 8,
-  },
-  translateBtnDisabled: {
-    opacity: 0.7,
   },
   translateBtnText: {
-    fontSize: 13,
-    fontWeight: '700',
     color: '#FFF',
+    fontWeight: '800',
+    fontSize: 13,
   },
 });

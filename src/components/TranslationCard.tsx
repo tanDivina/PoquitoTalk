@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -30,6 +30,7 @@ interface TranslationCardProps {
   category?: string;
   onSave?: () => void;
   isSaved?: boolean;
+  initialVoice?: VoiceOption;
 }
 
 export const TranslationCard: React.FC<TranslationCardProps> = ({
@@ -40,16 +41,24 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
   category,
   onSave,
   isSaved = false,
+  initialVoice,
 }) => {
-  const [selectedVoice, setSelectedVoice] = useState<VoiceOption>(GOOGLE_SPANISH_VOICES[0]);
+  const [selectedVoice, setSelectedVoice] = useState<VoiceOption>(initialVoice || GOOGLE_SPANISH_VOICES[0]);
   const [showVoiceModal, setShowVoiceModal] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSharingVoice, setIsSharingVoice] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  useEffect(() => {
+    if (initialVoice) {
+      setSelectedVoice(initialVoice);
+    }
+  }, [initialVoice]);
+
   // Play audio using selected Google Neural2 Voice
-  const handleSpeak = async () => {
+  const handlePlayTTS = async () => {
     if (!outputText) return;
+
     if (isPlaying) {
       Speech.stop();
       setIsPlaying(false);
@@ -59,13 +68,15 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
     setIsPlaying(true);
 
     try {
-      const googleAudioUri = await generateGoogleGeminiAudio(outputText, selectedVoice.id);
-      if (googleAudioUri) {
-        const soundObj = await playGoogleAudioFile(googleAudioUri);
-        if (soundObj) {
-          soundObj.setOnPlaybackStatusUpdate((status) => {
+      // 1. Synthesize audio file via Google Speech API
+      const fileUri = await generateGoogleGeminiAudio(outputText, selectedVoice.id);
+      if (fileUri) {
+        const sound = await playGoogleAudioFile(fileUri);
+        if (sound) {
+          sound.setOnPlaybackStatusUpdate((status) => {
             if (status.isLoaded && status.didJustFinish) {
               setIsPlaying(false);
+              sound.unloadAsync();
             }
           });
           return;
@@ -117,23 +128,13 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
     try {
       const isAvailable = await Sharing.isAvailableAsync();
       if (!isAvailable) {
-        Alert.alert('Sharing Unavailable', 'Audio file sharing is not supported in this preview mode.');
+        handleSendWhatsAppText();
         setIsSharingVoice(false);
         return;
       }
 
       // Generate local MP3 file with selected Google voice
       let audioUri = await generateGoogleGeminiAudio(outputText, selectedVoice.id);
-
-      // If offline/fallback, create local cache audio file
-      if (!audioUri) {
-        audioUri = `${FileSystem.cacheDirectory}poquitotalk_voicenote_${Date.now()}.mp3`;
-        await FileSystem.writeAsStringAsync(
-          audioUri,
-          'SUQzA3AAAAAAEFRJV...sample...', // Base64 audio representation
-          { encoding: FileSystem.EncodingType.Base64 }
-        ).catch(() => {});
-      }
 
       if (audioUri) {
         // Trigger Native Share Sheet for WhatsApp Audio Attachment
@@ -142,6 +143,8 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
           dialogTitle: `Send ${selectedVoice.name}'s Voice Note to WhatsApp`,
           UTI: 'public.mp3',
         });
+      } else {
+        handleSendWhatsAppText();
       }
     } catch (error) {
       handleSendWhatsAppText();
@@ -189,114 +192,130 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
             onPress={() => setShowVoiceModal(true)}
             activeOpacity={0.7}
           >
-            <Text style={styles.voiceFlag}>{selectedVoice.flag}</Text>
+            <FontAwesome5
+              name={selectedVoice.gender === 'MALE' ? 'male' : 'female'}
+              size={12}
+              color={Colors.secondary}
+            />
             <Text style={styles.voiceSelectorText}>{selectedVoice.name}</Text>
             <Ionicons name="chevron-down" size={12} color={Colors.secondary} />
           </TouchableOpacity>
         </View>
+
         <Text style={styles.outputText}>{outputText}</Text>
       </View>
 
-      {/* Main WhatsApp Actions Row */}
-      <View style={styles.whatsappActionsRow}>
-        {/* Send VOICE NOTE to WhatsApp */}
+      {/* Action Bar */}
+      <View style={styles.actionsBar}>
+        {/* Play Audio Button */}
         <TouchableOpacity
-          style={styles.voiceNoteBtn}
+          style={[styles.actionBtn, isPlaying && styles.actionBtnActive]}
+          onPress={handlePlayTTS}
+          activeOpacity={0.7}
+        >
+          <Ionicons
+            name={isPlaying ? 'square' : 'volume-high'}
+            size={18}
+            color={isPlaying ? '#BA1A1A' : Colors.secondary}
+          />
+          <Text style={[styles.actionText, isPlaying && styles.actionTextActive]}>
+            {isPlaying ? 'Stop' : 'Play Audio'}
+          </Text>
+        </TouchableOpacity>
+
+        {/* Copy Button */}
+        <TouchableOpacity style={styles.actionBtn} onPress={handleCopy} activeOpacity={0.7}>
+          <Ionicons
+            name={copied ? 'checkmark' : 'copy-outline'}
+            size={18}
+            color={copied ? Colors.tertiary : Colors.onSurfaceVariant}
+          />
+          <Text style={[styles.actionText, copied && styles.actionTextSuccess]}>
+            {copied ? 'Copied' : 'Copy'}
+          </Text>
+        </TouchableOpacity>
+
+        {/* Save Button */}
+        {onSave && (
+          <TouchableOpacity style={styles.actionBtn} onPress={onSave} activeOpacity={0.7}>
+            <Ionicons
+              name={isSaved ? 'bookmark' : 'bookmark-outline'}
+              size={18}
+              color={isSaved ? Colors.tertiary : Colors.onSurfaceVariant}
+            />
+            <Text style={[styles.actionText, isSaved && styles.actionTextSuccess]}>
+              {isSaved ? 'Saved' : 'Save'}
+            </Text>
+          </TouchableOpacity>
+        )}
+
+        {/* Send Voice Note to WhatsApp Button */}
+        <TouchableOpacity
+          style={styles.whatsappBtn}
           onPress={handleSendWhatsAppVoiceNote}
           disabled={isSharingVoice}
           activeOpacity={0.8}
         >
           {isSharingVoice ? (
-            <ActivityIndicator size="small" color="#FFF" />
+            <ActivityIndicator color="#FFF" size="small" />
           ) : (
             <>
-              <MaterialCommunityIcons name="microphone-outline" size={18} color="#FFF" />
-              <Text style={styles.voiceNoteBtnText}>Send Voice Note</Text>
+              <FontAwesome5 name="whatsapp" size={16} color="#FFF" />
+              <Text style={styles.whatsappBtnText}>Send Voice Note</Text>
             </>
           )}
         </TouchableOpacity>
+      </View>
 
-        {/* Send TEXT to WhatsApp */}
+      {/* Voice Persona Picker Modal */}
+      <Modal
+        visible={showVoiceModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowVoiceModal(false)}
+      >
         <TouchableOpacity
-          style={styles.whatsappTextBtn}
-          onPress={handleSendWhatsAppText}
-          activeOpacity={0.8}
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setShowVoiceModal(false)}
         >
-          <FontAwesome5 name="whatsapp" size={16} color={Colors.whatsapp} />
-          <Text style={styles.whatsappTextBtnText}>Send Text</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Secondary Utilities Row */}
-      <View style={styles.actionsRow}>
-        <Text style={styles.audioHintText}>Voice: {selectedVoice.name} ({selectedVoice.tone})</Text>
-        <View style={styles.utilityBtns}>
-          {/* Audio Play Button */}
-          <TouchableOpacity style={styles.iconBtn} onPress={handleSpeak} activeOpacity={0.7}>
-            <Ionicons
-              name={isPlaying ? 'stop' : 'volume-medium'}
-              size={18}
-              color={isPlaying ? Colors.secondary : Colors.primary}
-            />
-          </TouchableOpacity>
-
-          {/* Copy Button */}
-          <TouchableOpacity style={styles.iconBtn} onPress={handleCopy} activeOpacity={0.7}>
-            <Ionicons
-              name={copied ? 'checkmark' : 'copy-outline'}
-              size={18}
-              color={copied ? Colors.tertiary : Colors.primary}
-            />
-          </TouchableOpacity>
-
-          {/* Bookmark Star */}
-          {onSave && (
-            <TouchableOpacity style={styles.iconBtn} onPress={onSave} activeOpacity={0.7}>
-              <Ionicons
-                name={isSaved ? 'star' : 'star-outline'}
-                size={18}
-                color={isSaved ? '#E6A100' : Colors.primary}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
-
-      {/* Voice Persona Selection Modal */}
-      <Modal visible={showVoiceModal} animationType="fade" transparent={true}>
-        <View style={styles.modalOverlay}>
           <View style={styles.modalCard}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Select Voice Persona</Text>
+              <Text style={styles.modalTitle}>Select WhatsApp Voice Persona</Text>
               <TouchableOpacity onPress={() => setShowVoiceModal(false)}>
-                <Ionicons name="close" size={20} color={Colors.onBackground} />
+                <Ionicons name="close" size={20} color={Colors.onSurfaceVariant} />
               </TouchableOpacity>
             </View>
 
-            {GOOGLE_SPANISH_VOICES.map((v) => (
-              <TouchableOpacity
-                key={v.id}
-                style={[
-                  styles.voiceOptionRow,
-                  selectedVoice.id === v.id && styles.selectedVoiceOption,
-                ]}
-                onPress={() => {
-                  setSelectedVoice(v);
-                  setShowVoiceModal(false);
-                }}
-              >
-                <Text style={styles.voiceOptionFlag}>{v.flag}</Text>
-                <View style={styles.voiceOptionText}>
-                  <Text style={styles.voiceOptionName}>{v.name}</Text>
-                  <Text style={styles.voiceOptionTone}>{v.tone} • {v.gender}</Text>
-                </View>
-                {selectedVoice.id === v.id && (
-                  <Ionicons name="checkmark-circle" size={18} color={Colors.secondary} />
-                )}
-              </TouchableOpacity>
-            ))}
+            {GOOGLE_SPANISH_VOICES.map((v) => {
+              const isSelected = selectedVoice.id === v.id;
+              return (
+                <TouchableOpacity
+                  key={v.id}
+                  style={[styles.voiceOptionRow, isSelected && styles.voiceOptionRowSelected]}
+                  onPress={() => {
+                    setSelectedVoice(v);
+                    setShowVoiceModal(false);
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <FontAwesome5
+                    name={v.gender === 'MALE' ? 'male' : 'female'}
+                    size={20}
+                    color={isSelected ? Colors.secondary : Colors.outline}
+                  />
+                  <View style={styles.voiceOptionInfo}>
+                    <Text style={[styles.voiceOptionName, isSelected && styles.voiceOptionNameSelected]}>
+                      {v.name}
+                    </Text>
+                    <Text style={styles.voiceOptionTone}>{v.tone}</Text>
+                  </View>
+                  {isSelected && <Ionicons name="checkmark" size={18} color={Colors.secondary} />}
+                </TouchableOpacity>
+              );
+            })}
           </View>
-        </View>
+        </TouchableOpacity>
       </Modal>
     </View>
   );
@@ -304,48 +323,43 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
 const styles = StyleSheet.create({
   placeholderCard: {
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
     borderRadius: 24,
     padding: 24,
-    marginHorizontal: 20,
-    marginVertical: 12,
     alignItems: 'center',
-    justifyContent: 'center',
+    marginVertical: 12,
     borderWidth: 1,
     borderColor: Colors.cardBorder,
-    borderStyle: 'dashed',
-    minHeight: 180,
   },
   placeholderTitle: {
     fontSize: 16,
     fontWeight: '700',
     color: Colors.onBackground,
-    marginTop: 12,
+    marginTop: 8,
   },
   placeholderDesc: {
-    fontSize: 13,
+    fontSize: 12,
     color: Colors.onSurfaceVariant,
     textAlign: 'center',
-    marginTop: 6,
+    marginTop: 4,
     lineHeight: 18,
   },
   card: {
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',
     borderRadius: 24,
     padding: 20,
-    marginHorizontal: 20,
     marginVertical: 12,
     borderWidth: 1,
     borderColor: Colors.cardBorder,
     shadowColor: Colors.shadow,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 3,
   },
   categoryBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: Colors.tertiaryContainer,
+    backgroundColor: Colors.surfaceContainer,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
@@ -354,38 +368,36 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 11,
     fontWeight: '700',
-    color: Colors.tertiary,
-    textTransform: 'uppercase',
+    color: Colors.secondary,
   },
   sectionBlock: {
-    marginVertical: 4,
+    marginBottom: 8,
   },
   sectionLabel: {
-    fontSize: 11,
-    fontWeight: '700',
+    fontSize: 10,
+    fontWeight: '800',
     color: Colors.outline,
     letterSpacing: 0.5,
     marginBottom: 4,
   },
   inputText: {
     fontSize: 15,
-    fontWeight: '400',
-    color: Colors.onSurfaceVariant,
+    color: Colors.onBackground,
     lineHeight: 22,
   },
   divider: {
     height: 1,
-    backgroundColor: Colors.cardBorder,
+    backgroundColor: Colors.surfaceContainer,
     marginVertical: 12,
   },
   outputHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   outputLabel: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '800',
     color: Colors.secondary,
     letterSpacing: 0.5,
@@ -393,16 +405,11 @@ const styles = StyleSheet.create({
   voiceSelectorChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 6,
     backgroundColor: Colors.secondaryContainer,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: Colors.secondaryLight,
-  },
-  voiceFlag: {
-    fontSize: 12,
   },
   voiceSelectorText: {
     fontSize: 11,
@@ -410,88 +417,71 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
   },
   outputText: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '600',
     color: Colors.onBackground,
-    lineHeight: 26,
+    lineHeight: 24,
   },
-  whatsappActionsRow: {
+  actionsBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
     marginTop: 16,
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: Colors.surfaceContainer,
   },
-  voiceNoteBtn: {
-    flex: 1.2,
+  actionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-    backgroundColor: Colors.secondary,
-    paddingVertical: 11,
-    paddingHorizontal: 12,
-    borderRadius: 20,
+    gap: 4,
+    backgroundColor: Colors.surfaceContainer,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 14,
   },
-  voiceNoteBtnText: {
-    fontSize: 13,
+  actionBtnActive: {
+    backgroundColor: '#FDE8E8',
+  },
+  actionText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: Colors.onSurfaceVariant,
+  },
+  actionTextActive: {
+    color: '#BA1A1A',
     fontWeight: '700',
-    color: '#FFF',
   },
-  whatsappTextBtn: {
+  actionTextSuccess: {
+    color: Colors.tertiary,
+    fontWeight: '700',
+  },
+  whatsappBtn: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: Colors.surfaceContainer,
-    borderWidth: 1,
-    borderColor: Colors.whatsapp,
-    paddingVertical: 11,
+    backgroundColor: Colors.whatsapp,
+    paddingVertical: 10,
     paddingHorizontal: 12,
-    borderRadius: 20,
+    borderRadius: 16,
   },
-  whatsappTextBtnText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: Colors.whatsappDark,
-  },
-  actionsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 12,
-  },
-  audioHintText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: Colors.outline,
-  },
-  utilityBtns: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  iconBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: Colors.surfaceContainer,
-    alignItems: 'center',
-    justifyContent: 'center',
+  whatsappBtnText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#FFF',
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(27, 28, 26, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: 24,
   },
   modalCard: {
     width: '100%',
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
     borderRadius: 24,
     padding: 20,
   },
@@ -502,7 +492,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '800',
     color: Colors.onBackground,
   },
@@ -510,20 +500,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    padding: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
     borderRadius: 16,
+    marginBottom: 6,
     backgroundColor: Colors.surfaceContainer,
-    marginBottom: 8,
   },
-  selectedVoiceOption: {
+  voiceOptionRowSelected: {
     backgroundColor: Colors.secondaryContainer,
     borderWidth: 1,
     borderColor: Colors.secondary,
   },
-  voiceOptionFlag: {
-    fontSize: 22,
-  },
-  voiceOptionText: {
+  voiceOptionInfo: {
     flex: 1,
   },
   voiceOptionName: {
@@ -531,9 +519,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: Colors.onBackground,
   },
+  voiceOptionNameSelected: {
+    color: Colors.secondary,
+  },
   voiceOptionTone: {
     fontSize: 12,
     color: Colors.onSurfaceVariant,
-    marginTop: 2,
   },
 });
