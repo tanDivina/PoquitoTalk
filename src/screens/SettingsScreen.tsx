@@ -23,7 +23,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
       <View style={styles.card}>
         <View style={styles.cardRow}>
           <View style={styles.iconCircle}>
-            <Ionicons name="sparkles" size={20} color={Colors.secondary} />
+            <Ionicons name="card-outline" size={20} color={Colors.secondary} />
           </View>
           <View style={styles.cardText}>
             <Text style={styles.cardTitle}>Subscription Plan</Text>

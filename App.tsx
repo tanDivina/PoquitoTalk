@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Colors } from './src/theme/colors';
@@ -53,118 +54,127 @@ export default function App() {
 
   if (showOnboarding) {
     return (
-      <SafeAreaView style={styles.safeArea}>
-        <StatusBar style="dark" backgroundColor={Colors.background} />
-        <OnboardingScreen onComplete={handleCompleteOnboarding} />
-      </SafeAreaView>
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.safeArea}>
+          <StatusBar style="dark" backgroundColor={Colors.background} />
+          <OnboardingScreen onComplete={handleCompleteOnboarding} />
+        </SafeAreaView>
+      </SafeAreaProvider>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar style="dark" backgroundColor={Colors.background} />
-      <NavigationContainer>
-        <Tab.Navigator
-          id="mainTabs"
-          screenOptions={{
-            headerShown: false,
-            tabBarStyle: styles.tabBar,
-            tabBarActiveTintColor: Colors.secondary,
-            tabBarInactiveTintColor: Colors.outline,
-            tabBarLabelStyle: styles.tabBarLabel,
-          }}
-        >
-          <Tab.Screen
-            name="Translate"
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <MaterialCommunityIcons name="chat-processing-outline" size={size} color={color} />
-              ),
+    <SafeAreaProvider>
+      <View style={styles.mainContainer}>
+        <StatusBar style="dark" backgroundColor={Colors.background} />
+        <NavigationContainer>
+          <Tab.Navigator
+            id="mainTabs"
+            screenOptions={{
+              headerShown: false,
+              tabBarStyle: styles.tabBar,
+              tabBarActiveTintColor: Colors.secondary,
+              tabBarInactiveTintColor: Colors.outline,
+              tabBarLabelStyle: styles.tabBarLabel,
+              tabBarItemStyle: styles.tabBarItem,
             }}
           >
-            {(props) => (
-              <HomeScreen
-                {...props}
-                isPro={isPro}
-                onOpenPaywall={() => setPaywallVisible(true)}
-                savedTranslations={savedTranslations}
-                onToggleSave={handleToggleSave}
-                activePresetPrompt={activePresetPrompt}
-                onClearPresetPrompt={() => setActivePresetPrompt(undefined)}
-              />
-            )}
-          </Tab.Screen>
+            <Tab.Screen
+              name="Translate"
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons name="chat-processing-outline" size={size} color={color} />
+                ),
+              }}
+            >
+              {(props) => (
+                <HomeScreen
+                  {...props}
+                  isPro={isPro}
+                  onOpenPaywall={() => setPaywallVisible(true)}
+                  savedTranslations={savedTranslations}
+                  onToggleSave={handleToggleSave}
+                  activePresetPrompt={activePresetPrompt}
+                  onClearPresetPrompt={() => setActivePresetPrompt(undefined)}
+                />
+              )}
+            </Tab.Screen>
 
-          <Tab.Screen
-            name="Presets"
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <MaterialCommunityIcons name="toolbox-outline" size={size} color={color} />
-              ),
-            }}
-          >
-            {(props) => (
-              <PresetsScreen
-                {...props}
-                isPro={isPro}
-                onOpenPaywall={() => setPaywallVisible(true)}
-                onSelectPhrasePrompt={(promptText) => {
-                  setActivePresetPrompt(promptText);
-                  props.navigation.navigate('Translate');
-                }}
-              />
-            )}
-          </Tab.Screen>
+            <Tab.Screen
+              name="Presets"
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons name="toolbox-outline" size={size} color={color} />
+                ),
+              }}
+            >
+              {(props) => (
+                <PresetsScreen
+                  {...props}
+                  isPro={isPro}
+                  onOpenPaywall={() => setPaywallVisible(true)}
+                  onSelectPhrasePrompt={(promptText) => {
+                    setActivePresetPrompt(promptText);
+                    props.navigation.navigate('Translate');
+                  }}
+                />
+              )}
+            </Tab.Screen>
 
-          <Tab.Screen
-            name="Saved"
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="star-outline" size={size} color={color} />
-              ),
-            }}
-          >
-            {(props) => (
-              <SavedScreen
-                {...props}
-                isPro={isPro}
-                onOpenPaywall={() => setPaywallVisible(true)}
-                savedTranslations={savedTranslations}
-                onToggleSave={handleToggleSave}
-              />
-            )}
-          </Tab.Screen>
+            <Tab.Screen
+              name="Saved"
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="bookmark-outline" size={size} color={color} />
+                ),
+              }}
+            >
+              {(props) => (
+                <SavedScreen
+                  {...props}
+                  isPro={isPro}
+                  onOpenPaywall={() => setPaywallVisible(true)}
+                  savedTranslations={savedTranslations}
+                  onToggleSave={handleToggleSave}
+                />
+              )}
+            </Tab.Screen>
 
-          <Tab.Screen
-            name="Settings"
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="settings-outline" size={size} color={color} />
-              ),
-            }}
-          >
-            {(props) => (
-              <SettingsScreen
-                {...props}
-                isPro={isPro}
-                onOpenPaywall={() => setPaywallVisible(true)}
-              />
-            )}
-          </Tab.Screen>
-        </Tab.Navigator>
-      </NavigationContainer>
+            <Tab.Screen
+              name="Settings"
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="settings-outline" size={size} color={color} />
+                ),
+              }}
+            >
+              {(props) => (
+                <SettingsScreen
+                  {...props}
+                  isPro={isPro}
+                  onOpenPaywall={() => setPaywallVisible(true)}
+                />
+              )}
+            </Tab.Screen>
+          </Tab.Navigator>
+        </NavigationContainer>
 
-      {/* RevenueCat Paywall Modal */}
-      <PaywallModal
-        visible={paywallVisible}
-        onClose={() => setPaywallVisible(false)}
-        onSuccess={() => setIsPro(true)}
-      />
-    </SafeAreaView>
+        {/* RevenueCat Paywall Modal */}
+        <PaywallModal
+          visible={paywallVisible}
+          onClose={() => setPaywallVisible(false)}
+          onSuccess={() => setIsPro(true)}
+        />
+      </View>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
   safeArea: {
     flex: 1,
     backgroundColor: Colors.background,
@@ -173,9 +183,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',
     borderTopWidth: 1,
     borderTopColor: Colors.cardBorder,
-    height: 60,
-    paddingBottom: 8,
-    paddingTop: 6,
+    height: Platform.OS === 'ios' ? 84 : 65,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 10,
+    paddingTop: 8,
+    elevation: 8,
+    shadowColor: Colors.shadow,
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+  },
+  tabBarItem: {
+    paddingVertical: 2,
   },
   tabBarLabel: {
     fontSize: 11,

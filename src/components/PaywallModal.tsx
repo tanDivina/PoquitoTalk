@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { revenueCat } from '../services/revenuecat';
 
@@ -54,7 +54,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
           <ScrollView contentContainerStyle={styles.content}>
             {/* Header Badge */}
             <View style={styles.crownContainer}>
-              <Ionicons name="sparkles" size={32} color={Colors.secondary} />
+              <MaterialCommunityIcons name="crown" size={32} color={Colors.secondary} />
             </View>
 
             <Text style={styles.title}>PoquitoTalk Pro</Text>

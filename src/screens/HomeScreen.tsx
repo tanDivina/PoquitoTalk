@@ -153,7 +153,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               <ActivityIndicator color="#FFF" size="small" />
             ) : (
               <>
-                <Ionicons name="sparkles" size={16} color="#FFF" />
+                <Ionicons name="send" size={16} color="#FFF" />
                 <Text style={styles.translateBtnText}>Translate</Text>
               </>
             )}

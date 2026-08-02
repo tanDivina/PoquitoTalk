@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ isPro = false, onOpenPaywall }) 
         onPress={onOpenPaywall}
         activeOpacity={0.8}
       >
-        <Ionicons name="sparkles" size={14} color={isPro ? Colors.tertiary : Colors.secondary} />
+        <MaterialCommunityIcons name="crown" size={14} color={isPro ? Colors.tertiary : Colors.secondary} />
         <Text style={[styles.proText, isPro && styles.proTextActive]}>
           {isPro ? 'PRO ACTIVE' : 'GET PRO'}
         </Text>

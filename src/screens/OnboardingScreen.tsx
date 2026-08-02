@@ -93,7 +93,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
               </View>
 
               <View style={styles.featureItem}>
-                <Ionicons name="sparkles" size={22} color={Colors.tertiary} />
+                <Ionicons name="flash-outline" size={22} color={Colors.tertiary} />
                 <View style={styles.featureText}>
                   <Text style={styles.featureTitle}>Google Gemini AI Engine</Text>
                   <Text style={styles.featureDesc}>
@@ -251,7 +251,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
 
             <TouchableOpacity style={styles.primaryBtn} onPress={handleFinish} activeOpacity={0.8}>
               <Text style={styles.primaryBtnText}>Start Using PoquitoTalk</Text>
-              <Ionicons name="sparkles" size={18} color="#FFF" />
+              <Ionicons name="arrow-forward" size={18} color="#FFF" />
             </TouchableOpacity>
           </View>
         )}
