@@ -140,7 +140,11 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
                   onPress={() => updateVoicePreference('MALE', selectedAgeGroup)}
                   activeOpacity={0.8}
                 >
-                  <Text style={styles.optionEmoji}>👨</Text>
+                  <FontAwesome5
+                    name="male"
+                    size={22}
+                    color={selectedGender === 'MALE' ? Colors.secondary : Colors.outline}
+                  />
                   <Text style={[styles.optionText, selectedGender === 'MALE' && styles.optionTextSelected]}>
                     Male Voice
                   </Text>
@@ -151,7 +155,11 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
                   onPress={() => updateVoicePreference('FEMALE', selectedAgeGroup)}
                   activeOpacity={0.8}
                 >
-                  <Text style={styles.optionEmoji}>👩</Text>
+                  <FontAwesome5
+                    name="female"
+                    size={22}
+                    color={selectedGender === 'FEMALE' ? Colors.secondary : Colors.outline}
+                  />
                   <Text style={[styles.optionText, selectedGender === 'FEMALE' && styles.optionTextSelected]}>
                     Female Voice
                   </Text>
@@ -168,7 +176,11 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
                   onPress={() => updateVoicePreference(selectedGender, 'YOUNG')}
                   activeOpacity={0.8}
                 >
-                  <Text style={styles.optionEmoji}>⚡</Text>
+                  <Ionicons
+                    name="flash-outline"
+                    size={22}
+                    color={selectedAgeGroup === 'YOUNG' ? Colors.secondary : Colors.outline}
+                  />
                   <Text style={[styles.optionText, selectedAgeGroup === 'YOUNG' && styles.optionTextSelected]}>
                     Casual & Energetic
                   </Text>
@@ -179,7 +191,11 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
                   onPress={() => updateVoicePreference(selectedGender, 'MATURE')}
                   activeOpacity={0.8}
                 >
-                  <Text style={styles.optionEmoji}>🎙️</Text>
+                  <MaterialCommunityIcons
+                    name="microphone-outline"
+                    size={22}
+                    color={selectedAgeGroup === 'MATURE' ? Colors.secondary : Colors.outline}
+                  />
                   <Text style={[styles.optionText, selectedAgeGroup === 'MATURE' && styles.optionTextSelected]}>
                     Calm & Authoritative
                   </Text>
@@ -390,13 +406,14 @@ const styles = StyleSheet.create({
   },
   optionChip: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'center',
+    gap: 6,
     backgroundColor: Colors.surfaceContainer,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    borderRadius: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 8,
+    borderRadius: 18,
     borderWidth: 1,
     borderColor: Colors.cardBorder,
   },
@@ -404,13 +421,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondaryContainer,
     borderColor: Colors.secondary,
   },
-  optionEmoji: {
-    fontSize: 18,
-  },
   optionText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '600',
     color: Colors.onSurfaceVariant,
+    textAlign: 'center',
   },
   optionTextSelected: {
     fontWeight: '700',
