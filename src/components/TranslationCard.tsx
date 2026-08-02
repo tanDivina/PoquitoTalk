@@ -78,8 +78,8 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
     // Expo Speech Fallback
     Speech.speak(outputText, {
       language: 'es-PA',
-      pitch: selectedVoice.gender === 'FEMALE' ? 1.2 : 0.9,
-      rate: 0.88,
+      pitch: selectedVoice.gender === 'MALE' ? 0.70 : 1.28,
+      rate: selectedVoice.rate || 0.88,
       onDone: () => setIsPlaying(false),
       onError: () => setIsPlaying(false),
     });

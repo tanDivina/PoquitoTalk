@@ -10,14 +10,16 @@ export interface VoiceOption {
   gender: 'MALE' | 'FEMALE';
   tone: string;
   flag: string;
+  pitch: number;
+  rate: number;
 }
 
 export const GOOGLE_SPANISH_VOICES: VoiceOption[] = [
-  { id: 'es-US-Neural2-B', name: 'Diego', gender: 'MALE', tone: 'Warm & Natural (Panamá)', flag: '👨' },
-  { id: 'es-US-Neural2-A', name: 'Sofia', gender: 'FEMALE', tone: 'Clear & Natural', flag: '👩' },
-  { id: 'es-US-Journey-F', name: 'Valeria', gender: 'FEMALE', tone: 'Young & Expressive (Studio)', flag: '👧' },
-  { id: 'es-US-Neural2-C', name: 'Mateo', gender: 'MALE', tone: 'Mature & Deep', flag: '🧔' },
-  { id: 'es-US-Neural2-F', name: 'Lucía', gender: 'FEMALE', tone: 'Young & Friendly', flag: '✨' },
+  { id: 'es-US-Neural2-B', name: 'Diego', gender: 'MALE', tone: 'Warm & Natural Male (Panamá)', flag: '👨', pitch: -4.0, rate: 0.88 },
+  { id: 'es-US-Neural2-A', name: 'Sofia', gender: 'FEMALE', tone: 'Clear & Natural Female', flag: '👩', pitch: 2.5, rate: 0.92 },
+  { id: 'es-US-Journey-F', name: 'Valeria', gender: 'FEMALE', tone: 'Young & Expressive Female (Studio)', flag: '👧', pitch: 4.5, rate: 0.98 },
+  { id: 'es-US-Neural2-C', name: 'Mateo', gender: 'MALE', tone: 'Mature & Deep Male', flag: '🧔', pitch: -6.5, rate: 0.84 },
+  { id: 'es-US-Neural2-F', name: 'Lucía', gender: 'FEMALE', tone: 'Young & Friendly Female', flag: '✨', pitch: 3.5, rate: 0.94 },
 ];
 
 let customApiKey = '';
@@ -50,8 +52,8 @@ export async function generateGoogleGeminiAudio(
         },
         audioConfig: {
           audioEncoding: 'MP3',
-          speakingRate: selectedVoice.id.includes('Journey') ? 0.95 : 0.90,
-          pitch: 0.0,
+          speakingRate: selectedVoice.rate,
+          pitch: selectedVoice.pitch,
         },
       }),
     });
