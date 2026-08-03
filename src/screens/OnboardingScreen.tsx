@@ -207,10 +207,16 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
             <View style={styles.voiceResultCard}>
               <Text style={styles.voiceResultTag}>PAIRED VOICE PERSONA</Text>
               <View style={styles.voiceResultHeader}>
-                <Text style={styles.voiceResultFlag}>{selectedVoice.flag}</Text>
+                <View style={styles.voiceIconBubble}>
+                  <FontAwesome5
+                    name={selectedVoice.gender === 'MALE' ? 'male' : 'female'}
+                    size={22}
+                    color={Colors.secondary}
+                  />
+                </View>
                 <View style={styles.voiceResultInfo}>
                   <Text style={styles.voiceResultName}>{selectedVoice.name}</Text>
-                  <Text style={styles.voiceResultDesc}>Google Neural2 • {selectedVoice.tone}</Text>
+                  <Text style={styles.voiceResultDesc}>{selectedVoice.tone}</Text>
                 </View>
               </View>
             </View>
@@ -231,7 +237,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
 
             <Text style={styles.title}>You’re All Set, {userName || 'Friend'}!</Text>
             <Text style={styles.subtitle}>
-              Your voice persona <Text style={styles.highlightText}>{selectedVoice.name} ({selectedVoice.flag})</Text> is locked in and ready for WhatsApp voice notes.
+              Your voice persona <Text style={styles.highlightText}>{selectedVoice.name}</Text> ({selectedVoice.tone}) is locked in and ready for WhatsApp voice notes.
             </Text>
 
             <View style={styles.summaryCard}>
@@ -451,8 +457,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
   },
-  voiceResultFlag: {
-    fontSize: 24,
+  voiceIconBubble: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: Colors.secondaryContainer,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   voiceResultInfo: {
     flex: 1,

@@ -16,10 +16,10 @@ export interface VoiceOption {
 
 export const GOOGLE_SPANISH_VOICES: VoiceOption[] = [
   { id: 'es-US-Neural2-B', name: 'Diego', gender: 'MALE', tone: 'Warm & Natural Male (Panamá)', flag: '👨', pitch: -4.0, rate: 0.88 },
-  { id: 'es-US-Neural2-A', name: 'Sofia', gender: 'FEMALE', tone: 'Clear & Natural Female', flag: '👩', pitch: 2.5, rate: 0.92 },
-  { id: 'es-US-Journey-F', name: 'Valeria', gender: 'FEMALE', tone: 'Young & Expressive Female (Studio)', flag: '👧', pitch: 4.5, rate: 0.98 },
-  { id: 'es-US-Neural2-C', name: 'Mateo', gender: 'MALE', tone: 'Mature & Deep Male', flag: '🧔', pitch: -6.5, rate: 0.84 },
-  { id: 'es-US-Neural2-F', name: 'Lucía', gender: 'FEMALE', tone: 'Young & Friendly Female', flag: '✨', pitch: 3.5, rate: 0.94 },
+  { id: 'es-US-Neural2-A', name: 'Sofia', gender: 'FEMALE', tone: 'Clear & Friendly Female', flag: '👩', pitch: 2.5, rate: 0.92 },
+  { id: 'es-US-Journey-F', name: 'Valeria', gender: 'FEMALE', tone: 'Young & Expressive Female', flag: '👧', pitch: 4.5, rate: 0.98 },
+  { id: 'es-US-Neural2-C', name: 'Mateo', gender: 'MALE', tone: 'Calm & Authoritative Male', flag: '🧔', pitch: -6.5, rate: 0.84 },
+  { id: 'es-US-Neural2-F', name: 'Lucía', gender: 'FEMALE', tone: 'Bright & Friendly Female', flag: '✨', pitch: 3.5, rate: 0.94 },
 ];
 
 let customApiKey = '';
