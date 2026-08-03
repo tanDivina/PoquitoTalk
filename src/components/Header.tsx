@@ -6,9 +6,10 @@ import { Colors } from '../theme/colors';
 interface HeaderProps {
   isPro?: boolean;
   onOpenPaywall: () => void;
+  onResetOnboarding?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ isPro = false, onOpenPaywall }) => {
+export const Header: React.FC<HeaderProps> = ({ isPro = false, onOpenPaywall, onResetOnboarding }) => {
   return (
     <View style={styles.container}>
       <View style={styles.brandContainer}>
@@ -16,8 +17,20 @@ export const Header: React.FC<HeaderProps> = ({ isPro = false, onOpenPaywall }) 
           <MaterialCommunityIcons name="chat-processing-outline" size={22} color={Colors.secondary} />
         </View>
         <View>
-          <Text style={styles.title}>PoquitoTalk</Text>
-          <Text style={styles.subtitle}>Friendly Local Translations</Text>
+          <View style={styles.titleRow}>
+            <Text style={styles.title}>PoquitoTalk</Text>
+            {onResetOnboarding && (
+              <TouchableOpacity
+                style={styles.intakeBadge}
+                onPress={onResetOnboarding}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="refresh-circle-outline" size={12} color={Colors.secondary} />
+                <Text style={styles.intakeBadgeText}>v1.0.2 Intake</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          <Text style={styles.subtitle}>Bocas del Toro, Panamá 🇵🇦</Text>
         </View>
       </View>
 
@@ -58,11 +71,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
   title: {
     fontSize: 20,
     fontWeight: '700',
     color: Colors.onBackground,
     letterSpacing: -0.3,
+  },
+  intakeBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    backgroundColor: Colors.secondaryContainer,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  intakeBadgeText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: Colors.secondary,
   },
   subtitle: {
     fontSize: 12,

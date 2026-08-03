@@ -27,6 +27,7 @@ interface HomeScreenProps {
   activePresetPrompt?: string;
   onClearPresetPrompt?: () => void;
   initialVoice?: VoiceOption;
+  onResetOnboarding?: () => void;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
@@ -37,6 +38,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   activePresetPrompt,
   onClearPresetPrompt,
   initialVoice,
+  onResetOnboarding,
 }) => {
   const [fromLang, setFromLang] = useState('en');
   const [toLang, setToLang] = useState('es');
@@ -123,7 +125,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
+      <Header isPro={isPro} onOpenPaywall={onOpenPaywall} onResetOnboarding={onResetOnboarding} />
 
       {/* Language Switcher Row */}
       <LanguageChip

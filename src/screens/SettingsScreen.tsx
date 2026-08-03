@@ -1,18 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, Alert } from 'react-native';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 
 interface SettingsScreenProps {
   isPro: boolean;
   onOpenPaywall: () => void;
+  onResetOnboarding?: () => void;
 }
 
-export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPaywall }) => {
+export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPaywall, onResetOnboarding }) => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
+      <Header isPro={isPro} onOpenPaywall={onOpenPaywall} onResetOnboarding={onResetOnboarding} />
 
       <View style={styles.titleSection}>
         <Text style={styles.title}>Settings & Account</Text>
@@ -41,6 +42,21 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
           <Text style={styles.actionBtnText}>{isPro ? 'Manage Subscription' : 'Upgrade to Pro'}</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Intake Reset Card */}
+      {onResetOnboarding && (
+        <View style={styles.card}>
+          <TouchableOpacity
+            style={styles.linkRow}
+            onPress={onResetOnboarding}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="refresh-circle-outline" size={20} color={Colors.secondary} />
+            <Text style={styles.linkLabel}>Re-run First-Time Intake Flow (Onboarding)</Text>
+            <Ionicons name="chevron-forward" size={16} color={Colors.outline} />
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* Hackathon Info Card */}
       <View style={styles.card}>
@@ -90,7 +106,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.versionText}>PoquitoTalk v1.0.0 • Built for RevenueCat Shipaton</Text>
+      <Text style={styles.versionText}>PoquitoTalk v1.0.2 • Built for RevenueCat Shipaton</Text>
     </ScrollView>
   );
 };

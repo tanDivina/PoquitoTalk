@@ -97,6 +97,7 @@ export default function App() {
                   activePresetPrompt={activePresetPrompt}
                   onClearPresetPrompt={() => setActivePresetPrompt(undefined)}
                   initialVoice={userVoice}
+                  onResetOnboarding={() => setShowOnboarding(true)}
                 />
               )}
             </Tab.Screen>
@@ -154,6 +155,7 @@ export default function App() {
                   {...props}
                   isPro={isPro}
                   onOpenPaywall={() => setPaywallVisible(true)}
+                  onResetOnboarding={() => setShowOnboarding(true)}
                 />
               )}
             </Tab.Screen>
