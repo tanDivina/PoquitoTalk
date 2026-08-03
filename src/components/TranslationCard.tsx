@@ -86,14 +86,48 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
       console.warn('Google audio playback:', e);
     }
 
-    // Expo Speech Fallback
-    Speech.speak(outputText, {
-      language: 'es-PA',
-      pitch: selectedVoice.gender === 'MALE' ? 0.70 : 1.28,
-      rate: selectedVoice.rate || 0.88,
-      onDone: () => setIsPlaying(false),
-      onError: () => setIsPlaying(false),
-    });
+    // Expo Speech Fallback with explicit voice query
+    try {
+      const availableVoices = await Speech.getAvailableVoicesAsync();
+      const spanishVoices = availableVoices.filter((v) => v.language.startsWith('es'));
+      
+      let matchedVoice = undefined;
+      if (selectedVoice.gender === 'MALE') {
+        matchedVoice = spanishVoices.find(
+          (v) =>
+            v.identifier.toLowerCase().includes('juan') ||
+            v.identifier.toLowerCase().includes('jorge') ||
+            v.identifier.toLowerCase().includes('carlos') ||
+            v.identifier.toLowerCase().includes('male') ||
+            v.identifier.toLowerCase().includes('diego')
+        );
+      } else {
+        matchedVoice = spanishVoices.find(
+          (v) =>
+            v.identifier.toLowerCase().includes('monica') ||
+            v.identifier.toLowerCase().includes('paulina') ||
+            v.identifier.toLowerCase().includes('female') ||
+            v.identifier.toLowerCase().includes('sofia')
+        );
+      }
+
+      Speech.speak(outputText, {
+        language: 'es-PA',
+        voice: matchedVoice?.identifier,
+        pitch: selectedVoice.gender === 'MALE' ? 0.50 : 1.30,
+        rate: selectedVoice.rate || 0.88,
+        onDone: () => setIsPlaying(false),
+        onError: () => setIsPlaying(false),
+      });
+    } catch (err) {
+      Speech.speak(outputText, {
+        language: 'es-PA',
+        pitch: selectedVoice.gender === 'MALE' ? 0.50 : 1.30,
+        rate: selectedVoice.rate || 0.88,
+        onDone: () => setIsPlaying(false),
+        onError: () => setIsPlaying(false),
+      });
+    }
   };
 
   const handleCopy = async () => {

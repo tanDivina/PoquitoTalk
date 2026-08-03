@@ -84,16 +84,28 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const handleMicPress = () => {
     if (isListening) {
       setIsListening(false);
-    } else {
-      setIsListening(true);
-      // Simulate voice input dictation
-      setTimeout(() => {
-        setIsListening(false);
-        const voiceText = "Hi! I need someone to check the air conditioning unit in the main room.";
-        setInputText(voiceText);
-        handleTranslate(voiceText);
-      }, 3000);
+      return;
     }
+
+    // If user already typed custom text, translate that directly on mic press
+    if (inputText.trim().length > 0) {
+      handleTranslate(inputText);
+      return;
+    }
+
+    // Dictation mode
+    setIsListening(true);
+    setTimeout(() => {
+      setIsListening(false);
+      const dictationSamples = [
+        "Hi! Could you tell me where the nearest pharmacy is located?",
+        "Hello! I am calling to check if you have availability for a boat tour tomorrow.",
+        "Good day! What time does the grocery store close tonight?",
+      ];
+      const randomSample = dictationSamples[Math.floor(Math.random() * dictationSamples.length)];
+      setInputText(randomSample);
+      handleTranslate(randomSample);
+    }, 2000);
   };
 
   const currentTranslationItem: TranslationItem = {

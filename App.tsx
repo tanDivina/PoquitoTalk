@@ -83,7 +83,7 @@ export default function App() {
               name="Translate"
               options={{
                 tabBarIcon: ({ color, size }) => (
-                  <MaterialCommunityIcons name="chat-processing-outline" size={size} color={color} />
+                  <MaterialCommunityIcons name="chat-processing-outline" size={22} color={color} />
                 ),
               }}
             >
@@ -105,7 +105,7 @@ export default function App() {
               name="Presets"
               options={{
                 tabBarIcon: ({ color, size }) => (
-                  <MaterialCommunityIcons name="toolbox-outline" size={size} color={color} />
+                  <MaterialCommunityIcons name="toolbox-outline" size={22} color={color} />
                 ),
               }}
             >
@@ -126,7 +126,7 @@ export default function App() {
               name="Saved"
               options={{
                 tabBarIcon: ({ color, size }) => (
-                  <Ionicons name="bookmark-outline" size={size} color={color} />
+                  <Ionicons name="bookmark-outline" size={22} color={color} />
                 ),
               }}
             >
@@ -145,7 +145,7 @@ export default function App() {
               name="Settings"
               options={{
                 tabBarIcon: ({ color, size }) => (
-                  <Ionicons name="settings-outline" size={size} color={color} />
+                  <Ionicons name="settings-outline" size={22} color={color} />
                 ),
               }}
             >
@@ -181,23 +181,28 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   tabBar: {
+    position: 'absolute',
+    bottom: Platform.OS === 'ios' ? 28 : 20,
+    left: 16,
+    right: 16,
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',
-    borderTopWidth: 1,
-    borderTopColor: Colors.cardBorder,
-    height: Platform.OS === 'ios' ? 84 : 65,
-    paddingBottom: Platform.OS === 'ios' ? 24 : 10,
-    paddingTop: 8,
-    elevation: 8,
+    borderRadius: 32,
+    height: 64,
+    paddingBottom: Platform.OS === 'ios' ? 10 : 6,
+    paddingTop: 6,
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
+    elevation: 12,
     shadowColor: Colors.shadow,
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
   },
   tabBarItem: {
     paddingVertical: 2,
   },
   tabBarLabel: {
     fontSize: 11,
-    fontWeight: '600',
+    fontWeight: '700',
   },
 });
