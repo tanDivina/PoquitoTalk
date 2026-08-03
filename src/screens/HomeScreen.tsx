@@ -271,8 +271,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             style={styles.voiceNoteOptionBtn}
             onPress={() =>
               Alert.alert(
-                'How to Translate WhatsApp Audio Files',
-                '1. In WhatsApp, long-press the voice note -> tap 3 dots -> Share -> Quick Share / Save to Files.\n2. Open PoquitoTalk and tap "Import Audio File".\n3. PoquitoTalk reads the file and translates it to English instantly!',
+                'How to Enable WhatsApp Voice Transcripts',
+                '1. Open WhatsApp -> Settings -> Chats -> Turn ON "Voice message transcripts".\n2. Select Spanish to download the on-device language pack.\n3. Long-press any Spanish voice note -> tap Transcribe -> Copy text.\n4. Open PoquitoTalk — the 1-tap green banner translates it instantly!',
                 [{ text: 'Got It!' }]
               )
             }
