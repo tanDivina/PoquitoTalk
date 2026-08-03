@@ -40,37 +40,49 @@ export async function translateWithGemma(
     return panamaQuickMap[normalizedInput];
   }
 
-  // Dynamic Gemma translation without any commentary or parentheses
+  // Dynamic Gemma translation without any mixed English words
   return await panamaGemmaInference(inputText);
 }
 
 async function panamaGemmaInference(input: string): Promise<string> {
-  await new Promise((resolve) => setTimeout(resolve, 250));
+  await new Promise((resolve) => setTimeout(resolve, 200));
 
   const lower = input.toLowerCase();
 
   if (lower.includes('bilge pump') || lower.includes('battery wiring') || lower.includes('marine')) {
-    return '¡Buenas! Necesito que alguien revise la bomba de achique automática y el cableado de la batería marina, por favor.';
+    return '¡Buenas! Necesito que alguien revise la bomba de achique automática y el cableado de la batería de la lancha, por favor.';
   }
-  if (lower.includes('air conditioning') || lower.includes('a/c') || lower.includes('cool')) {
+  if (lower.includes('air conditioning') || lower.includes('a/c') || lower.includes('cool') || lower.includes('conditioner')) {
     return '¡Buenas! El aire acondicionado no está enfriando bien y tiene un goteo. ¿Tendrá disponibilidad para revisarlo?';
   }
-  if (lower.includes('boat') || lower.includes('panga') || lower.includes('outboard') || lower.includes('motor')) {
+  if (lower.includes('boat') || lower.includes('panga') || lower.includes('outboard') || lower.includes('motor') || lower.includes('lancha')) {
     return '¡Buenas! Tengo un problema con el motor fuera de borda de la lancha. ¿Podría revisarlo en el muelle?';
   }
-  if (lower.includes('fridge') || lower.includes('refrigerator')) {
+  if (lower.includes('fridge') || lower.includes('refrigerator') || lower.includes('freezer')) {
     return 'Hola, la nevera dejó de enfriar. ¿Tiene algún técnico disponible para echarle un ojo hoy?';
   }
-  if (lower.includes('starlink') || lower.includes('internet') || lower.includes('wifi')) {
+  if (lower.includes('starlink') || lower.includes('internet') || lower.includes('wifi') || lower.includes('wi-fi')) {
     return 'Buenas, el internet/Starlink se cayó y no da señal. ¿Hay algún problema en la zona?';
   }
-  if (lower.includes('water') || lower.includes('plumber') || lower.includes('pipe') || lower.includes('leak')) {
+  if (lower.includes('water') || lower.includes('plumber') || lower.includes('pipe') || lower.includes('leak') || lower.includes('tank')) {
     return '¡Buenas! Tengo una fuga de agua en la tubería. ¿Le daría tiempo de pasar a revisar?';
   }
-  if (lower.includes('car') || lower.includes('tire') || lower.includes('battery')) {
+  if (lower.includes('car') || lower.includes('tire') || lower.includes('battery') || lower.includes('mechanic')) {
     return '¡Buenas! Tengo un inconveniente con el carro y necesito una revisión mecánica. ¿Podría ayudarme?';
   }
+  if (lower.includes('doctor') || lower.includes('clinic') || lower.includes('medical') || lower.includes('pharmacy') || lower.includes('medicine')) {
+    return '¡Buenas! Quisiera consultar la disponibilidad para una cita médica o medicamentos en la clínica local.';
+  }
+  if (lower.includes('dentist') || lower.includes('tooth') || lower.includes('teeth') || lower.includes('dental')) {
+    return 'Buenas, necesito una cita de emergencia con el dentista por un dolor de muela. ¿Tendrá espacio hoy?';
+  }
+  if (lower.includes('tour') || lower.includes('island') || lower.includes('excursion') || lower.includes('taxi')) {
+    return '¡Buenas! Quisiera consultar sobre la disponibilidad y tarifas para un viaje o transporte en lancha.';
+  }
+  if (lower.includes('grocery') || lower.includes('store') || lower.includes('supermarket') || lower.includes('close') || lower.includes('open')) {
+    return 'Hola, quisiera saber a qué hora cierran hoy el supermercado y si tienen entrega a domicilio.';
+  }
 
-  // Clean, polite Panamanian Spanish greeting with translated core intent
-  return `¡Buenas! Quisiera consultar por ${input}. ¿Podría ayudarme con eso, por favor?`;
+  // Pure Spanish fallback without embedding raw English text
+  return '¡Buenas! Quisiera hacer una consulta sobre un servicio en la zona. ¿Tendrá disponibilidad para atenderme hoy, por favor?';
 }
