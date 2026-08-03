@@ -55,7 +55,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
     }
   }, [initialVoice]);
 
-  // Play audio using selected Google Neural2 Voice
+  // Play audio using selected Google Neural2 Voice or Native TTS
   const handlePlayTTS = async () => {
     if (!outputText) return;
 
@@ -68,7 +68,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
     setIsPlaying(true);
 
     try {
-      // 1. Synthesize audio file via Google Speech API with SSML
+      // 1. Synthesize audio file via Google Speech API with SSML if API key available
       const fileUri = await generateGoogleGeminiAudio(outputText, selectedVoice.id);
       if (fileUri) {
         const sound = await playGoogleAudioFile(fileUri);
@@ -86,11 +86,27 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
       console.warn('Google audio playback:', e);
     }
 
-    // Expo Speech Fallback with explicit voice query
+    // 2. Native Expo Speech Fallback with distinct Male vs Female pitch & question intonation
+    let speechText = outputText;
+    const isQuestion = speechText.includes('?') || speechText.includes('¿');
+    if (isQuestion && !speechText.startsWith('¿')) {
+      speechText = `¿${speechText}`;
+    }
+
+    // Determine distinct base pitch per persona
+    let basePitch = 1.0;
+    if (selectedVoice.name === 'Diego') basePitch = 0.35;       // Deep Warm Male
+    else if (selectedVoice.name === 'Mateo') basePitch = 0.20;  // Ultra-Deep Male
+    else if (selectedVoice.name === 'Sofia') basePitch = 1.45;  // Clear Female
+    else if (selectedVoice.name === 'Valeria') basePitch = 1.75;// Young High Female
+
+    // Question pitch boost for sentence-ending intonation
+    const finalPitch = isQuestion ? basePitch + 0.30 : basePitch;
+
     try {
       const availableVoices = await Speech.getAvailableVoicesAsync();
       const spanishVoices = availableVoices.filter((v) => v.language.startsWith('es'));
-      
+
       let matchedVoice = undefined;
       if (selectedVoice.gender === 'MALE') {
         matchedVoice = spanishVoices.find(
@@ -111,18 +127,18 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
         );
       }
 
-      Speech.speak(outputText, {
+      Speech.speak(speechText, {
         language: 'es-PA',
         voice: matchedVoice?.identifier,
-        pitch: selectedVoice.gender === 'MALE' ? 0.50 : 1.30,
+        pitch: Math.max(0.1, Math.min(finalPitch, 2.0)),
         rate: selectedVoice.rate || 0.88,
         onDone: () => setIsPlaying(false),
         onError: () => setIsPlaying(false),
       });
     } catch (err) {
-      Speech.speak(outputText, {
+      Speech.speak(speechText, {
         language: 'es-PA',
-        pitch: selectedVoice.gender === 'MALE' ? 0.50 : 1.30,
+        pitch: Math.max(0.1, Math.min(finalPitch, 2.0)),
         rate: selectedVoice.rate || 0.88,
         onDone: () => setIsPlaying(false),
         onError: () => setIsPlaying(false),

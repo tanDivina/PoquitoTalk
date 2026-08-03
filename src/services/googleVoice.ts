@@ -15,11 +15,10 @@ export interface VoiceOption {
 }
 
 export const GOOGLE_SPANISH_VOICES: VoiceOption[] = [
-  { id: 'es-US-Neural2-B', name: 'Diego', gender: 'MALE', tone: 'Warm & Natural Male (Panamá)', flag: '👨', pitch: -4.0, rate: 0.88 },
-  { id: 'es-US-Neural2-A', name: 'Sofia', gender: 'FEMALE', tone: 'Clear & Friendly Female', flag: '👩', pitch: 2.5, rate: 0.92 },
-  { id: 'es-US-Journey-F', name: 'Valeria', gender: 'FEMALE', tone: 'Young & Expressive Female', flag: '👧', pitch: 4.5, rate: 0.98 },
-  { id: 'es-US-Neural2-C', name: 'Mateo', gender: 'MALE', tone: 'Calm & Authoritative Male', flag: '🧔', pitch: -6.5, rate: 0.84 },
-  { id: 'es-US-Neural2-F', name: 'Lucía', gender: 'FEMALE', tone: 'Bright & Friendly Female', flag: '✨', pitch: 3.5, rate: 0.94 },
+  { id: 'es-US-Neural2-B', name: 'Diego', gender: 'MALE', tone: 'Warm & Natural Male (Panamá)', flag: '👨', pitch: -5.0, rate: 0.88 },
+  { id: 'es-US-Neural2-C', name: 'Mateo', gender: 'MALE', tone: 'Calm & Authoritative Male', flag: '🧔', pitch: -7.5, rate: 0.82 },
+  { id: 'es-US-Neural2-A', name: 'Sofia', gender: 'FEMALE', tone: 'Clear & Friendly Female', flag: '👩', pitch: 3.0, rate: 0.92 },
+  { id: 'es-US-Journey-F', name: 'Valeria', gender: 'FEMALE', tone: 'Young & Expressive Female', flag: '👧', pitch: 5.5, rate: 0.98 },
 ];
 
 let customApiKey = '';
@@ -32,13 +31,22 @@ export async function generateGoogleGeminiAudio(
   text: string,
   voiceId: string = 'es-US-Neural2-B'
 ): Promise<string | null> {
-  const apiKey = customApiKey || 'AIzaSyDemoGoogleKeyForShipaton2026';
+  const apiKey = customApiKey;
+  if (!apiKey) return null;
+
   const GOOGLE_TTS_ENDPOINT = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`;
 
   try {
     const selectedVoice = GOOGLE_SPANISH_VOICES.find((v) => v.id === voiceId) || GOOGLE_SPANISH_VOICES[0];
     const isQuestion = text.includes('?') || text.includes('¿');
-    const ssmlContent = `<speak>${text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</speak>`;
+    
+    // Ensure inverted question marks for Spanish question cadence
+    let formattedText = text;
+    if (isQuestion && !formattedText.includes('¿')) {
+      formattedText = `¿${formattedText}`;
+    }
+
+    const ssmlContent = `<speak>${formattedText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</speak>`;
 
     const response = await fetch(GOOGLE_TTS_ENDPOINT, {
       method: 'POST',
@@ -55,7 +63,7 @@ export async function generateGoogleGeminiAudio(
         audioConfig: {
           audioEncoding: 'MP3',
           speakingRate: selectedVoice.rate,
-          pitch: isQuestion ? selectedVoice.pitch + 1.5 : selectedVoice.pitch,
+          pitch: isQuestion ? selectedVoice.pitch + 2.0 : selectedVoice.pitch,
         },
       }),
     });
