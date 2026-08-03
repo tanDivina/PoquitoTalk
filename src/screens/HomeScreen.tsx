@@ -8,8 +8,9 @@ import {
   ScrollView,
   ActivityIndicator,
   Keyboard,
+  Alert,
 } from 'react-native';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
@@ -48,6 +49,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const [isTranslating, setIsTranslating] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [clipboardReplyText, setClipboardReplyText] = useState<string | null>(null);
+  const [showVoiceNoteHelp, setShowVoiceNoteHelp] = useState(false);
 
   // Auto-detect copied WhatsApp Spanish reply from clipboard
   useEffect(() => {
@@ -147,6 +149,20 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     }, 2000);
   };
 
+  const handleListenToIncomingVoiceNote = () => {
+    setIsListening(true);
+    setFromLang('es');
+    setToLang('en');
+    
+    // Simulate live listening to WhatsApp speaker playback
+    setTimeout(() => {
+      setIsListening(false);
+      const incomingSpanishVoice = "¡Buenas! Puedo pasar a revisar el aire acondicionado hoy a las 3:00 PM. ¿Me confirma su ubicación en Isla Colón?";
+      setInputText(incomingSpanishVoice);
+      handleTranslateText(incomingSpanishVoice, 'es', 'en');
+    }, 2500);
+  };
+
   const handleSelectFollowUpChip = (englishFollowUp: string) => {
     setFromLang('en');
     setToLang('es');
@@ -191,6 +207,46 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           </View>
         </TouchableOpacity>
       )}
+
+      {/* Incoming WhatsApp Voice Note Translation Tool Card */}
+      <View style={styles.voiceNoteHelperCard}>
+        <View style={styles.voiceNoteHelperHeader}>
+          <FontAwesome5 name="whatsapp" size={18} color={Colors.whatsapp} />
+          <Text style={styles.voiceNoteHelperTitle}>Received a Spanish WhatsApp Voice Note?</Text>
+        </View>
+
+        <Text style={styles.voiceNoteHelperDesc}>
+          3 Easy ways to translate incoming voice notes from technicians, boat captains & local services into English:
+        </Text>
+
+        <View style={styles.voiceNoteOptionsRow}>
+          {/* Method 1: Play Speaker & Tap Mic */}
+          <TouchableOpacity
+            style={styles.voiceNoteOptionBtn}
+            onPress={handleListenToIncomingVoiceNote}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="volume-medium-outline" size={18} color={Colors.secondary} />
+            <Text style={styles.voiceNoteOptionBtnText}>Listen via Mic</Text>
+          </TouchableOpacity>
+
+          {/* Method 2: How to Copy/Forward in WhatsApp */}
+          <TouchableOpacity
+            style={styles.voiceNoteOptionBtn}
+            onPress={() =>
+              Alert.alert(
+                'How to Translate WhatsApp Voice Notes',
+                '1. In WhatsApp, long-press the voice note transcript or message text.\n2. Tap Copy.\n3. Open PoquitoTalk — the 1-tap green banner will pop up automatically to translate it to English!',
+                [{ text: 'Got It!' }]
+              )
+            }
+            activeOpacity={0.8}
+          >
+            <Ionicons name="help-circle-outline" size={18} color={Colors.secondary} />
+            <Text style={styles.voiceNoteOptionBtnText}>WhatsApp Guide</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
       {/* Language Switcher Row */}
       <LanguageChip
@@ -342,6 +398,51 @@ const styles = StyleSheet.create({
   replyBannerBtnText: {
     fontSize: 11,
     fontWeight: '800',
+    color: Colors.secondary,
+  },
+  voiceNoteHelperCard: {
+    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
+    borderRadius: 20,
+    padding: 16,
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
+  },
+  voiceNoteHelperHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 6,
+  },
+  voiceNoteHelperTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: Colors.onBackground,
+  },
+  voiceNoteHelperDesc: {
+    fontSize: 12,
+    color: Colors.onSurfaceVariant,
+    lineHeight: 18,
+    marginBottom: 12,
+  },
+  voiceNoteOptionsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  voiceNoteOptionBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: Colors.secondaryContainer,
+    paddingVertical: 10,
+    borderRadius: 14,
+  },
+  voiceNoteOptionBtnText: {
+    fontSize: 12,
+    fontWeight: '700',
     color: Colors.secondary,
   },
   inputCard: {
