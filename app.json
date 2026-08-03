@@ -1,15 +1,17 @@
 {
   "expo": {
-    "name": "noble-pythagoras",
-    "slug": "noble-pythagoras",
-    "version": "1.0.0",
+    "name": "PoquitoTalk",
+    "slug": "poquitotalk",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "scheme": "poquitotalk",
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "com.heroapps.poquitotalk",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
