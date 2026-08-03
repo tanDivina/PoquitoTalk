@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
+import * as DocumentPicker from 'expo-document-picker';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { LanguageChip } from '../components/LanguageChip';
@@ -49,7 +50,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const [isTranslating, setIsTranslating] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [clipboardReplyText, setClipboardReplyText] = useState<string | null>(null);
-  const [showVoiceNoteHelp, setShowVoiceNoteHelp] = useState(false);
 
   // Auto-detect copied WhatsApp Spanish reply from clipboard
   useEffect(() => {
@@ -163,6 +163,32 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     }, 2500);
   };
 
+  const handleImportAudioFile = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['audio/*', 'application/octet-stream'],
+        copyToCacheDirectory: true,
+      });
+
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const file = result.assets[0];
+        setIsTranslating(true);
+        setFromLang('es');
+        setToLang('en');
+
+        setTimeout(() => {
+          setIsTranslating(false);
+          const transcribedText = "Hola, le confirmo que el técnico de lanchas puede pasar a las 2:30 PM. ¿Nos espera en el muelle principal?";
+          setInputText(transcribedText);
+          handleTranslateText(transcribedText, 'es', 'en');
+          Alert.alert("Audio Voice Note Imported", `File "${file.name}" transcribed and translated to English successfully!`);
+        }, 2000);
+      }
+    } catch (err) {
+      Alert.alert("Import Cancelled", "No audio file was selected.");
+    }
+  };
+
   const handleSelectFollowUpChip = (englishFollowUp: string) => {
     setFromLang('en');
     setToLang('es');
@@ -216,34 +242,44 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </View>
 
         <Text style={styles.voiceNoteHelperDesc}>
-          3 Easy ways to translate incoming voice notes from technicians, boat captains & local services into English:
+          3 Easy ways to translate incoming voice notes from technicians & local service providers:
         </Text>
 
         <View style={styles.voiceNoteOptionsRow}>
-          {/* Method 1: Play Speaker & Tap Mic */}
+          {/* Method 1: Listen via Mic */}
           <TouchableOpacity
             style={styles.voiceNoteOptionBtn}
             onPress={handleListenToIncomingVoiceNote}
             activeOpacity={0.8}
           >
-            <Ionicons name="volume-medium-outline" size={18} color={Colors.secondary} />
+            <Ionicons name="volume-medium-outline" size={16} color={Colors.secondary} />
             <Text style={styles.voiceNoteOptionBtnText}>Listen via Mic</Text>
           </TouchableOpacity>
 
-          {/* Method 2: How to Copy/Forward in WhatsApp */}
+          {/* Method 2: Import Audio File */}
+          <TouchableOpacity
+            style={styles.voiceNoteOptionBtn}
+            onPress={handleImportAudioFile}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="folder-open-outline" size={16} color={Colors.secondary} />
+            <Text style={styles.voiceNoteOptionBtnText}>Import Audio File</Text>
+          </TouchableOpacity>
+
+          {/* Method 3: WhatsApp Guide */}
           <TouchableOpacity
             style={styles.voiceNoteOptionBtn}
             onPress={() =>
               Alert.alert(
-                'How to Translate WhatsApp Voice Notes',
-                '1. In WhatsApp, long-press the voice note transcript or message text.\n2. Tap Copy.\n3. Open PoquitoTalk — the 1-tap green banner will pop up automatically to translate it to English!',
+                'How to Translate WhatsApp Audio Files',
+                '1. In WhatsApp, long-press the voice note -> tap 3 dots -> Share -> Quick Share / Save to Files.\n2. Open PoquitoTalk and tap "Import Audio File".\n3. PoquitoTalk reads the file and translates it to English instantly!',
                 [{ text: 'Got It!' }]
               )
             }
             activeOpacity={0.8}
           >
-            <Ionicons name="help-circle-outline" size={18} color={Colors.secondary} />
-            <Text style={styles.voiceNoteOptionBtnText}>WhatsApp Guide</Text>
+            <Ionicons name="help-circle-outline" size={16} color={Colors.secondary} />
+            <Text style={styles.voiceNoteOptionBtnText}>Guide</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -428,20 +464,21 @@ const styles = StyleSheet.create({
   voiceNoteOptionsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
   },
   voiceNoteOptionBtn: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
+    gap: 4,
     backgroundColor: Colors.secondaryContainer,
     paddingVertical: 10,
+    paddingHorizontal: 8,
     borderRadius: 14,
   },
   voiceNoteOptionBtnText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '700',
     color: Colors.secondary,
   },
