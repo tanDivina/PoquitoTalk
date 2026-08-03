@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,8 @@ import {
   ActivityIndicator,
   Keyboard,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import * as Clipboard from 'expo-clipboard';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { LanguageChip } from '../components/LanguageChip';
@@ -46,19 +47,57 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const [outputText, setOutputText] = useState('');
   const [isTranslating, setIsTranslating] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [clipboardReplyText, setClipboardReplyText] = useState<string | null>(null);
+
+  // Auto-detect copied WhatsApp Spanish reply from clipboard
+  useEffect(() => {
+    checkClipboardReply();
+  }, []);
+
+  const checkClipboardReply = async () => {
+    try {
+      const hasString = await Clipboard.hasStringAsync();
+      if (hasString) {
+        const text = await Clipboard.getStringAsync();
+        const trimmed = text.trim();
+        // Check if text looks like a Spanish WhatsApp reply
+        const spanishKeywords = ['hola', 'buenas', 'puedo', 'mañana', 'hora', 'muelle', 'precio', 'dólares', 'costo', 'cuánto', 'dónde', 'revisar', 'estoy', 'llegar', 'gracias'];
+        const isSpanishReply = spanishKeywords.some((kw) => trimmed.toLowerCase().includes(kw)) && trimmed.length > 5 && trimmed !== inputText;
+        
+        if (isSpanishReply) {
+          setClipboardReplyText(trimmed);
+        }
+      }
+    } catch (e) {
+      console.warn('Clipboard check:', e);
+    }
+  };
+
+  const handleTranslateWhatsAppReply = () => {
+    if (!clipboardReplyText) return;
+    setFromLang('es');
+    setToLang('en');
+    setInputText(clipboardReplyText);
+    handleTranslateText(clipboardReplyText, 'es', 'en');
+    setClipboardReplyText(null);
+  };
 
   // Sync active preset prompt if selected from Presets tab
-  React.useEffect(() => {
+  useEffect(() => {
     if (activePresetPrompt) {
+      setFromLang('en');
+      setToLang('es');
       setInputText(activePresetPrompt);
-      handleTranslate(activePresetPrompt);
+      handleTranslateText(activePresetPrompt, 'en', 'es');
       if (onClearPresetPrompt) onClearPresetPrompt();
     }
   }, [activePresetPrompt]);
 
   const handleSwapLanguages = () => {
-    setFromLang(toLang);
-    setToLang(fromLang);
+    const nextFrom = toLang;
+    const nextTo = fromLang;
+    setFromLang(nextFrom);
+    setToLang(nextTo);
     if (outputText) {
       const prevInput = inputText;
       setInputText(outputText);
@@ -66,7 +105,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     }
   };
 
-  const handleTranslate = async (textToTranslate?: string) => {
+  const handleTranslateText = async (textToTranslate?: string, srcLang = fromLang, tgtLang = toLang) => {
     const text = textToTranslate || inputText;
     if (!text.trim()) return;
 
@@ -74,7 +113,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     setIsTranslating(true);
 
     try {
-      const translated = await translateWithGemma(text, fromLang, toLang);
+      const translated = await translateWithGemma(text, srcLang, tgtLang);
       setOutputText(translated);
     } catch (error) {
       setOutputText(`¡Buenas! ${text} (Traducido al español de Panamá)`);
@@ -89,13 +128,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       return;
     }
 
-    // If user already typed custom text, translate that directly on mic press
     if (inputText.trim().length > 0) {
-      handleTranslate(inputText);
+      handleTranslateText(inputText);
       return;
     }
 
-    // Dictation mode
     setIsListening(true);
     setTimeout(() => {
       setIsListening(false);
@@ -106,8 +143,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       ];
       const randomSample = dictationSamples[Math.floor(Math.random() * dictationSamples.length)];
       setInputText(randomSample);
-      handleTranslate(randomSample);
+      handleTranslateText(randomSample);
     }, 2000);
+  };
+
+  const handleSelectFollowUpChip = (englishFollowUp: string) => {
+    setFromLang('en');
+    setToLang('es');
+    setInputText(englishFollowUp);
+    handleTranslateText(englishFollowUp, 'en', 'es');
   };
 
   const currentTranslationItem: TranslationItem = {
@@ -127,6 +171,27 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} onResetOnboarding={onResetOnboarding} />
 
+      {/* WhatsApp Clipboard Reply Detection Banner */}
+      {clipboardReplyText && (
+        <TouchableOpacity
+          style={styles.replyBanner}
+          onPress={handleTranslateWhatsAppReply}
+          activeOpacity={0.85}
+        >
+          <View style={styles.replyBannerHeader}>
+            <FontAwesome5 name="whatsapp" size={16} color="#FFF" />
+            <Text style={styles.replyBannerTitle}>Copied WhatsApp Reply Detected!</Text>
+          </View>
+          <Text style={styles.replyBannerText} numberOfLines={2}>
+            "{clipboardReplyText}"
+          </Text>
+          <View style={styles.replyBannerBtn}>
+            <Text style={styles.replyBannerBtnText}>Translate to English 🇺🇸</Text>
+            <Ionicons name="arrow-forward" size={14} color={Colors.secondary} />
+          </View>
+        </TouchableOpacity>
+      )}
+
       {/* Language Switcher Row */}
       <LanguageChip
         fromLang={fromLang}
@@ -140,7 +205,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       <View style={styles.inputCard}>
         <TextInput
           style={styles.textInput}
-          placeholder={fromLang === 'en' ? 'Type or tap mic to speak...' : 'Escribe o presiona el micrófono...'}
+          placeholder={fromLang === 'en' ? 'Type or tap mic to speak...' : 'Pega la respuesta de WhatsApp en español...'}
           placeholderTextColor={Colors.outline}
           multiline
           value={inputText}
@@ -158,7 +223,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
             <TouchableOpacity
               style={styles.translateBtn}
-              onPress={() => handleTranslate()}
+              onPress={() => handleTranslateText()}
               disabled={isTranslating}
               activeOpacity={0.8}
             >
@@ -188,6 +253,41 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         isSaved={isSaved}
         initialVoice={initialVoice}
       />
+
+      {/* 1-Tap Quick Follow-Up Response Chips for WhatsApp Conversations */}
+      {outputText.length > 0 && (
+        <View style={styles.followUpSection}>
+          <Text style={styles.followUpSectionTitle}>1-TAP WHATSAPP FOLLOW-UP RESPONSES</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.followUpRow}>
+            <TouchableOpacity
+              style={styles.followUpChip}
+              onPress={() => handleSelectFollowUpChip("3:00 PM works great for me! Thank you.")}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.followUpChipIcon}>🕒</Text>
+              <Text style={styles.followUpChipText}>"3:00 PM works great! Thank you."</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.followUpChip}
+              onPress={() => handleSelectFollowUpChip("How much will the inspection cost?")}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.followUpChipIcon}>💵</Text>
+              <Text style={styles.followUpChipText}>"How much is the inspection cost?"</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.followUpChip}
+              onPress={() => handleSelectFollowUpChip("Here is my location on Isla Colón.")}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.followUpChipIcon}>📍</Text>
+              <Text style={styles.followUpChipText}>"Here is my location on Isla Colón."</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -201,20 +301,48 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 32,
   },
-  languageRow: {
+  replyBanner: {
+    backgroundColor: Colors.whatsapp,
+    borderRadius: 20,
+    padding: 16,
+    marginVertical: 10,
+    shadowColor: Colors.whatsapp,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  replyBannerHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
-    marginVertical: 16,
+    gap: 8,
+    marginBottom: 4,
   },
-  swapBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: Colors.secondaryContainer,
+  replyBannerTitle: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#FFF',
+  },
+  replyBannerText: {
+    fontSize: 12,
+    color: '#E8F5E9',
+    fontStyle: 'italic',
+    marginBottom: 10,
+  },
+  replyBannerBtn: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#FFF',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+  },
+  replyBannerBtnText: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: Colors.secondary,
   },
   inputCard: {
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',
@@ -257,5 +385,37 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontWeight: '800',
     fontSize: 13,
+  },
+  followUpSection: {
+    marginTop: 14,
+  },
+  followUpSectionTitle: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: Colors.outline,
+    letterSpacing: 0.5,
+    marginBottom: 8,
+  },
+  followUpRow: {
+    gap: 8,
+  },
+  followUpChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
+  },
+  followUpChipIcon: {
+    fontSize: 14,
+  },
+  followUpChipText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: Colors.onBackground,
   },
 });
