@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { ServicePreset } from '../types';
+import { sharePhrasebookToCommunity } from '../services/deepLinks';
 
 interface PresetCardProps {
   preset: ServicePreset;
@@ -11,6 +12,16 @@ interface PresetCardProps {
 }
 
 export const PresetCard: React.FC<PresetCardProps> = ({ preset, onSelect, onSelectPhrase }) => {
+  const handleSharePhrasebook = () => {
+    sharePhrasebookToCommunity({
+      id: preset.id,
+      title: preset.title,
+      category: preset.category,
+      emoji: '🌴',
+      phraseCount: preset.phrases.length,
+    });
+  };
+
   return (
     <View style={styles.card}>
       <TouchableOpacity
@@ -46,6 +57,16 @@ export const PresetCard: React.FC<PresetCardProps> = ({ preset, onSelect, onSele
           </TouchableOpacity>
         ))}
       </View>
+
+      {/* Growth Loop 2: Share Phrasebook to Community Groups */}
+      <TouchableOpacity
+        style={styles.sharePhrasebookBtn}
+        onPress={handleSharePhrasebook}
+        activeOpacity={0.8}
+      >
+        <FontAwesome5 name="whatsapp" size={14} color={Colors.whatsapp} />
+        <Text style={styles.sharePhrasebookText}>Share Phrasebook to Bocas Expat Groups 🌴</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -82,38 +103,56 @@ const styles = StyleSheet.create({
   },
   category: {
     fontSize: 10,
-    fontWeight: '700',
-    color: Colors.tertiary,
-    textTransform: 'uppercase',
+    fontWeight: '800',
+    color: Colors.secondary,
     letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   title: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '800',
     color: Colors.onBackground,
+    marginTop: 2,
   },
   description: {
-    fontSize: 13,
+    fontSize: 12,
     color: Colors.onSurfaceVariant,
     marginTop: 8,
     lineHeight: 18,
   },
   phrasesList: {
     marginTop: 12,
-    gap: 6,
+    gap: 8,
   },
   phraseChip: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: Colors.surfaceContainer,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
     borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
   },
   phraseText: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '600',
     color: Colors.onBackground,
+  },
+  sharePhrasebookBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#E8F5E9',
+    borderRadius: 14,
+    paddingVertical: 10,
+    marginTop: 14,
+    borderWidth: 1,
+    borderColor: '#C8E6C9',
+  },
+  sharePhrasebookText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: Colors.whatsapp,
   },
 });

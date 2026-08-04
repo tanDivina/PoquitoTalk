@@ -8,6 +8,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  Share,
 } from 'react-native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
@@ -39,6 +40,19 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
       Alert.alert('Purchase Error', 'Unable to complete transaction.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleInviteNeighbor = async () => {
+    try {
+      const inviteUrl = 'https://poquitotalk.hero-apps.com?ref=bocas_expat';
+      await Share.share({
+        message: '🌴 Hey! Try PoquitoTalk to translate WhatsApp voice notes with local Bocas plumbers, boat captains, and landlords: ' + inviteUrl,
+        url: inviteUrl,
+        title: 'PoquitoTalk Free Pro Referral',
+      });
+    } catch (e) {
+      console.warn('Share error:', e);
     }
   };
 
@@ -109,6 +123,22 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               )}
             </TouchableOpacity>
 
+            {/* Growth Loop 3: RevenueCat Referral Card */}
+            <TouchableOpacity
+              style={styles.referralCard}
+              onPress={handleInviteNeighbor}
+              activeOpacity={0.8}
+            >
+              <View style={styles.referralIconCircle}>
+                <Ionicons name="gift-outline" size={20} color={Colors.secondary} />
+              </View>
+              <View style={styles.referralTextContainer}>
+                <Text style={styles.referralTitle}>Invite a Bocas Neighbor 🎁</Text>
+                <Text style={styles.referralSub}>Get 1 Month Pro FREE when they download!</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={16} color={Colors.secondary} />
+            </TouchableOpacity>
+
             <Text style={styles.footerNote}>
               Powered by RevenueCat for Google Play & App Store
             </Text>
@@ -122,32 +152,24 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(27, 28, 26, 0.6)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-end',
   },
   container: {
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
-    paddingTop: 24,
-    paddingBottom: 32,
-    maxHeight: '90%',
+    paddingTop: 20,
+    paddingHorizontal: 20,
+    maxHeight: '88%',
   },
   closeBtn: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    zIndex: 10,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: Colors.surfaceContainer,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignSelf: 'flex-end',
+    padding: 8,
   },
   content: {
-    paddingHorizontal: 24,
     alignItems: 'center',
+    paddingBottom: 32,
   },
   crownContainer: {
     width: 64,
@@ -156,34 +178,34 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondaryContainer,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '800',
     color: Colors.onBackground,
-    textAlign: 'center',
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: Colors.onSurfaceVariant,
     textAlign: 'center',
-    marginTop: 6,
-    lineHeight: 20,
+    marginTop: 4,
     paddingHorizontal: 12,
+    lineHeight: 18,
   },
   featuresList: {
     width: '100%',
-    marginTop: 20,
-    gap: 12,
+    marginVertical: 18,
+    gap: 10,
   },
   featureRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
     backgroundColor: Colors.surfaceContainer,
-    padding: 12,
-    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 14,
   },
   featureText: {
     fontSize: 13,
@@ -193,20 +215,20 @@ const styles = StyleSheet.create({
   pricingCard: {
     width: '100%',
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',
-    borderRadius: 24,
-    padding: 20,
-    marginTop: 24,
-    alignItems: 'center',
+    borderRadius: 20,
+    padding: 18,
     borderWidth: 2,
     borderColor: Colors.secondary,
+    alignItems: 'center',
     position: 'relative',
+    marginVertical: 10,
   },
   popularBadge: {
     position: 'absolute',
     top: -12,
     backgroundColor: Colors.secondary,
     paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingVertical: 3,
     borderRadius: 12,
   },
   popularText: {
@@ -216,7 +238,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   planTitle: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '700',
     color: Colors.onBackground,
     marginTop: 4,
@@ -225,20 +247,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'baseline',
     gap: 4,
-    marginTop: 8,
+    marginTop: 6,
   },
   priceAmount: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: '800',
-    color: Colors.secondary,
+    color: Colors.onBackground,
   },
   pricePeriod: {
     fontSize: 13,
-    fontWeight: '600',
     color: Colors.onSurfaceVariant,
   },
   trialText: {
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.tertiary,
     fontWeight: '600',
     marginTop: 6,
@@ -246,23 +267,51 @@ const styles = StyleSheet.create({
   subscribeBtn: {
     width: '100%',
     backgroundColor: Colors.secondary,
-    paddingVertical: 16,
-    borderRadius: 24,
+    borderRadius: 18,
+    paddingVertical: 14,
     alignItems: 'center',
-    marginTop: 20,
-    shadowColor: Colors.secondary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 4,
+    marginTop: 10,
   },
   subscribeBtnText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '800',
     color: '#FFF',
   },
-  footerNote: {
+  referralCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    backgroundColor: Colors.secondaryContainer,
+    borderRadius: 16,
+    padding: 12,
+    marginTop: 14,
+    borderWidth: 1,
+    borderColor: Colors.secondaryLight,
+  },
+  referralIconCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#FFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  referralTextContainer: {
+    flex: 1,
+  },
+  referralTitle: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: Colors.onBackground,
+  },
+  referralSub: {
     fontSize: 11,
+    color: Colors.onSurfaceVariant,
+    marginTop: 1,
+  },
+  footerNote: {
+    fontSize: 10,
     color: Colors.outline,
     marginTop: 14,
   },

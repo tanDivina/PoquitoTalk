@@ -11,6 +11,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Share,
 } from 'react-native';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import * as Sharing from 'expo-sharing';
@@ -106,6 +107,18 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
     }
   };
 
+  const handleShareRecommendation = async () => {
+    try {
+      const shareMsg = `🌴 Highly recommend ${thread.contactName} (${thread.category}) in Bocas del Toro!\nArranged seamlessly with Spanish voice notes using PoquitoTalk.app 🇵🇦`;
+      await Share.share({
+        message: shareMsg,
+        title: `Recommend ${thread.contactName}`,
+      });
+    } catch (e) {
+      console.warn('Recommendation share error:', e);
+    }
+  };
+
   const handleImportIncomingVoiceNote = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
@@ -157,12 +170,22 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
             <Text style={styles.categoryBadge}>{thread.category} • Panamá 🇵🇦</Text>
           </View>
 
-          <TouchableOpacity
-            onPress={handleImportIncomingVoiceNote}
-            style={styles.importVoiceBtn}
-          >
-            <FontAwesome5 name="whatsapp" size={16} color={Colors.whatsapp} />
-          </TouchableOpacity>
+          <View style={styles.headerActionsRow}>
+            {/* Growth Loop 4: Service Proof & Recommendation Card Share */}
+            <TouchableOpacity
+              onPress={handleShareRecommendation}
+              style={styles.recommendBtn}
+            >
+              <Ionicons name="share-social-outline" size={18} color={Colors.secondary} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={handleImportIncomingVoiceNote}
+              style={styles.importVoiceBtn}
+            >
+              <FontAwesome5 name="whatsapp" size={16} color={Colors.whatsapp} />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Chat Messages Timeline */}
@@ -279,6 +302,16 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: Colors.onSurfaceVariant,
     marginTop: 2,
+  },
+  headerActionsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  recommendBtn: {
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: Colors.secondaryContainer,
   },
   importVoiceBtn: {
     padding: 8,

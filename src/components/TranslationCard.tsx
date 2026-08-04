@@ -148,7 +148,8 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
   const handleCopy = async () => {
     if (!outputText) return;
-    await Clipboard.setStringAsync(outputText);
+    const textWithSignature = `${outputText}\n\n— Sent via PoquitoTalk.app 🇵🇦`;
+    await Clipboard.setStringAsync(textWithSignature);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -156,7 +157,8 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
   // Send Text to WhatsApp
   const handleSendWhatsAppText = async () => {
     if (!outputText) return;
-    const url = `whatsapp://send?text=${encodeURIComponent(outputText)}`;
+    const textWithSignature = `${outputText}\n\n— Sent via PoquitoTalk.app 🇵🇦`;
+    const url = `whatsapp://send?text=${encodeURIComponent(textWithSignature)}`;
     const canOpen = await Linking.canOpenURL(url);
 
     if (canOpen) {
