@@ -56,3 +56,78 @@ function initiateStripeCheckout(plan) {
   alert(`Redirecting to Stripe Checkout for ${plan === 'pro_annual' ? 'Annual Unlimited Pass ($19.99)' : '100 Credits ($4.99)'}...`);
   window.location.href = `https://checkout.stripe.com/pay/poquitotalk_${plan}`;
 }
+
+// Feedback Drawer Logic & FormSubmit.co Email Dispatch
+let selectedCategory = 'Feature Request';
+let selectedRating = 5;
+
+function openFeedbackDrawer() {
+  document.getElementById('feedback-drawer').classList.add('open');
+  document.getElementById('feedback-drawer-overlay').classList.add('open');
+  setRating(5);
+}
+
+function closeFeedbackDrawer() {
+  document.getElementById('feedback-drawer').classList.remove('open');
+  document.getElementById('feedback-drawer-overlay').classList.remove('open');
+}
+
+function selectCategory(btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedCategory = btn.getAttribute('data-cat');
+}
+
+function setRating(val) {
+  selectedRating = val;
+  const stars = document.querySelectorAll('.star');
+  stars.forEach((star, idx) => {
+    if (idx < val) {
+      star.classList.add('filled');
+    } else {
+      star.classList.remove('filled');
+    }
+  });
+}
+
+async function submitWebFeedback(e) {
+  e.preventDefault();
+  const comment = document.getElementById('fb-comment').value.trim();
+  const email = document.getElementById('fb-email').value.trim();
+  if (!comment) return;
+
+  const btn = document.getElementById('fb-submit-btn');
+  btn.innerText = 'Sending Feedback...';
+  btn.disabled = true;
+
+  const payload = {
+    _subject: `[PoquitoTalk Feedback] ${selectedCategory} (${selectedRating}★)`,
+    Category: selectedCategory,
+    Rating: `${selectedRating} Out of 5 Stars`,
+    Comment: comment,
+    Email: email || 'Anonymous (Bocas Web Visitor)',
+    PageURL: window.location.href,
+    SubmittedAt: new Date().toLocaleString('en-US', { timeZone: 'America/Panama' }),
+    _captcha: 'false'
+  };
+
+  try {
+    await fetch('https://formsubmit.co/ajax/support@hero-apps.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {
+    console.warn('FormSubmit dispatch error:', err);
+  }
+
+  // Local storage history
+  try {
+    const history = JSON.parse(localStorage.getItem('poquitotalk_web_feedback') || '[]');
+    history.unshift({ ...payload, id: Date.now() });
+    localStorage.setItem('poquitotalk_web_feedback', JSON.stringify(history));
+  } catch (e) {}
+
+  document.getElementById('feedback-form').style.display = 'none';
+  document.getElementById('fb-success-msg').style.display = 'block';
+}

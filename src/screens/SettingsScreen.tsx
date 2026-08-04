@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
+import { FeedbackModal } from '../components/FeedbackModal';
 
 interface SettingsScreenProps {
   isPro: boolean;
@@ -11,6 +12,8 @@ interface SettingsScreenProps {
 }
 
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPaywall, onResetOnboarding }) => {
+  const [feedbackVisible, setFeedbackVisible] = useState(false);
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} onResetOnboarding={onResetOnboarding} />
@@ -40,6 +43,19 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
           activeOpacity={0.8}
         >
           <Text style={styles.actionBtnText}>{isPro ? 'Manage Subscription' : 'Upgrade to Pro'}</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Feedback Trigger Card */}
+      <View style={styles.card}>
+        <TouchableOpacity
+          style={styles.linkRow}
+          onPress={() => setFeedbackVisible(true)}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="chatbubble-ellipses-outline" size={20} color={Colors.secondary} />
+          <Text style={styles.linkLabel}>Send Feedback & Feature Requests 💬</Text>
+          <Ionicons name="chevron-forward" size={16} color={Colors.outline} />
         </TouchableOpacity>
       </View>
 
@@ -90,7 +106,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
           onPress={() => Linking.openURL('mailto:support@hero-apps.com')}
         >
           <Ionicons name="mail-outline" size={18} color={Colors.primary} />
-          <Text style={styles.linkLabel}>Support & Feedback</Text>
+          <Text style={styles.linkLabel}>Support Desk (support@hero-apps.com)</Text>
           <Ionicons name="chevron-forward" size={16} color={Colors.outline} />
         </TouchableOpacity>
 
@@ -107,6 +123,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
       </View>
 
       <Text style={styles.versionText}>PoquitoTalk v1.0.2 • Built for RevenueCat Shipaton</Text>
+
+      {/* In-App Feedback Modal */}
+      <FeedbackModal
+        visible={feedbackVisible}
+        onClose={() => setFeedbackVisible(false)}
+      />
     </ScrollView>
   );
 };
@@ -170,19 +192,19 @@ const styles = StyleSheet.create({
   },
   actionBtn: {
     backgroundColor: Colors.secondary,
-    paddingVertical: 12,
-    borderRadius: 16,
+    borderRadius: 14,
+    paddingVertical: 10,
     alignItems: 'center',
     marginTop: 14,
   },
   actionBtnText: {
-    fontSize: 14,
-    fontWeight: '700',
     color: '#FFF',
+    fontSize: 13,
+    fontWeight: '800',
   },
   sectionHeader: {
-    fontSize: 11,
-    fontWeight: '700',
+    fontSize: 10,
+    fontWeight: '800',
     color: Colors.outline,
     letterSpacing: 0.5,
     marginBottom: 12,
@@ -195,18 +217,18 @@ const styles = StyleSheet.create({
   },
   rowLabel: {
     fontSize: 13,
-    color: Colors.onSurfaceVariant,
+    color: Colors.onBackground,
+    fontWeight: '600',
   },
   rowValue: {
     fontSize: 13,
-    fontWeight: '600',
-    color: Colors.onBackground,
+    color: Colors.onSurfaceVariant,
   },
   linkRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    paddingVertical: 8,
+    paddingVertical: 4,
   },
   linkLabel: {
     flex: 1,
@@ -217,12 +239,12 @@ const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: Colors.cardBorder,
-    marginVertical: 6,
+    marginVertical: 12,
   },
   versionText: {
+    textAlign: 'center',
     fontSize: 11,
     color: Colors.outline,
-    textAlign: 'center',
     marginTop: 12,
   },
 });
