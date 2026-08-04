@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://poquitotalk.hero-apps.com/sitemap.xml

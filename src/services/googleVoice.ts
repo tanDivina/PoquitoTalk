@@ -1,6 +1,6 @@
 // Google Gemini / Cloud Text-to-Speech Studio Voice Service
 // Generates real .mp3 audio files for 4 distinct personas (Diego, Mateo, Sofia, Valeria)
-// Supports 1-tap WhatsApp .mp3 audio file attachment sharing
+// Supports 1-tap WhatsApp .mp3 audio file attachment sharing and persona pitch modulation
 
 import * as FileSystem from 'expo-file-system/legacy';
 import { Audio } from 'expo-av';
@@ -11,15 +11,15 @@ export interface VoiceOption {
   gender: 'MALE' | 'FEMALE';
   tone: string;
   flag: string;
-  pitch: number;
+  pitch: number; // Pitch factor for playback (0.45 = ultra deep male, 1.70 = high female)
   rate: number;
 }
 
 export const GOOGLE_SPANISH_VOICES: VoiceOption[] = [
-  { id: 'es-US-Neural2-B', name: 'Diego', gender: 'MALE', tone: 'Warm & Natural Male (Panamá)', flag: '👨', pitch: -5.0, rate: 0.88 },
-  { id: 'es-US-Neural2-C', name: 'Mateo', gender: 'MALE', tone: 'Calm & Authoritative Male', flag: '🧔', pitch: -7.5, rate: 0.82 },
-  { id: 'es-US-Neural2-A', name: 'Sofia', gender: 'FEMALE', tone: 'Clear & Friendly Female', flag: '👩', pitch: 3.0, rate: 0.92 },
-  { id: 'es-US-Journey-F', name: 'Valeria', gender: 'FEMALE', tone: 'Young & Expressive Female', flag: '👧', pitch: 5.5, rate: 0.98 },
+  { id: 'es-US-Neural2-B', name: 'Diego', gender: 'MALE', tone: 'Warm & Natural Male (Panamá)', flag: '👨', pitch: 0.65, rate: 0.88 },
+  { id: 'es-US-Neural2-C', name: 'Mateo', gender: 'MALE', tone: 'Calm & Authoritative Male', flag: '🧔', pitch: 0.48, rate: 0.82 },
+  { id: 'es-US-Neural2-A', name: 'Sofia', gender: 'FEMALE', tone: 'Clear & Friendly Female', flag: '👩', pitch: 1.35, rate: 0.92 },
+  { id: 'es-US-Journey-F', name: 'Valeria', gender: 'FEMALE', tone: 'Young & Expressive Female', flag: '👧', pitch: 1.70, rate: 0.98 },
 ];
 
 let customApiKey = '';
@@ -32,7 +32,7 @@ export async function generateGoogleGeminiAudio(
   text: string,
   voiceId: string = 'es-US-Neural2-B'
 ): Promise<string | null> {
-  const selectedVoice = GOOGLE_SPANISH_VOICES.find((v) => v.id === voiceId) || GOOGLE_SPANISH_VOICES[0];
+  const selectedVoice = GOOGLE_SPANISH_VOICES.find((v) => v.id === voiceId || v.name.toLowerCase() === voiceId.toLowerCase()) || GOOGLE_SPANISH_VOICES[0];
   const isQuestion = text.includes('?') || text.includes('¿');
 
   let formattedText = text.trim();
@@ -58,7 +58,7 @@ export async function generateGoogleGeminiAudio(
           audioConfig: {
             audioEncoding: 'MP3',
             speakingRate: selectedVoice.rate,
-            pitch: isQuestion ? selectedVoice.pitch + 2.0 : selectedVoice.pitch,
+            pitch: selectedVoice.gender === 'MALE' ? -6.0 : 4.0,
           },
         }),
       });
@@ -66,7 +66,7 @@ export async function generateGoogleGeminiAudio(
       if (response.ok) {
         const data = await response.json();
         if (data.audioContent) {
-          const fileUri = `${FileSystem.cacheDirectory}poquitotalk_${Date.now()}.mp3`;
+          const fileUri = `${FileSystem.cacheDirectory}poquitotalk_${selectedVoice.name.toLowerCase()}_${Date.now()}.mp3`;
           await FileSystem.writeAsStringAsync(fileUri, data.audioContent, {
             encoding: FileSystem.EncodingType.Base64,
           });
@@ -74,7 +74,7 @@ export async function generateGoogleGeminiAudio(
         }
       }
     } catch (e) {
-      console.warn('Google Cloud API call failed, falling back to direct audio stream:', e);
+      console.warn('Google Cloud API call failed, falling back to stream:', e);
     }
   }
 
@@ -95,7 +95,7 @@ export async function generateGoogleGeminiAudio(
   return null;
 }
 
-export async function playGoogleAudioFile(fileUri: string): Promise<Audio.Sound | null> {
+export async function playGoogleAudioFile(fileUri: string, voiceOption?: VoiceOption): Promise<Audio.Sound | null> {
   try {
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
@@ -103,7 +103,14 @@ export async function playGoogleAudioFile(fileUri: string): Promise<Audio.Sound 
       shouldDuckAndroid: true,
       playThroughEarpieceAndroid: false,
     });
+
     const { sound } = await Audio.Sound.createAsync({ uri: fileUri }, { shouldPlay: true });
+    
+    if (voiceOption) {
+      // Apply pitch & rate modulation on audio playback for distinct male vs female persona voices
+      await sound.setRateAsync(voiceOption.pitch, false);
+    }
+
     return sound;
   } catch (error) {
     console.warn('Error playing audio file:', error);

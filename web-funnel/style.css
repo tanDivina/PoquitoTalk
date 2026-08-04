@@ -630,7 +630,7 @@ textarea:focus {
   right: -420px;
   width: 100%;
   max-width: 400px;
-  height: 100%;
+  height: 100vh;
   background: var(--surface-card);
   border-left: 1px solid var(--card-border);
   box-shadow: -10px 0 40px rgba(0,0,0,0.15);
@@ -638,34 +638,36 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
 }
 
 .feedback-drawer.open {
   right: 0;
 }
 
-.drawer-header {
-  padding: 24px;
+.feedback-drawer .drawer-header {
+  padding: 20px 24px;
   border-bottom: 1px solid var(--card-border);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   background: var(--surface-container);
+  box-sizing: border-box;
 }
 
-.drawer-header h3 {
+.feedback-drawer .drawer-header h3 {
   font-size: 18px;
   font-weight: 800;
   color: var(--text-charcoal);
   margin-bottom: 4px;
 }
 
-.drawer-header p {
+.feedback-drawer .drawer-header p {
   font-size: 12px;
   color: var(--text-muted);
 }
 
-.drawer-close-btn {
+.feedback-drawer .drawer-close-btn {
   background: transparent;
   border: none;
   font-size: 20px;
@@ -674,17 +676,18 @@ textarea:focus {
   padding: 4px;
 }
 
-.drawer-body {
+.feedback-drawer .drawer-body {
   padding: 24px;
   flex: 1;
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
-.form-group {
-  margin-bottom: 20px;
+.feedback-drawer .form-group {
+  margin-bottom: 18px;
 }
 
-.form-group label {
+.feedback-drawer .form-group label {
   display: block;
   font-size: 11px;
   font-weight: 800;
@@ -693,19 +696,15 @@ textarea:focus {
   margin-bottom: 8px;
 }
 
-.subtext {
-  font-weight: 400;
-  text-transform: none;
-}
-
-.category-grid {
+.feedback-drawer .category-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
+  width: 100%;
 }
 
-.cat-btn {
-  padding: 10px;
+.feedback-drawer .cat-btn {
+  padding: 10px 8px;
   border-radius: 12px;
   border: 1px solid var(--card-border);
   background: var(--surface-container);
@@ -715,31 +714,36 @@ textarea:focus {
   cursor: pointer;
   text-align: center;
   transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.cat-btn.active {
+.feedback-drawer .cat-btn.active {
   background: var(--action-terracotta-bg);
   border-color: var(--action-terracotta-light);
   color: var(--action-terracotta);
+  font-weight: 800;
 }
 
-.stars-row {
+.feedback-drawer .stars-row {
   display: flex;
   gap: 8px;
+  align-items: center;
 }
 
-.star {
+.feedback-drawer .star {
   font-size: 26px;
   color: var(--card-border);
   cursor: pointer;
   transition: color 0.15s ease;
 }
 
-.star.filled {
+.feedback-drawer .star.filled {
   color: #FFB800;
 }
 
-textarea, input[type="email"] {
+.feedback-drawer textarea, 
+.feedback-drawer input[type="email"] {
   width: 100%;
   padding: 12px;
   border-radius: 12px;
@@ -749,13 +753,15 @@ textarea, input[type="email"] {
   font-size: 13px;
   color: var(--text-charcoal);
   outline: none;
+  box-sizing: border-box;
 }
 
-textarea:focus, input[type="email"]:focus {
+.feedback-drawer textarea:focus, 
+.feedback-drawer input[type="email"]:focus {
   border-color: var(--action-terracotta);
 }
 
-.btn-submit-feedback {
+.feedback-drawer .btn-submit-feedback {
   width: 100%;
   padding: 14px;
   border-radius: 14px;
@@ -766,9 +772,10 @@ textarea:focus, input[type="email"]:focus {
   font-size: 14px;
   cursor: pointer;
   transition: background 0.2s ease;
+  box-sizing: border-box;
 }
 
-.btn-submit-feedback:hover {
+.feedback-drawer .btn-submit-feedback:hover {
   background: #7D391A;
 }
 

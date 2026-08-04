@@ -71,7 +71,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
       // 1. Synthesize audio file via Google Speech API with SSML if API key available
       const fileUri = await generateGoogleGeminiAudio(outputText, selectedVoice.id);
       if (fileUri) {
-        const sound = await playGoogleAudioFile(fileUri);
+        const sound = await playGoogleAudioFile(fileUri, selectedVoice);
         if (sound) {
           sound.setOnPlaybackStatusUpdate((status) => {
             if (status.isLoaded && status.didJustFinish) {
