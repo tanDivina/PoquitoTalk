@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 
@@ -10,13 +11,16 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ isPro = false, onOpenPaywall, onResetOnboarding }) => {
+  const insets = useSafeAreaInsets();
+  const topPadding = Math.max(insets.top + 6, Platform.OS === 'android' ? (StatusBar.currentHeight || 24) + 6 : 40);
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: topPadding }]}>
       <View style={styles.brandContainer}>
         <View style={styles.logoBubble}>
           <MaterialCommunityIcons name="chat-processing-outline" size={22} color={Colors.secondary} />
         </View>
-        <View>
+        <View style={styles.titleInfoBox}>
           <View style={styles.titleRow}>
             <Text style={styles.title}>PoquitoTalk</Text>
             {onResetOnboarding && (
@@ -53,32 +57,37 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 16,
+    paddingHorizontal: 16,
     paddingBottom: 12,
     backgroundColor: Colors.background,
   },
   brandContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
+    flex: 1,
+    marginRight: 8,
   },
   logoBubble: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: Colors.secondaryContainer,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  titleInfoBox: {
+    flex: 1,
   },
   titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+    flexWrap: 'wrap',
   },
   title: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: '800',
     color: Colors.onBackground,
     letterSpacing: -0.3,
   },
@@ -97,15 +106,15 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
   },
   subtitle: {
-    fontSize: 12,
-    fontWeight: '500',
+    fontSize: 11,
+    fontWeight: '600',
     color: Colors.onSurfaceVariant,
   },
   proBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
+    gap: 4,
+    paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 20,
     backgroundColor: Colors.secondaryContainer,
@@ -117,8 +126,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.tertiary,
   },
   proText: {
-    fontSize: 11,
-    fontWeight: '700',
+    fontSize: 10,
+    fontWeight: '800',
     color: Colors.secondary,
     letterSpacing: 0.5,
   },
