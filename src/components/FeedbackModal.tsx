@@ -75,8 +75,8 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ visible, onClose }
           style={styles.container}
         >
           <View style={styles.header}>
-            <View>
-              <Text style={styles.title}>Send Feedback 💬</Text>
+            <View style={styles.headerTitleBox}>
+              <Text style={styles.title}>Send Feedback</Text>
               <Text style={styles.subtitle}>Help us shape PoquitoTalk for Bocas del Toro!</Text>
             </View>
             <TouchableOpacity onPress={handleResetAndClose} style={styles.closeBtn}>
@@ -99,33 +99,42 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ visible, onClose }
             </View>
           ) : (
             <View style={styles.body}>
-              {/* Category selector */}
+              {/* Category selector with Crisp Vector SVG Icons */}
               <Text style={styles.label}>FEEDBACK CATEGORY</Text>
               <View style={styles.categoryGrid}>
                 {[
-                  { label: '💡 Feature Request', value: 'Feature Request' },
-                  { label: '🐛 Bug Report', value: 'Bug Report' },
-                  { label: '👍 Praise', value: 'Praise' },
-                  { label: '💬 General', value: 'General Feedback' },
-                ].map((cat) => (
-                  <TouchableOpacity
-                    key={cat.value}
-                    style={[
-                      styles.categoryBtn,
-                      category === cat.value && styles.categoryBtnActive,
-                    ]}
-                    onPress={() => setCategory(cat.value as any)}
-                  >
-                    <Text
+                  { label: 'Feature Request', icon: 'bulb-outline', value: 'Feature Request' },
+                  { label: 'Bug Report', icon: 'bug-outline', value: 'Bug Report' },
+                  { label: 'Praise', icon: 'thumbs-up-outline', value: 'Praise' },
+                  { label: 'General', icon: 'chatbubble-ellipses-outline', value: 'General Feedback' },
+                ].map((cat) => {
+                  const active = category === cat.value;
+                  return (
+                    <TouchableOpacity
+                      key={cat.value}
                       style={[
-                        styles.categoryBtnText,
-                        category === cat.value && styles.categoryBtnTextActive,
+                        styles.categoryBtn,
+                        active && styles.categoryBtnActive,
                       ]}
+                      onPress={() => setCategory(cat.value as any)}
+                      activeOpacity={0.75}
                     >
-                      {cat.label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                      <Ionicons
+                        name={cat.icon as any}
+                        size={16}
+                        color={active ? Colors.secondary : Colors.outline}
+                      />
+                      <Text
+                        style={[
+                          styles.categoryBtnText,
+                          active && styles.categoryBtnTextActive,
+                        ]}
+                      >
+                        {cat.label}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
 
               {/* Star Rating */}
@@ -200,17 +209,21 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
-    padding: 24,
-    maxHeight: '90%',
+    padding: 20,
+    maxHeight: '92%',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 16,
-    paddingBottom: 12,
+    marginBottom: 14,
+    paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: Colors.cardBorder,
+  },
+  headerTitleBox: {
+    flex: 1,
+    marginRight: 8,
   },
   title: {
     fontSize: 18,
@@ -221,19 +234,20 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.onSurfaceVariant,
     marginTop: 2,
+    lineHeight: 16,
   },
   closeBtn: {
     padding: 6,
   },
   body: {
-    gap: 12,
+    gap: 10,
   },
   label: {
     fontSize: 10,
     fontWeight: '800',
     color: Colors.outline,
     letterSpacing: 0.5,
-    marginTop: 4,
+    marginTop: 2,
   },
   categoryGrid: {
     flexDirection: 'row',
@@ -241,6 +255,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   categoryBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 12,
@@ -269,7 +286,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surfaceContainer,
     borderRadius: 16,
     padding: 12,
-    minHeight: 90,
+    minHeight: 85,
     textAlignVertical: 'top',
     fontSize: 14,
     color: Colors.onBackground,
@@ -294,7 +311,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondary,
     paddingVertical: 14,
     borderRadius: 18,
-    marginTop: 8,
+    marginTop: 6,
   },
   submitBtnText: {
     fontSize: 14,
