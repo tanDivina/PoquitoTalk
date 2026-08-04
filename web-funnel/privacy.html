@@ -1,26 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Privacy Policy — PoquitoTalk</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy & Data Security — PoquitoTalk</title>
+  <meta name="description" content="Privacy Policy for PoquitoTalk — 1-Tap WhatsApp Voice Notes for Panamá. Compliant with GDPR, CCPA, and RevenueCat Funnels." />
+  <link rel="stylesheet" href="style.css?v=1.0.2" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { background: #050507; color: #f5f5f7; font-family: sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; line-height: 1.6; }
-    h1, h2 { color: #a8ff35; }
-    a { color: #a8ff35; }
+    .privacy-container {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 36px;
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    }
+    .privacy-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-charcoal);
+      margin-bottom: 8px;
+    }
+    .privacy-date {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .privacy-section {
+      margin-bottom: 24px;
+    }
+    .privacy-section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--action-terracotta);
+      margin-bottom: 10px;
+    }
+    .privacy-section p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+    .privacy-section ul {
+      margin-left: 20px;
+      margin-bottom: 12px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .privacy-section li {
+      margin-bottom: 6px;
+    }
+    .back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--action-terracotta);
+      font-weight: 700;
+      text-decoration: none;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
-  <h1>Privacy Policy for PoquitoTalk</h1>
-  <p>Last updated: August 2, 2026</p>
-  <p>PoquitoTalk ("we", "our", or "us") operates the website <strong>poquitotalk.hero-apps.com</strong> and the PoquitoTalk mobile application. This Privacy Policy details how we handle user data and voice translation processing.</p>
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
+          <div class="logo-bubble">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#964824" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <span class="brand-name">PoquitoTalk <span class="badge-tag">Panamá 🇵🇦</span></span>
+        </a>
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">← Back to App</a>
+      </div>
+    </div>
+  </header>
 
-  <h2>1. Data Collection & Processing</h2>
-  <p>PoquitoTalk processes text and voice inputs solely for generating real-time Spanish translations. Voice inputs are converted to text and translated via secure API endpoints (Google Gemini / Cloud Speech API). We do not sell or store personal audio recordings.</p>
+  <div class="container">
+    <div class="privacy-container">
+      <a href="index.html" class="back-home">← Back to Main Page</a>
+      <h1 class="privacy-title">Privacy Policy & Data Security</h1>
+      <div class="privacy-date">Last updated: August 3, 2026 • Effective for PoquitoTalk Web & Mobile Apps</div>
 
-  <h2>2. Payments & Subscriptions</h2>
-  <p>All web payments are processed securely via <strong>Stripe</strong> and synchronized with <strong>RevenueCat Funnels</strong>. We do not store credit card numbers on our servers.</p>
+      <div class="privacy-section">
+        <h2>1. Overview & Commitment</h2>
+        <p>PoquitoTalk ("we", "our", or "us") operates the website <strong>poquitotalk.hero-apps.com</strong> and the PoquitoTalk mobile application. We are committed to protecting user privacy, ensuring transparent data collection, and maintaining GDPR & CCPA compliance for expats, nomads, and local service providers in Panamá.</p>
+      </div>
 
-  <h2>3. Contact Us</h2>
-  <p>If you have any questions regarding this Privacy Policy, please contact our support desk at <a href="mailto:support@hero-apps.com">support@hero-apps.com</a>.</p>
+      <div class="privacy-section">
+        <h2>2. Speech & Text Translation Processing</h2>
+        <p>PoquitoTalk processes text dictations and audio voice clips solely to generate real-time Panamanian Spanish translations:</p>
+        <ul>
+          <li><strong>No Permanent Audio Storage</strong>: Voice clips processed via Google Speech-to-Text and Gemma AI are used strictly in-memory during translation and are never stored on our permanent servers.</li>
+          <li><strong>Local Audio Caching</strong>: Generated `.mp3` audio files for WhatsApp attachments are saved locally on your device's sandbox cache and can be cleared anytime.</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h2>3. Payments & Stripe Security</h2>
+        <p>All subscription transactions (Credit Packs & Annual Passes) are processed securely via <strong>Stripe Checkout</strong> and synchronized with <strong>RevenueCat Purchases v9</strong>:</p>
+        <ul>
+          <li>We never receive, store, or log raw credit card or banking details on our servers.</li>
+          <li>Purchases are linked strictly to your anonymous user ID or email address for subscription entitlements.</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h2>4. Cookies & Local Analytics</h2>
+        <p>We use minimal, essential cookies and local storage (`localStorage` / `AsyncStorage`) to:</p>
+        <ul>
+          <li>Maintain active subscription entitlement state.</li>
+          <li>Save user preferences (e.g. selected Voice Persona, bookmarked service phrases).</li>
+          <li>Store feedback submission history so you can track your sent requests.</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h2>5. Your Data Rights (GDPR & CCPA)</h2>
+        <p>You have full control over your data. You may at any time request data deletion, export your saved translations, or reset your intake onboarding state directly within the app's Settings screen.</p>
+      </div>
+
+      <div class="privacy-section">
+        <h2>6. Contact Us</h2>
+        <p>For any privacy inquiries, data deletion requests, or support questions, please contact our support desk:</p>
+        <p>✉️ Email: <a href="mailto:support@hero-apps.com" style="color: var(--action-terracotta); font-weight: 700;">support@hero-apps.com</a><br>
+        🌐 Web: <a href="https://poquitotalk.hero-apps.com" style="color: var(--action-terracotta); font-weight: 700;">https://poquitotalk.hero-apps.com</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <p>© 2026 Hero-Apps • Built for RevenueCat Shipaton 2026</p>
+      <div class="footer-links">
+        <a href="index.html">Main Page</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="mailto:support@hero-apps.com">Support Desk</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

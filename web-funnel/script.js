@@ -131,3 +131,20 @@ async function submitWebFeedback(e) {
   document.getElementById('feedback-form').style.display = 'none';
   document.getElementById('fb-success-msg').style.display = 'block';
 }
+
+// Cookie Consent Banner Handling
+window.addEventListener('DOMContentLoaded', () => {
+  const consent = localStorage.getItem('poquitotalk_cookie_consent');
+  if (!consent) {
+    setTimeout(() => {
+      const banner = document.getElementById('cookie-banner');
+      if (banner) banner.classList.add('show');
+    }, 1000);
+  }
+});
+
+function acceptCookieConsent() {
+  localStorage.setItem('poquitotalk_cookie_consent', 'true');
+  const banner = document.getElementById('cookie-banner');
+  if (banner) banner.classList.remove('show');
+}
