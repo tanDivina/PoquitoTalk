@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Linking, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
@@ -63,9 +63,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
             <Ionicons name="mic-outline" size={20} color={Colors.whatsapp} />
           </View>
           <View style={styles.cardText}>
-            <Text style={styles.cardTitle}>ElevenLabs Hyper-Realistic Studio Voices 🎙️</Text>
+            <Text style={styles.cardTitle}>ElevenLabs Studio Voices 🎙️</Text>
             <Text style={styles.cardSubtitle}>
-              Enter your ElevenLabs API Key for human-grade Panamanian Spanish speech
+              Active API Key for human-grade Panamanian Spanish speech
             </Text>
           </View>
         </View>
@@ -98,7 +98,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
           activeOpacity={0.7}
         >
           <Ionicons name="chatbubble-ellipses-outline" size={20} color={Colors.secondary} />
-          <Text style={styles.linkLabel}>Send Feedback & Feature Requests 💬</Text>
+          <Text style={styles.linkLabel}>Send Feedback & Feature Requests</Text>
           <Ionicons name="chevron-forward" size={16} color={Colors.outline} />
         </TouchableOpacity>
       </View>
@@ -118,31 +118,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
         </View>
       )}
 
-      {/* Hackathon Info Card */}
-      <View style={styles.card}>
-        <Text style={styles.sectionHeader}>HACKATHON INFORMATION</Text>
-
-        <View style={styles.settingRow}>
-          <Text style={styles.rowLabel}>Event</Text>
-          <Text style={styles.rowValue}>RevenueCat Shipaton 2026</Text>
-        </View>
-
-        <View style={styles.settingRow}>
-          <Text style={styles.rowLabel}>AI Engine</Text>
-          <Text style={styles.rowValue}>Gemma 2B / Gemma 3 1B</Text>
-        </View>
-
-        <View style={styles.settingRow}>
-          <Text style={styles.rowLabel}>TTS Voice Engine</Text>
-          <Text style={styles.rowValue}>ElevenLabs Multilingual v2 / Google</Text>
-        </View>
-
-        <View style={styles.settingRow}>
-          <Text style={styles.rowLabel}>Monetization SDK</Text>
-          <Text style={styles.rowValue}>RevenueCat Purchases v9</Text>
-        </View>
-      </View>
-
       {/* Support & Privacy */}
       <View style={styles.card}>
         <TouchableOpacity
@@ -158,15 +133,15 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
 
         <TouchableOpacity
           style={styles.linkRow}
-          onPress={() => Alert.alert('Privacy Policy', 'PoquitoTalk processes translations securely and respects your privacy.')}
+          onPress={() => Linking.openURL('https://poquitotalk.hero-apps.com/privacy.html')}
         >
           <Ionicons name="shield-checkmark-outline" size={18} color={Colors.primary} />
-          <Text style={styles.linkLabel}>Privacy Policy</Text>
+          <Text style={styles.linkLabel}>Privacy Policy & Data Security</Text>
           <Ionicons name="chevron-forward" size={16} color={Colors.outline} />
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.versionText}>PoquitoTalk v1.0.2 • Built for RevenueCat Shipaton</Text>
+      <Text style={styles.versionText}>PoquitoTalk v1.0.2 • Bocas del Toro, Panamá 🇵🇦</Text>
 
       {/* In-App Feedback Modal */}
       <FeedbackModal
@@ -271,28 +246,6 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 13,
     fontWeight: '800',
-  },
-  sectionHeader: {
-    fontSize: 10,
-    fontWeight: '800',
-    color: Colors.outline,
-    letterSpacing: 0.5,
-    marginBottom: 12,
-  },
-  settingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-  },
-  rowLabel: {
-    fontSize: 13,
-    color: Colors.onBackground,
-    fontWeight: '600',
-  },
-  rowValue: {
-    fontSize: 13,
-    color: Colors.onSurfaceVariant,
   },
   linkRow: {
     flexDirection: 'row',
