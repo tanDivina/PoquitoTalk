@@ -21,7 +21,7 @@ export const ELEVENLABS_PERSONAS: Record<string, string> = {
   Valeria: 'EXAVITQu4vr4xnSDxMaL', // Bella - Young Expressive Female
 };
 
-let elevenLabsApiKey = process.env.EXPO_PUBLIC_ELEVENLABS_API_KEY || '';
+let elevenLabsApiKey = process.env.EXPO_PUBLIC_ELEVENLABS_API_KEY || 'sk_64d48eca9c2c52a559dfc4e40da1a2dc76870f3f851f4c49';
 
 export function setElevenLabsApiKey(key: string) {
   elevenLabsApiKey = key.trim();
