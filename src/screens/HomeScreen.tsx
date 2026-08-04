@@ -23,6 +23,7 @@ import { TranslationItem } from '../types';
 import { VoiceOption } from '../services/googleVoice';
 
 interface HomeScreenProps {
+  navigation?: any;
   isPro: boolean;
   onOpenPaywall: () => void;
   savedTranslations: TranslationItem[];
@@ -34,6 +35,7 @@ interface HomeScreenProps {
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
+  navigation,
   isPro,
   onOpenPaywall,
   savedTranslations,
@@ -234,55 +236,19 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </TouchableOpacity>
       )}
 
-      {/* Incoming WhatsApp Voice Note Translation Tool Card */}
-      <View style={styles.voiceNoteHelperCard}>
-        <View style={styles.voiceNoteHelperHeader}>
-          <FontAwesome5 name="whatsapp" size={18} color={Colors.whatsapp} />
-          <Text style={styles.voiceNoteHelperTitle}>Received a Spanish WhatsApp Voice Note?</Text>
+      {/* 2-Way Conversation Threads Launcher Bar */}
+      <TouchableOpacity
+        style={styles.threadsLauncherBar}
+        onPress={() => (navigation as any).navigate('Threads')}
+        activeOpacity={0.8}
+      >
+        <FontAwesome5 name="whatsapp" size={18} color={Colors.whatsapp} />
+        <View style={styles.threadsLauncherText}>
+          <Text style={styles.threadsLauncherTitle}>2-Way Conversation Threads 💬</Text>
+          <Text style={styles.threadsLauncherSub}>Carlos (A/C), Captain Juan (Boat), Landlord...</Text>
         </View>
-
-        <Text style={styles.voiceNoteHelperDesc}>
-          3 Easy ways to translate incoming voice notes from technicians & local service providers:
-        </Text>
-
-        <View style={styles.voiceNoteOptionsRow}>
-          {/* Method 1: Listen via Mic */}
-          <TouchableOpacity
-            style={styles.voiceNoteOptionBtn}
-            onPress={handleListenToIncomingVoiceNote}
-            activeOpacity={0.8}
-          >
-            <Ionicons name="volume-medium-outline" size={16} color={Colors.secondary} />
-            <Text style={styles.voiceNoteOptionBtnText}>Listen via Mic</Text>
-          </TouchableOpacity>
-
-          {/* Method 2: Import Audio File */}
-          <TouchableOpacity
-            style={styles.voiceNoteOptionBtn}
-            onPress={handleImportAudioFile}
-            activeOpacity={0.8}
-          >
-            <Ionicons name="folder-open-outline" size={16} color={Colors.secondary} />
-            <Text style={styles.voiceNoteOptionBtnText}>Import Audio File</Text>
-          </TouchableOpacity>
-
-          {/* Method 3: WhatsApp Guide */}
-          <TouchableOpacity
-            style={styles.voiceNoteOptionBtn}
-            onPress={() =>
-              Alert.alert(
-                'How to Enable WhatsApp Voice Transcripts',
-                '1. Open WhatsApp -> Settings -> Chats -> Turn ON "Voice message transcripts".\n2. Select Spanish to download the on-device language pack.\n3. Long-press any Spanish voice note -> tap Transcribe -> Copy text.\n4. Open PoquitoTalk — the 1-tap green banner translates it instantly!',
-                [{ text: 'Got It!' }]
-              )
-            }
-            activeOpacity={0.8}
-          >
-            <Ionicons name="help-circle-outline" size={16} color={Colors.secondary} />
-            <Text style={styles.voiceNoteOptionBtnText}>Guide</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+        <Ionicons name="chevron-forward" size={18} color={Colors.secondary} />
+      </TouchableOpacity>
 
       {/* Language Switcher Row */}
       <LanguageChip
@@ -461,26 +427,35 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     marginBottom: 12,
   },
-  voiceNoteOptionsRow: {
+  threadsLauncherBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 12,
+    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
+    shadowColor: Colors.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 6,
+    elevation: 2,
   },
-  voiceNoteOptionBtn: {
+  threadsLauncherText: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-    backgroundColor: Colors.secondaryContainer,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    borderRadius: 14,
   },
-  voiceNoteOptionBtnText: {
+  threadsLauncherTitle: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: Colors.onBackground,
+  },
+  threadsLauncherSub: {
     fontSize: 11,
-    fontWeight: '700',
-    color: Colors.secondary,
+    color: Colors.onSurfaceVariant,
+    marginTop: 2,
   },
   inputCard: {
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',

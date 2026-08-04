@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Platform } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-
 import { Colors } from './src/theme/colors';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { PresetsScreen } from './src/screens/PresetsScreen';
 import { SavedScreen } from './src/screens/SavedScreen';
 import { SettingsScreen } from './src/screens/SettingsScreen';
 import { OnboardingScreen } from './src/screens/OnboardingScreen';
+import { ConversationsScreen } from './src/screens/ConversationsScreen';
 import { PaywallModal } from './src/components/PaywallModal';
-import { revenueCat } from './src/services/revenuecat';
 import { TranslationItem } from './src/types';
-import { VoiceOption, GOOGLE_SPANISH_VOICES } from './src/services/googleVoice';
+import { GOOGLE_SPANISH_VOICES, VoiceOption } from './src/services/googleVoice';
+import { revenueCat } from './src/services/revenuecat';
 
 const Tab = createBottomTabNavigator();
 
@@ -53,30 +52,22 @@ export default function App() {
   };
 
   if (showOnboarding) {
-    return (
-      <SafeAreaProvider>
-        <SafeAreaView style={styles.safeArea}>
-          <StatusBar style="dark" backgroundColor={Colors.background} />
-          <OnboardingScreen onComplete={handleCompleteOnboarding} />
-        </SafeAreaView>
-      </SafeAreaProvider>
-    );
+    return <OnboardingScreen onComplete={handleCompleteOnboarding} />;
   }
 
   return (
     <SafeAreaProvider>
       <View style={styles.mainContainer}>
-        <StatusBar style="dark" backgroundColor={Colors.background} />
         <NavigationContainer>
           <Tab.Navigator
-            id="mainTabs"
+            id="main_tabs"
             screenOptions={{
               headerShown: false,
-              tabBarStyle: styles.tabBar,
               tabBarActiveTintColor: Colors.secondary,
               tabBarInactiveTintColor: Colors.outline,
-              tabBarLabelStyle: styles.tabBarLabel,
+              tabBarStyle: styles.tabBar,
               tabBarItemStyle: styles.tabBarItem,
+              tabBarLabelStyle: styles.tabBarLabel,
             }}
           >
             <Tab.Screen
@@ -97,6 +88,24 @@ export default function App() {
                   activePresetPrompt={activePresetPrompt}
                   onClearPresetPrompt={() => setActivePresetPrompt(undefined)}
                   initialVoice={userVoice}
+                  onResetOnboarding={() => setShowOnboarding(true)}
+                />
+              )}
+            </Tab.Screen>
+
+            <Tab.Screen
+              name="Threads"
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="chatbubbles-outline" size={22} color={color} />
+                ),
+              }}
+            >
+              {(props) => (
+                <ConversationsScreen
+                  {...props}
+                  isPro={isPro}
+                  onOpenPaywall={() => setPaywallVisible(true)}
                   onResetOnboarding={() => setShowOnboarding(true)}
                 />
               )}
@@ -204,7 +213,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   tabBarLabel: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '700',
   },
 });
