@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Linking, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { FeedbackModal } from '../components/FeedbackModal';
+import { setElevenLabsApiKey, getElevenLabsApiKey } from '../services/elevenLabsVoice';
 
 interface SettingsScreenProps {
   isPro: boolean;
@@ -13,6 +14,15 @@ interface SettingsScreenProps {
 
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPaywall, onResetOnboarding }) => {
   const [feedbackVisible, setFeedbackVisible] = useState(false);
+  const [elevenKey, setElevenKeyState] = useState(getElevenLabsApiKey());
+  const [isSaved, setIsSaved] = useState(false);
+
+  const handleSaveElevenKey = () => {
+    setElevenLabsApiKey(elevenKey);
+    setIsSaved(true);
+    Alert.alert("ElevenLabs API Key Saved! 🎙️", "Hyper-realistic studio voices are now active for all personas!");
+    setTimeout(() => setIsSaved(false), 3000);
+  };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -43,6 +53,40 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
           activeOpacity={0.8}
         >
           <Text style={styles.actionBtnText}>{isPro ? 'Manage Subscription' : 'Upgrade to Pro'}</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* ElevenLabs API Key Settings Card */}
+      <View style={styles.card}>
+        <View style={styles.cardRow}>
+          <View style={[styles.iconCircle, { backgroundColor: '#E8F5E9' }]}>
+            <Ionicons name="mic-outline" size={20} color={Colors.whatsapp} />
+          </View>
+          <View style={styles.cardText}>
+            <Text style={styles.cardTitle}>ElevenLabs Hyper-Realistic Studio Voices 🎙️</Text>
+            <Text style={styles.cardSubtitle}>
+              Enter your ElevenLabs API Key for human-grade Panamanian Spanish speech
+            </Text>
+          </View>
+        </View>
+
+        <TextInput
+          style={styles.keyInput}
+          placeholder="sk_..."
+          placeholderTextColor={Colors.outline}
+          value={elevenKey}
+          onChangeText={setElevenKeyState}
+          secureTextEntry
+          autoCapitalize="none"
+        />
+
+        <TouchableOpacity
+          style={styles.saveKeyBtn}
+          onPress={handleSaveElevenKey}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="checkmark-circle-outline" size={16} color="#FFF" />
+          <Text style={styles.saveKeyBtnText}>{isSaved ? 'Key Saved & Active ✓' : 'Save ElevenLabs API Key'}</Text>
         </TouchableOpacity>
       </View>
 
@@ -89,13 +133,13 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
         </View>
 
         <View style={styles.settingRow}>
-          <Text style={styles.rowLabel}>Monetization SDK</Text>
-          <Text style={styles.rowValue}>RevenueCat Purchases v9</Text>
+          <Text style={styles.rowLabel}>TTS Voice Engine</Text>
+          <Text style={styles.rowValue}>ElevenLabs Multilingual v2 / Google</Text>
         </View>
 
         <View style={styles.settingRow}>
-          <Text style={styles.rowLabel}>Target Stores</Text>
-          <Text style={styles.rowValue}>Google Play / Galaxy Store</Text>
+          <Text style={styles.rowLabel}>Monetization SDK</Text>
+          <Text style={styles.rowValue}>RevenueCat Purchases v9</Text>
         </View>
       </View>
 
@@ -189,6 +233,32 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.onSurfaceVariant,
     marginTop: 2,
+  },
+  keyInput: {
+    backgroundColor: Colors.surfaceContainer,
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    fontSize: 14,
+    color: Colors.onBackground,
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
+    marginTop: 12,
+  },
+  saveKeyBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: Colors.whatsapp,
+    borderRadius: 14,
+    paddingVertical: 10,
+    marginTop: 10,
+  },
+  saveKeyBtnText: {
+    color: '#FFF',
+    fontSize: 12,
+    fontWeight: '800',
   },
   actionBtn: {
     backgroundColor: Colors.secondary,
