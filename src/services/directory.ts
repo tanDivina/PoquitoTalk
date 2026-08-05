@@ -10,6 +10,8 @@ export interface LocalServiceProvider {
   rating: number;
   verified: boolean;
   notes?: string;
+  isSponsored?: boolean;      // Catvertising Award: B2B Local Provider Ad Placement
+  adSpotlightText?: string;   // Rewarded Ad Text
 }
 
 // Initial Verified Directory for Bocas del Toro, Panama 🇵🇦
@@ -22,6 +24,8 @@ export const INITIAL_BOCAS_DIRECTORY: LocalServiceProvider[] = [
     whatsappNumber: '+50761234567',
     rating: 4.9,
     verified: true,
+    isSponsored: true,
+    adSpotlightText: 'FEATURED SPONSOR • Watch 10s Spotlight to Unlock +5 Free Translations!',
     notes: 'A/C leak repairs & gas refills in Isla Colón & Carenero.',
   },
   {
@@ -32,6 +36,8 @@ export const INITIAL_BOCAS_DIRECTORY: LocalServiceProvider[] = [
     whatsappNumber: '+50769876543',
     rating: 4.8,
     verified: true,
+    isSponsored: true,
+    adSpotlightText: 'FEATURED SPONSOR • Dockside outboard motor assistance in Bocas town.',
     notes: 'Outboard motor repairs & dockside assistance in Bocas town.',
   },
   {
@@ -71,7 +77,6 @@ export async function fetchRegionalProviders(
   category?: string
 ): Promise<LocalServiceProvider[]> {
   try {
-    // Attempt MongoDB Atlas Data API Endpoint fetch if configured
     const mongoDataApiUrl = process.env.EXPO_PUBLIC_MONGO_ATLAS_URL;
     if (mongoDataApiUrl) {
       const response = await fetch(`${mongoDataApiUrl}/action/find`, {
@@ -99,7 +104,6 @@ export async function fetchRegionalProviders(
     console.warn('MongoDB Atlas fetch fallback to local initial directory:', error);
   }
 
-  // Graceful fallback to local initial directory for selected region & category
   return INITIAL_BOCAS_DIRECTORY.filter((p) => {
     const matchesRegion = p.region === region;
     const matchesCategory = !category || p.category === category;
