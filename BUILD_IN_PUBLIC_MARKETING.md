@@ -14,14 +14,14 @@
 
 ---
 
-## 3. Catvertising Award Video Campaign 🐱🏆
+## 3. Catvertising Award Video Campaign 🏆
 Targeting the **Catvertising Award** category at RevenueCat Shipaton 2026 ([shipaton.com/categories/catvertising-award](https://www.shipaton.com/categories/catvertising-award)):
 
-### Campaign Concept: *"Gato Diego Speaks Panamanian Spanish with PoquitoTalk! 🐱🇵🇦"*
-- **Plot**: An expat's cat ("Gato Diego") wants to hire a local boat taxi captain on Isla Carenero.
-- **Action**: The expat opens PoquitoTalk, selects the **Diego Studio Voice Persona**, and converts *"Take Gato Diego to Carenero!"* into Panamanian Spanish speech.
-- **RevenueCat Paywall**: Unlocks Unlimited Treats & Voice Notes with RevenueCat SDK!
-- **Format**: 15-second vertical promo ad rendered via Hyperframes.
+### Core Video Concept: *"The Instant Paywall Unlock Moment"*
+- **Scene 1 (0–4s) — High-Friction Problem**: An expat in Bocas receives an urgent Spanish voice note from an A/C repair technician on WhatsApp and hits the free tier translation limit.
+- **Scene 2 (4–8s) — RevenueCat 1-Tap Unlock**: The expat taps **"Start 7-Day Free Trial"** on the RevenueCat paywall modal. Smooth animation reveals: **"PRO UNLOCKED 👑"**.
+- **Scene 3 (8–15s) — Instant Resolution & Delight**: PoquitoTalk synthesizes the ElevenLabs Panamanian Spanish studio voice (*"¡Buenas! Llego en 10 minutos a revisar el aire."*) and shares it directly to WhatsApp with 1 tap.
+- **Format**: High-converting 15-second vertical promo ad rendered via Hyperframes.
 
 ---
 
