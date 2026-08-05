@@ -148,3 +148,14 @@ function acceptCookieConsent() {
   const banner = document.getElementById('cookie-banner');
   if (banner) banner.classList.remove('show');
 }
+
+// Interactive FAQ Accordion Toggle
+function toggleFaq(btn) {
+  const card = btn.closest('.faq-card');
+  const isOpen = card.classList.contains('open');
+  document.querySelectorAll('.faq-card').forEach(c => c.classList.remove('open'));
+  if (!isOpen) {
+    card.classList.add('open');
+  }
+}
+

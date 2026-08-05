@@ -2,6 +2,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
+    { "source": "/es", "destination": "/index-es.html" },
     { "source": "/privacy", "destination": "/privacy.html" }
   ],
   "headers": [
