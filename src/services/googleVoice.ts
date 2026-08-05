@@ -2,7 +2,7 @@
 // Generates real .mp3 audio files for 4 distinct personas (Diego, Mateo, Sofia, Valeria)
 // Supports ElevenLabs hyper-realistic TTS, Google Cloud TTS, and pitch-modulated stream fallbacks
 
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { Audio } from 'expo-av';
 import { generateElevenLabsAudio } from './elevenLabsVoice';
 
