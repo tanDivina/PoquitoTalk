@@ -1,12 +1,16 @@
 {
   "expo": {
     "name": "PoquitoTalk",
-    "slug": "poquitotalk",
+    "slug": "poquitotalk-dev",
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "scheme": "poquitotalk",
+    "updates": {
+      "enabled": false,
+      "checkAutomatically": "NEVER"
+    },
     "ios": {
       "supportsTablet": true
     },
