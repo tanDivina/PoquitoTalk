@@ -8,10 +8,6 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "scheme": "poquitotalk",
-    "updates": {
-      "enabled": false,
-      "checkAutomatically": "NEVER"
-    },
     "ios": {
       "supportsTablet": true
     },
