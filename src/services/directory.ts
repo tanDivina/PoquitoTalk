@@ -48,6 +48,8 @@ export const INITIAL_BOCAS_DIRECTORY: LocalServiceProvider[] = [
     whatsappNumber: '+50765554321',
     rating: 5.0,
     verified: true,
+    isSponsored: true,
+    adSpotlightText: 'FEATURED SPONSOR • Dish installation, router cabling & line testing.',
     notes: 'Starlink dish installation, router cabling & line testing.',
   },
   {
@@ -71,6 +73,30 @@ export const INITIAL_BOCAS_DIRECTORY: LocalServiceProvider[] = [
     notes: 'Doctor consultation & urgent pharmacy needs in Isla Colón.',
   },
 ];
+
+// Contextual Ad Targeting Helper
+export function getMatchingProviderForCategory(categoryName?: string): LocalServiceProvider | null {
+  if (!categoryName) return null;
+  const lower = categoryName.toLowerCase();
+
+  if (lower.includes('air') || lower.includes('ac') || lower.includes('conditioning') || lower.includes('cooling')) {
+    return INITIAL_BOCAS_DIRECTORY.find((p) => p.category === 'ac_repair') || null;
+  }
+  if (lower.includes('boat') || lower.includes('water') || lower.includes('taxi') || lower.includes('marina')) {
+    return INITIAL_BOCAS_DIRECTORY.find((p) => p.category === 'boat_repair') || null;
+  }
+  if (lower.includes('starlink') || lower.includes('wifi') || lower.includes('internet')) {
+    return INITIAL_BOCAS_DIRECTORY.find((p) => p.category === 'starlink_internet') || null;
+  }
+  if (lower.includes('plumb') || lower.includes('housing') || lower.includes('landlord') || lower.includes('water')) {
+    return INITIAL_BOCAS_DIRECTORY.find((p) => p.category === 'landlord_housing') || null;
+  }
+  if (lower.includes('medical') || lower.includes('doctor') || lower.includes('pharmacy')) {
+    return INITIAL_BOCAS_DIRECTORY.find((p) => p.category === 'medical_pharmacy') || null;
+  }
+
+  return null;
+}
 
 export async function fetchRegionalProviders(
   region: string = 'bocas_del_toro',

@@ -21,6 +21,8 @@ import {
   GOOGLE_SPANISH_VOICES,
   VoiceOption,
 } from '../services/googleVoice';
+import { DirectoryCard } from './DirectoryCard';
+import { getMatchingProviderForCategory } from '../services/directory';
 
 interface TranslationCardProps {
   inputText: string;
@@ -48,6 +50,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSharingVoice, setIsSharingVoice] = useState(false);
   const [copied, setCopied] = useState(false);
+  const contextualSponsor = getMatchingProviderForCategory(category);
 
   useEffect(() => {
     if (initialVoice) {
@@ -320,6 +323,14 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
             </>
           )}
         </TouchableOpacity>
+
+        {/* Contextual Local Sponsor Ad — 100% relevant to active service category */}
+        {contextualSponsor && (
+          <View style={styles.contextualAdSection}>
+            <Text style={styles.contextualAdHeader}>RELEVANT LOCAL SERVICE SPONSOR 🇵🇦</Text>
+            <DirectoryCard provider={contextualSponsor} translatedMessage={outputText} />
+          </View>
+        )}
       </View>
 
       {/* Voice Persona Picker Modal */}
@@ -533,6 +544,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '800',
     color: '#FFF',
+  },
+  contextualAdSection: {
+    marginTop: 14,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: Colors.cardBorder,
+  },
+  contextualAdHeader: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: Colors.outline,
+    letterSpacing: 0.8,
+    marginBottom: 8,
   },
   modalOverlay: {
     flex: 1,
