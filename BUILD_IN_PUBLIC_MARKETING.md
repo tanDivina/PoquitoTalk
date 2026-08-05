@@ -14,7 +14,18 @@
 
 ---
 
-## 3. Marketing & Outreach Playbook
+## 3. Catvertising Award Video Campaign 🐱🏆
+Targeting the **Catvertising Award** category at RevenueCat Shipaton 2026 ([shipaton.com/categories/catvertising-award](https://www.shipaton.com/categories/catvertising-award)):
+
+### Campaign Concept: *"Gato Diego Speaks Panamanian Spanish with PoquitoTalk! 🐱🇵🇦"*
+- **Plot**: An expat's cat ("Gato Diego") wants to hire a local boat taxi captain on Isla Carenero.
+- **Action**: The expat opens PoquitoTalk, selects the **Diego Studio Voice Persona**, and converts *"Take Gato Diego to Carenero!"* into Panamanian Spanish speech.
+- **RevenueCat Paywall**: Unlocks Unlimited Treats & Voice Notes with RevenueCat SDK!
+- **Format**: 15-second vertical promo ad rendered via Hyperframes.
+
+---
+
+## 4. Marketing & Outreach Playbook
 
 ### VIP Beta Tester Recruitment Post (Facebook Groups / X / WhatsApp)
 
@@ -32,7 +43,7 @@ In exchange, I’d love to have a quick 10-minute WhatsApp voice chat or coffee 
 
 ---
 
-## 4. 1-on-1 Interview Framework (The 3 Golden Questions)
+## 5. 1-on-1 Interview Framework (The 3 Golden Questions)
 
 When conducting 10-minute coffee chats or WhatsApp voice exchanges with early testers:
 
@@ -45,7 +56,7 @@ When conducting 10-minute coffee chats or WhatsApp voice exchanges with early te
 
 ---
 
-## 5. Growth Loops & Monetization Model
+## 6. Growth Loops & Monetization Model
 
 ### B2C Subscription Model (RevenueCat)
 - **Free Tier**: 10 translations / day + basic audio playback.
@@ -58,7 +69,7 @@ When conducting 10-minute coffee chats or WhatsApp voice exchanges with early te
 
 ---
 
-## 6. Social Proof & Case Study Logs
+## 7. Social Proof & Case Study Logs
 
 - **Dorien's Identity**: Dorien Van den Abbeele (`Dorien.vda@gmail.com`, `@DorienVibecodes`).
 - **Support Desk**: `support@hero-apps.com`.
