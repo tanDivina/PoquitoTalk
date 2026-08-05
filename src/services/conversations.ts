@@ -1,7 +1,7 @@
 // Conversation Threads Storage & Management Service
 // Manages 2-way persistent chat threads per service contact (Plumber, Landlord, Boat Captain)
 
-import * as FileSystem from 'expo-file-system/legacy';
+import * as FileSystem from 'expo-file-system';
 
 export interface ThreadMessage {
   id: string;

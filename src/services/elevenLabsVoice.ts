@@ -2,7 +2,7 @@
 // Generates human-grade, hyper-realistic Panamanian Spanish .mp3 voice clips
 // Uses eleven_multilingual_v2 model for natural speech, breathing, and human emotion
 
-import * as FileSystem from 'expo-file-system/legacy';
+import * as FileSystem from 'expo-file-system';
 import { VoiceOption } from './googleVoice';
 
 export interface ElevenLabsVoice {

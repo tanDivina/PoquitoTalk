@@ -13,7 +13,7 @@ import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
 import * as Clipboard from 'expo-clipboard';
 import * as Sharing from 'expo-sharing';
-import * as FileSystem from 'expo-file-system/legacy';
+import * as FileSystem from 'expo-file-system';
 import { Colors } from '../theme/colors';
 import {
   generateGoogleGeminiAudio,
