@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PoquitoTalk Walkie-Talkie en Vivo 📻</title>
+  <title>PoquitoTalk Walkie-Talkie en Vivo</title>
   
   <meta name="description" content="Walkie-Talkie en vivo con traducción instantánea de español e inglés para WhatsApp." />
-  <meta name="theme-color" content="#1B1C1A" />
+  <meta name="theme-color" content="#FBF9F5" />
 
   <!-- WhatsApp & Social Open Graph Meta Tags for 1-Tap Clickable Previews -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="PoquitoTalk" />
-  <meta property="og:title" content="📻 Walkie-Talkie en Vivo - PoquitoTalk" />
+  <meta property="og:title" content="Walkie-Talkie en Vivo - PoquitoTalk" />
   <meta property="og:description" content="Toca aquí para hablar por voz en español. Traduce tu voz a inglés automáticamente." />
   <meta property="og:image" content="https://poquitotalk.hero-apps.com/logo_transparent.png" />
   <meta property="og:url" content="https://poquitotalk.hero-apps.com/talk" />
   
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="📻 Walkie-Talkie en Vivo - PoquitoTalk" />
+  <meta name="twitter:title" content="Walkie-Talkie en Vivo - PoquitoTalk" />
   <meta name="twitter:description" content="Toca aquí para hablar por voz en español sin instalar nada." />
   <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/logo_transparent.png" />
 
@@ -26,15 +26,21 @@
 
   <style>
     :root {
-      --bg-dark: #1B1C1A;
-      --card-dark: #262724;
+      --bg-cream: #FBF9F5;
+      --surface-card: #FFFFFF;
+      --surface-container: #F5F3EF;
+      --surface-container-high: #EFEEEA;
+      --text-charcoal: #1B1C1A;
+      --text-muted: #4D463E;
+      --text-outline: #7E766D;
       --action-terracotta: #964824;
       --action-terracotta-light: #FD9A6F;
-      --whatsapp-green: #25D366;
+      --action-terracotta-bg: #FFDBCD;
       --sage-green: #4F604E;
-      --text-main: #FFFFFF;
-      --text-muted: #A8A39D;
-      --border-color: rgba(255, 255, 255, 0.12);
+      --sage-green-bg: #D5E8D1;
+      --whatsapp-green: #25D366;
+      --card-border: #E4E2DE;
+      --shadow-soft: rgba(142, 128, 113, 0.12);
     }
 
     * {
@@ -46,46 +52,65 @@
     }
 
     body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
+      background-color: var(--bg-cream);
+      color: var(--text-charcoal);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 16px 30px;
+      padding: 16px 16px 24px;
     }
 
+    /* Header Bar with Back Button */
     .header-bar {
       width: 100%;
-      max-width: 480px;
+      max-width: 520px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 18px;
-      background: var(--card-dark);
-      border: 1px solid var(--border-color);
+      padding: 10px 16px;
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
       border-radius: 20px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 16px var(--shadow-soft);
+    }
+
+    .btn-back-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--action-terracotta);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 12px;
+      background: var(--surface-container);
+      transition: background 0.2s ease;
+    }
+
+    .btn-back-nav:hover {
+      background: var(--action-terracotta-bg);
     }
 
     .brand-title {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       font-family: 'Lexend', sans-serif;
       font-weight: 800;
-      font-size: 17px;
-      color: var(--text-main);
+      font-size: 16px;
+      color: var(--text-charcoal);
     }
 
     .badge-live {
       display: flex;
       align-items: center;
       gap: 6px;
-      background: rgba(37, 211, 102, 0.15);
-      border: 1px solid var(--whatsapp-green);
-      color: var(--whatsapp-green);
+      background: var(--sage-green-bg);
+      border: 1px solid var(--sage-green);
+      color: var(--sage-green);
       padding: 4px 10px;
       border-radius: 14px;
       font-size: 11px;
@@ -108,19 +133,20 @@
       100% { opacity: 0.4; transform: scale(0.9); }
     }
 
+    /* Main Walkie Card */
     .main-card {
       width: 100%;
-      max-width: 480px;
-      background: var(--card-dark);
-      border: 1px solid var(--border-color);
+      max-width: 520px;
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
       border-radius: 28px;
-      padding: 28px 20px;
+      padding: 28px 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       gap: 20px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 30px var(--shadow-soft);
       margin: auto 0;
     }
 
@@ -132,9 +158,9 @@
 
     .room-title {
       font-family: 'Lexend', sans-serif;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 800;
-      color: var(--text-main);
+      color: var(--text-charcoal);
     }
 
     .room-subtitle {
@@ -146,7 +172,7 @@
     /* Hold to Speak Mic Button */
     .talk-btn-container {
       position: relative;
-      margin: 15px 0;
+      margin: 10px 0;
     }
 
     .talk-btn {
@@ -162,20 +188,21 @@
       justify-content: center;
       cursor: pointer;
       color: #FFFFFF;
-      box-shadow: 0 10px 30px rgba(150, 72, 36, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 10px 30px rgba(150, 72, 36, 0.35), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
       user-select: none;
       -webkit-user-select: none;
     }
 
     .talk-btn:active, .talk-btn.recording {
       transform: scale(1.08);
-      background: linear-gradient(135deg, #FF5252, #D32F2F);
-      box-shadow: 0 0 40px rgba(239, 68, 68, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+      background: linear-gradient(135deg, #EF4444, #DC2626);
+      box-shadow: 0 0 35px rgba(239, 68, 68, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.4);
     }
 
-    .mic-icon {
-      font-size: 42px;
+    .mic-svg-icon {
+      width: 44px;
+      height: 44px;
       margin-bottom: 4px;
     }
 
@@ -189,15 +216,15 @@
     .status-text {
       font-size: 14px;
       font-weight: 700;
-      color: var(--action-terracotta-light);
+      color: var(--action-terracotta);
       min-height: 22px;
     }
 
     /* Message History / Incoming Audio Player */
     .incoming-section {
       width: 100%;
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--border-color);
+      background: var(--surface-container);
+      border: 1px solid var(--card-border);
       border-radius: 18px;
       padding: 16px;
       text-align: left;
@@ -250,9 +277,18 @@
 </head>
 <body>
 
-  <!-- Header Bar -->
+  <!-- Header Bar with Back Button & Brand Logo -->
   <div class="header-bar">
+    <a href="index.html" class="btn-back-nav">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Volver
+    </a>
+
     <div class="brand-title">
+      <!-- Green Parrot Vector SVG Logo -->
       <svg width="32" height="32" viewBox="0 0 200 200" fill="none">
         <path d="M 100 20 C 50 20 20 52 20 95 C 20 120 32 142 50 156 C 42 172 26 182 25 182 C 25 182 52 186 78 174 C 85 177 92 178 100 178 C 150 178 180 146 180 95 C 180 52 150 20 100 20 Z" fill="none" stroke="#25D366" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
         <path d="M 62 152 C 55 138 52 122 55 105 C 58 78 72 55 92 55 C 108 55 116 70 114 85 C 112 102 114 128 110 142 C 102 155 82 160 62 152 Z" fill="#10B981" stroke="#047857" stroke-width="4.5" />
@@ -268,9 +304,10 @@
       </svg>
       PoquitoTalk
     </div>
+
     <div class="badge-live">
       <div class="live-dot"></div>
-      En Vivo 📻
+      En Vivo
     </div>
   </div>
 
@@ -281,10 +318,15 @@
       <p class="room-subtitle">Habla en español. Tu cliente escuchará tu mensaje traducido en inglés claro con IA.</p>
     </div>
 
-    <!-- Hold to Speak Button -->
+    <!-- Hold to Speak Button with Vector SVG Microphone Icon -->
     <div class="talk-btn-container">
       <button class="talk-btn" id="talk-btn" onmousedown="startRecording()" onmouseup="stopRecording()" ontouchstart="startRecording()" ontouchend="stopRecording()">
-        <span class="mic-icon">🎙️</span>
+        <svg class="mic-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" y1="19" x2="12" y2="23"></line>
+          <line x1="8" y1="23" x2="16" y2="23"></line>
+        </svg>
         <span class="btn-label">PRESIONAR</span>
       </button>
     </div>
@@ -298,7 +340,11 @@
         <span id="incoming-time">--:--</span>
       </div>
       <button class="audio-player-btn" id="play-incoming-btn" onclick="playIncomingAudio()">
-        <span>🔊 Reproducir Respuesta en Español</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        <span>Reproducir Respuesta en Español</span>
       </button>
     </div>
   </div>
@@ -329,7 +375,7 @@
       const btn = document.getElementById('talk-btn');
       const statusText = document.getElementById('status-text');
       btn.classList.add('recording');
-      statusText.innerText = '🔴 Grabando mensaje audio...';
+      statusText.innerText = 'Grabando mensaje audio...';
 
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -344,7 +390,7 @@
         mediaRecorder.start();
       } catch (err) {
         console.error('Audio permission error:', err);
-        statusText.innerText = '⚠️ Por favor permite acceso al micrófono';
+        statusText.innerText = 'Por favor permite acceso al micrófono';
         isRecording = false;
         btn.classList.remove('recording');
       }
@@ -357,7 +403,7 @@
       const btn = document.getElementById('talk-btn');
       const statusText = document.getElementById('status-text');
       btn.classList.remove('recording');
-      statusText.innerText = '⚡ Traduciendo a inglés...';
+      statusText.innerText = 'Traduciendo a inglés...';
 
       if (mediaRecorder && mediaRecorder.state !== 'inactive') {
         mediaRecorder.stop();
@@ -371,13 +417,11 @@
     async function sendAudioToExpatApp(blob) {
       const statusText = document.getElementById('status-text');
       
-      // Convert audio blob to base64 string
       const reader = new FileReader();
       reader.readAsDataURL(blob);
       reader.onloadend = async () => {
         const base64Audio = reader.result;
 
-        // Post message payload to PoquitoTalk walkie-talkie sync endpoint
         try {
           const payload = {
             roomId: roomId,
@@ -386,15 +430,14 @@
             timestamp: Date.now()
           };
 
-          // Store room payload in localStorage for demo / local session
           localStorage.setItem(`walkie_last_msg_${roomId}`, JSON.stringify(payload));
 
-          statusText.innerText = '✅ ¡Enviado al cliente!';
+          statusText.innerText = '¡Enviado al cliente!';
           setTimeout(() => {
             statusText.innerText = 'Mantén presionado para hablar';
           }, 2500);
         } catch (e) {
-          statusText.innerText = '✅ Transmitido en canal seguro';
+          statusText.innerText = 'Transmitido en canal seguro';
         }
       };
     }
