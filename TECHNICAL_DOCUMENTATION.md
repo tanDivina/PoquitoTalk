@@ -37,14 +37,11 @@
 - **Regional Service Directory**: MongoDB Atlas Data API (`EXPO_PUBLIC_MONGO_ATLAS_URL`).
 - **Web Conversion Funnel**: Static HTML5/CSS3 Stitch Artisanal Clarity tokens on Namecheap cPanel (`poquitotalk.hero-apps.com`) + Vercel staging.
 
-### 🌐 Hosting & Domain Architecture
+### 🌐 Hosting & Web Funnel Deployment
 
-| Domain / Subdomain | Host Provider | Infrastructure | Deployment Method |
+| Domain | Host Provider | Infrastructure | Deployment Method |
 | :--- | :--- | :--- | :--- |
 | **`poquitotalk.hero-apps.com`** | Namecheap cPanel | LiteSpeed Server (`66.29.146.28`) | Automated SSH/rsync to `/home/finclazc/public_html/poquitotalk/` |
-| **`hero-apps.com` (Main Site)** | Namecheap cPanel | LiteSpeed Server (`66.29.146.28`) | Namecheap File Manager / cPanel |
-| **`tweetskill.hero-apps.com`** | Vercel | Vercel Edge (`cname.vercel-dns.com`) | `vercel --prod` CLI |
-| **`*.rankbeacon.dev`** | Vercel | Vercel Nameservers (`ns1.vercel-dns.com`) | `vercel --prod` CLI |
 
 ---
 
