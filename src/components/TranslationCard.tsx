@@ -211,7 +211,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
   };
 
   const handleStartWalkieTalkie = async () => {
-    const session = walkieTalkieService.createSession('Dorien');
+    const session = walkieTalkieService.createSession();
     await shareWalkieTalkieToWhatsApp(session.shareUrl, 'Amigo');
     Alert.alert('📻 Magic Walkie-Talkie Active!', `Sent link to WhatsApp. The contractor can speak Spanish voice audio without installing an app!`);
   };

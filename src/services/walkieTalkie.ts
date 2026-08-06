@@ -25,14 +25,15 @@ class WalkieTalkieService {
   private activeSession: WalkieSession | null = null;
   private pollInterval: NodeJS.Timeout | null = null;
 
-  public createSession(clientName: string = 'Dorien'): WalkieSession {
+  public createSession(clientName?: string): WalkieSession {
     const randomId = Math.random().toString(36).substring(2, 8);
     const roomId = `room_${randomId}`;
-    const shareUrl = `https://poquitotalk.hero-apps.com/talk?room=${roomId}&name=${encodeURIComponent(clientName)}`;
+    const nameParam = clientName && clientName.trim().length > 0 ? `&name=${encodeURIComponent(clientName.trim())}` : '';
+    const shareUrl = `https://poquitotalk.hero-apps.com/talk?room=${roomId}${nameParam}`;
 
     this.activeSession = {
       roomId,
-      clientName,
+      clientName: clientName || 'Cliente',
       shareUrl,
       status: 'active',
       createdAt: Date.now()
