@@ -1,5 +1,5 @@
-import { gemmaTranslationService } from './gemma';
-import { googleTtsService } from './googleVoice';
+import { translateWithGemma } from './gemma';
+import { generateGoogleGeminiAudio } from './googleVoice';
 
 export interface WalkieMessage {
   id: string;
@@ -60,16 +60,16 @@ class WalkieTalkieService {
    * Process raw contractor Spanish input with accent normalization rules
    */
   public async processContractorAudio(roomId: string, rawAudioText: string): Promise<WalkieMessage> {
-    // Run through Gemma translation & accent cleaner engine
-    const translated = await gemmaTranslationService.translateText(rawAudioText, 'Diego');
+    // Run through Gemma translation & accent cleaner engine (es -> en)
+    const cleanedEnglish = await translateWithGemma(rawAudioText, 'es', 'en');
 
     const msg: WalkieMessage = {
       id: `msg_${Date.now()}`,
       roomId,
       sender: 'contractor',
       rawText: rawAudioText,
-      cleanedEnglishText: translated.englishTranslation,
-      spanishText: translated.spanishText,
+      cleanedEnglishText: cleanedEnglish,
+      spanishText: rawAudioText,
       timestamp: Date.now()
     };
 
