@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Platform, StatusBar } from 'r
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
+import { GreenParrotLogo } from './GreenParrotLogo';
 
 interface HeaderProps {
   isPro?: boolean;
@@ -17,9 +18,7 @@ export const Header: React.FC<HeaderProps> = ({ isPro = false, onOpenPaywall, on
   return (
     <View style={[styles.container, { paddingTop: topPadding }]}>
       <View style={styles.brandContainer}>
-        <View style={styles.logoBubble}>
-          <MaterialCommunityIcons name="bird" size={22} color={Colors.tertiary || Colors.secondary} />
-        </View>
+        <GreenParrotLogo size={36} />
         <View style={styles.titleInfoBox}>
           <View style={styles.titleRow}>
             <Text style={styles.title}>PoquitoTalk</Text>
