@@ -31,3 +31,28 @@ export async function sharePhrasebookToCommunity(pkg: PhrasebookPackage): Promis
     Alert.alert('Share Error', 'Could not share phrasebook.');
   }
 }
+
+export async function shareWalkieTalkieToWhatsApp(shareUrl: string, recipientName: string = 'Amigo'): Promise<void> {
+  const message = `¡Buenas ${recipientName}! 📻 Te envío un enlace de Walkie-Talkie en vivo sin instalar nada:\n\n${shareUrl}\n\nToca el enlace para hablarme por voz en español y yo te escucho en inglés.`;
+  const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(message)}`;
+
+  try {
+    const supported = await Linking.canOpenURL(whatsappUrl);
+    if (supported) {
+      await Linking.openURL(whatsappUrl);
+    } else {
+      await Share.share({
+        message,
+        url: shareUrl,
+        title: 'PoquitoTalk Walkie-Talkie en Vivo 📻'
+      });
+    }
+  } catch (e) {
+    await Share.share({
+      message,
+      url: shareUrl,
+      title: 'PoquitoTalk Walkie-Talkie en Vivo 📻'
+    });
+  }
+}
+

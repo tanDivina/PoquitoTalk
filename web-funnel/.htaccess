@@ -2,6 +2,10 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+RewriteRule ^talk/?$ talk.html [L,QSA]
+RewriteRule ^privacy/?$ privacy.html [L,QSA]
+RewriteRule ^es/?$ index-es.html [L,QSA]
+
 # Prevent aggressive browser caching of HTML files so updates show instantly
 <FilesMatch "\.(html|htm)$">
   Header set Cache-Control "no-cache, no-store, must-revalidate"

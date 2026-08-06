@@ -23,6 +23,8 @@ import {
 } from '../services/googleVoice';
 import { DirectoryCard } from './DirectoryCard';
 import { getMatchingProviderForCategory } from '../services/directory';
+import { walkieTalkieService } from '../services/walkieTalkie';
+import { shareWalkieTalkieToWhatsApp } from '../services/deepLinks';
 
 interface TranslationCardProps {
   inputText: string;
@@ -208,6 +210,12 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
     }
   };
 
+  const handleStartWalkieTalkie = async () => {
+    const session = walkieTalkieService.createSession('Dorien');
+    await shareWalkieTalkieToWhatsApp(session.shareUrl, 'Amigo');
+    Alert.alert('📻 Magic Walkie-Talkie Active!', `Sent link to WhatsApp. The contractor can speak Spanish voice audio without installing an app!`);
+  };
+
   if (!inputText && !outputText) {
     return (
       <View style={styles.placeholderCard}>
@@ -314,6 +322,16 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
               <Text style={styles.fullWidthWhatsappBtnText}>Send Voice Note to WhatsApp</Text>
             </>
           )}
+        </TouchableOpacity>
+
+        {/* Row 3: 2-Way Magic Walkie-Talkie Link CTA */}
+        <TouchableOpacity
+          style={styles.walkieBtn}
+          onPress={handleStartWalkieTalkie}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="radio-outline" size={18} color={Colors.secondary} />
+          <Text style={styles.walkieBtnText}>📻 Send Magic Walkie-Talkie Link</Text>
         </TouchableOpacity>
 
         {/* Contextual Local Sponsor Ad — 100% relevant to active service category */}
@@ -599,6 +617,24 @@ const styles = StyleSheet.create({
   },
   voiceOptionNameSelected: {
     color: Colors.secondary,
+  },
+  walkieBtn: {
+    marginTop: 10,
+    backgroundColor: Colors.secondaryContainer || '#FFDBCD',
+    borderWidth: 1,
+    borderColor: Colors.secondary,
+    borderRadius: 24,
+    paddingVertical: 13,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  walkieBtnText: {
+    color: Colors.secondary,
+    fontWeight: '800',
+    fontSize: 14,
   },
   voiceOptionTone: {
     fontSize: 12,
