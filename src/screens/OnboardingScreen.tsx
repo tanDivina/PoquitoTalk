@@ -216,31 +216,30 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
 
             {/* Selected Paired Voice Badge */}
             <View style={styles.voiceResultCard}>
-              <Text style={styles.voiceResultTag}>SELECTED VOICE PERSONA</Text>
               <View style={styles.voiceResultHeader}>
                 <View style={styles.voiceIconBubble}>
                   <FontAwesome5
                     name={selectedVoice.gender === 'MALE' ? 'male' : 'female'}
-                    size={22}
+                    size={18}
                     color={Colors.secondary}
                   />
                 </View>
                 <View style={styles.voiceResultInfo}>
-                  <Text style={styles.voiceResultName}>{selectedVoice.name} ({selectedVoice.tone.toLowerCase()})</Text>
-                  <Text style={styles.demoScenarioTitle}>
-                    Scenario: {VOICE_DEMO_SAMPLES[selectedVoice.name]?.scenarioTitle}
+                  <Text style={styles.voiceResultName}>{selectedVoice.name} ({selectedVoice.tone})</Text>
+                  <Text style={styles.demoScenarioTitle} numberOfLines={1}>
+                    {VOICE_DEMO_SAMPLES[selectedVoice.name]?.scenarioTitle}
                   </Text>
                 </View>
-              </View>
 
-              <TouchableOpacity
-                style={styles.listenDemoBtn}
-                onPress={() => playVoiceDemoSample(selectedVoice)}
-                activeOpacity={0.8}
-              >
-                <Ionicons name="play-circle" size={18} color={Colors.secondary} />
-                <Text style={styles.listenDemoBtnText}>▶ Listen Practical Voice Demo</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.listenDemoBtn}
+                  onPress={() => playVoiceDemoSample(selectedVoice)}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name="play" size={14} color={Colors.secondary} />
+                  <Text style={styles.listenDemoBtnText}>Demo</Text>
+                </TouchableOpacity>
+              </View>
             </View>
 
             <TouchableOpacity style={styles.primaryBtn} onPress={() => setStep(3)} activeOpacity={0.8}>
@@ -458,28 +457,21 @@ const styles = StyleSheet.create({
   },
   voiceResultCard: {
     backgroundColor: Colors.surfaceContainer,
-    borderRadius: 18,
-    padding: 14,
-    marginTop: 20,
+    borderRadius: 16,
+    padding: 10,
+    marginTop: 12,
     borderWidth: 1,
     borderColor: Colors.secondaryLight,
-  },
-  voiceResultTag: {
-    fontSize: 10,
-    fontWeight: '800',
-    color: Colors.secondary,
-    letterSpacing: 0.5,
-    marginBottom: 6,
   },
   voiceResultHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
   },
   voiceIconBubble: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: Colors.secondaryContainer,
     alignItems: 'center',
     justifyContent: 'center',
@@ -488,35 +480,34 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   voiceResultName: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '800',
     color: Colors.onBackground,
   },
   voiceResultDesc: {
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.onSurfaceVariant,
   },
   demoScenarioTitle: {
     fontSize: 11,
     color: Colors.onSurfaceVariant,
-    marginTop: 2,
+    marginTop: 1,
     fontStyle: 'italic',
   },
   listenDemoBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
+    gap: 4,
     backgroundColor: '#FFF',
     borderRadius: 12,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    marginTop: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: Colors.secondaryLight,
   },
   listenDemoBtnText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '800',
     color: Colors.secondary,
   },
@@ -547,9 +538,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     backgroundColor: Colors.secondary,
-    paddingVertical: 16,
+    paddingVertical: 14,
     borderRadius: 22,
-    marginTop: 24,
+    marginTop: 16,
     shadowColor: Colors.secondary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
