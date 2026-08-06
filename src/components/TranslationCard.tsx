@@ -224,6 +224,15 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
         <Text style={styles.placeholderDesc}>
           Tap the microphone or choose a service preset below for instant Panamanian Spanish WhatsApp voice notes & text.
         </Text>
+
+        <TouchableOpacity
+          style={styles.walkieBtn}
+          onPress={handleStartWalkieTalkie}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="radio-outline" size={18} color={Colors.secondary} />
+          <Text style={styles.walkieBtnText}>📻 Start 2-Way Magic Walkie-Talkie Link</Text>
+        </TouchableOpacity>
       </View>
     );
   }

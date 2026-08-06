@@ -361,6 +361,30 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         initialVoice={initialVoice}
       />
 
+      {/* Magic Walkie-Talkie Feature Card */}
+      {!walkieTalkieService.getActiveSession() && (
+        <View style={styles.walkieFeatureCard}>
+          <View style={styles.walkieFeatureHeader}>
+            <Ionicons name="radio" size={24} color={Colors.secondary} />
+            <Text style={styles.walkieFeatureTitle}>Magic 2-Way Web Walkie-Talkie 📻</Text>
+          </View>
+          <Text style={styles.walkieFeatureDesc}>
+            Send a zero-install web link to your contractor inside WhatsApp. They press hold-to-talk in Spanish, and our AI cleans their accent into English for you in real-time.
+          </Text>
+          <TouchableOpacity
+            style={styles.startWalkieCardBtn}
+            onPress={() => {
+              const session = walkieTalkieService.createSession('Dorien');
+              shareWalkieTalkieToWhatsApp(session.shareUrl, 'Amigo');
+            }}
+            activeOpacity={0.85}
+          >
+            <FontAwesome5 name="whatsapp" size={16} color="#FFF" />
+            <Text style={styles.startWalkieCardBtnText}>Start Walkie-Talkie Session & Share Link</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
       <VoiceQualityModal
         visible={showVoiceQualityModal}
         onClose={() => setShowVoiceQualityModal(false)}
@@ -664,5 +688,50 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '800',
     color: Colors.secondary,
+  },
+  walkieFeatureCard: {
+    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
+    borderRadius: 24,
+    padding: 20,
+    marginTop: 16,
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
+    shadowColor: Colors.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 3,
+  },
+  walkieFeatureHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 8,
+  },
+  walkieFeatureTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: Colors.onBackground,
+  },
+  walkieFeatureDesc: {
+    fontSize: 13,
+    color: Colors.onSurfaceVariant,
+    lineHeight: 18,
+    marginBottom: 16,
+  },
+  startWalkieCardBtn: {
+    backgroundColor: Colors.secondary,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  startWalkieCardBtnText: {
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: '800',
   },
 });
