@@ -361,30 +361,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         initialVoice={initialVoice}
       />
 
-      {/* Magic Walkie-Talkie Feature Card */}
-      {!walkieTalkieService.getActiveSession() && (
-        <View style={styles.walkieFeatureCard}>
-          <View style={styles.walkieFeatureHeader}>
-            <Ionicons name="radio" size={24} color={Colors.secondary} />
-            <Text style={styles.walkieFeatureTitle}>Magic 2-Way Web Walkie-Talkie 📻</Text>
-          </View>
-          <Text style={styles.walkieFeatureDesc}>
-            Send a zero-install web link to your contractor inside WhatsApp. They press hold-to-talk in Spanish, and our AI cleans their accent into English for you in real-time.
-          </Text>
-          <TouchableOpacity
-            style={styles.startWalkieCardBtn}
-            onPress={() => {
-              const session = walkieTalkieService.createSession('Dorien');
-              shareWalkieTalkieToWhatsApp(session.shareUrl, 'Amigo');
-            }}
-            activeOpacity={0.85}
-          >
-            <FontAwesome5 name="whatsapp" size={16} color="#FFF" />
-            <Text style={styles.startWalkieCardBtnText}>Start Walkie-Talkie Session & Share Link</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
       <VoiceQualityModal
         visible={showVoiceQualityModal}
         onClose={() => setShowVoiceQualityModal(false)}
