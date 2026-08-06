@@ -14,6 +14,7 @@ import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-ico
 import { Colors } from '../theme/colors';
 import { GOOGLE_SPANISH_VOICES, VoiceOption } from '../services/googleVoice';
 import { playVoiceDemoSample, VOICE_DEMO_SAMPLES } from '../services/voiceDemos';
+import { GreenParrotLogo } from '../components/GreenParrotLogo';
 
 interface OnboardingScreenProps {
   onComplete: (userName: string, selectedVoice: VoiceOption) => void;
@@ -73,7 +74,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
         {step === 1 && (
           <View style={styles.stepCard}>
             <View style={styles.heroBadge}>
-              <MaterialCommunityIcons name="chat-processing-outline" size={42} color={Colors.secondary} />
+              <GreenParrotLogo size={64} />
             </View>
 
             <Text style={styles.heroTitle}>Welcome to PoquitoTalk</Text>
