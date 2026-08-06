@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { FeedbackModal } from '../components/FeedbackModal';
+import { GreenParrotLogo } from '../components/GreenParrotLogo';
 
 interface SettingsScreenProps {
   isPro: boolean;
@@ -26,8 +27,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
       {/* Studio Credits Card */}
       <View style={styles.card}>
         <View style={styles.cardRow}>
-          <View style={styles.iconCircle}>
-            <Ionicons name="sparkles" size={20} color={Colors.secondary} />
+          <View style={[styles.iconCircle, { backgroundColor: 'transparent' }]}>
+            <GreenParrotLogo size={42} />
           </View>
           <View style={styles.cardText}>
             <Text style={styles.cardTitle}>Natural Voice Notes</Text>

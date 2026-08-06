@@ -13,6 +13,7 @@ import {
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { revenueCat } from '../services/revenuecat';
+import { GreenParrotLogo } from './GreenParrotLogo';
 
 interface PaywallModalProps {
   visible: boolean;
@@ -69,7 +70,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
           <ScrollView contentContainerStyle={styles.content}>
             {/* Header Badge */}
             <View style={styles.crownContainer}>
-              <MaterialCommunityIcons name="crown" size={32} color={Colors.secondary} />
+              <GreenParrotLogo size={56} />
             </View>
 
             <Text style={styles.title}>Unlock Natural-Sounding Voices 🎙️</Text>
@@ -196,13 +197,10 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   crownContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: Colors.secondaryContainer,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
+    backgroundColor: 'transparent',
   },
   title: {
     fontSize: 22,

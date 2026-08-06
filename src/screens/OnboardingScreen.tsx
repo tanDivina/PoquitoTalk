@@ -334,14 +334,11 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   heroBadge: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: Colors.secondaryContainer,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
     marginBottom: 16,
+    backgroundColor: 'transparent',
   },
   checkBadge: {
     alignSelf: 'center',

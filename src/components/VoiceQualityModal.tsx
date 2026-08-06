@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { VoiceOption } from '../services/googleVoice';
+import { GreenParrotLogo } from './GreenParrotLogo';
 
 interface VoiceQualityModalProps {
   visible: boolean;
@@ -28,7 +29,7 @@ export const VoiceQualityModal: React.FC<VoiceQualityModalProps> = ({
           </TouchableOpacity>
 
           <View style={styles.headerIcon}>
-            <FontAwesome5 name="microphone-alt" size={28} color={Colors.secondary} />
+            <GreenParrotLogo size={52} />
           </View>
 
           <Text style={styles.title}>Choose Voice Quality 🎙️</Text>
@@ -119,13 +120,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surfaceContainer,
   },
   headerIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: Colors.secondaryContainer || '#F4FAFE',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
+    backgroundColor: 'transparent',
   },
   title: {
     fontSize: 20,
