@@ -22,6 +22,8 @@ import { MicButton } from '../components/MicButton';
 import { translateWithGemma } from '../services/gemma';
 import { TranslationItem } from '../types';
 import { VoiceOption } from '../services/googleVoice';
+import { walkieTalkieService } from '../services/walkieTalkie';
+import { shareWalkieTalkieToWhatsApp } from '../services/deepLinks';
 
 interface HomeScreenProps {
   navigation?: any;
@@ -231,6 +233,44 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             <Ionicons name="arrow-forward" size={14} color={Colors.secondary} />
           </View>
         </TouchableOpacity>
+      )}
+
+      {/* Active Magic Walkie-Talkie HUD Banner */}
+      {walkieTalkieService.getActiveSession() && (
+        <View style={styles.walkieActiveBanner}>
+          <View style={styles.walkieActiveHeader}>
+            <View style={styles.walkieLiveBadge}>
+              <View style={styles.walkieDot} />
+              <Text style={styles.walkieLiveText}>WALKIE-TALKIE LIVE 📻</Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => {
+                walkieTalkieService.closeSession();
+                Alert.alert('Session Ended', 'Walkie-Talkie channel closed.');
+              }}
+            >
+              <Ionicons name="close-circle" size={20} color={Colors.outline} />
+            </TouchableOpacity>
+          </View>
+
+          <Text style={styles.walkieActiveTitle}>
+            Contractor link active ({walkieTalkieService.getActiveSession()?.roomId})
+          </Text>
+          <Text style={styles.walkieActiveDesc}>
+            The contractor can press hold-to-talk inside WhatsApp. Audio translates into clean English automatically.
+          </Text>
+
+          <TouchableOpacity
+            style={styles.walkieShareBtn}
+            onPress={() => {
+              const s = walkieTalkieService.getActiveSession();
+              if (s) shareWalkieTalkieToWhatsApp(s.shareUrl, 'Amigo');
+            }}
+          >
+            <FontAwesome5 name="whatsapp" size={14} color={Colors.secondary} />
+            <Text style={styles.walkieShareBtnText}>Share Link to WhatsApp</Text>
+          </TouchableOpacity>
+        </View>
       )}
 
       {/* Language Switcher Row */}
@@ -565,5 +605,64 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: Colors.onBackground,
+  },
+  walkieActiveBanner: {
+    backgroundColor: Colors.secondaryContainer || '#FFDBCD',
+    borderWidth: 1,
+    borderColor: Colors.secondary,
+    borderRadius: 20,
+    padding: 16,
+    marginBottom: 16,
+  },
+  walkieActiveHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 6,
+  },
+  walkieLiveBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  walkieDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.whatsapp,
+  },
+  walkieLiveText: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: Colors.secondary,
+    letterSpacing: 0.5,
+  },
+  walkieActiveTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: Colors.onBackground,
+    marginBottom: 2,
+  },
+  walkieActiveDesc: {
+    fontSize: 12,
+    color: Colors.onSurfaceVariant,
+    lineHeight: 16,
+    marginBottom: 12,
+  },
+  walkieShareBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: Colors.secondary,
+    paddingVertical: 8,
+    borderRadius: 14,
+  },
+  walkieShareBtnText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: Colors.secondary,
   },
 });
