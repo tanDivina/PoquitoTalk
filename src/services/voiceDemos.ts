@@ -1,5 +1,7 @@
 import * as Speech from 'expo-speech';
+import { Audio } from 'expo-av';
 import { VoiceOption } from './googleVoice';
+import { generateElevenLabsAudio } from './elevenLabsVoice';
 
 export interface VoiceDemoSample {
   personaName: string;
@@ -40,26 +42,44 @@ export const VOICE_DEMO_SAMPLES: Record<string, VoiceDemoSample> = {
   },
 };
 
+let currentSoundObject: Audio.Sound | null = null;
+
 export async function playVoiceDemoSample(persona: VoiceOption): Promise<void> {
   const sample = VOICE_DEMO_SAMPLES[persona.name] || VOICE_DEMO_SAMPLES.Diego;
   
   // Stop any currently playing audio
-  await Speech.stop();
+  await stopVoiceDemoSample();
 
+  // 1. First Priority: Try Hyper-Realistic ElevenLabs Studio Voices (Diego, Mateo, Sofia, Valeria)
+  try {
+    const elevenMp3Uri = await generateElevenLabsAudio(sample.spanishDemoText, persona.name);
+    if (elevenMp3Uri) {
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        playsInSilentModeIOS: true,
+        shouldDuckAndroid: true,
+        playThroughEarpieceAndroid: false,
+      });
+
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: elevenMp3Uri },
+        { shouldPlay: true }
+      );
+      currentSoundObject = sound;
+      return;
+    }
+  } catch (e) {
+    console.warn('ElevenLabs demo audio generation fallback:', e);
+  }
+
+  // 2. Fallback: Native Device TTS
   let pitch = persona.pitch || 1.0;
   let rate = persona.rate || 0.88;
 
-  // Distinct base pitch calibrations per persona
-  if (persona.name === 'Diego') pitch = 0.72; // Deep warm male tone
-  else if (persona.name === 'Mateo') pitch = 0.65; // Deep authoritative male tone
-  else if (persona.name === 'Sofia') pitch = 1.05; // Clear female
-  else if (persona.name === 'Valeria') pitch = 1.15; // Expressive female
-
-  // Question pitch inflection boost for natural sentence-ending question intonation
-  const isQuestion = sample.spanishDemoText.includes('?') || sample.spanishDemoText.includes('¿');
-  if (isQuestion) {
-    pitch = Math.min(2.0, pitch + 0.12);
-  }
+  if (persona.name === 'Diego') pitch = 0.72;
+  else if (persona.name === 'Mateo') pitch = 0.65;
+  else if (persona.name === 'Sofia') pitch = 1.05;
+  else if (persona.name === 'Valeria') pitch = 1.15;
 
   try {
     const availableVoices = await Speech.getAvailableVoicesAsync();
@@ -92,7 +112,7 @@ export async function playVoiceDemoSample(persona: VoiceOption): Promise<void> {
     }
 
     Speech.speak(sample.spanishDemoText, {
-      language: 'es-419', // Latin American Spanish
+      language: 'es-419',
       voice: esVoice ? esVoice.identifier : undefined,
       pitch: Math.max(0.4, Math.min(pitch, 2.0)),
       rate,
@@ -106,6 +126,16 @@ export async function playVoiceDemoSample(persona: VoiceOption): Promise<void> {
   }
 }
 
-export function stopVoiceDemoSample(): void {
-  Speech.stop();
+export async function stopVoiceDemoSample(): Promise<void> {
+  try {
+    await Speech.stop();
+  } catch (e) {}
+
+  if (currentSoundObject) {
+    try {
+      await currentSoundObject.stopAsync();
+      await currentSoundObject.unloadAsync();
+    } catch (e) {}
+    currentSoundObject = null;
+  }
 }

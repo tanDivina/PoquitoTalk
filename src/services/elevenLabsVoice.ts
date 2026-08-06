@@ -15,9 +15,9 @@ export interface ElevenLabsVoice {
 }
 
 export const ELEVENLABS_PERSONAS: Record<string, string> = {
-  Diego: 'pNInz6obpgDQGcFmaJgB', // Adam - Warm Conversational Male
-  Mateo: 'VR6AewLTigWG4xSOukaG', // Arnold - Authoritative Deep Male
-  Sofia: '21m00Tcm4TlvDq8ikWAM', // Rachel - Clear Friendly Female
+  Diego: 'JBFqnCBsd6RMkjVDRZzb', // George - Warm Conversational Male
+  Mateo: 'ErXwobaYiN019PkySvjV', // Antoni - Authoritative Deep Male
+  Sofia: 'cgSgspJ2msm6clMCkdW9', // Jessica - Clear Friendly Female
   Valeria: 'EXAVITQu4vr4xnSDxMaL', // Bella - Young Expressive Female
 };
 
