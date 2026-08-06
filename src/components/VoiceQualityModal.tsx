@@ -77,7 +77,7 @@ export const VoiceQualityModal: React.FC<VoiceQualityModalProps> = ({
               <Text style={styles.optionTitle}>⭐ Unlock 50 Studio Credits ($4.99)</Text>
             </View>
             <Text style={styles.optionDesc}>
-              Ultra-realistic ElevenLabs audio with human inflection, warm cadence, and natural Panamanian accent.
+              Ultra-realistic studio audio with human inflection, warm cadence, and natural Panamanian accent.
             </Text>
             <View style={styles.proActionBtn}>
               <Ionicons name="cart" size={16} color="#FFF" />
