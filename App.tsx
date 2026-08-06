@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
 import { Colors } from './src/theme/colors';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { PresetsScreen } from './src/screens/PresetsScreen';
@@ -18,12 +19,160 @@ import { revenueCat } from './src/services/revenuecat';
 
 const Tab = createBottomTabNavigator();
 
+function MainAppTabs({
+  isPro,
+  setPaywallVisible,
+  savedTranslations,
+  handleToggleSave,
+  activePresetPrompt,
+  setActivePresetPrompt,
+  activePresetCategory,
+  setActivePresetCategory,
+  userVoice,
+  setShowOnboarding,
+  paywallVisible,
+  setIsPro,
+}: any) {
+  const insets = useSafeAreaInsets();
+  const dynamicBottom = Math.max(insets.bottom + 12, Platform.OS === 'android' ? 24 : 20);
+
+  return (
+    <View style={styles.mainContainer}>
+      <NavigationContainer>
+        <Tab.Navigator
+          id="main_tabs"
+          screenOptions={{
+            headerShown: false,
+            tabBarActiveTintColor: Colors.secondary,
+            tabBarInactiveTintColor: Colors.outline,
+            tabBarStyle: [styles.tabBar, { bottom: dynamicBottom }],
+            tabBarItemStyle: styles.tabBarItem,
+            tabBarLabelStyle: styles.tabBarLabel,
+          }}
+        >
+          <Tab.Screen
+            name="Translate"
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="chat-processing-outline" size={22} color={color} />
+              ),
+            }}
+          >
+            {(props) => (
+              <HomeScreen
+                {...props}
+                isPro={isPro}
+                onOpenPaywall={() => setPaywallVisible(true)}
+                savedTranslations={savedTranslations}
+                onToggleSave={handleToggleSave}
+                activePresetPrompt={activePresetPrompt}
+                activePresetCategory={activePresetCategory}
+                onClearPresetPrompt={() => {
+                  setActivePresetPrompt(undefined);
+                  setActivePresetCategory(undefined);
+                }}
+                initialVoice={userVoice}
+                onResetOnboarding={() => setShowOnboarding(true)}
+              />
+            )}
+          </Tab.Screen>
+
+          <Tab.Screen
+            name="Threads"
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="chatbubbles-outline" size={22} color={color} />
+              ),
+            }}
+          >
+            {(props) => (
+              <ConversationsScreen
+                {...props}
+                isPro={isPro}
+                onOpenPaywall={() => setPaywallVisible(true)}
+                onResetOnboarding={() => setShowOnboarding(true)}
+              />
+            )}
+          </Tab.Screen>
+
+          <Tab.Screen
+            name="Presets"
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="toolbox-outline" size={22} color={color} />
+              ),
+            }}
+          >
+            {(props) => (
+              <PresetsScreen
+                {...props}
+                isPro={isPro}
+                onOpenPaywall={() => setPaywallVisible(true)}
+                onSelectPhrasePrompt={(promptText, categoryTitle) => {
+                  setActivePresetPrompt(promptText);
+                  setActivePresetCategory(categoryTitle);
+                  props.navigation.navigate('Translate');
+                }}
+              />
+            )}
+          </Tab.Screen>
+
+          <Tab.Screen
+            name="Saved"
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="bookmark-outline" size={22} color={color} />
+              ),
+            }}
+          >
+            {(props) => (
+              <SavedScreen
+                {...props}
+                isPro={isPro}
+                onOpenPaywall={() => setPaywallVisible(true)}
+                savedTranslations={savedTranslations}
+                onToggleSave={handleToggleSave}
+              />
+            )}
+          </Tab.Screen>
+
+          <Tab.Screen
+            name="Settings"
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="settings-outline" size={22} color={color} />
+              ),
+            }}
+          >
+            {(props) => (
+              <SettingsScreen
+                {...props}
+                isPro={isPro}
+                onOpenPaywall={() => setPaywallVisible(true)}
+                onResetOnboarding={() => setShowOnboarding(true)}
+              />
+            )}
+          </Tab.Screen>
+        </Tab.Navigator>
+      </NavigationContainer>
+
+      {/* RevenueCat Paywall Modal */}
+      <PaywallModal
+        visible={paywallVisible}
+        onClose={() => setPaywallVisible(false)}
+        onSuccess={() => setIsPro(true)}
+      />
+    </View>
+  );
+}
+
 export default function App() {
   const [isPro, setIsPro] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(true); // First-time Intake Flow
   const [paywallVisible, setPaywallVisible] = useState(false);
   const [savedTranslations, setSavedTranslations] = useState<TranslationItem[]>([]);
   const [activePresetPrompt, setActivePresetPrompt] = useState<string | undefined>(undefined);
+  const [activePresetCategory, setActivePresetCategory] = useState<string | undefined>(undefined);
   const [userName, setUserName] = useState('Expat Friend');
   const [userVoice, setUserVoice] = useState<VoiceOption>(GOOGLE_SPANISH_VOICES[0]);
 
@@ -51,133 +200,27 @@ export default function App() {
     });
   };
 
-  if (showOnboarding) {
-    return <OnboardingScreen onComplete={handleCompleteOnboarding} />;
-  }
-
   return (
     <SafeAreaProvider>
-      <View style={styles.mainContainer}>
-        <NavigationContainer>
-          <Tab.Navigator
-            id="main_tabs"
-            screenOptions={{
-              headerShown: false,
-              tabBarActiveTintColor: Colors.secondary,
-              tabBarInactiveTintColor: Colors.outline,
-              tabBarStyle: styles.tabBar,
-              tabBarItemStyle: styles.tabBarItem,
-              tabBarLabelStyle: styles.tabBarLabel,
-            }}
-          >
-            <Tab.Screen
-              name="Translate"
-              options={{
-                tabBarIcon: ({ color, size }) => (
-                  <MaterialCommunityIcons name="chat-processing-outline" size={22} color={color} />
-                ),
-              }}
-            >
-              {(props) => (
-                <HomeScreen
-                  {...props}
-                  isPro={isPro}
-                  onOpenPaywall={() => setPaywallVisible(true)}
-                  savedTranslations={savedTranslations}
-                  onToggleSave={handleToggleSave}
-                  activePresetPrompt={activePresetPrompt}
-                  onClearPresetPrompt={() => setActivePresetPrompt(undefined)}
-                  initialVoice={userVoice}
-                  onResetOnboarding={() => setShowOnboarding(true)}
-                />
-              )}
-            </Tab.Screen>
-
-            <Tab.Screen
-              name="Threads"
-              options={{
-                tabBarIcon: ({ color, size }) => (
-                  <Ionicons name="chatbubbles-outline" size={22} color={color} />
-                ),
-              }}
-            >
-              {(props) => (
-                <ConversationsScreen
-                  {...props}
-                  isPro={isPro}
-                  onOpenPaywall={() => setPaywallVisible(true)}
-                  onResetOnboarding={() => setShowOnboarding(true)}
-                />
-              )}
-            </Tab.Screen>
-
-            <Tab.Screen
-              name="Presets"
-              options={{
-                tabBarIcon: ({ color, size }) => (
-                  <MaterialCommunityIcons name="toolbox-outline" size={22} color={color} />
-                ),
-              }}
-            >
-              {(props) => (
-                <PresetsScreen
-                  {...props}
-                  isPro={isPro}
-                  onOpenPaywall={() => setPaywallVisible(true)}
-                  onSelectPhrasePrompt={(promptText) => {
-                    setActivePresetPrompt(promptText);
-                    props.navigation.navigate('Translate');
-                  }}
-                />
-              )}
-            </Tab.Screen>
-
-            <Tab.Screen
-              name="Saved"
-              options={{
-                tabBarIcon: ({ color, size }) => (
-                  <Ionicons name="bookmark-outline" size={22} color={color} />
-                ),
-              }}
-            >
-              {(props) => (
-                <SavedScreen
-                  {...props}
-                  isPro={isPro}
-                  onOpenPaywall={() => setPaywallVisible(true)}
-                  savedTranslations={savedTranslations}
-                  onToggleSave={handleToggleSave}
-                />
-              )}
-            </Tab.Screen>
-
-            <Tab.Screen
-              name="Settings"
-              options={{
-                tabBarIcon: ({ color, size }) => (
-                  <Ionicons name="settings-outline" size={22} color={color} />
-                ),
-              }}
-            >
-              {(props) => (
-                <SettingsScreen
-                  {...props}
-                  isPro={isPro}
-                  onOpenPaywall={() => setPaywallVisible(true)}
-                  onResetOnboarding={() => setShowOnboarding(true)}
-                />
-              )}
-            </Tab.Screen>
-          </Tab.Navigator>
-        </NavigationContainer>
-
-        {/* RevenueCat Paywall Modal */}
-        <PaywallModal
-          visible={paywallVisible}
-          onClose={() => setPaywallVisible(false)}
-          onSuccess={() => setIsPro(true)}
+      <StatusBar style="dark" translucent />
+      {showOnboarding ? (
+        <OnboardingScreen onComplete={handleCompleteOnboarding} />
+      ) : (
+        <MainAppTabs
+          isPro={isPro}
+          setPaywallVisible={setPaywallVisible}
+          savedTranslations={savedTranslations}
+          handleToggleSave={handleToggleSave}
+          activePresetPrompt={activePresetPrompt}
+          setActivePresetPrompt={setActivePresetPrompt}
+          activePresetCategory={activePresetCategory}
+          setActivePresetCategory={setActivePresetCategory}
+          userVoice={userVoice}
+          setShowOnboarding={setShowOnboarding}
+          paywallVisible={paywallVisible}
+          setIsPro={setIsPro}
         />
-      </View>
+      )}
     </SafeAreaProvider>
   );
 }

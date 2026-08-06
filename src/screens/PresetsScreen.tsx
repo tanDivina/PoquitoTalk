@@ -11,7 +11,7 @@ import { fetchRegionalProviders, LocalServiceProvider } from '../services/direct
 interface PresetsScreenProps {
   isPro: boolean;
   onOpenPaywall: () => void;
-  onSelectPhrasePrompt: (phraseText: string) => void;
+  onSelectPhrasePrompt: (phraseText: string, categoryTitle?: string) => void;
 }
 
 export const PresetsScreen: React.FC<PresetsScreenProps> = ({
@@ -54,8 +54,8 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
           <PresetCard
             key={preset.id}
             preset={preset}
-            onSelect={(p: ServicePreset) => onSelectPhrasePrompt(p.defaultInputPrompt)}
-            onSelectPhrase={(text: string) => onSelectPhrasePrompt(text)}
+            onSelect={(p: ServicePreset) => onSelectPhrasePrompt(p.defaultInputPrompt, p.title)}
+            onSelectPhrase={(text: string) => onSelectPhrasePrompt(text, preset.title)}
           />
         ))}
       </View>

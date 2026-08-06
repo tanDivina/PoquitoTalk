@@ -190,7 +190,7 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
 
         {/* Chat Messages Timeline */}
         <ScrollView contentContainerStyle={styles.timeline} ref={(ref) => ref?.scrollToEnd({ animated: true })}>
-          {thread.messages.map((msg) => {
+          {(thread?.messages || []).map((msg) => {
             const isExpat = msg.sender === 'EXPAT';
             return (
               <View

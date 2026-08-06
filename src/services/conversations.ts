@@ -81,7 +81,7 @@ export async function loadConversationThreads(): Promise<ConversationThread[]> {
   } catch (e) {
     console.warn('Error loading threads file:', e);
   }
-  return DEFAULT_PRESET_THREADS;
+  return [];
 }
 
 export async function saveConversationThreads(threads: ConversationThread[]): Promise<void> {

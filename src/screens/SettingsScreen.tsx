@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Linking, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { FeedbackModal } from '../components/FeedbackModal';
-import { setElevenLabsApiKey, getElevenLabsApiKey } from '../services/elevenLabsVoice';
 
 interface SettingsScreenProps {
   isPro: boolean;
@@ -14,15 +13,6 @@ interface SettingsScreenProps {
 
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPaywall, onResetOnboarding }) => {
   const [feedbackVisible, setFeedbackVisible] = useState(false);
-  const [elevenKey, setElevenKeyState] = useState(getElevenLabsApiKey());
-  const [isSaved, setIsSaved] = useState(false);
-
-  const handleSaveElevenKey = () => {
-    setElevenLabsApiKey(elevenKey);
-    setIsSaved(true);
-    Alert.alert("ElevenLabs API Key Saved! 🎙️", "Hyper-realistic studio voices are now active for all personas!");
-    setTimeout(() => setIsSaved(false), 3000);
-  };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -33,16 +23,16 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
         <Text style={styles.subtitle}>Configure preferences and subscription options.</Text>
       </View>
 
-      {/* Subscription Card */}
+      {/* Studio Credits Card */}
       <View style={styles.card}>
         <View style={styles.cardRow}>
           <View style={styles.iconCircle}>
-            <Ionicons name="card-outline" size={20} color={Colors.secondary} />
+            <Ionicons name="sparkles" size={20} color={Colors.secondary} />
           </View>
           <View style={styles.cardText}>
-            <Text style={styles.cardTitle}>Subscription Plan</Text>
+            <Text style={styles.cardTitle}>ElevenLabs Studio Credits</Text>
             <Text style={styles.cardSubtitle}>
-              {isPro ? 'Pro Member (Unlimited Access)' : 'Free Tier (10 Translations / Day)'}
+              {isPro ? 'Pro Member (Unlimited Credits)' : '5 Free Welcome Credits Active'}
             </Text>
           </View>
         </View>
@@ -52,41 +42,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
           onPress={onOpenPaywall}
           activeOpacity={0.8}
         >
-          <Text style={styles.actionBtnText}>{isPro ? 'Manage Subscription' : 'Upgrade to Pro'}</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* ElevenLabs API Key Settings Card */}
-      <View style={styles.card}>
-        <View style={styles.cardRow}>
-          <View style={[styles.iconCircle, { backgroundColor: '#E8F5E9' }]}>
-            <Ionicons name="mic-outline" size={20} color={Colors.whatsapp} />
-          </View>
-          <View style={styles.cardText}>
-            <Text style={styles.cardTitle}>ElevenLabs Studio Voices 🎙️</Text>
-            <Text style={styles.cardSubtitle}>
-              Active API Key for human-grade Panamanian Spanish speech
-            </Text>
-          </View>
-        </View>
-
-        <TextInput
-          style={styles.keyInput}
-          placeholder="sk_..."
-          placeholderTextColor={Colors.outline}
-          value={elevenKey}
-          onChangeText={setElevenKeyState}
-          secureTextEntry
-          autoCapitalize="none"
-        />
-
-        <TouchableOpacity
-          style={styles.saveKeyBtn}
-          onPress={handleSaveElevenKey}
-          activeOpacity={0.8}
-        >
-          <Ionicons name="checkmark-circle-outline" size={16} color="#FFF" />
-          <Text style={styles.saveKeyBtnText}>{isSaved ? 'Key Saved & Active ✓' : 'Save ElevenLabs API Key'}</Text>
+          <Text style={styles.actionBtnText}>{isPro ? 'Manage Membership' : 'Get 50 Studio Credits ($4.99)'}</Text>
         </TouchableOpacity>
       </View>
 
@@ -125,7 +81,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
           onPress={() => Linking.openURL('mailto:support@hero-apps.com')}
         >
           <Ionicons name="mail-outline" size={18} color={Colors.primary} />
-          <Text style={styles.linkLabel}>Support Desk (support@hero-apps.com)</Text>
+          <Text style={styles.linkLabel}>Support Desk</Text>
           <Ionicons name="chevron-forward" size={16} color={Colors.outline} />
         </TouchableOpacity>
 

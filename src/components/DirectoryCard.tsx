@@ -87,7 +87,7 @@ export const DirectoryCard: React.FC<DirectoryCardProps> = ({ provider, translat
         >
           <Ionicons name="play-circle-outline" size={16} color={Colors.secondary} />
           <Text style={styles.rewardedAdBtnText}>
-            Watch 10s Sponsor Spotlight $\rightarrow$ Get +5 Free Voice Notes! 🎁
+            Watch 10s Sponsor Spotlight → Get +5 Free Voice Notes! 🎁
           </Text>
         </TouchableOpacity>
       )}

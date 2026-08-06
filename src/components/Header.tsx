@@ -23,16 +23,6 @@ export const Header: React.FC<HeaderProps> = ({ isPro = false, onOpenPaywall, on
         <View style={styles.titleInfoBox}>
           <View style={styles.titleRow}>
             <Text style={styles.title}>PoquitoTalk</Text>
-            {onResetOnboarding && (
-              <TouchableOpacity
-                style={styles.intakeBadge}
-                onPress={onResetOnboarding}
-                activeOpacity={0.7}
-              >
-                <Ionicons name="refresh-circle-outline" size={12} color={Colors.secondary} />
-                <Text style={styles.intakeBadgeText}>v1.0.2 Intake</Text>
-              </TouchableOpacity>
-            )}
           </View>
           <Text style={styles.subtitle}>Bocas del Toro, Panamá 🇵🇦</Text>
         </View>

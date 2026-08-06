@@ -17,10 +17,10 @@ export interface VoiceOption {
 }
 
 export const GOOGLE_SPANISH_VOICES: VoiceOption[] = [
-  { id: 'es-US-Neural2-B', name: 'Diego', gender: 'MALE', tone: 'Warm & Natural Male (Panamá)', flag: '👨', pitch: 0.65, rate: 0.88 },
-  { id: 'es-US-Neural2-C', name: 'Mateo', gender: 'MALE', tone: 'Calm & Authoritative Male', flag: '🧔', pitch: 0.48, rate: 0.82 },
-  { id: 'es-US-Neural2-A', name: 'Sofia', gender: 'FEMALE', tone: 'Clear & Friendly Female', flag: '👩', pitch: 1.35, rate: 0.92 },
-  { id: 'es-US-Journey-F', name: 'Valeria', gender: 'FEMALE', tone: 'Young & Expressive Female', flag: '👧', pitch: 1.70, rate: 0.98 },
+  { id: 'es-US-Neural2-B', name: 'Diego', gender: 'MALE', tone: 'Warm & Natural', flag: '👨', pitch: 0.96, rate: 0.88 },
+  { id: 'es-US-Neural2-C', name: 'Mateo', gender: 'MALE', tone: 'Calm & Authoritative', flag: '🧔', pitch: 0.90, rate: 0.84 },
+  { id: 'es-US-Neural2-A', name: 'Sofia', gender: 'FEMALE', tone: 'Clear & Friendly', flag: '👩', pitch: 1.02, rate: 0.92 },
+  { id: 'es-US-Journey-F', name: 'Valeria', gender: 'FEMALE', tone: 'Young & Expressive', flag: '👧', pitch: 1.08, rate: 0.95 },
 ];
 
 let customApiKey = '';

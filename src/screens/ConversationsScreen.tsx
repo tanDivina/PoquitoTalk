@@ -99,38 +99,57 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
 
       {/* List of Active Conversation Threads */}
       <View style={styles.threadsList}>
-        {threads.map((thread) => {
-          const lastMsg = thread.messages[thread.messages.length - 1];
-          return (
+        {threads.length === 0 ? (
+          <View style={styles.emptyCard}>
+            <Ionicons name="chatbubbles-outline" size={36} color={Colors.outline} />
+            <Text style={styles.emptyTitle}>No Active Threads Yet</Text>
+            <Text style={styles.emptyDesc}>
+              Create a dedicated 2-way conversation thread for your service contacts (e.g., Landlord, Plumber, or Water Taxi).
+            </Text>
             <TouchableOpacity
-              key={thread.id}
-              style={styles.threadCard}
-              onPress={() => handleSelectThread(thread)}
-              activeOpacity={0.7}
+              style={styles.emptyAddBtn}
+              onPress={handleCreateNewContactThread}
+              activeOpacity={0.8}
             >
-              <View style={styles.avatarCircle}>
-                <Ionicons name={(thread.avatarIcon as any) || 'person-outline'} size={20} color={Colors.secondary} />
-              </View>
+              <Ionicons name="add" size={18} color="#FFF" />
+              <Text style={styles.emptyAddBtnText}>Add First Contact Thread</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          threads.map((thread) => {
+            const lastMsg = thread?.messages?.length ? thread.messages[thread.messages.length - 1] : null;
+            const formattedDate = thread?.lastUpdated
+              ? new Date(thread.lastUpdated).toLocaleDateString([], { month: 'short', day: 'numeric' })
+              : '';
+            return (
+              <TouchableOpacity
+                key={thread.id}
+                style={styles.threadCard}
+                onPress={() => handleSelectThread(thread)}
+                activeOpacity={0.7}
+              >
+                <View style={styles.avatarCircle}>
+                  <Ionicons name={(thread?.avatarIcon as any) || 'person-outline'} size={20} color={Colors.secondary} />
+                </View>
 
-              <View style={styles.threadInfo}>
-                <View style={styles.threadHeaderRow}>
-                  <Text style={styles.contactName}>{thread.contactName}</Text>
-                  <Text style={styles.timestamp}>
-                    {new Date(thread.lastUpdated).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                <View style={styles.threadInfo}>
+                  <View style={styles.threadHeaderRow}>
+                    <Text style={styles.contactName}>{thread?.contactName || 'Service Contact'}</Text>
+                    <Text style={styles.timestamp}>{formattedDate}</Text>
+                  </View>
+
+                  <Text style={styles.categoryLabel}>{thread.category}</Text>
+
+                  <Text style={styles.lastMsgSnippet} numberOfLines={1}>
+                    {lastMsg ? lastMsg.textEnglish : 'Tap to start 2-way conversation in Spanish...'}
                   </Text>
                 </View>
 
-                <Text style={styles.categoryLabel}>{thread.category}</Text>
-
-                <Text style={styles.lastMsgSnippet} numberOfLines={1}>
-                  {lastMsg ? lastMsg.textEnglish : 'Tap to start 2-way conversation in Spanish...'}
-                </Text>
-              </View>
-
-              <Ionicons name="chevron-forward" size={16} color={Colors.outline} />
-            </TouchableOpacity>
-          );
-        })}
+                <Ionicons name="chevron-forward" size={16} color={Colors.outline} />
+              </TouchableOpacity>
+            );
+          })
+        )}
       </View>
 
       {/* 2-Way Thread View Modal */}
@@ -234,5 +253,42 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.onSurfaceVariant,
     marginTop: 4,
+  },
+  emptyCard: {
+    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
+    borderRadius: 24,
+    padding: 28,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
+    marginTop: 8,
+  },
+  emptyTitle: {
+    fontSize: 17,
+    fontWeight: '800',
+    color: Colors.onBackground,
+    marginTop: 10,
+  },
+  emptyDesc: {
+    fontSize: 13,
+    color: Colors.onSurfaceVariant,
+    textAlign: 'center',
+    marginTop: 6,
+    lineHeight: 18,
+  },
+  emptyAddBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: Colors.secondary,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 18,
+    marginTop: 18,
+  },
+  emptyAddBtnText: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#FFF',
   },
 });
