@@ -33,7 +33,7 @@ export const VoiceQualityModal: React.FC<VoiceQualityModalProps> = ({
 
           <Text style={styles.title}>Choose Voice Quality 🎙️</Text>
           <Text style={styles.subtitle}>
-            You have <Text style={styles.boldText}>0 Natural Voice Credits</Text> remaining. Choose how you’d like to send your Spanish voice note:
+            You have <Text style={styles.boldText}>0 Natural Voice Notes</Text> remaining. Choose how you’d like to send your Spanish voice note:
           </Text>
 
           {/* Option 1: Free Standard Voice */}
@@ -74,7 +74,7 @@ export const VoiceQualityModal: React.FC<VoiceQualityModalProps> = ({
                 <Ionicons name="star" size={10} color="#FFF" />
                 <Text style={styles.proBadgeText}>NATURAL ACCENT</Text>
               </View>
-              <Text style={styles.optionTitle}>⭐ Unlock 50 Natural Credits ($4.99)</Text>
+              <Text style={styles.optionTitle}>⭐ Unlock 50 Natural Voice Notes ($4.99)</Text>
             </View>
             <Text style={styles.optionDesc}>
               Ultra-realistic natural audio with human inflection, warm cadence, and natural Panamanian accent.

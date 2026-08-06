@@ -106,7 +106,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               <View style={styles.popularBadge}>
                 <Text style={styles.popularText}>POPULAR ONE-TIME</Text>
               </View>
-              <Text style={styles.planTitle}>Starter 50 Natural Voice Credits</Text>
+              <Text style={styles.planTitle}>50 Natural Voice Notes Pack</Text>
               <View style={styles.priceRow}>
                 <Text style={styles.priceAmount}>$4.99</Text>
                 <Text style={styles.pricePeriod}>one-time payment</Text>
@@ -142,7 +142,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
                 <ActivityIndicator color="#FFF" />
               ) : (
                 <Text style={styles.subscribeBtnText}>
-                  {selectedTier === 'CREDITS' ? 'Get 50 Natural Voice Credits ($4.99)' : 'Subscribe to Pro ($9.99/mo)'}
+                  {selectedTier === 'CREDITS' ? 'Get 50 Natural Voice Notes ($4.99)' : 'Subscribe to Pro ($9.99/mo)'}
                 </Text>
               )}
             </TouchableOpacity>
@@ -158,7 +158,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               </View>
               <View style={styles.referralTextContainer}>
                 <Text style={styles.referralTitle}>Invite a Bocas Neighbor 🎁</Text>
-                <Text style={styles.referralSub}>Get +5 Free Natural Voice Credits when they download!</Text>
+                <Text style={styles.referralSub}>Get +5 Free Natural Voice Notes when they download!</Text>
               </View>
               <Ionicons name="chevron-forward" size={16} color={Colors.secondary} />
             </TouchableOpacity>

@@ -30,9 +30,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
             <Ionicons name="sparkles" size={20} color={Colors.secondary} />
           </View>
           <View style={styles.cardText}>
-            <Text style={styles.cardTitle}>Natural Voice Credits</Text>
+            <Text style={styles.cardTitle}>Natural Voice Notes</Text>
             <Text style={styles.cardSubtitle}>
-              {isPro ? 'Pro Member (Unlimited Credits)' : '5 Free Welcome Credits Active'}
+              {isPro ? 'Pro Member (Unlimited Voice Notes)' : '5 Free Welcome Voice Notes Active'}
             </Text>
           </View>
         </View>
