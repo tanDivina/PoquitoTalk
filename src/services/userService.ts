@@ -30,7 +30,7 @@ const INITIAL_USER_PROFILE: UserProfileData = {
       type: 'BONUS_FREE',
       amount: 5,
       source: 'Welcome Bonus',
-      details: '5 Free ElevenLabs Studio Voice Notes on app install 🎁',
+      details: '5 Free Ultra-Realistic Studio Voice Notes on app install 🎁',
       timestamp: Date.now(),
     },
   ],

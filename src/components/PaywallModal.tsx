@@ -74,14 +74,14 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
             <Text style={styles.title}>Unlock Studio Quality Voices 🎙️</Text>
             <Text style={styles.subtitle}>
-              Get human-grade ElevenLabs voice notes with warm Panamanian cadence.
+              Get human-grade ultra-realistic voice notes with warm Panamanian cadence.
             </Text>
 
             {/* Feature Highlights */}
             <View style={styles.featuresList}>
               <View style={styles.featureRow}>
                 <Ionicons name="sparkles" size={20} color={Colors.secondary} />
-                <Text style={styles.featureText}>ElevenLabs Studio Voices (Diego, Mateo, Sofia, Valeria)</Text>
+                <Text style={styles.featureText}>Ultra-Realistic Studio Voices (Diego, Mateo, Sofia, Valeria)</Text>
               </View>
               <View style={styles.featureRow}>
                 <FontAwesome5 name="whatsapp" size={18} color={Colors.whatsapp} />
@@ -111,7 +111,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
                 <Text style={styles.priceAmount}>$4.99</Text>
                 <Text style={styles.pricePeriod}>one-time payment</Text>
               </View>
-              <Text style={styles.trialText}>50 ElevenLabs Studio Voice Notes • Never Expires</Text>
+              <Text style={styles.trialText}>50 Ultra-Realistic Studio Voice Notes • Never Expires</Text>
             </TouchableOpacity>
 
             {/* Tier 2: Monthly Pro Membership */}
