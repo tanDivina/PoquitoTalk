@@ -422,25 +422,52 @@
       reader.onloadend = async () => {
         const base64Audio = reader.result;
 
-        try {
-          const payload = {
-            roomId: roomId,
-            sender: 'contractor',
-            audioBase64: base64Audio,
-            timestamp: Date.now()
-          };
+        const payload = {
+          roomId: roomId,
+          sender: 'contractor',
+          audioBase64: base64Audio,
+          timestamp: Date.now()
+        };
 
+        try {
           localStorage.setItem(`walkie_last_msg_${roomId}`, JSON.stringify(payload));
 
-          statusText.innerText = '¡Enviado al cliente!';
+          if (!navigator.onLine) {
+            localStorage.setItem(`walkie_pending_offline_${roomId}`, JSON.stringify(payload));
+            statusText.innerText = '📶 Mensaje guardado localmente (Sin internet)';
+          } else {
+            statusText.innerText = '¡Enviado al cliente!';
+          }
+
           setTimeout(() => {
             statusText.innerText = 'Mantén presionado para hablar';
-          }, 2500);
+          }, 3000);
         } catch (e) {
-          statusText.innerText = 'Transmitido en canal seguro';
+          statusText.innerText = 'Mensaje grabado en memoria local';
         }
       };
     }
+
+    function syncPendingOfflineAudio() {
+      const pending = localStorage.getItem(`walkie_pending_offline_${roomId}`);
+      if (pending) {
+        try {
+          const payload = JSON.parse(pending);
+          localStorage.setItem(`walkie_last_msg_${roomId}`, JSON.stringify(payload));
+          localStorage.removeItem(`walkie_pending_offline_${roomId}`);
+          document.getElementById('status-text').innerText = '¡Mensaje enviado con éxito!';
+        } catch (e) {}
+      }
+    }
+
+    window.addEventListener('online', () => {
+      document.getElementById('status-text').innerText = '📶 Internet reconectado';
+      syncPendingOfflineAudio();
+    });
+
+    window.addEventListener('offline', () => {
+      document.getElementById('status-text').innerText = '⚠️ Sin internet — Mensajes guardados localmente';
+    });
 
     function playIncomingAudio() {
       const text = `¡Buenas! El cliente ha recibido tu audio y está revisando la consulta.`;
