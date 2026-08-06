@@ -309,9 +309,13 @@
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get('room') || 'demo';
-    const clientName = urlParams.get('name') || 'Cliente PoquitoTalk';
+    const clientName = urlParams.get('name');
 
-    document.getElementById('room-title').innerText = `Walkie-Talkie con ${clientName}`;
+    if (clientName && clientName.trim().length > 0) {
+      document.getElementById('room-title').innerText = `Walkie-Talkie con ${clientName}`;
+    } else {
+      document.getElementById('room-title').innerText = `Canal Walkie-Talkie en Vivo`;
+    }
 
     let mediaRecorder;
     let audioChunks = [];
