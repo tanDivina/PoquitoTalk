@@ -7,6 +7,37 @@ const DEMO_TRANSLATIONS = {
   'hi! the water pressure in the main bathroom dropped.': '¡Buenas! La presión del agua en el baño principal bajó por completo. ¿Podría revisar la tubería?',
 };
 
+// Natural Voice Personas & Pitch Calibrations matching app (src/services/googleVoice.ts)
+const VOICE_PITCHES = {
+  'Diego': { pitch: 0.96, rate: 0.88, name: 'Diego', flag: '👨' },
+  'Mateo': { pitch: 0.90, rate: 0.84, name: 'Mateo', flag: '🧔' },
+  'Sofia': { pitch: 1.02, rate: 0.92, name: 'Sofia', flag: '👩' },
+  'Valeria': { pitch: 1.08, rate: 0.95, name: 'Valeria', flag: '👧' }
+};
+
+let currentDemoVoice = 'Diego';
+
+function selectDemoVoice(name) {
+  currentDemoVoice = name;
+  document.querySelectorAll('.voice-chip-btn').forEach(btn => {
+    if (btn.getAttribute('data-voice') === name) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  const voice = VOICE_PITCHES[name] || VOICE_PITCHES['Diego'];
+  const playBtn = document.getElementById('play-audio-btn');
+  if (playBtn) {
+    playBtn.innerHTML = `🔊 Play ${voice.flag} ${voice.name} Audio Note`;
+  }
+  const playBtnEs = document.getElementById('play-audio-btn-es');
+  if (playBtnEs) {
+    playBtnEs.innerHTML = `🔊 Reproducir Audio ${voice.flag} ${voice.name}`;
+  }
+}
+
 function setDemoPrompt(tag, text) {
   document.getElementById('demo-input').value = text;
   runDemoTranslation();
@@ -40,11 +71,17 @@ function playDemoAudio() {
   const text = document.getElementById('result-text').innerText;
   if (!text) return;
 
-  // Web Speech API Synthesis with Spanish Voice
+  // Web Speech API Synthesis with Spanish Voice & Pitch Calibration matching app
   if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'es-PA';
-    utterance.rate = 0.9;
+
+    const config = VOICE_PITCHES[currentDemoVoice] || VOICE_PITCHES['Diego'];
+    const isQuestion = text.includes('?') || text.includes('¿');
+    utterance.pitch = isQuestion ? config.pitch + 0.05 : config.pitch;
+    utterance.rate = config.rate;
+
     window.speechSynthesis.speak(utterance);
   } else {
     alert('Audio playback is ready on PoquitoTalk mobile app!');
