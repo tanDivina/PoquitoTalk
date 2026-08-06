@@ -314,6 +314,12 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
               </Text>
             </TouchableOpacity>
           )}
+
+          {/* Walkie-Talkie Link Button */}
+          <TouchableOpacity style={styles.actionBtn} onPress={handleStartWalkieTalkie} activeOpacity={0.7}>
+            <Ionicons name="radio-outline" size={16} color={Colors.secondary} />
+            <Text style={styles.actionText}>Walkie Link</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Row 2: Prominent Full-Width Send Voice Note CTA */}
@@ -331,16 +337,6 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
               <Text style={styles.fullWidthWhatsappBtnText}>Send Voice Note to WhatsApp</Text>
             </>
           )}
-        </TouchableOpacity>
-
-        {/* Row 3: 2-Way Magic Walkie-Talkie Link CTA */}
-        <TouchableOpacity
-          style={styles.walkieBtn}
-          onPress={handleStartWalkieTalkie}
-          activeOpacity={0.8}
-        >
-          <Ionicons name="radio-outline" size={18} color={Colors.secondary} />
-          <Text style={styles.walkieBtnText}>📻 Send Magic Walkie-Talkie Link</Text>
         </TouchableOpacity>
 
         {/* Contextual Local Sponsor Ad — 100% relevant to active service category */}
