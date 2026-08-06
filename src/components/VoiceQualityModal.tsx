@@ -31,12 +31,12 @@ export const VoiceQualityModal: React.FC<VoiceQualityModalProps> = ({
             <FontAwesome5 name="microphone-alt" size={28} color={Colors.secondary} />
           </View>
 
-          <Text style={styles.title}>Choose Voice Note Quality 🎙️</Text>
+          <Text style={styles.title}>Choose Voice Quality 🎙️</Text>
           <Text style={styles.subtitle}>
-            You selected <Text style={styles.boldText}>{selectedVoice.name} ({selectedVoice.tone.toLowerCase()})</Text>. You currently have 0 Studio Voice Credits remaining.
+            You have <Text style={styles.boldText}>0 Natural Voice Credits</Text> remaining. Choose how you’d like to send your Spanish voice note:
           </Text>
 
-          {/* Option 1: Standard Free Voice */}
+          {/* Option 1: Free Standard Voice */}
           <TouchableOpacity
             style={styles.freeOptionCard}
             onPress={() => {
@@ -47,20 +47,20 @@ export const VoiceQualityModal: React.FC<VoiceQualityModalProps> = ({
           >
             <View style={styles.optionHeader}>
               <View style={styles.freeBadge}>
-                <Text style={styles.freeBadgeText}>100% FREE</Text>
+                <Text style={styles.freeBadgeText}>STANDARD FREE</Text>
               </View>
-              <Text style={styles.optionTitle}>⚡ Standard Free Voice</Text>
+              <Text style={styles.optionTitle}>⚡ Free Voice ($0.00)</Text>
             </View>
             <Text style={styles.optionDesc}>
-              Send using local device voice engine. Unlimited usage with zero API cost.
+              Uses basic device voice output. 100% free with unlimited translations.
             </Text>
             <View style={styles.actionRow}>
-              <Text style={styles.freeActionText}>Use Standard Free Voice</Text>
+              <Text style={styles.freeActionText}>Send with Free Voice</Text>
               <Ionicons name="arrow-forward" size={14} color={Colors.secondary} />
             </View>
           </TouchableOpacity>
 
-          {/* Option 2: Studio Pro / Credits */}
+          {/* Option 2: Pro Natural Credits */}
           <TouchableOpacity
             style={styles.proOptionCard}
             onPress={() => {
@@ -72,12 +72,12 @@ export const VoiceQualityModal: React.FC<VoiceQualityModalProps> = ({
             <View style={styles.optionHeader}>
               <View style={styles.proBadge}>
                 <Ionicons name="star" size={10} color="#FFF" />
-                <Text style={styles.proBadgeText}>STUDIO QUALITY</Text>
+                <Text style={styles.proBadgeText}>NATURAL ACCENT</Text>
               </View>
-              <Text style={styles.optionTitle}>⭐ Unlock 50 Studio Credits ($4.99)</Text>
+              <Text style={styles.optionTitle}>⭐ Unlock 50 Natural Credits ($4.99)</Text>
             </View>
             <Text style={styles.optionDesc}>
-              Ultra-realistic studio audio with human inflection, warm cadence, and natural Panamanian accent.
+              Ultra-realistic natural audio with human inflection, warm cadence, and natural Panamanian accent.
             </Text>
             <View style={styles.proActionBtn}>
               <Ionicons name="cart" size={16} color="#FFF" />
