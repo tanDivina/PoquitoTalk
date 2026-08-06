@@ -90,7 +90,7 @@ function playDemoAudio() {
 
 function initiateStripeCheckout(plan) {
   // Redirect to Stripe Checkout / RevenueCat Web Funnel
-  alert(`Redirecting to Stripe Checkout for ${plan === 'pro_annual' ? 'Annual Unlimited Pass ($19.99)' : '100 Credits ($4.99)'}...`);
+  alert(`Redirecting to Stripe Checkout for ${plan === 'pro_monthly' ? 'Pro Monthly Membership ($9.99/mo)' : '50 Natural Voice Notes Pack ($4.99)'}...`);
   window.location.href = `https://checkout.stripe.com/pay/poquitotalk_${plan}`;
 }
 

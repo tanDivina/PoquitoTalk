@@ -81,7 +81,19 @@
   <header class="navbar">
     <div class="nav-container">
       <div class="brand">
-        <img src="logo_transparent.png" alt="PoquitoTalk Green Parrot Logo" class="brand-logo-img" width="38" height="38" style="margin-right: 10px; filter: drop-shadow(0 2px 10px rgba(37, 211, 102, 0.4));" />
+        <svg width="40" height="40" viewBox="0 0 200 200" fill="none" style="margin-right: 8px; filter: drop-shadow(0 2px 10px rgba(37, 211, 102, 0.4));">
+          <path d="M 100 20 C 50 20 20 52 20 95 C 20 120 32 142 50 156 C 42 172 26 182 25 182 C 25 182 52 186 78 174 C 85 177 92 178 100 178 C 150 178 180 146 180 95 C 180 52 150 20 100 20 Z" fill="none" stroke="#25D366" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M 62 152 C 55 138 52 122 55 105 C 58 78 72 55 92 55 C 108 55 116 70 114 85 C 112 102 114 128 110 142 C 102 155 82 160 62 152 Z" fill="#10B981" stroke="#047857" stroke-width="4.5" />
+          <path d="M 58 112 C 62 98 76 92 86 108 C 92 122 86 145 70 148 C 62 140 57 126 58 112 Z" fill="#06B6D4" stroke="#047857" stroke-width="3.5" />
+          <circle cx="95" cy="74" r="8" fill="#FFFFFF" stroke="#047857" stroke-width="2.5" />
+          <circle cx="93.5" cy="74" r="4" fill="#0F172A" />
+          <circle cx="92" cy="72" r="1.5" fill="#FFFFFF" />
+          <path d="M 110 70 C 124 70 130 82 118 94 C 113 98 106 94 108 88 C 110 82 108 74 110 70 Z" fill="#F59E0B" stroke="#047857" stroke-width="3.5" stroke-linejoin="round" />
+          <path d="M 110 84 C 118 85 116 93 110 91 Z" fill="#EF4444" />
+          <path d="M 130 73 A 12 12 0 0 1 130 93" fill="none" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round" />
+          <path d="M 140 66 A 19 19 0 0 1 140 100" fill="none" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round" />
+          <path d="M 150 60 A 25 25 0 0 1 150 106" fill="none" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+        </svg>
         <span class="brand-name">PoquitoTalk <span class="badge-tag">Panamá 🇵🇦</span></span>
       </div>
       <div class="nav-links">
@@ -251,21 +263,22 @@
         <!-- Credit Pack -->
         <div class="pricing-card">
           <div class="plan-header">
-            <h3>Paquete de Créditos de Voz</h3>
-            <p class="plan-desc">Ideal para viajes cortos y estadías breves</p>
+            <h3>Paquete 50 Notas de Voz Naturales</h3>
+            <p class="plan-desc">Ideal para viajes cortos y diligencias diarias</p>
           </div>
           <div class="price-box">
             <span class="currency">$</span><span class="amount">4.99</span>
-            <span class="period">/ 100 Créditos</span>
+            <span class="period">pago único</span>
           </div>
           <ul class="features">
-            <li>✓ 100 Conversiones de Nota de Voz para WhatsApp</li>
+            <li>✓ 50 Notas de Voz de Sonido Natural</li>
+            <li>✓ Nunca vence</li>
             <li>✓ Todas las 8 plantillas (A/C, Lanchas, Starlink)</li>
-            <li>✓ Voces Masculinas y Femeninas Naturales</li>
+            <li>✓ Voces Masculinas y Femeninas (Diego, Sofía)</li>
             <li>✓ Sincronización instantánea con la App Móvil</li>
           </ul>
-          <button class="btn-checkout" onclick="initiateStripeCheckout('credits_100')">
-            Comprar 100 Créditos <span class="arrow">→</span>
+          <button class="btn-checkout" onclick="initiateStripeCheckout('credits_50')">
+            Obtener 50 Notas de Voz ($4.99) <span class="arrow">→</span>
           </button>
         </div>
 
@@ -273,22 +286,22 @@
         <div class="pricing-card featured">
           <div class="featured-badge">MÁS POPULAR</div>
           <div class="plan-header">
-            <h3>Pase Anual Pro Ilimitado</h3>
-            <p class="plan-desc">Para residentes, nómadas digitales y viajeros frecuentes</p>
+            <h3>Membresía Mensual Pro</h3>
+            <p class="plan-desc">Para residentes, nómadas digitales y expatriados</p>
           </div>
           <div class="price-box">
-            <span class="currency">$</span><span class="amount">19.99</span>
-            <span class="period">/ año ($1.66/mes)</span>
+            <span class="currency">$</span><span class="amount">9.99</span>
+            <span class="period">/ mes</span>
           </div>
           <ul class="features">
-            <li>✓ Notas de Voz Gemma AI <strong>Ilimitadas</strong></li>
-            <li>✓ Envíos a WhatsApp en 1-Tap <strong>Ilimitados</strong></li>
-            <li>✓ Todas las personas de voz (Diego, Sofía, Valeria)</li>
-            <li>✓ Modo de traducción offline</li>
-            <li>✓ Incluye Prueba Gratuita de 7 Días</li>
+            <li>✓ Notas de Voz Naturales <strong>Ilimitadas</strong></li>
+            <li>✓ <strong>Cero Anuncios</strong> y cero patrocinios</li>
+            <li>✓ Todas las voces (Diego, Mateo, Sofía, Valeria)</li>
+            <li>✓ Hilos de conversación bidireccionales en WhatsApp</li>
+            <li>✓ Cancela cuando quieras en 1 toque</li>
           </ul>
-          <button class="btn-checkout featured-btn" onclick="initiateStripeCheckout('pro_annual')">
-            Comenzar Prueba Gratis de 7 Días <span class="arrow">→</span>
+          <button class="btn-checkout featured-btn" onclick="initiateStripeCheckout('pro_monthly')">
+            Suscribirse a Pro ($9.99/mes) <span class="arrow">→</span>
           </button>
         </div>
       </div>
