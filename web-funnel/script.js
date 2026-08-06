@@ -187,8 +187,9 @@ function acceptCookieConsent() {
 }
 
 // Interactive FAQ Accordion Toggle
-function toggleFaq(btn) {
-  const card = btn.closest('.faq-card');
+function toggleFaq(target) {
+  const card = target.closest ? target.closest('.faq-card') : target;
+  if (!card) return;
   const isOpen = card.classList.contains('open');
   document.querySelectorAll('.faq-card').forEach(c => c.classList.remove('open'));
   if (!isOpen) {

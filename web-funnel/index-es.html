@@ -238,13 +238,13 @@
           </div>
         </div>
 
-        <div class="faq-card">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            <span>¿Cómo se activa el pase mediante RevenueCat y Stripe?</span>
+        <div class="faq-card" onclick="toggleFaq(this)">
+          <button class="faq-question" type="button">
+            <span>¿Cómo funcionan las notas de voz entre la aplicación móvil y la página web?</span>
             <span class="faq-toggle-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>Al completar el pago en Stripe Checkout, tu pase se sincroniza instantáneamente con RevenueCat. Puedes utilizar tus créditos o pase ilimitado tanto en la web como en la app móvil (iOS/Android).</p>
+            <p>Tu Paquete de 50 Notas de Voz o Membresía Pro desbloquea instantáneamente las voces naturales tanto en nuestro sitio web como en la app móvil. ¡Las notas de voz nunca vencen!</p>
           </div>
         </div>
       </div>
@@ -256,7 +256,7 @@
     <div class="container">
       <div class="section-title">
         <h2>Elige tu Pase de PoquitoTalk</h2>
-        <p>Activación instantánea mediante Stripe Checkout y RevenueCat Funnels</p>
+        <p>Diseñado específicamente para Bocas del Toro y la comunidad en Panamá 🇵🇦</p>
       </div>
 
       <div class="pricing-grid">
@@ -311,10 +311,10 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container footer-content">
-      <p>© 2026 Hero-Apps • Creado para RevenueCat Shipaton 2026</p>
+      <p>© 2026 Hero-Apps • Diseñado para Bocas del Toro y Panamá 🇵🇦</p>
       <div class="footer-links">
         <a href="privacy.html">Política de Privacidad</a>
-        <a href="mailto:support@hero-apps.com">Mesa de Soporte</a>
+        <a href="mailto:support@hero-apps.com">Soporte Técnico</a>
       </div>
     </div>
   </footer>
@@ -326,7 +326,7 @@
       <line x1="12" y1="8" x2="12" y2="12"></line>
       <line x1="12" y1="16" x2="12.01" y2="16"></line>
     </svg>
-    <span>Opiniones</span>
+    <span>Comentarios</span>
   </button>
 
   <!-- Sliding Feedback Drawer Panel -->
@@ -335,7 +335,7 @@
     <div class="drawer-header">
       <div>
         <h3>Comparte tus Comentarios</h3>
-        <p>¡Ayúdanos a hacer PoquitoTalk aún mejor para Panamá!</p>
+        <p>¡Ayúdanos a mejorar PoquitoTalk para la comunidad!</p>
       </div>
       <button class="drawer-close-btn" onclick="closeFeedbackDrawer()">✕</button>
     </div>
@@ -368,22 +368,22 @@
         <!-- Comments -->
         <div class="form-group">
           <label for="fb-comment">TUS COMENTARIOS</label>
-          <textarea id="fb-comment" required rows="4" placeholder="Cuéntanos qué te gusta o qué función necesitas..."></textarea>
+          <textarea id="fb-comment" required rows="4" placeholder="Dinos qué te gusta o qué función necesitas..."></textarea>
         </div>
 
         <!-- Email -->
         <div class="form-group">
-          <label for="fb-email">CORREO ELECTRÓNICO <span class="subtext">(Opcional)</span></label>
+          <label for="fb-email">CORREO ELECTRÓNICO <span class="subtext">(Opcional para respuesta)</span></label>
           <input type="email" id="fb-email" placeholder="tu@ejemplo.com" />
         </div>
 
         <button type="submit" id="fb-submit-btn" class="btn-submit-feedback">
-          Enviar Comentarios →
+          Enviar Comentario →
         </button>
       </form>
 
       <div id="fb-success-msg" class="success-msg" style="display: none;">
-        ✓ ¡Gracias! Tus comentarios se han enviado directamente a nuestro equipo (support@hero-apps.com).
+        🎉 ¡Gracias! Tus comentarios se han enviado directamente a nuestro equipo.
       </div>
     </div>
   </div>
@@ -391,7 +391,7 @@
   <!-- Cookie Consent Banner -->
   <div id="cookie-banner" class="cookie-banner">
     <div class="cookie-content">
-      <span>🍪 <strong>Aviso de Cookies y Privacidad</strong>: Utilizamos cookies esenciales para gestionar sesiones de traducción, Stripe Checkout y estado de suscripciones en RevenueCat. Lee nuestra <a href="privacy.html">Política de Privacidad</a>.</span>
+      <span>🍪 <strong>Aviso de Cookies y Privacidad</strong>: Utilizamos cookies esenciales para recordar tus preferencias de idioma y guardar la sesión de tus traducciones de forma local. Consulta nuestra <a href="privacy.html">Política de Privacidad</a>.</span>
       <button class="btn-cookie-accept" onclick="acceptCookieConsent()">Aceptar Cookies Esenciales</button>
     </div>
   </div>
