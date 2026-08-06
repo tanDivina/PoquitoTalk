@@ -52,10 +52,10 @@ export const GreenParrotLogo: React.FC<GreenParrotLogoProps> = ({ size = 42 }) =
         fill="#EF4444"
       />
 
-      {/* Audio Soundwave Arcs (Sized and padded so they NEVER touch the green circle border) */}
-      <Path d="M 132 72 A 12 12 0 0 1 132 92" fill="none" stroke="#F59E0B" strokeWidth="4.5" strokeLinecap="round" />
-      <Path d="M 143 64 A 20 20 0 0 1 143 100" fill="none" stroke="#F59E0B" strokeWidth="4.5" strokeLinecap="round" />
-      <Path d="M 154 57 A 28 28 0 0 1 154 107" fill="none" stroke="#F59E0B" strokeWidth="4" strokeLinecap="round" opacity={0.8} />
+      {/* Audio Soundwave Arcs (Pulled further inward so there is a massive gap away from the green circle wall) */}
+      <Path d="M 125 76 A 9 9 0 0 1 125 90" fill="none" stroke="#F59E0B" strokeWidth="4.5" strokeLinecap="round" />
+      <Path d="M 133 70 A 15 15 0 0 1 133 96" fill="none" stroke="#F59E0B" strokeWidth="4.5" strokeLinecap="round" />
+      <Path d="M 141 64 A 21 21 0 0 1 141 102" fill="none" stroke="#F59E0B" strokeWidth="4" strokeLinecap="round" opacity={0.8} />
     </Svg>
   );
 };
