@@ -27,7 +27,7 @@
   <meta name="twitter:description" content="Generate polite Panamanian Spanish voice notes ready for WhatsApp in 1-tap." />
   <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/expo_go_qr.png" />
 
-  <link rel="stylesheet" href="style.css?v=1.1.1" />
+  <link rel="stylesheet" href="style.css?v=1.1.2" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
 
@@ -173,7 +173,13 @@
           <div id="result-box" class="result-box" style="display: none;">
             <div class="result-header">
               <span class="result-label">ESPAÑOL PANAMÁ 🇵🇦 (AUDIO NOTE)</span>
-              <span class="badge-gemma">GEMMA AI</span>
+              
+              <div class="voice-selector-chips">
+                <button class="voice-chip-btn active" data-voice="Diego" onclick="selectDemoVoice('Diego')">👨 Diego</button>
+                <button class="voice-chip-btn" data-voice="Sofia" onclick="selectDemoVoice('Sofia')">👩 Sofia</button>
+                <button class="voice-chip-btn" data-voice="Valeria" onclick="selectDemoVoice('Valeria')">👧 Valeria</button>
+                <button class="voice-chip-btn" data-voice="Mateo" onclick="selectDemoVoice('Mateo')">🧔 Mateo</button>
+              </div>
             </div>
             <p id="result-text" class="result-text"></p>
 
@@ -182,8 +188,8 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                 Send Voice Note to WhatsApp
               </button>
-              <button class="btn-secondary-action" onclick="playDemoAudio()">
-                🔊 Play Audio Note
+              <button id="play-audio-btn" class="btn-secondary-action" onclick="playDemoAudio()">
+                🔊 Play 👨 Diego Audio Note
               </button>
             </div>
           </div>

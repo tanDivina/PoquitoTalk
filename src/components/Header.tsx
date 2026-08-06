@@ -18,7 +18,7 @@ export const Header: React.FC<HeaderProps> = ({ isPro = false, onOpenPaywall, on
     <View style={[styles.container, { paddingTop: topPadding }]}>
       <View style={styles.brandContainer}>
         <View style={styles.logoBubble}>
-          <MaterialCommunityIcons name="chat-processing-outline" size={22} color={Colors.secondary} />
+          <MaterialCommunityIcons name="bird" size={22} color={Colors.tertiary || Colors.secondary} />
         </View>
         <View style={styles.titleInfoBox}>
           <View style={styles.titleRow}>
