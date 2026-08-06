@@ -6,11 +6,14 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  SafeAreaView,
+  Platform,
+  StatusBar,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { GOOGLE_SPANISH_VOICES, VoiceOption } from '../services/googleVoice';
+import { playVoiceDemoSample, VOICE_DEMO_SAMPLES } from '../services/voiceDemos';
 
 interface OnboardingScreenProps {
   onComplete: (userName: string, selectedVoice: VoiceOption) => void;
@@ -30,15 +33,19 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
 
     if (gender === 'FEMALE') {
       if (age === 'YOUNG') {
-        setSelectedVoice(GOOGLE_SPANISH_VOICES[2]); // Valeria (Young Studio)
+        const valeria = GOOGLE_SPANISH_VOICES.find((v) => v.name === 'Valeria') || GOOGLE_SPANISH_VOICES[3];
+        setSelectedVoice(valeria); // Valeria (Young & Expressive Female)
       } else {
-        setSelectedVoice(GOOGLE_SPANISH_VOICES[1]); // Sofia (Natural Female)
+        const sofia = GOOGLE_SPANISH_VOICES.find((v) => v.name === 'Sofia') || GOOGLE_SPANISH_VOICES[2];
+        setSelectedVoice(sofia); // Sofia (Clear & Friendly Female)
       }
     } else {
       if (age === 'YOUNG') {
-        setSelectedVoice(GOOGLE_SPANISH_VOICES[0]); // Diego (Warm Male)
+        const diego = GOOGLE_SPANISH_VOICES.find((v) => v.name === 'Diego') || GOOGLE_SPANISH_VOICES[0];
+        setSelectedVoice(diego); // Diego (Warm & Natural Male)
       } else {
-        setSelectedVoice(GOOGLE_SPANISH_VOICES[3]); // Mateo (Mature Deep)
+        const mateo = GOOGLE_SPANISH_VOICES.find((v) => v.name === 'Mateo') || GOOGLE_SPANISH_VOICES[1];
+        setSelectedVoice(mateo); // Mateo (Calm & Authoritative Male)
       }
     }
   };
@@ -47,8 +54,11 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
     onComplete(userName.trim() || 'Expat Friend', selectedVoice);
   };
 
+  const insets = useSafeAreaInsets();
+  const topPadding = Math.max(insets.top + 16, Platform.OS === 'android' ? (StatusBar.currentHeight || 24) + 20 : 44);
+
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={[styles.safeArea, { paddingTop: topPadding }]}>
       <ScrollView contentContainerStyle={styles.container}>
         {/* Step Indicator Bar */}
         <View style={styles.stepBar}>
@@ -95,9 +105,9 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
               <View style={styles.featureItem}>
                 <Ionicons name="flash-outline" size={22} color={Colors.tertiary} />
                 <View style={styles.featureText}>
-                  <Text style={styles.featureTitle}>Google Gemini AI Engine</Text>
+                  <Text style={styles.featureTitle}>Authentic Local Phrasing</Text>
                   <Text style={styles.featureDesc}>
-                    Uses polite, authentic local phrasing that sounds natural to Panamanian service contacts.
+                    Polite Panamanian Spanish tailored for local service contacts and businesses.
                   </Text>
                 </View>
               </View>
@@ -116,7 +126,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
             <Text style={styles.stepTag}>STEP 2 OF 3</Text>
             <Text style={styles.title}>Personalize Your Voice Persona</Text>
             <Text style={styles.subtitle}>
-              We’ll pair you with the best Google Neural2 Spanish voice for your WhatsApp audio notes.
+              Choose your preferred voice persona for sending natural Spanish WhatsApp voice notes.
             </Text>
 
             {/* Name Input */}
@@ -205,7 +215,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
 
             {/* Selected Paired Voice Badge */}
             <View style={styles.voiceResultCard}>
-              <Text style={styles.voiceResultTag}>PAIRED VOICE PERSONA</Text>
+              <Text style={styles.voiceResultTag}>SELECTED VOICE PERSONA</Text>
               <View style={styles.voiceResultHeader}>
                 <View style={styles.voiceIconBubble}>
                   <FontAwesome5
@@ -215,10 +225,21 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
                   />
                 </View>
                 <View style={styles.voiceResultInfo}>
-                  <Text style={styles.voiceResultName}>{selectedVoice.name}</Text>
-                  <Text style={styles.voiceResultDesc}>{selectedVoice.tone}</Text>
+                  <Text style={styles.voiceResultName}>{selectedVoice.name} ({selectedVoice.tone.toLowerCase()})</Text>
+                  <Text style={styles.demoScenarioTitle}>
+                    Scenario: {VOICE_DEMO_SAMPLES[selectedVoice.name]?.scenarioTitle}
+                  </Text>
                 </View>
               </View>
+
+              <TouchableOpacity
+                style={styles.listenDemoBtn}
+                onPress={() => playVoiceDemoSample(selectedVoice)}
+                activeOpacity={0.8}
+              >
+                <Ionicons name="play-circle" size={18} color={Colors.secondary} />
+                <Text style={styles.listenDemoBtnText}>▶ Listen Practical Voice Demo</Text>
+              </TouchableOpacity>
             </View>
 
             <TouchableOpacity style={styles.primaryBtn} onPress={() => setStep(3)} activeOpacity={0.8}>
@@ -237,7 +258,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
 
             <Text style={styles.title}>You’re All Set, {userName || 'Friend'}!</Text>
             <Text style={styles.subtitle}>
-              Your voice persona <Text style={styles.highlightText}>{selectedVoice.name}</Text> ({selectedVoice.tone}) is locked in and ready for WhatsApp voice notes.
+              Your voice persona <Text style={styles.highlightText}>{selectedVoice.name} ({selectedVoice.tone.toLowerCase()})</Text> is locked in and ready for WhatsApp voice notes.
             </Text>
 
             <View style={styles.summaryCard}>
@@ -250,8 +271,8 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
                 <Text style={styles.summaryVal}>Español (Panamá)</Text>
               </View>
               <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>Paired Voice:</Text>
-                <Text style={styles.summaryVal}>{selectedVoice.name} ({selectedVoice.gender})</Text>
+                <Text style={styles.summaryLabel}>Voice Persona:</Text>
+                <Text style={styles.summaryVal}>{selectedVoice.name} ({selectedVoice.tone.toLowerCase()})</Text>
               </View>
             </View>
 
@@ -262,7 +283,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
           </View>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -476,6 +497,30 @@ const styles = StyleSheet.create({
   voiceResultDesc: {
     fontSize: 12,
     color: Colors.onSurfaceVariant,
+  },
+  demoScenarioTitle: {
+    fontSize: 11,
+    color: Colors.onSurfaceVariant,
+    marginTop: 2,
+    fontStyle: 'italic',
+  },
+  listenDemoBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#FFF',
+    borderRadius: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: Colors.secondaryLight,
+  },
+  listenDemoBtnText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: Colors.secondary,
   },
   summaryCard: {
     backgroundColor: Colors.surfaceContainer,

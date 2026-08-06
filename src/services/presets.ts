@@ -11,15 +11,15 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     phrases: [
       {
         title: 'Urgent Doctor Visit',
-        input: '¡Buenas! Tengo fiebre y dolor intenso, ¿tienen un médico disponible para una consulta hoy?',
+        input: 'Hi! I have a fever and severe pain. Is a doctor available for a consultation today?',
       },
       {
         title: 'Pharmacy Medication',
-        input: 'Hola, ¿tienen medicamentos para la infección/fiebre en la farmacia y hasta qué hora están abiertos?',
+        input: 'Hello, do you have medication for fever/infection in the pharmacy and what time are you open until?',
       },
       {
         title: 'Medical Emergency Help',
-        input: '¡Buenas! Necesito asistencia médica de emergencia o una ambulancia inmediatamente, por favor.',
+        input: 'Hi! I need urgent medical assistance or an ambulance immediately, please.',
       },
     ],
   },
@@ -33,15 +33,15 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     phrases: [
       {
         title: 'Urgent Toothache Appointment',
-        input: '¡Buenas! Tengo un dolor de muela muy fuerte, ¿tendrá cita disponible con el dentista hoy?',
+        input: 'Hi! I have a severe toothache. Is a dentist appointment available today?',
       },
       {
         title: 'Schedule Dental Cleaning',
-        input: 'Hola, quisiera programar una cita para una limpieza dental la próxima semana.',
+        input: 'Hello, I would like to schedule a dental cleaning appointment for next week.',
       },
       {
         title: 'Doctor Follow-up / Lab Results',
-        input: 'Buenas, quisiera consultar por los resultados de mis exámenes de laboratorio.',
+        input: 'Hi, I would like to inquire about the results of my laboratory exams.',
       },
     ],
   },
@@ -55,15 +55,15 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     phrases: [
       {
         title: 'A/C Leaking Water',
-        input: '¡Buenas! El aire acondicionado está goteando agua dentro de la habitación. ¿Podría venir a revisarlo?',
+        input: 'Hi! The air conditioner is leaking water inside the room. Could you come check it?',
       },
       {
         title: 'Needs Gas/Refrigerant',
-        input: 'Hola, el aire acondicionado enciende pero no frena frío. Creo que necesita recarga de gas.',
+        input: 'Hello, the air conditioner turns on but is not blowing cold air. I think it needs gas refill.',
       },
       {
         title: 'Remote Not Working',
-        input: 'Hola, el control remoto del aire no responde. ¿Podría revisarlo?',
+        input: 'Hello, the air conditioner remote control is not responding. Could you check it?',
       },
     ],
   },
@@ -77,15 +77,15 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     phrases: [
       {
         title: 'Fridge Not Cooling',
-        input: 'Hola, la nevera dejó de enfriar hoy. ¿Podría venir un técnico a revisarla?',
+        input: 'Hello, the refrigerator stopped cooling today. Could a technician inspect it?',
       },
       {
         title: 'Washing Machine Error',
-        input: 'Buenas, la lavadora no está botando el agua al final del ciclo.',
+        input: 'Hi, the washing machine is not draining water at the end of the cycle.',
       },
       {
         title: 'Stove Ignition Broken',
-        input: 'Hola, el quemador de la estufa no está encendiendo bien.',
+        input: 'Hello, the stove burner is not igniting properly.',
       },
     ],
   },
@@ -99,15 +99,15 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     phrases: [
       {
         title: 'Outboard Motor Won\'t Start',
-        input: '¡Buenas! El motor fuera de borda de la lancha no quiere arrancar. ¿Hace trabajos de mecánica marina por aquí?',
+        input: 'Hi! The boat outboard motor won\'t start. Do you do marine mechanics here?',
       },
       {
         title: 'Bilge Pump Check',
-        input: '¡Buenas! Necesito que alguien revise la bomba de achique automática y el cableado de la batería marina, por favor.',
+        input: 'Hi! I need someone to check the automatic bilge pump and marine battery wiring, please.',
       },
       {
         title: 'Hull Clean & Maintenance',
-        input: '¡Buenas! ¿Realiza limpieza de casco y revisión de hélice en el muelle?',
+        input: 'Hi! Do you do hull cleaning and propeller inspection at the dock?',
       },
     ],
   },
@@ -121,15 +121,15 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     phrases: [
       {
         title: 'Dead Battery Jump',
-        input: '¡Buenas! La batería del carro se descargó por completo. ¿Alguien podría traerme cables o una batería nueva?',
+        input: 'Hi! The car battery is dead. Could someone bring jumper cables or a new battery?',
       },
       {
         title: 'Punctured Tire Repair',
-        input: 'Hola, la llanta tiene un clavo y perdió aire. ¿Dónde podría repararla cerca?',
+        input: 'Hello, the tire has a nail in it and lost air. Where can I get it repaired nearby?',
       },
       {
         title: 'Oil Change & Checkup',
-        input: 'Buenas, quisiera programar un cambio de aceite y revisión general de frenos.',
+        input: 'Hi, I would like to schedule an oil change and general brake checkup.',
       },
     ],
   },
@@ -143,15 +143,15 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     phrases: [
       {
         title: 'Starlink Dish Disconnected',
-        input: 'Buenas, la antena de Starlink perdió la conexión. ¿Hay alguna caída de señal en la zona?',
+        input: 'Hi, the Starlink dish lost connection. Is there a signal outage in the area?',
       },
       {
         title: 'Fiber Cable Damaged',
-        input: 'Hola, el cable de fibra de internet afuera de la casa parece dañado o cortado.',
+        input: 'Hello, the internet fiber cable outside the house appears damaged or cut.',
       },
       {
         title: 'Router Reboot / Low Speed',
-        input: 'Buenas, el internet está muy lento hoy. ¿Podría verificar el estado de la línea?',
+        input: 'Hi, the internet is very slow today. Could you check the line status?',
       },
     ],
   },
@@ -165,15 +165,15 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     phrases: [
       {
         title: 'Low Water Pressure',
-        input: '¡Buenas! La presión del agua en el baño principal bajó por completo.',
+        input: 'Hi! The water pressure in the main bathroom dropped completely.',
       },
       {
         title: 'Spare Key Request',
-        input: 'Hola, me quedé fuera por accidente. ¿Tendrá un duplicado de la llave cerca?',
+        input: 'Hello, I accidentally locked myself out. Do you have a spare key nearby?',
       },
       {
         title: 'Rent & Utility Payment',
-        input: 'Buenas, ya le envié el pago del alquiler por transferencia y le adjunté el comprobante.',
+        input: 'Hi, I sent the rent payment via transfer and attached the proof.',
       },
     ],
   },

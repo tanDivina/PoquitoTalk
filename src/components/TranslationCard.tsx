@@ -58,7 +58,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
     }
   }, [initialVoice]);
 
-  // Play audio using selected Google Neural2 Voice or Native TTS
+  // Play audio using selected Voice Persona or Native TTS
   const handlePlayTTS = async () => {
     if (!outputText) return;
 
@@ -98,13 +98,13 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
     // Determine distinct base pitch per persona
     let basePitch = 1.0;
-    if (selectedVoice.name === 'Diego') basePitch = 0.35;       // Deep Warm Male
-    else if (selectedVoice.name === 'Mateo') basePitch = 0.20;  // Ultra-Deep Male
-    else if (selectedVoice.name === 'Sofia') basePitch = 1.45;  // Clear Female
-    else if (selectedVoice.name === 'Valeria') basePitch = 1.75;// Young High Female
+    if (selectedVoice.name === 'Diego') basePitch = 0.96;
+    else if (selectedVoice.name === 'Mateo') basePitch = 0.90;
+    else if (selectedVoice.name === 'Sofia') basePitch = 1.02;
+    else if (selectedVoice.name === 'Valeria') basePitch = 1.08;
 
-    // Question pitch boost for sentence-ending intonation
-    const finalPitch = isQuestion ? basePitch + 0.30 : basePitch;
+    // Subtle question pitch boost for natural sentence-ending intonation
+    const finalPitch = isQuestion ? basePitch + 0.05 : basePitch;
 
     try {
       const availableVoices = await Speech.getAvailableVoicesAsync();
@@ -227,14 +227,6 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
           <Text style={styles.categoryText}>{category}</Text>
         </View>
       )}
-
-      {/* Input Text Block */}
-      <View style={styles.sectionBlock}>
-        <Text style={styles.sectionLabel}>ORIGINAL ({fromLang.toUpperCase()})</Text>
-        <Text style={styles.inputText}>{inputText}</Text>
-      </View>
-
-      <View style={styles.divider} />
 
       {/* Gemma Output Block */}
       <View style={styles.sectionBlock}>

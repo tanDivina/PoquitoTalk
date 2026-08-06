@@ -17,6 +17,7 @@ import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { LanguageChip } from '../components/LanguageChip';
 import { TranslationCard } from '../components/TranslationCard';
+import { VoiceQualityModal } from '../components/VoiceQualityModal';
 import { MicButton } from '../components/MicButton';
 import { translateWithGemma } from '../services/gemma';
 import { TranslationItem } from '../types';
@@ -29,6 +30,7 @@ interface HomeScreenProps {
   savedTranslations: TranslationItem[];
   onToggleSave: (item: TranslationItem) => void;
   activePresetPrompt?: string;
+  activePresetCategory?: string;
   onClearPresetPrompt?: () => void;
   initialVoice?: VoiceOption;
   onResetOnboarding?: () => void;
@@ -41,6 +43,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   savedTranslations,
   onToggleSave,
   activePresetPrompt,
+  activePresetCategory,
   onClearPresetPrompt,
   initialVoice,
   onResetOnboarding,
@@ -52,6 +55,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const [isTranslating, setIsTranslating] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [clipboardReplyText, setClipboardReplyText] = useState<string | null>(null);
+  const [showVoiceQualityModal, setShowVoiceQualityModal] = useState(false);
 
   // Auto-detect copied WhatsApp Spanish reply from clipboard
   useEffect(() => {
@@ -126,29 +130,29 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     }
   };
 
-  const handleMicPress = () => {
-    if (isListening) {
-      setIsListening(false);
-      return;
-    }
+  const inputRef = React.useRef<TextInput>(null);
 
+  const handleMicPress = () => {
+    // If text already present, translate immediately
     if (inputText.trim().length > 0) {
       handleTranslateText(inputText);
       return;
     }
 
-    setIsListening(true);
-    setTimeout(() => {
+    // Toggle active listening mode and focus input box for dictation
+    if (isListening) {
       setIsListening(false);
-      const dictationSamples = [
-        "Hi! Could you tell me where the nearest pharmacy is located?",
-        "Hello! I am calling to check if you have availability for a boat tour tomorrow.",
-        "Good day! What time does the grocery store close tonight?",
-      ];
-      const randomSample = dictationSamples[Math.floor(Math.random() * dictationSamples.length)];
-      setInputText(randomSample);
-      handleTranslateText(randomSample);
-    }, 2000);
+    } else {
+      setIsListening(true);
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+
+      // Auto-stop listening indicator after 3.5 seconds
+      setTimeout(() => {
+        setIsListening(false);
+      }, 3500);
+    }
   };
 
   const handleListenToIncomingVoiceNote = () => {
@@ -191,13 +195,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     }
   };
 
-  const handleSelectFollowUpChip = (englishFollowUp: string) => {
-    setFromLang('en');
-    setToLang('es');
-    setInputText(englishFollowUp);
-    handleTranslateText(englishFollowUp, 'en', 'es');
-  };
-
   const currentTranslationItem: TranslationItem = {
     id: `${inputText}-${outputText}`,
     inputText,
@@ -236,32 +233,43 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </TouchableOpacity>
       )}
 
-      {/* 2-Way Conversation Threads Launcher Bar */}
-      <TouchableOpacity
-        style={styles.threadsLauncherBar}
-        onPress={() => (navigation as any).navigate('Threads')}
-        activeOpacity={0.8}
-      >
-        <FontAwesome5 name="whatsapp" size={18} color={Colors.whatsapp} />
-        <View style={styles.threadsLauncherText}>
-          <Text style={styles.threadsLauncherTitle}>2-Way Conversation Threads 💬</Text>
-          <Text style={styles.threadsLauncherSub}>Carlos (A/C), Captain Juan (Boat), Landlord...</Text>
-        </View>
-        <Ionicons name="chevron-forward" size={18} color={Colors.secondary} />
-      </TouchableOpacity>
-
       {/* Language Switcher Row */}
-      <LanguageChip
-        fromLang={fromLang}
-        toLang={toLang}
-        onSwap={handleSwapLanguages}
-        onSelectFrom={() => {}}
-        onSelectTo={() => {}}
-      />
+      {/* Category Badge Context & Back Button */}
+      {activePresetCategory && (
+        <View style={styles.categoryBadgeRow}>
+          <View style={styles.categoryBadge}>
+            <Ionicons name="folder-open-outline" size={14} color={Colors.secondary} />
+            <Text style={styles.categoryBadgeText}>{activePresetCategory}</Text>
+          </View>
+
+          <TouchableOpacity
+            style={styles.backToPresetsBtn}
+            onPress={() => {
+              if (onClearPresetPrompt) onClearPresetPrompt();
+              if (navigation) navigation.navigate('Presets');
+            }}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="arrow-back" size={14} color={Colors.secondary} />
+            <Text style={styles.backToPresetsBtnText}>Back to Presets</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {/* Active Dictation Helper Banner */}
+      {isListening && (
+        <View style={styles.dictationActiveBanner}>
+          <Ionicons name="mic-circle" size={18} color={Colors.secondary} />
+          <Text style={styles.dictationActiveText}>
+            Dictation active: Speak or type your message in English above.
+          </Text>
+        </View>
+      )}
 
       {/* Primary Input Card */}
       <View style={styles.inputCard}>
         <TextInput
+          ref={inputRef}
           style={styles.textInput}
           placeholder={fromLang === 'en' ? 'Type or tap mic to speak...' : 'Pega la respuesta de WhatsApp en español...'}
           placeholderTextColor={Colors.outline}
@@ -270,6 +278,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           onChangeText={(text) => {
             setInputText(text);
             if (!text) setOutputText('');
+            if (text.length > 0) setIsListening(false);
           }}
         />
 
@@ -312,40 +321,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         initialVoice={initialVoice}
       />
 
-      {/* 1-Tap Quick Follow-Up Response Chips for WhatsApp Conversations */}
-      {outputText.length > 0 && (
-        <View style={styles.followUpSection}>
-          <Text style={styles.followUpSectionTitle}>1-TAP WHATSAPP FOLLOW-UP RESPONSES</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.followUpRow}>
-            <TouchableOpacity
-              style={styles.followUpChip}
-              onPress={() => handleSelectFollowUpChip("3:00 PM works great for me! Thank you.")}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.followUpChipIcon}>🕒</Text>
-              <Text style={styles.followUpChipText}>"3:00 PM works great! Thank you."</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.followUpChip}
-              onPress={() => handleSelectFollowUpChip("How much will the inspection cost?")}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.followUpChipIcon}>💵</Text>
-              <Text style={styles.followUpChipText}>"How much is the inspection cost?"</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.followUpChip}
-              onPress={() => handleSelectFollowUpChip("Here is my location on Isla Colón.")}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.followUpChipIcon}>📍</Text>
-              <Text style={styles.followUpChipText}>"Here is my location on Isla Colón."</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
-      )}
+      <VoiceQualityModal
+        visible={showVoiceQualityModal}
+        onClose={() => setShowVoiceQualityModal(false)}
+        selectedVoice={initialVoice || { name: 'Diego', tone: 'Warm & Natural', gender: 'MALE', id: 'es-US-Neural2-B', flag: '👨', pitch: 0.96, rate: 0.88 }}
+        onSelectFreeStandardVoice={() => {
+          Alert.alert("Standard Free Voice Selected ⚡", "Your audio message will be generated using the local standard free voice.");
+        }}
+        onBuyCreditsOrPro={onOpenPaywall}
+      />
     </ScrollView>
   );
 };
@@ -357,7 +341,58 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 20,
-    paddingBottom: 32,
+    paddingBottom: 110,
+  },
+  categoryBadgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginVertical: 8,
+  },
+  categoryBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: Colors.secondaryContainer || '#F4FAFE',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 14,
+  },
+  categoryBadgeText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: Colors.secondary,
+  },
+  backToPresetsBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: Colors.surfaceContainer || '#F5F5F5',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 14,
+  },
+  backToPresetsBtnText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.secondary,
+  },
+  dictationActiveBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: Colors.secondaryContainer || '#F4FAFE',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 14,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: Colors.secondaryLight,
+  },
+  dictationActiveText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.secondary,
   },
   replyBanner: {
     backgroundColor: Colors.whatsapp,

@@ -4,7 +4,7 @@
 
 ## Key Capabilities
 - **Gemma AI Translation Engine**: Converts English repair and service requests into authentic local Panamanian Spanish phrasing (*"¡Buenas!..."*).
-- **Google Neural2 Voice Synthesis**: Generates crisp `.mp3` voice note attachments ready for WhatsApp.
+- **WhatsApp Audio Notes**: Generates crisp `.mp3` voice note attachments ready for WhatsApp.
 - **1-Tap WhatsApp Integration**: Directly opens native `wa.me` chats with pre-formatted voice clips and text.
 - **Local Service Presets**: Built-in scenarios for A/C repair, boat outboard motors, Starlink alignment, plumbing, water delivery, doctors, and landlords.
 - **RevenueCat Funnel & Stripe Checkout**: Instant entitlement activation for 100 Credit Packs ($4.99) and Annual Pro Unlimited Passes ($19.99/yr) across web and mobile apps.

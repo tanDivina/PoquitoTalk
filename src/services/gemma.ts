@@ -16,24 +16,53 @@ export async function translateWithGemma(
 
   // Local Panamanian Spanish Map for instant sub-second response
   const panamaQuickMap: Record<string, string> = {
-    'hi! my air conditioner is leaking water inside the bedroom.': '¡Buenas! El aire acondicionado está goteando agua dentro de la habitación. ¿Podría venir a revisarlo?',
-    'hello, the a/c is running but it is not blowing cold air. i think it needs refrigerant.': 'Hola, el aire enciende pero no frena frío. Creo que necesita recarga de gas.',
-    'hi, the a/c remote control stopped responding. can you check it?': 'Hola, el control remoto del aire no responde. ¿Podría revisarlo?',
-    'hello, the refrigerator stopped cooling today. can a technician inspect it?': 'Hola, la nevera dejó de enfriar hoy. ¿Podría venir un técnico a revisarla?',
+    // Medical & Emergency
+    'hi! i have a fever and severe pain. is a doctor available for a consultation today?': '¡Buenas! Tengo fiebre y dolor intenso. ¿Tienen un médico disponible para una consulta hoy, por favor?',
+    'hello, do you have medication for fever/infection in the pharmacy and what time are you open until?': 'Hola, ¿tienen medicamentos para la infección o fiebre en la farmacia y hasta qué hora están abiertos?',
+    'hi! i need urgent medical assistance or an ambulance immediately, please.': '¡Buenas! Necesito asistencia médica de emergencia o una ambulancia inmediatamente, por favor.',
+    'hi, i need an urgent doctor consultation or nearest open pharmacy in bocas.': '¡Buenas! Necesito una consulta médica urgente o la farmacia abierta más cercana en Bocas.',
+    
+    // Dentist & Appointments
+    'hi! i have a severe toothache. is a dentist appointment available today?': '¡Buenas! Tengo un dolor de muela muy fuerte, ¿tendrá cita disponible con el dentista hoy?',
+    'hello, i would like to schedule a dental cleaning appointment for next week.': 'Hola, quisiera programar una cita para una limpieza dental la próxima semana.',
+    'hi, i would like to inquire about the results of my laboratory exams.': 'Buenas, quisiera consultar por los resultados de mis exámenes de laboratorio.',
+    'hi, i have a severe toothache and need an urgent dentist appointment today.': '¡Buenas! Tengo un dolor de muela fuerte y necesito una cita urgente con el dentista hoy.',
+
+    // Air Conditioning
+    'hi! the air conditioner is leaking water inside the room. could you come check it?': '¡Buenas! El aire acondicionado está goteando agua dentro de la habitación. ¿Podría venir a revisarlo?',
+    'hello, the air conditioner turns on but is not blowing cold air. i think it needs gas refill.': 'Hola, el aire acondicionado enciende pero no frena frío. Creo que necesita recarga de gas.',
+    'hello, the air conditioner remote control is not responding. could you check it?': 'Hola, el control remoto del aire no responde. ¿Podría revisarlo?',
+    'my air conditioning unit is leaking water and not blowing cold air.': '¡Buenas! El aire acondicionado está goteando agua y no está enfriando bien. ¿Podría revisarlo?',
+
+    // Fridge & Appliances
+    'hello, the refrigerator stopped cooling today. could a technician inspect it?': 'Hola, la nevera dejó de enfriar hoy. ¿Podría venir un técnico a revisarla?',
     'hi, the washing machine is not draining water at the end of the cycle.': 'Buenas, la lavadora no está botando el agua al final del ciclo.',
-    'hello, the stove burner is not igniting gas properly.': 'Hola, el quemador de la estufa no está encendiendo bien.',
-    'hi! my boat outboard motor is cranked but won\'t start. do you do marine mechanics?': '¡Buenas! El motor fuera de borda de la lancha no quiere arrancar. ¿Hace trabajos de mecánica marina por aquí?',
-    'hello, i need someone to check the automatic bilge pump and marine battery wiring.': '¡Buenas! Necesito que alguien revise la bomba de achique automática y el cableado de la batería de la lancha.',
-    'hi, do you offer hull cleaning and propeller inspection in the harbor?': '¡Buenas! ¿Realiza limpieza de casco y revisión de hélice en el muelle?',
-    'hi! my car battery is completely dead. can someone bring jumper cables or a new battery?': '¡Buenas! La batería del carro se descargó por completo. ¿Alguien podría traerme cables o una batería nueva?',
-    'hello, my tire has a nail in it and lost pressure. can you fix it nearby?': 'Hola, la llanta tiene un clavo y perdió aire. ¿Dónde podría repararla cerca?',
+    'hello, the stove burner is not igniting properly.': 'Hola, el quemador de la estufa no está encendiendo bien.',
+    'our refrigerator stopped cooling and the food inside is defrosting.': 'Hola, la nevera dejó de enfriar y los alimentos se están descongelando. ¿Podría revisarla?',
+
+    // Boat Repairs
+    'hi! the boat outboard motor won\'t start. do you do marine mechanics here?': '¡Buenas! El motor fuera de borda de la lancha no quiere arrancar. ¿Hace trabajos de mecánica marina por aquí?',
+    'hi! i need someone to check the automatic bilge pump and marine battery wiring, please.': '¡Buenas! Necesito que alguien revise la bomba de achique automática y el cableado de la batería marina, por favor.',
+    'hi! do you do hull cleaning and propeller inspection at the dock?': '¡Buenas! ¿Realiza limpieza de casco y revisión de hélice en el muelle?',
+    'the outboard motor is turning over but will not start.': '¡Buenas! El motor fuera de borda da marcha pero no arranca. ¿Tendrá disponibilidad para revisarlo?',
+
+    // Vehicles & Mechanics
+    'hi! the car battery is dead. could someone bring jumper cables or a new battery?': '¡Buenas! La batería del carro se descargó por completo. ¿Alguien podría traerme cables o una batería nueva?',
+    'hello, the tire has a nail in it and lost air. where can i get it repaired nearby?': 'Hola, la llanta tiene un clavo y perdió aire. ¿Dónde podría repararla cerca?',
     'hi, i would like to schedule an oil change and general brake checkup.': 'Buenas, quisiera programar un cambio de aceite y revisión general de frenos.',
-    'hi, my starlink satellite dish lost signal connection. is there a network outage?': 'Buenas, la antena de Starlink perdió la conexión. ¿Hay alguna caída de señal en la zona?',
-    'hello, the internet fiber cable outside my house appears damaged/cut.': 'Hola, el cable de fibra de internet afuera de la casa parece dañado o cortado.',
-    'hi, the wi-fi speed is extremely slow today. can you check my connection line?': 'Buenas, el internet está muy lento hoy. ¿Podría verificar el estado de la línea?',
+    'my car battery is dead and i need a jump start or replacement.': '¡Buenas! La batería del carro se descargó y necesito auxilio o reemplazo.',
+
+    // Internet & Starlink
+    'hi, the starlink dish lost connection. is there a signal outage in the area?': 'Buenas, la antena de Starlink perdió la conexión. ¿Hay alguna caída de señal en la zona?',
+    'hello, the internet fiber cable outside the house appears damaged or cut.': 'Hola, el cable de fibra de internet afuera de la casa parece dañado o cortado.',
+    'hi, the internet is very slow today. could you check the line status?': 'Buenas, el internet está muy lento hoy. ¿Podría verificar el estado de la línea?',
+    'my starlink dish lost signal connection and the router light is red.': 'Buenas, la antena de Starlink perdió conexión y la luz del router está roja.',
+
+    // Housing & Property
     'hi! the water pressure in the main bathroom dropped completely.': '¡Buenas! La presión del agua en el baño principal bajó por completo.',
-    'hello, i accidentally locked myself out. is there a spare key nearby?': 'Hola, me quedé fuera por accidente. ¿Tendrá un duplicado de la llave cerca?',
-    'hi, i sent the monthly rent payment via transfer and attached the receipt.': 'Buenas, ya le envié el pago del alquiler por transferencia y le adjunté el comprobante.',
+    'hello, i accidentally locked myself out. do you have a spare key nearby?': 'Hola, me quedé fuera por accidente. ¿Tendrá un duplicado de la llave cerca?',
+    'hi, i sent the rent payment via transfer and attached the proof.': 'Buenas, ya le envié el pago del alquiler por transferencia y le adjunté el comprobante.',
+    'hi, the water pressure in the shower dropped significantly today.': '¡Buenas! La presión del agua en la ducha bajó por completo hoy.',
   };
 
   if (panamaQuickMap[normalizedInput]) {
@@ -45,44 +74,92 @@ export async function translateWithGemma(
 }
 
 async function panamaGemmaInference(input: string): Promise<string> {
-  await new Promise((resolve) => setTimeout(resolve, 200));
+  await new Promise((resolve) => setTimeout(resolve, 150));
 
   const lower = input.toLowerCase();
+  const specifiesToday = lower.includes('today') || lower.includes('tonight') || lower.includes('this afternoon') || lower.includes('this morning');
+  const timeframe = specifiesToday ? (lower.includes('tonight') ? 'esta noche' : 'hoy') : '';
 
-  if (lower.includes('bilge pump') || lower.includes('battery wiring') || lower.includes('marine')) {
-    return '¡Buenas! Necesito que alguien revise la bomba de achique automática y el cableado de la batería de la lancha, por favor.';
+  // Air conditioning / Airco / Climate / AC repair
+  if (
+    lower.includes('airco') ||
+    lower.includes('aircon') ||
+    lower.includes('air-co') ||
+    lower.includes('ac') ||
+    lower.includes('a/c') ||
+    lower.includes('air conditioning') ||
+    lower.includes('conditioner') ||
+    lower.includes('cooling')
+  ) {
+    if (lower.includes('leak') || lower.includes('water') || lower.includes('drip')) {
+      return '¡Buenas! El aire acondicionado está goteando agua. ¿Podría venir a revisarlo, por favor?';
+    }
+    if (lower.includes('not cooling') || lower.includes('warm') || lower.includes('gas')) {
+      return '¡Buenas! El aire acondicionado no está enfriando bien. ¿Podría venir a revisarlo, por favor?';
+    }
+    // Clean, direct general translation without assuming timeframe
+    return `¡Buenas! Necesito reparar el aire acondicionado. ¿Tendrá disponibilidad para venir a revisarlo${timeframe ? ` ${timeframe}` : ''}, por favor?`;
   }
-  if (lower.includes('air conditioning') || lower.includes('a/c') || lower.includes('cool') || lower.includes('conditioner')) {
-    return '¡Buenas! El aire acondicionado no está enfriando bien y tiene un goteo. ¿Tendrá disponibilidad para revisarlo?';
+
+  // Medical & Health
+  if (lower.includes('fever') || lower.includes('pain') || lower.includes('sick')) {
+    return `¡Buenas! Tengo fiebre y dolor. ¿Tienen un médico disponible para una consulta${timeframe ? ` ${timeframe}` : ''}, por favor?`;
   }
-  if (lower.includes('boat') || lower.includes('panga') || lower.includes('outboard') || lower.includes('motor') || lower.includes('lancha')) {
-    return '¡Buenas! Tengo un problema con el motor fuera de borda de la lancha. ¿Podría revisarlo en el muelle?';
+  if (lower.includes('doctor') || lower.includes('consultation') || lower.includes('medic') || lower.includes('clinic')) {
+    return `¡Buenas! Necesito consultar con un médico. ¿Tendrá disponibilidad para una cita${timeframe ? ` ${timeframe}` : ''}, por favor?`;
   }
+
+  // Marine / Boat / Panga / Water Taxi
+  if (lower.includes('outboard') || lower.includes('engine') || (lower.includes('motor') && lower.includes('lancha'))) {
+    return '¡Buenas! Tengo un problema con el motor fuera de borda de la lancha. ¿Podría revisarlo en el muelle, por favor?';
+  }
+  if (lower.includes('boat') || lower.includes('panga') || lower.includes('lancha') || lower.includes('water taxi') || lower.includes('captain') || lower.includes('capitan')) {
+    return `¡Buenas! Quisiera consultar la disponibilidad y tarifa para un viaje en lancha${timeframe ? ` ${timeframe}` : ''}, por favor.`;
+  }
+
+  // Appliances / Refrigerator / Fridge / Washing machine
   if (lower.includes('fridge') || lower.includes('refrigerator') || lower.includes('freezer')) {
-    return 'Hola, la nevera dejó de enfriar. ¿Tiene algún técnico disponible para echarle un ojo hoy?';
+    return `Hola, la nevera necesita revisión. ¿Tiene algún técnico disponible para echarle un ojo${timeframe ? ` ${timeframe}` : ''}?`;
   }
-  if (lower.includes('starlink') || lower.includes('internet') || lower.includes('wifi') || lower.includes('wi-fi')) {
-    return 'Buenas, el internet/Starlink se cayó y no da señal. ¿Hay algún problema en la zona?';
+  if (lower.includes('stove') || lower.includes('washer') || lower.includes('washing')) {
+    return 'Hola, el electrodoméstico necesita reparación. ¿Tiene algún técnico disponible para revisarlo?';
   }
-  if (lower.includes('water') || lower.includes('plumber') || lower.includes('pipe') || lower.includes('leak') || lower.includes('tank')) {
-    return '¡Buenas! Tengo una fuga de agua en la tubería. ¿Le daría tiempo de pasar a revisar?';
+
+  // Internet & Starlink
+  if (lower.includes('starlink') || lower.includes('internet') || lower.includes('wifi') || lower.includes('wi-fi') || lower.includes('router') || lower.includes('fiber')) {
+    return 'Buenas, el internet/Starlink se cayó y no da señal. ¿Hay algún problema de conexión en la zona?';
   }
-  if (lower.includes('car') || lower.includes('tire') || lower.includes('battery') || lower.includes('mechanic')) {
-    return '¡Buenas! Tengo un inconveniente con el carro y necesito una revisión mecánica. ¿Podría ayudarme?';
+
+  // Plumbing & Water Leak
+  if (lower.includes('water') || lower.includes('plumber') || lower.includes('pipe') || lower.includes('leak') || lower.includes('tank') || lower.includes('pressure')) {
+    return `¡Buenas! Necesito revisar un problema de agua en la tubería. ¿Le daría tiempo de pasar${timeframe ? ` ${timeframe}` : ''}, por favor?`;
   }
-  if (lower.includes('doctor') || lower.includes('clinic') || lower.includes('medical') || lower.includes('pharmacy') || lower.includes('medicine')) {
-    return '¡Buenas! Quisiera consultar la disponibilidad para una cita médica o medicamentos en la clínica local.';
+
+  // Vehicle / Car / Tire / Battery Mechanic
+  if (lower.includes('car') || lower.includes('tire') || lower.includes('battery') || lower.includes('mechanic') || lower.includes('flat')) {
+    return '¡Buenas! Necesito un mecánico para revisar mi vehículo. ¿Podría ayudarme, por favor?';
   }
+
+  // Pharmacy
+  if (lower.includes('pharmacy') || lower.includes('medicine') || lower.includes('farmacia')) {
+    return '¡Buenas! Quisiera consultar el horario de la farmacia local, por favor.';
+  }
+
+  // Dentist
   if (lower.includes('dentist') || lower.includes('tooth') || lower.includes('teeth') || lower.includes('dental')) {
-    return 'Buenas, necesito una cita de emergencia con el dentista por un dolor de muela. ¿Tendrá espacio hoy?';
+    return 'Buenas, necesito una cita con el dentista. ¿Tendrá espacio hoy, por favor?';
   }
-  if (lower.includes('tour') || lower.includes('island') || lower.includes('excursion') || lower.includes('taxi')) {
-    return '¡Buenas! Quisiera consultar sobre la disponibilidad y tarifas para un viaje o transporte en lancha.';
+
+  // Restaurant / Table / Food / Catch of the day
+  if (lower.includes('restaurant') || lower.includes('table') || lower.includes('food') || lower.includes('dinner') || lower.includes('catch') || lower.includes('menu')) {
+    return '¡Buenas! ¿Tienen mesa disponible para hoy y cuál es la pesca del día?';
   }
+
+  // Grocery / Supermarket / Store
   if (lower.includes('grocery') || lower.includes('store') || lower.includes('supermarket') || lower.includes('close') || lower.includes('open')) {
-    return 'Hola, quisiera saber a qué hora cierran hoy el supermercado y si tienen entrega a domicilio.';
+    return 'Hola, quisiera saber a qué hora cierran hoy el supermercado por favor.';
   }
 
   // Pure Spanish fallback without embedding raw English text
-  return '¡Buenas! Quisiera hacer una consulta sobre un servicio en la zona. ¿Tendrá disponibilidad para atenderme hoy, por favor?';
+  return '¡Buenas! Quisiera hacer una consulta por favor. ¿Tendrá disponibilidad para atenderme hoy?';
 }
