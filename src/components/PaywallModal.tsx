@@ -26,6 +26,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   onSuccess,
 }) => {
   const [loading, setLoading] = useState(false);
+  const [selectedTier, setSelectedTier] = useState<'CREDITS' | 'SUBSCRIPTION'>('CREDITS');
 
   const handleSubscribe = async () => {
     setLoading(true);
@@ -71,43 +72,64 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               <MaterialCommunityIcons name="crown" size={32} color={Colors.secondary} />
             </View>
 
-            <Text style={styles.title}>PoquitoTalk Pro</Text>
+            <Text style={styles.title}>Unlock Studio Quality Voices 🎙️</Text>
             <Text style={styles.subtitle}>
-              Unlimited AI Translations for Everyday Services & Local Contacts
+              Get human-grade ElevenLabs voice notes with warm Panamanian cadence.
             </Text>
 
             {/* Feature Highlights */}
             <View style={styles.featuresList}>
               <View style={styles.featureRow}>
-                <Ionicons name="checkmark-circle" size={20} color={Colors.tertiary} />
-                <Text style={styles.featureText}>Unlimited Gemma 2B AI Translations</Text>
+                <Ionicons name="sparkles" size={20} color={Colors.secondary} />
+                <Text style={styles.featureText}>ElevenLabs Studio Voices (Diego, Mateo, Sofia, Valeria)</Text>
               </View>
               <View style={styles.featureRow}>
                 <FontAwesome5 name="whatsapp" size={18} color={Colors.whatsapp} />
-                <Text style={styles.featureText}>1-Tap Instant WhatsApp & SMS Sharing</Text>
+                <Text style={styles.featureText}>1-Tap Voice Notes sent directly to WhatsApp</Text>
               </View>
               <View style={styles.featureRow}>
-                <Ionicons name="wifi-outline" size={20} color={Colors.secondary} />
-                <Text style={styles.featureText}>Offline Translation Mode</Text>
+                <Ionicons name="shield-checkmark" size={20} color={Colors.tertiary} />
+                <Text style={styles.featureText}>Zero Ads & Zero Sponsor Spotlights</Text>
               </View>
               <View style={styles.featureRow}>
-                <Ionicons name="star-outline" size={20} color={Colors.primary} />
-                <Text style={styles.featureText}>All Service Presets (A/C, Boat, Starlink, Car)</Text>
+                <Ionicons name="chatbubbles" size={20} color={Colors.primary} />
+                <Text style={styles.featureText}>Unlimited 2-Way WhatsApp Conversation Threads</Text>
               </View>
             </View>
 
-            {/* Pricing Box */}
-            <View style={styles.pricingCard}>
+            {/* Tier 1: Starter 50 Credits Pack */}
+            <TouchableOpacity
+              style={[styles.pricingCard, selectedTier === 'CREDITS' && styles.pricingCardSelected]}
+              onPress={() => setSelectedTier('CREDITS')}
+              activeOpacity={0.8}
+            >
               <View style={styles.popularBadge}>
+                <Text style={styles.popularText}>POPULAR ONE-TIME</Text>
+              </View>
+              <Text style={styles.planTitle}>Starter 50 Studio Credits</Text>
+              <View style={styles.priceRow}>
+                <Text style={styles.priceAmount}>$4.99</Text>
+                <Text style={styles.pricePeriod}>one-time payment</Text>
+              </View>
+              <Text style={styles.trialText}>50 ElevenLabs Studio Voice Notes • Never Expires</Text>
+            </TouchableOpacity>
+
+            {/* Tier 2: Monthly Pro Membership */}
+            <TouchableOpacity
+              style={[styles.pricingCard, selectedTier === 'SUBSCRIPTION' && styles.pricingCardSelected]}
+              onPress={() => setSelectedTier('SUBSCRIPTION')}
+              activeOpacity={0.8}
+            >
+              <View style={[styles.popularBadge, { backgroundColor: Colors.tertiary }]}>
                 <Text style={styles.popularText}>BEST VALUE</Text>
               </View>
-              <Text style={styles.planTitle}>Annual Unlimited Access</Text>
+              <Text style={styles.planTitle}>Pro Monthly Membership</Text>
               <View style={styles.priceRow}>
-                <Text style={styles.priceAmount}>$19.99</Text>
-                <Text style={styles.pricePeriod}>/ year ($1.66/mo)</Text>
+                <Text style={styles.priceAmount}>$9.99</Text>
+                <Text style={styles.pricePeriod}>/ month</Text>
               </View>
-              <Text style={styles.trialText}>Includes 7-Day Free Trial • Cancel Anytime</Text>
-            </View>
+              <Text style={styles.trialText}>Unlimited Studio Voice Notes + Zero Ads • Cancel Anytime</Text>
+            </TouchableOpacity>
 
             {/* CTA Button */}
             <TouchableOpacity
@@ -119,11 +141,13 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               {loading ? (
                 <ActivityIndicator color="#FFF" />
               ) : (
-                <Text style={styles.subscribeBtnText}>Start 7-Day Free Trial</Text>
+                <Text style={styles.subscribeBtnText}>
+                  {selectedTier === 'CREDITS' ? 'Get 50 Studio Credits ($4.99)' : 'Subscribe to Pro ($9.99/mo)'}
+                </Text>
               )}
             </TouchableOpacity>
 
-            {/* Growth Loop 3: RevenueCat Referral Card */}
+            {/* Growth Loop: Invite a Neighbor */}
             <TouchableOpacity
               style={styles.referralCard}
               onPress={handleInviteNeighbor}
@@ -134,13 +158,13 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               </View>
               <View style={styles.referralTextContainer}>
                 <Text style={styles.referralTitle}>Invite a Bocas Neighbor 🎁</Text>
-                <Text style={styles.referralSub}>Get 1 Month Pro FREE when they download!</Text>
+                <Text style={styles.referralSub}>Get +5 Free Studio Credits when they download!</Text>
               </View>
               <Ionicons name="chevron-forward" size={16} color={Colors.secondary} />
             </TouchableOpacity>
 
             <Text style={styles.footerNote}>
-              Powered by RevenueCat for Google Play & App Store
+              Secured payments via RevenueCat, Apple App Store & Google Play
             </Text>
           </ScrollView>
         </View>
@@ -217,11 +241,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',
     borderRadius: 20,
     padding: 18,
-    borderWidth: 2,
-    borderColor: Colors.secondary,
+    borderWidth: 1.5,
+    borderColor: Colors.cardBorder,
     alignItems: 'center',
     position: 'relative',
     marginVertical: 10,
+  },
+  pricingCardSelected: {
+    borderColor: Colors.secondary,
+    borderWidth: 2.5,
+    backgroundColor: Colors.secondaryContainer || '#F4FAFE',
   },
   popularBadge: {
     position: 'absolute',
