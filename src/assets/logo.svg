@@ -43,8 +43,8 @@
     fill="#EF4444"
   />
 
-  <!-- Audio Soundwave Arcs (Pulled further inward so there is a massive gap away from the green circle wall) -->
-  <path d="M 125 76 A 9 9 0 0 1 125 90" fill="none" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round" />
-  <path d="M 133 70 A 15 15 0 0 1 133 96" fill="none" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round" />
-  <path d="M 141 64 A 21 21 0 0 1 141 102" fill="none" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+  <!-- Audio Soundwave Arcs (Perfectly centered balance: 10px from beak tip, 25px from green circle wall) -->
+  <path d="M 130 73 A 12 12 0 0 1 130 93" fill="none" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round" />
+  <path d="M 140 66 A 19 19 0 0 1 140 100" fill="none" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round" />
+  <path d="M 150 60 A 25 25 0 0 1 150 106" fill="none" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity="0.8" />
 </svg>
