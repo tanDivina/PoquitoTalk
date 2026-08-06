@@ -22,7 +22,7 @@ const PROFILE_FILE_PATH = `${FileSystem.documentDirectory || FileSystem.cacheDir
 const INITIAL_USER_PROFILE: UserProfileData = {
   uid: 'usr_guest_bocas',
   email: 'guest@poquitotalk.com',
-  creditsBalance: 5, // 5 Free Studio Voice Notes on install
+  creditsBalance: 5, // 5 Free Natural Voice Notes on install
   isProSubscriber: false,
   transactions: [
     {
@@ -30,7 +30,7 @@ const INITIAL_USER_PROFILE: UserProfileData = {
       type: 'BONUS_FREE',
       amount: 5,
       source: 'Welcome Bonus',
-      details: '5 Free Ultra-Realistic Studio Voice Notes on app install 🎁',
+      details: '5 Free Natural-Sounding Voice Notes on app install 🎁',
       timestamp: Date.now(),
     },
   ],
