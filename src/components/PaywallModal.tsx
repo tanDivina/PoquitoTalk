@@ -10,7 +10,7 @@ import {
   Alert,
   Share,
 } from 'react-native';
-import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { revenueCat } from '../services/revenuecat';
 import { GreenParrotLogo } from './GreenParrotLogo';
@@ -21,20 +21,22 @@ interface PaywallModalProps {
   onSuccess: () => void;
 }
 
+export type PlanTier = 'CREDITS' | 'WEEKLY' | 'PRO_MONTHLY';
+
 export const PaywallModal: React.FC<PaywallModalProps> = ({
   visible,
   onClose,
   onSuccess,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [selectedTier, setSelectedTier] = useState<'CREDITS' | 'SUBSCRIPTION'>('CREDITS');
+  const [selectedTier, setSelectedTier] = useState<PlanTier>('PRO_MONTHLY');
 
   const handleSubscribe = async () => {
     setLoading(true);
     try {
       const success = await revenueCat.purchaseProPackage();
       if (success) {
-        Alert.alert('Welcome to PoquitoTalk Pro!', 'You now have unlimited Gemma translations and WhatsApp sharing.');
+        Alert.alert('Welcome to PoquitoTalk Pro!', 'You now have full studio voice notes and Walkie-Talkie access.');
         onSuccess();
         onClose();
       }
@@ -51,7 +53,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
       await Share.share({
         message: '🌴 Hey! Try PoquitoTalk to translate WhatsApp voice notes with local Bocas plumbers, boat captains, and landlords: ' + inviteUrl,
         url: inviteUrl,
-        title: 'PoquitoTalk Free Pro Referral',
+        title: 'PoquitoTalk Free Referral',
       });
     } catch (e) {
       console.warn('Share error:', e);
@@ -67,69 +69,103 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
             <Ionicons name="close" size={22} color={Colors.onBackground} />
           </TouchableOpacity>
 
-          <ScrollView contentContainerStyle={styles.content}>
-            {/* Header Badge */}
+          <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+            {/* Header Logo */}
             <View style={styles.crownContainer}>
-              <GreenParrotLogo size={56} />
+              <GreenParrotLogo size={52} />
             </View>
 
-            <Text style={styles.title}>Unlock Natural-Sounding Voices 🎙️</Text>
+            {/* Single Line Clean Title */}
+            <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit>
+              Unlock Natural Sounding Voices
+            </Text>
             <Text style={styles.subtitle}>
-              Get human-grade natural voice notes with warm Panamanian cadence.
+              Human-grade Spanish voice notes with natural Panamanian cadence.
             </Text>
 
             {/* Feature Highlights */}
             <View style={styles.featuresList}>
               <View style={styles.featureRow}>
-                <Ionicons name="sparkles" size={20} color={Colors.secondary} />
-                <Text style={styles.featureText}>Natural Panamanian Voices (Diego, Mateo, Sofia, Valeria)</Text>
+                <Ionicons name="volume-high-outline" size={20} color={Colors.tertiary} />
+                <Text style={styles.featureText}>
+                  Natural Panamanian Voices (Diego, Mateo, Sofia, Valeria)
+                </Text>
               </View>
+
+              <View style={styles.featureRow}>
+                <Ionicons name="radio-outline" size={20} color={Colors.secondary} />
+                <Text style={styles.featureText}>
+                  2-Way Live Walkie-Talkie Web Links for Contractors
+                </Text>
+              </View>
+
               <View style={styles.featureRow}>
                 <FontAwesome5 name="whatsapp" size={18} color={Colors.whatsapp} />
-                <Text style={styles.featureText}>1-Tap Voice Notes sent directly to WhatsApp</Text>
+                <Text style={styles.featureText}>
+                  1-Tap Voice Notes sent directly to WhatsApp
+                </Text>
               </View>
+
               <View style={styles.featureRow}>
-                <Ionicons name="shield-checkmark" size={20} color={Colors.tertiary} />
-                <Text style={styles.featureText}>Zero Ads & Zero Sponsor Spotlights</Text>
-              </View>
-              <View style={styles.featureRow}>
-                <Ionicons name="chatbubbles" size={20} color={Colors.primary} />
-                <Text style={styles.featureText}>Unlimited 2-Way WhatsApp Conversation Threads</Text>
+                <Ionicons name="shield-checkmark-outline" size={20} color={Colors.tertiary} />
+                <Text style={styles.featureText}>
+                  Zero Ads & Zero Sponsor Spotlights
+                </Text>
               </View>
             </View>
 
-            {/* Tier 1: Starter 50 Credits Pack */}
+            {/* Plan 1: Pro Monthly Membership ($12.99/mo) */}
+            <TouchableOpacity
+              style={[styles.pricingCard, selectedTier === 'PRO_MONTHLY' && styles.pricingCardSelected]}
+              onPress={() => setSelectedTier('PRO_MONTHLY')}
+              activeOpacity={0.8}
+            >
+              <View style={[styles.popularBadge, { backgroundColor: Colors.tertiary }]}>
+                <Text style={styles.popularText}>BEST VALUE FOR RESIDENTS</Text>
+              </View>
+              <Text style={styles.planTitle}>Pro Monthly Membership</Text>
+              <View style={styles.priceRow}>
+                <Text style={styles.priceAmount}>$12.99</Text>
+                <Text style={styles.pricePeriod}>/ month</Text>
+              </View>
+              <Text style={styles.trialText}>
+                300 Voice Notes + 65 Walkie Sessions / mo • For permanent Panama residents
+              </Text>
+            </TouchableOpacity>
+
+            {/* Plan 2: Weekly Tourist Pass ($4.99/wk) */}
+            <TouchableOpacity
+              style={[styles.pricingCard, selectedTier === 'WEEKLY' && styles.pricingCardSelected]}
+              onPress={() => setSelectedTier('WEEKLY')}
+              activeOpacity={0.8}
+            >
+              <View style={styles.popularBadge}>
+                <Text style={styles.popularText}>WEEKLY TOURIST PASS</Text>
+              </View>
+              <Text style={styles.planTitle}>7-Day Tourist Pass</Text>
+              <View style={styles.priceRow}>
+                <Text style={styles.priceAmount}>$4.99</Text>
+                <Text style={styles.pricePeriod}>/ 7 days</Text>
+              </View>
+              <Text style={styles.trialText}>
+                100 Voice Notes + 25 Walkie Sessions / week • Ideal for island trips
+              </Text>
+            </TouchableOpacity>
+
+            {/* Plan 3: 50 Credits Pack ($4.99 one-time) */}
             <TouchableOpacity
               style={[styles.pricingCard, selectedTier === 'CREDITS' && styles.pricingCardSelected]}
               onPress={() => setSelectedTier('CREDITS')}
               activeOpacity={0.8}
             >
-              <View style={styles.popularBadge}>
-                <Text style={styles.popularText}>POPULAR ONE-TIME</Text>
-              </View>
-              <Text style={styles.planTitle}>50 Natural Voice Notes Pack</Text>
+              <Text style={styles.planTitle}>50 Poquito Credits Pack</Text>
               <View style={styles.priceRow}>
                 <Text style={styles.priceAmount}>$4.99</Text>
                 <Text style={styles.pricePeriod}>one-time payment</Text>
               </View>
-              <Text style={styles.trialText}>50 Natural-Sounding Voice Notes • Never Expires</Text>
-            </TouchableOpacity>
-
-            {/* Tier 2: Monthly Pro Membership */}
-            <TouchableOpacity
-              style={[styles.pricingCard, selectedTier === 'SUBSCRIPTION' && styles.pricingCardSelected]}
-              onPress={() => setSelectedTier('SUBSCRIPTION')}
-              activeOpacity={0.8}
-            >
-              <View style={[styles.popularBadge, { backgroundColor: Colors.tertiary }]}>
-                <Text style={styles.popularText}>BEST VALUE</Text>
-              </View>
-              <Text style={styles.planTitle}>Pro Monthly Membership</Text>
-              <View style={styles.priceRow}>
-                <Text style={styles.priceAmount}>$9.99</Text>
-                <Text style={styles.pricePeriod}>/ month</Text>
-              </View>
-              <Text style={styles.trialText}>Unlimited Natural-Sounding Voice Notes + Zero Ads • Cancel Anytime</Text>
+              <Text style={styles.trialText}>
+                50 Voice Notes or 10 Walkie Sessions • Never expires
+              </Text>
             </TouchableOpacity>
 
             {/* CTA Button */}
@@ -143,7 +179,9 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
                 <ActivityIndicator color="#FFF" />
               ) : (
                 <Text style={styles.subscribeBtnText}>
-                  {selectedTier === 'CREDITS' ? 'Get 50 Natural Voice Notes ($4.99)' : 'Subscribe to Pro ($9.99/mo)'}
+                  {selectedTier === 'PRO_MONTHLY' && 'Get Pro Monthly ($12.99 / mo)'}
+                  {selectedTier === 'WEEKLY' && 'Get 7-Day Tourist Pass ($4.99 / wk)'}
+                  {selectedTier === 'CREDITS' && 'Get 50 Poquito Credits ($4.99)'}
                 </Text>
               )}
             </TouchableOpacity>
@@ -155,17 +193,18 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               activeOpacity={0.8}
             >
               <View style={styles.referralIconCircle}>
-                <Ionicons name="gift-outline" size={20} color={Colors.secondary} />
+                <Ionicons name="gift-outline" size={20} color={Colors.tertiary} />
               </View>
               <View style={styles.referralTextContainer}>
                 <Text style={styles.referralTitle}>Invite a Bocas Neighbor 🎁</Text>
-                <Text style={styles.referralSub}>Get +5 Free Natural Voice Notes when they download!</Text>
+                <Text style={styles.referralSub}>Get +5 Free Voice Notes when they try PoquitoTalk!</Text>
               </View>
-              <Ionicons name="chevron-forward" size={16} color={Colors.secondary} />
+              <Ionicons name="chevron-forward" size={16} color={Colors.tertiary} />
             </TouchableOpacity>
 
+            {/* Android / Web Secured Checkout Footer */}
             <Text style={styles.footerNote}>
-              Secured payments via RevenueCat, Apple App Store & Google Play
+              Secured checkout via Stripe • Google Play & Web • Cancel anytime
             </Text>
           </ScrollView>
         </View>
@@ -177,16 +216,16 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.55)',
     justifyContent: 'flex-end',
   },
   container: {
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
-    paddingTop: 20,
+    paddingTop: 16,
     paddingHorizontal: 20,
-    maxHeight: '88%',
+    maxHeight: '92%',
   },
   closeBtn: {
     alignSelf: 'flex-end',
@@ -199,26 +238,27 @@ const styles = StyleSheet.create({
   crownContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
-    backgroundColor: 'transparent',
+    marginBottom: 8,
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '800',
     color: Colors.onBackground,
+    textAlign: 'center',
+    width: '100%',
   },
   subtitle: {
-    fontSize: 13,
+    fontSize: 12.5,
     color: Colors.onSurfaceVariant,
     textAlign: 'center',
     marginTop: 4,
     paddingHorizontal: 12,
-    lineHeight: 18,
+    lineHeight: 17,
   },
   featuresList: {
     width: '100%',
-    marginVertical: 18,
-    gap: 10,
+    marginVertical: 16,
+    gap: 8,
   },
   featureRow: {
     flexDirection: 'row',
@@ -230,66 +270,69 @@ const styles = StyleSheet.create({
     borderRadius: 14,
   },
   featureText: {
-    fontSize: 13,
+    flex: 1,
+    fontSize: 12.5,
     fontWeight: '600',
     color: Colors.onBackground,
+    flexWrap: 'wrap',
   },
   pricingCard: {
     width: '100%',
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',
     borderRadius: 20,
-    padding: 18,
+    padding: 16,
     borderWidth: 1.5,
     borderColor: Colors.cardBorder,
     alignItems: 'center',
     position: 'relative',
-    marginVertical: 10,
+    marginVertical: 8,
   },
   pricingCardSelected: {
-    borderColor: Colors.secondary,
+    borderColor: Colors.tertiary,
     borderWidth: 2.5,
-    backgroundColor: Colors.secondaryContainer || '#F4FAFE',
+    backgroundColor: Colors.tertiaryContainer || '#F4FAFE',
   },
   popularBadge: {
     position: 'absolute',
-    top: -12,
+    top: -11,
     backgroundColor: Colors.secondary,
     paddingHorizontal: 12,
     paddingVertical: 3,
     borderRadius: 12,
   },
   popularText: {
-    fontSize: 10,
+    fontSize: 9.5,
     fontWeight: '800',
     color: '#FFF',
     letterSpacing: 0.5,
   },
   planTitle: {
-    fontSize: 15,
+    fontSize: 14.5,
     fontWeight: '700',
     color: Colors.onBackground,
-    marginTop: 4,
+    marginTop: 2,
   },
   priceRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
     gap: 4,
-    marginTop: 6,
+    marginTop: 4,
   },
   priceAmount: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: '800',
     color: Colors.onBackground,
   },
   pricePeriod: {
-    fontSize: 13,
+    fontSize: 12.5,
     color: Colors.onSurfaceVariant,
   },
   trialText: {
     fontSize: 11,
     color: Colors.tertiary,
     fontWeight: '600',
-    marginTop: 6,
+    marginTop: 4,
+    textAlign: 'center',
   },
   subscribeBtn: {
     width: '100%',
@@ -308,12 +351,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    backgroundColor: Colors.secondaryContainer,
+    backgroundColor: Colors.tertiaryContainer,
     borderRadius: 16,
     padding: 12,
     marginTop: 14,
     borderWidth: 1,
-    borderColor: Colors.secondaryLight,
+    borderColor: Colors.tertiary,
   },
   referralIconCircle: {
     width: 36,
@@ -328,7 +371,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   referralTitle: {
-    fontSize: 13,
+    fontSize: 12.5,
     fontWeight: '800',
     color: Colors.onBackground,
   },
@@ -338,8 +381,9 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   footerNote: {
-    fontSize: 10,
+    fontSize: 10.5,
     color: Colors.outline,
     marginTop: 14,
+    textAlign: 'center',
   },
 });
