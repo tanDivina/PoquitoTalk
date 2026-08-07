@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, LayoutAnimation, Platform, UIManager } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, LayoutAnimation, Platform, UIManager, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
-import { PresetCard } from '../components/PresetCard';
 import { SERVICE_PRESETS, getCategoryPastelTheme } from '../services/presets';
-import { ServicePreset } from '../types';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -22,12 +20,28 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   onOpenPaywall,
   onSelectPhrasePrompt,
 }) => {
-  // Store expanded preset ID (highest top card open by default)
-  const [expandedId, setExpandedId] = useState<string>(SERVICE_PRESETS[0]?.id || 'medical_pharmacy');
+  // Currently active expanded card index based on scroll position or manual tap
+  const [activeIndex, setActiveIndex] = useState<number>(0);
 
-  const toggleExpand = (id: string) => {
+  const toggleExpand = (index: number) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setExpandedId((prev) => (prev === id ? '' : id));
+    setActiveIndex(index);
+  };
+
+  // Scroll listener: Automatically closes current top card and opens next card as user scrolls
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    // Step threshold calculation based on card height (~120px collapsed / ~240px expanded)
+    const cardStep = 130;
+    const computedIndex = Math.max(
+      0,
+      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 40) / cardStep))
+    );
+
+    if (computedIndex !== activeIndex) {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setActiveIndex(computedIndex);
+    }
   };
 
   return (
@@ -35,20 +49,22 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       style={styles.container}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
+      onScroll={handleScroll}
+      scrollEventThrottle={32}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
       <View style={styles.titleSection}>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
-          Tap any stacked category below to expand polite Panamanian Spanish phrase templates 🇵🇦.
+          Scroll up or down to auto-reveal scenario phrases, or tap any card in the deck 🇵🇦.
         </Text>
       </View>
 
-      {/* Stacked Interactive Accordion Deck Section */}
+      {/* Accordion Deck Section: Auto-opens active scrolled card and collapses previous */}
       <View style={styles.list}>
         {SERVICE_PRESETS.map((preset, index) => {
-          const isExpanded = expandedId === preset.id;
+          const isExpanded = activeIndex === index;
           const theme = getCategoryPastelTheme(preset.id);
 
           return (
@@ -59,15 +75,15 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                 {
                   backgroundColor: theme.bg,
                   borderColor: theme.border,
-                  marginTop: index > 0 ? -12 : 0, // Visual card stacking overlap
+                  marginTop: index > 0 ? -10 : 0, // Visual card stacking overlap
                   zIndex: isExpanded ? 50 : SERVICE_PRESETS.length - index,
                 },
               ]}
             >
-              {/* Stacked Header Row */}
+              {/* Card Header Row */}
               <TouchableOpacity
                 style={styles.stackedHeaderRow}
-                onPress={() => toggleExpand(preset.id)}
+                onPress={() => toggleExpand(index)}
                 activeOpacity={0.8}
               >
                 <View style={[styles.iconContainer, { backgroundColor: theme.badgeBg }]}>
@@ -84,7 +100,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                   <Text style={styles.cardTitle}>{preset.title}</Text>
                 </View>
 
-                {/* Stack Expand Toggle Arrow */}
+                {/* Active Indicator Arrow */}
                 <View style={[styles.toggleCircle, { backgroundColor: theme.badgeBg }]}>
                   <Ionicons
                     name={isExpanded ? 'chevron-up' : 'chevron-down'}
@@ -94,7 +110,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                 </View>
               </TouchableOpacity>
 
-              {/* Expanded Card Content */}
+              {/* Expanded Content View */}
               {isExpanded && (
                 <View style={styles.expandedContent}>
                   <Text style={styles.description}>{preset.description}</Text>
@@ -128,7 +144,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 40,
+    paddingBottom: 50,
   },
   titleSection: {
     paddingHorizontal: 20,
@@ -147,7 +163,7 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingHorizontal: 20,
-    marginTop: 12,
+    marginTop: 10,
   },
   stackedCardContainer: {
     borderRadius: 22,
