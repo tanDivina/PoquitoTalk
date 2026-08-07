@@ -1,5 +1,16 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, LayoutAnimation, Platform, UIManager, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import React, { useState, useRef } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  LayoutAnimation,
+  Platform,
+  UIManager,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
@@ -20,27 +31,32 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   onOpenPaywall,
   onSelectPhrasePrompt,
 }) => {
-  // Currently active expanded card index based on scroll position or manual tap
+  // Active expanded card index (starts at 0 - Medical & Pharmacy)
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  const cardYPositions = useRef<{ [key: number]: number }>({});
 
   const toggleExpand = (index: number) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setActiveIndex(index);
   };
 
-  // Scroll listener: Automatically closes current top card and opens next card as user scrolls
+  // Scroll listener: Dynamically tracks exact Y position of all 8 preset cards
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollY = event.nativeEvent.contentOffset.y;
-    // Step threshold calculation based on card height (~120px collapsed / ~240px expanded)
-    const cardStep = 130;
-    const computedIndex = Math.max(
-      0,
-      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 40) / cardStep))
-    );
 
-    if (computedIndex !== activeIndex) {
+    // Determine target active card index based on measured card layout positions
+    let targetIndex = 0;
+    for (let i = SERVICE_PRESETS.length - 1; i >= 0; i--) {
+      const cardY = cardYPositions.current[i] ?? i * 80;
+      if (scrollY >= cardY - 160) {
+        targetIndex = i;
+        break;
+      }
+    }
+
+    if (targetIndex !== activeIndex) {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setActiveIndex(computedIndex);
+      setActiveIndex(targetIndex);
     }
   };
 
@@ -50,18 +66,18 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
       onScroll={handleScroll}
-      scrollEventThrottle={32}
+      scrollEventThrottle={16}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
       <View style={styles.titleSection}>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
-          Scroll up or down to auto-reveal scenario phrases, or tap any card in the deck 🇵🇦.
+          Scroll up or down to auto-reveal scenario phrases across all categories, or tap any card 🇵🇦.
         </Text>
       </View>
 
-      {/* Accordion Deck Section: Auto-opens active scrolled card and collapses previous */}
+      {/* Accordion Deck Section */}
       <View style={styles.list}>
         {SERVICE_PRESETS.map((preset, index) => {
           const isExpanded = activeIndex === index;
@@ -70,12 +86,15 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
           return (
             <View
               key={preset.id}
+              onLayout={(e) => {
+                cardYPositions.current[index] = e.nativeEvent.layout.y;
+              }}
               style={[
                 styles.stackedCardContainer,
                 {
                   backgroundColor: theme.bg,
                   borderColor: theme.border,
-                  marginTop: index > 0 ? -10 : 0, // Visual card stacking overlap
+                  marginTop: index > 0 ? -10 : 0,
                   zIndex: isExpanded ? 50 : SERVICE_PRESETS.length - index,
                 },
               ]}
@@ -144,7 +163,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 50,
+    paddingBottom: 60,
   },
   titleSection: {
     paddingHorizontal: 20,
