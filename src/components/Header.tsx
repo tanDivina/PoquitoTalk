@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
-    backgroundColor: Colors.secondaryContainer,
+    backgroundColor: Colors.tertiaryContainer,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   intakeBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: Colors.secondary,
+    color: Colors.tertiary,
   },
   subtitle: {
     fontSize: 11,
@@ -106,9 +106,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 20,
-    backgroundColor: Colors.secondaryContainer,
+    backgroundColor: Colors.tertiaryContainer,
     borderWidth: 1,
-    borderColor: Colors.secondaryLight,
+    borderColor: Colors.tertiary,
   },
   proBadgeActive: {
     backgroundColor: Colors.tertiaryContainer,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   proText: {
     fontSize: 10,
     fontWeight: '800',
-    color: Colors.secondary,
+    color: Colors.tertiary,
     letterSpacing: 0.5,
   },
   proTextActive: {
