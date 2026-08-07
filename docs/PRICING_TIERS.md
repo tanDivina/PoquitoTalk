@@ -12,7 +12,7 @@ PoquitoTalk provides a zero-friction, multi-tiered monetization strategy tailore
 | **Free Forever** | **$0.00** | Unlimited (Device TTS + 10 Studio Presets) | Preview Mode | Casual Browsers |
 | **50 Poquito Credits Pack** | **$4.99** *(one-time)* | 50 Custom Voice Notes (1 Credit/note) | 10 Walkie Sessions (5 Credits/session) | Pay-as-you-go users |
 | **Weekly Tourist Pass** | **$4.99** */ week* | **Unlimited** ElevenLabs Studio Voices | **Unlimited** 2-Way Walkie-Talkie | Short-term travelers & island visitors (7 Days) |
-| **Pro Monthly Membership** | **$9.99** */ month* | **Unlimited** ElevenLabs Studio Voices | **Unlimited** 2-Way Walkie-Talkie | Expats, nomads & local Panama residents |
+| **Pro Monthly Membership** | **$9.99** */ month* | **Unlimited** ElevenLabs Studio Voices | **Unlimited** 2-Way Walkie-Talkie | Expats, nomads & permanent Panama residents |
 
 ---
 
