@@ -5,14 +5,19 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
+  LayoutAnimation,
+  Platform,
+  UIManager,
 } from 'react-native';
 import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { SERVICE_PRESETS, getCategoryPastelTheme } from '../services/presets';
 import { sharePhrasebookToCommunity } from '../services/deepLinks';
+
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 interface PresetsScreenProps {
   isPro: boolean;
@@ -25,26 +30,24 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   onOpenPaywall,
   onSelectPhrasePrompt,
 }) => {
-  // Active expanded card index (auto-updates on scroll up/down or tap)
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+  // Track open cards map (defaults to Doctor & Medical open by default)
+  const [expandedMap, setExpandedMap] = useState<{ [key: string]: boolean }>({
+    medical_pharmacy: true,
+    dentist_appointments: true,
+  });
 
-  const handleSelectCard = (index: number) => {
-    setActiveIndex(index);
+  const toggleExpand = (id: string) => {
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    }
+    setExpandedMap((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Scroll listener: Dynamically opens active scrolled card in viewport (75px step matches card header height)
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const scrollY = event.nativeEvent.contentOffset.y;
-
-    const cardTrackStep = 75;
-    const computedIndex = Math.max(
-      0,
-      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 35) / cardTrackStep))
-    );
-
-    if (computedIndex !== activeIndex) {
-      setActiveIndex(computedIndex);
+  const expandSingleCard = (id: string) => {
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
+    setExpandedMap({ [id]: true });
   };
 
   return (
@@ -52,45 +55,43 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       style={styles.container}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={true}
-      onScroll={handleScroll}
-      scrollEventThrottle={16}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
       <View style={styles.titleSection}>
         <View style={styles.versionBadge}>
           <Ionicons name="sparkles" size={12} color={Colors.tertiary} />
-          <Text style={styles.versionText}>v1.0.9 • SCROLL-DRIVEN CARD DECK ✨</Text>
+          <Text style={styles.versionText}>v1.1.0 • ACCORDION CARD DECK ✨</Text>
         </View>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
-          Scroll up or down to auto-reveal scenario phrases across all 11 categories 🇵🇦.
+          Tap any card or top category pill to view polite Panamanian Spanish phrase templates 🇵🇦.
         </Text>
 
-        {/* Quick Category Jump Pills */}
+        {/* Quick Category Jump Bar */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.quickCategoryBar}>
-          {SERVICE_PRESETS.map((preset, idx) => {
-            const isSelected = activeIndex === idx;
+          {SERVICE_PRESETS.map((preset) => {
+            const isExpanded = !!expandedMap[preset.id];
             const theme = getCategoryPastelTheme(preset.id);
             return (
               <TouchableOpacity
                 key={preset.id}
                 style={[
                   styles.categoryPill,
-                  { backgroundColor: isSelected ? theme.accent : theme.bg, borderColor: theme.border },
+                  { backgroundColor: isExpanded ? theme.accent : theme.bg, borderColor: theme.border },
                 ]}
-                onPress={() => handleSelectCard(idx)}
+                onPress={() => expandSingleCard(preset.id)}
                 activeOpacity={0.8}
               >
                 <MaterialCommunityIcons
                   name={preset.icon as any}
                   size={14}
-                  color={isSelected ? '#FFFFFF' : theme.accent}
+                  color={isExpanded ? '#FFFFFF' : theme.accent}
                 />
                 <Text
                   style={[
                     styles.categoryPillText,
-                    { color: isSelected ? '#FFFFFF' : theme.accent },
+                    { color: isExpanded ? '#FFFFFF' : theme.accent },
                   ]}
                 >
                   {preset.title.split('&')[0].trim()}
@@ -101,10 +102,10 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
         </ScrollView>
       </View>
 
-      {/* Scroll-Driven Stacked Card Deck Section */}
+      {/* Accordion Card Deck Section */}
       <View style={styles.stackedDeckList}>
-        {SERVICE_PRESETS.map((preset, index) => {
-          const isExpanded = activeIndex === index;
+        {SERVICE_PRESETS.map((preset) => {
+          const isExpanded = !!expandedMap[preset.id];
           const theme = getCategoryPastelTheme(preset.id);
 
           return (
@@ -122,7 +123,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
               {/* Card Header Row */}
               <TouchableOpacity
                 style={styles.cardHeaderRow}
-                onPress={() => handleSelectCard(index)}
+                onPress={() => toggleExpand(preset.id)}
                 activeOpacity={0.8}
               >
                 <View style={[styles.iconContainer, { backgroundColor: theme.badgeBg }]}>
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 220,
+    paddingBottom: 100,
   },
   titleSection: {
     paddingHorizontal: 20,
