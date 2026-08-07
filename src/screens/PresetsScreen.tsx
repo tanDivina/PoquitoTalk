@@ -22,8 +22,8 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   onOpenPaywall,
   onSelectPhrasePrompt,
 }) => {
-  // Store expanded preset ID (defaults to 'ac_repair')
-  const [expandedId, setExpandedId] = useState<string>('ac_repair');
+  // Store expanded preset ID (highest top card open by default)
+  const [expandedId, setExpandedId] = useState<string>(SERVICE_PRESETS[0]?.id || 'medical_pharmacy');
 
   const toggleExpand = (id: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
