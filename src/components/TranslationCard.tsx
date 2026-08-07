@@ -281,14 +281,10 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
           >
             <Ionicons
               name={isPlaying ? 'square' : 'volume-high'}
-              size={15}
+              size={16}
               color={isPlaying ? '#BA1A1A' : Colors.secondary}
             />
-            <Text
-              style={[styles.actionText, isPlaying && styles.actionTextActive]}
-              numberOfLines={1}
-              adjustsFontSizeToFit
-            >
+            <Text style={[styles.actionText, isPlaying && styles.actionTextActive]}>
               {isPlaying ? 'Stop' : 'Play Audio'}
             </Text>
           </TouchableOpacity>
@@ -297,14 +293,10 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
           <TouchableOpacity style={styles.actionBtn} onPress={handleCopy} activeOpacity={0.7}>
             <Ionicons
               name={copied ? 'checkmark' : 'copy-outline'}
-              size={15}
+              size={16}
               color={copied ? Colors.tertiary : Colors.onSurfaceVariant}
             />
-            <Text
-              style={[styles.actionText, copied && styles.actionTextSuccess]}
-              numberOfLines={1}
-              adjustsFontSizeToFit
-            >
+            <Text style={[styles.actionText, copied && styles.actionTextSuccess]}>
               {copied ? 'Copied' : 'Copy'}
             </Text>
           </TouchableOpacity>
@@ -314,26 +306,14 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
             <TouchableOpacity style={styles.actionBtn} onPress={onSave} activeOpacity={0.7}>
               <Ionicons
                 name={isSaved ? 'bookmark' : 'bookmark-outline'}
-                size={15}
+                size={16}
                 color={isSaved ? Colors.tertiary : Colors.onSurfaceVariant}
               />
-              <Text
-                style={[styles.actionText, isSaved && styles.actionTextSuccess]}
-                numberOfLines={1}
-                adjustsFontSizeToFit
-              >
+              <Text style={[styles.actionText, isSaved && styles.actionTextSuccess]}>
                 {isSaved ? 'Saved' : 'Save'}
               </Text>
             </TouchableOpacity>
           )}
-
-          {/* Dedicated Walkie Channel Button */}
-          <TouchableOpacity style={styles.actionBtn} onPress={handleStartWalkieTalkie} activeOpacity={0.7}>
-            <Ionicons name="radio-outline" size={15} color={Colors.secondary} />
-            <Text style={styles.actionText} numberOfLines={1} adjustsFontSizeToFit>
-              Walkie Link
-            </Text>
-          </TouchableOpacity>
         </View>
 
         {/* Row 2: Combined 1-Tap CTA (Send Spanish Voice Note + 2-Way Walkie Link) */}

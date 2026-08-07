@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { PresetCard } from '../components/PresetCard';
@@ -20,7 +20,6 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   onSelectPhrasePrompt,
 }) => {
   const [providers, setProviders] = useState<LocalServiceProvider[]>([]);
-  const scrollY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     // Fetch verified local directory for Bocas del Toro
@@ -28,14 +27,10 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   }, []);
 
   return (
-    <Animated.ScrollView
+    <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
-      onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
-        useNativeDriver: true,
-      })}
-      scrollEventThrottle={16}
+      showsVerticalScrollIndicator={true}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
@@ -56,55 +51,24 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
         </View>
       )}
 
-      {/* Stacked Service Presets Cards Section */}
+      {/* Service Presets Category Cards Section with Distinct Pastel Themes */}
       <View style={styles.list}>
         <Text style={styles.sectionHeader}>PRESET CONVERSATION TEMPLATES</Text>
-        {SERVICE_PRESETS.map((preset, index) => {
+        {SERVICE_PRESETS.map((preset) => {
           const pastelTheme = getCategoryPastelTheme(preset.id);
-
-          // Card height approximation ~210px
-          const cardHeight = 220;
-          const topPadding = 120; // Title & header offset
-          const cardStartPos = topPadding + index * cardHeight;
-          const stackTopOffset = 100 + index * 38; // Stacks neatly 38px apart at top
-
-          // Sticky Stack Interpolation:
-          // When scrollY reaches cardStartPos, card pins to stackTopOffset
-          const translateY = scrollY.interpolate({
-            inputRange: [-1, 0, cardStartPos - stackTopOffset, cardStartPos + 2000],
-            outputRange: [0, 0, 0, 2000],
-            extrapolate: 'clamp',
-          });
-
-          // Scale & Shadow Interpolation when stacked:
-          const scale = scrollY.interpolate({
-            inputRange: [cardStartPos - 100, cardStartPos, cardStartPos + 400],
-            outputRange: [1, 1, Math.max(0.92, 1 - index * 0.02)],
-            extrapolate: 'clamp',
-          });
-
           return (
-            <Animated.View
-              key={preset.id}
-              style={[
-                styles.stackedCardWrapper,
-                {
-                  transform: [{ translateY }, { scale }],
-                  zIndex: index + 1,
-                },
-              ]}
-            >
+            <View key={preset.id} style={styles.presetCardWrapper}>
               <PresetCard
                 preset={preset}
                 customTheme={pastelTheme}
                 onSelect={(p: ServicePreset) => onSelectPhrasePrompt(p.defaultInputPrompt, p.title)}
                 onSelectPhrase={(text: string) => onSelectPhrasePrompt(text, preset.title)}
               />
-            </Animated.View>
+            </View>
           );
         })}
       </View>
-    </Animated.ScrollView>
+    </ScrollView>
   );
 };
 
@@ -114,7 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 32,
+    paddingBottom: 40,
   },
   titleSection: {
     paddingHorizontal: 20,
@@ -144,9 +108,9 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingHorizontal: 20,
-    marginTop: 16,
+    marginTop: 12,
   },
-  stackedCardWrapper: {
-    marginBottom: 6,
+  presetCardWrapper: {
+    marginBottom: 14,
   },
 });
