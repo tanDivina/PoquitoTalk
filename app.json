@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "PoquitoTalk v1.0.9",
-    "slug": "poquitotalk-v109-fresh",
-    "version": "1.0.9",
+    "name": "PoquitoTalk v1.1.0",
+    "slug": "poquitotalk-v110",
+    "version": "1.1.0",
     "sdkVersion": "54.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
