@@ -12,8 +12,9 @@ import {
 } from 'react-native';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
-import { revenueCat } from '../services/revenuecat';
+import { GoogleSignInButton } from './GoogleSignInButton';
 import { GreenParrotLogo } from './GreenParrotLogo';
+import { revenueCat } from '../services/revenuecat';
 
 interface PaywallModalProps {
   visible: boolean;
@@ -185,6 +186,11 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
                 </Text>
               )}
             </TouchableOpacity>
+
+            {/* Google Sign-In Sync Card */}
+            <View style={{ width: '100%', marginTop: 12 }}>
+              <GoogleSignInButton />
+            </View>
 
             {/* Growth Loop: Invite a Neighbor */}
             <TouchableOpacity
