@@ -5,13 +5,19 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  LayoutAnimation,
+  Platform,
+  UIManager,
 } from 'react-native';
 import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { SERVICE_PRESETS, getCategoryPastelTheme } from '../services/presets';
-import { ServicePreset } from '../types';
 import { sharePhrasebookToCommunity } from '../services/deepLinks';
+
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 interface PresetsScreenProps {
   isPro: boolean;
@@ -24,59 +30,98 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   onOpenPaywall,
   onSelectPhrasePrompt,
 }) => {
-  // Track open cards (all open by default for effortless scrolling without jump bugs)
-  const [collapsedMap, setCollapsedMap] = useState<{ [key: string]: boolean }>({});
+  // Only 1 single card is expanded at a time (defaults to Medical & Pharmacy)
+  const [activeId, setActiveId] = useState<string>(SERVICE_PRESETS[0]?.id || 'medical_pharmacy');
 
-  const toggleCollapse = (id: string) => {
-    setCollapsedMap((prev) => ({ ...prev, [id]: !prev[id] }));
+  const handleSelectCard = (id: string) => {
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    }
+    setActiveId((prev) => (prev === id ? '' : id));
   };
 
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={true}
+      showsVerticalScrollIndicator={false}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
       <View style={styles.titleSection}>
         <View style={styles.versionBadge}>
           <Ionicons name="sparkles" size={12} color={Colors.tertiary} />
-          <Text style={styles.versionText}>v1.0.8 • 11 CATEGORIES & DIRECTORY</Text>
+          <Text style={styles.versionText}>v1.0.8 • APPLE WALLET STACKED DECK</Text>
         </View>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
-          Tap any phrase to instantly send polite Panamanian Spanish voice notes & messages 🇵🇦.
+          Tap any card in the stacked deck below to expand polite Panamanian Spanish phrases 🇵🇦.
         </Text>
+
+        {/* Quick Horizontal Category Jump Bar */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.quickCategoryBar}>
+          {SERVICE_PRESETS.map((preset) => {
+            const isSelected = activeId === preset.id;
+            const theme = getCategoryPastelTheme(preset.id);
+            return (
+              <TouchableOpacity
+                key={preset.id}
+                style={[
+                  styles.categoryPill,
+                  { backgroundColor: isSelected ? theme.accent : theme.bg, borderColor: theme.border },
+                ]}
+                onPress={() => handleSelectCard(preset.id)}
+                activeOpacity={0.8}
+              >
+                <MaterialCommunityIcons
+                  name={preset.icon as any}
+                  size={14}
+                  color={isSelected ? '#FFFFFF' : theme.accent}
+                />
+                <Text
+                  style={[
+                    styles.categoryPillText,
+                    { color: isSelected ? '#FFFFFF' : theme.accent },
+                  ]}
+                >
+                  {preset.title.split('&')[0].trim()}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
       </View>
 
-      {/* Preset Category Cards List */}
-      <View style={styles.list}>
-        {SERVICE_PRESETS.map((preset) => {
-          const isCollapsed = collapsedMap[preset.id] || false;
+      {/* Apple Wallet Style Overlapping Stacked Card Deck */}
+      <View style={styles.stackedDeckList}>
+        {SERVICE_PRESETS.map((preset, index) => {
+          const isExpanded = activeId === preset.id;
           const theme = getCategoryPastelTheme(preset.id);
 
           return (
             <View
               key={preset.id}
               style={[
-                styles.presetCard,
+                styles.stackedCard,
                 {
                   backgroundColor: theme.bg,
                   borderColor: theme.border,
+                  marginTop: index > 0 ? -28 : 0, // Overlap cards like Apple Wallet deck
+                  zIndex: isExpanded ? 100 : SERVICE_PRESETS.length - index,
+                  elevation: isExpanded ? 8 : SERVICE_PRESETS.length - index,
                 },
               ]}
             >
-              {/* Card Header Row */}
+              {/* Stacked Header Row */}
               <TouchableOpacity
                 style={styles.cardHeaderRow}
-                onPress={() => toggleCollapse(preset.id)}
+                onPress={() => handleSelectCard(preset.id)}
                 activeOpacity={0.8}
               >
                 <View style={[styles.iconContainer, { backgroundColor: theme.badgeBg }]}>
                   <MaterialCommunityIcons
                     name={preset.icon as any}
-                    size={24}
+                    size={22}
                     color={theme.accent}
                   />
                 </View>
@@ -89,14 +134,15 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
 
                 <View style={[styles.toggleCircle, { backgroundColor: theme.badgeBg }]}>
                   <Ionicons
-                    name={isCollapsed ? 'chevron-down' : 'chevron-up'}
+                    name={isExpanded ? 'chevron-up' : 'chevron-down'}
                     size={16}
                     color={theme.accent}
                   />
                 </View>
               </TouchableOpacity>
 
-              {!isCollapsed && (
+              {/* Expanded Card Content */}
+              {isExpanded && (
                 <View style={styles.cardBody}>
                   <Text style={styles.description}>{preset.description}</Text>
 
@@ -115,7 +161,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                     ))}
                   </View>
 
-                  {/* Share Phrasebook to Bocas Expat Groups */}
+                  {/* Share Phrasebook */}
                   <TouchableOpacity
                     style={[styles.sharePhrasebookBtn, { borderColor: theme.border }]}
                     onPress={() =>
@@ -148,7 +194,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 60,
+    paddingBottom: 70,
   },
   titleSection: {
     paddingHorizontal: 20,
@@ -174,7 +220,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#111827',
+    color: '#0F172A',
   },
   subtitle: {
     fontSize: 13,
@@ -182,20 +228,36 @@ const styles = StyleSheet.create({
     marginTop: 4,
     lineHeight: 18,
   },
-  list: {
-    paddingHorizontal: 20,
-    marginTop: 8,
+  quickCategoryBar: {
+    marginTop: 12,
+    marginBottom: 4,
   },
-  presetCard: {
+  categoryPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 16,
+    marginRight: 8,
+    borderWidth: 1,
+  },
+  categoryPillText: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  stackedDeckList: {
+    paddingHorizontal: 20,
+    marginTop: 10,
+  },
+  stackedCard: {
     borderRadius: 22,
     padding: 16,
     borderWidth: 1.5,
-    marginBottom: 14,
-    shadowColor: Colors.shadow,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
   },
   cardHeaderRow: {
     flexDirection: 'row',
@@ -221,7 +283,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#111827', // Solid dark black text for 100% legibility
+    color: '#0F172A', // Solid slate black font for max contrast & zero outline issues
     marginTop: 2,
   },
   toggleCircle: {
@@ -258,7 +320,7 @@ const styles = StyleSheet.create({
   phraseText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#111827',
+    color: '#0F172A',
   },
   sharePhrasebookBtn: {
     flexDirection: 'row',
