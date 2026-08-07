@@ -62,18 +62,24 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
         {SERVICE_PRESETS.map((preset, index) => {
           const pastelTheme = getCategoryPastelTheme(preset.id);
 
-          // Card Stack Animation Interpolation:
-          // Cards move up, scale slightly, and stack neatly on scroll
-          const cardOffset = index * 180;
+          // Card height approximation ~210px
+          const cardHeight = 220;
+          const topPadding = 120; // Title & header offset
+          const cardStartPos = topPadding + index * cardHeight;
+          const stackTopOffset = 100 + index * 38; // Stacks neatly 38px apart at top
+
+          // Sticky Stack Interpolation:
+          // When scrollY reaches cardStartPos, card pins to stackTopOffset
           const translateY = scrollY.interpolate({
-            inputRange: [-1, 0, cardOffset, cardOffset + 240],
-            outputRange: [0, 0, 0, -index * 6],
+            inputRange: [-1, 0, cardStartPos - stackTopOffset, cardStartPos + 2000],
+            outputRange: [0, 0, 0, 2000],
             extrapolate: 'clamp',
           });
 
+          // Scale & Shadow Interpolation when stacked:
           const scale = scrollY.interpolate({
-            inputRange: [cardOffset - 100, cardOffset, cardOffset + 240],
-            outputRange: [1, 1, Math.max(0.94, 1 - index * 0.015)],
+            inputRange: [cardStartPos - 100, cardStartPos, cardStartPos + 400],
+            outputRange: [1, 1, Math.max(0.92, 1 - index * 0.02)],
             extrapolate: 'clamp',
           });
 
@@ -84,7 +90,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                 styles.stackedCardWrapper,
                 {
                   transform: [{ translateY }, { scale }],
-                  zIndex: SERVICE_PRESETS.length - index,
+                  zIndex: index + 1,
                 },
               ]}
             >
