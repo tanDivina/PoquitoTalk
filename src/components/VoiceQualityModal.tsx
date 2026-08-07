@@ -32,7 +32,7 @@ export const VoiceQualityModal: React.FC<VoiceQualityModalProps> = ({
             <GreenParrotLogo size={52} />
           </View>
 
-          <Text style={styles.title}>Choose Voice Quality 🎙️</Text>
+          <Text style={styles.title}>Choose Voice Quality</Text>
           <Text style={styles.subtitle}>
             You have <Text style={styles.boldText}>0 Natural Voice Notes</Text> remaining. Choose how you’d like to send your Spanish voice note:
           </Text>
@@ -50,7 +50,7 @@ export const VoiceQualityModal: React.FC<VoiceQualityModalProps> = ({
               <View style={styles.freeBadge}>
                 <Text style={styles.freeBadgeText}>STANDARD FREE</Text>
               </View>
-              <Text style={styles.optionTitle}>⚡ Free Voice ($0.00)</Text>
+              <Text style={styles.optionTitle}>Free Voice ($0.00)</Text>
             </View>
             <Text style={styles.optionDesc}>
               Uses basic device voice output. 100% free with unlimited translations.
@@ -72,10 +72,10 @@ export const VoiceQualityModal: React.FC<VoiceQualityModalProps> = ({
           >
             <View style={styles.optionHeader}>
               <View style={styles.proBadge}>
-                <Ionicons name="star" size={10} color="#FFF" />
+                <Ionicons name="volume-high" size={10} color="#FFF" />
                 <Text style={styles.proBadgeText}>NATURAL ACCENT</Text>
               </View>
-              <Text style={styles.optionTitle}>⭐ Unlock 50 Natural Voice Notes ($4.99)</Text>
+              <Text style={styles.optionTitle}>Unlock 50 Studio Voice Notes ($4.99)</Text>
             </View>
             <Text style={styles.optionDesc}>
               Ultra-realistic natural audio with human inflection, warm cadence, and natural Panamanian accent.
