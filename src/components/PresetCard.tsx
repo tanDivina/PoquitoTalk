@@ -4,14 +4,18 @@ import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { ServicePreset } from '../types';
 import { sharePhrasebookToCommunity } from '../services/deepLinks';
+import { getCategoryPastelTheme, PastelTheme } from '../services/presets';
 
 interface PresetCardProps {
   preset: ServicePreset;
   onSelect: (preset: ServicePreset) => void;
   onSelectPhrase?: (phraseInput: string) => void;
+  customTheme?: PastelTheme;
 }
 
-export const PresetCard: React.FC<PresetCardProps> = ({ preset, onSelect, onSelectPhrase }) => {
+export const PresetCard: React.FC<PresetCardProps> = ({ preset, onSelect, onSelectPhrase, customTheme }) => {
+  const theme = customTheme || getCategoryPastelTheme(preset.id);
+
   const handleSharePhrasebook = () => {
     sharePhrasebookToCommunity({
       id: preset.id,
@@ -23,21 +27,21 @@ export const PresetCard: React.FC<PresetCardProps> = ({ preset, onSelect, onSele
   };
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: theme.bg, borderColor: theme.border }]}>
       <TouchableOpacity
         style={styles.headerRow}
         onPress={() => onSelect(preset)}
         activeOpacity={0.8}
       >
-        <View style={styles.iconContainer}>
+        <View style={[styles.iconContainer, { backgroundColor: theme.badgeBg }]}>
           <MaterialCommunityIcons
             name={preset.icon as any}
             size={24}
-            color={Colors.secondary}
+            color={theme.accent}
           />
         </View>
         <View style={styles.headerText}>
-          <Text style={styles.category}>{preset.category}</Text>
+          <Text style={[styles.category, { color: theme.accent }]}>{preset.category}</Text>
           <Text style={styles.title}>{preset.title}</Text>
         </View>
       </TouchableOpacity>
@@ -48,19 +52,19 @@ export const PresetCard: React.FC<PresetCardProps> = ({ preset, onSelect, onSele
         {preset.phrases.map((phrase, idx) => (
           <TouchableOpacity
             key={idx}
-            style={styles.phraseChip}
+            style={[styles.phraseChip, { backgroundColor: theme.chipBg, borderColor: theme.border }]}
             onPress={() => onSelectPhrase && onSelectPhrase(phrase.input)}
             activeOpacity={0.7}
           >
             <Text style={styles.phraseText}>{phrase.title}</Text>
-            <MaterialCommunityIcons name="chevron-right" size={16} color={Colors.primary} />
+            <MaterialCommunityIcons name="chevron-right" size={16} color={theme.accent} />
           </TouchableOpacity>
         ))}
       </View>
 
-      {/* Growth Loop 2: Share Phrasebook to Community Groups */}
+      {/* Growth Loop: Share Phrasebook to Community Groups */}
       <TouchableOpacity
-        style={styles.sharePhrasebookBtn}
+        style={[styles.sharePhrasebookBtn, { borderColor: theme.border }]}
         onPress={handleSharePhrasebook}
         activeOpacity={0.8}
       >
