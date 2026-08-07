@@ -12,6 +12,7 @@ import { SavedScreen } from './src/screens/SavedScreen';
 import { SettingsScreen } from './src/screens/SettingsScreen';
 import { OnboardingScreen } from './src/screens/OnboardingScreen';
 import { ConversationsScreen } from './src/screens/ConversationsScreen';
+import { DirectoryScreen } from './src/screens/DirectoryScreen';
 import { PaywallModal } from './src/components/PaywallModal';
 import { TranslationItem } from './src/types';
 import { GOOGLE_SPANISH_VOICES, VoiceOption } from './src/services/googleVoice';
@@ -113,6 +114,24 @@ function MainAppTabs({
                   setActivePresetCategory(categoryTitle);
                   props.navigation.navigate('Translate');
                 }}
+              />
+            )}
+          </Tab.Screen>
+
+          <Tab.Screen
+            name="Directory"
+            options={{
+              tabBarLabel: 'Providers',
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="people-outline" size={22} color={color} />
+              ),
+            }}
+          >
+            {(props) => (
+              <DirectoryScreen
+                {...props}
+                isPro={isPro}
+                onOpenPaywall={() => setPaywallVisible(true)}
               />
             )}
           </Tab.Screen>

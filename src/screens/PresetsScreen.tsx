@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, LayoutAnimation, Platform, UIManager } from 'react-native';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { PresetCard } from '../components/PresetCard';
-import { DirectoryCard } from '../components/DirectoryCard';
 import { SERVICE_PRESETS, getCategoryPastelTheme } from '../services/presets';
 import { ServicePreset } from '../types';
-import { fetchRegionalProviders, LocalServiceProvider } from '../services/directory';
+
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 interface PresetsScreenProps {
   isPro: boolean;
@@ -19,51 +22,98 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   onOpenPaywall,
   onSelectPhrasePrompt,
 }) => {
-  const [providers, setProviders] = useState<LocalServiceProvider[]>([]);
+  // Store expanded preset ID (defaults to 'ac_repair')
+  const [expandedId, setExpandedId] = useState<string>('ac_repair');
 
-  useEffect(() => {
-    // Fetch verified local directory for Bocas del Toro
-    fetchRegionalProviders('bocas_del_toro').then((list) => setProviders(list));
-  }, []);
+  const toggleExpand = (id: string) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setExpandedId((prev) => (prev === id ? '' : id));
+  };
 
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={true}
+      showsVerticalScrollIndicator={false}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
       <View style={styles.titleSection}>
-        <Text style={styles.title}>Service Presets & Local Contacts</Text>
+        <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
-          Choose a scenario or message a verified local provider directly in Bocas del Toro 🇵🇦.
+          Tap any stacked category below to expand polite Panamanian Spanish phrase templates 🇵🇦.
         </Text>
       </View>
 
-      {/* Verified Local Contacts Section */}
-      {providers.length > 0 && (
-        <View style={styles.directorySection}>
-          <Text style={styles.sectionHeader}>VERIFIED BOCAS DEL TORO DIRECTORY</Text>
-          {providers.map((p) => (
-            <DirectoryCard key={p.id} provider={p} />
-          ))}
-        </View>
-      )}
-
-      {/* Service Presets Category Cards Section with Distinct Pastel Themes */}
+      {/* Stacked Interactive Accordion Deck Section */}
       <View style={styles.list}>
-        <Text style={styles.sectionHeader}>PRESET CONVERSATION TEMPLATES</Text>
-        {SERVICE_PRESETS.map((preset) => {
-          const pastelTheme = getCategoryPastelTheme(preset.id);
+        {SERVICE_PRESETS.map((preset, index) => {
+          const isExpanded = expandedId === preset.id;
+          const theme = getCategoryPastelTheme(preset.id);
+
           return (
-            <View key={preset.id} style={styles.presetCardWrapper}>
-              <PresetCard
-                preset={preset}
-                customTheme={pastelTheme}
-                onSelect={(p: ServicePreset) => onSelectPhrasePrompt(p.defaultInputPrompt, p.title)}
-                onSelectPhrase={(text: string) => onSelectPhrasePrompt(text, preset.title)}
-              />
+            <View
+              key={preset.id}
+              style={[
+                styles.stackedCardContainer,
+                {
+                  backgroundColor: theme.bg,
+                  borderColor: theme.border,
+                  marginTop: index > 0 ? -12 : 0, // Visual card stacking overlap
+                  zIndex: isExpanded ? 50 : SERVICE_PRESETS.length - index,
+                },
+              ]}
+            >
+              {/* Stacked Header Row */}
+              <TouchableOpacity
+                style={styles.stackedHeaderRow}
+                onPress={() => toggleExpand(preset.id)}
+                activeOpacity={0.8}
+              >
+                <View style={[styles.iconContainer, { backgroundColor: theme.badgeBg }]}>
+                  <MaterialCommunityIcons
+                    name={preset.icon as any}
+                    size={22}
+                    color={theme.accent}
+                  />
+                </View>
+                <View style={styles.headerInfo}>
+                  <Text style={[styles.categoryLabel, { color: theme.accent }]}>
+                    {preset.category}
+                  </Text>
+                  <Text style={styles.cardTitle}>{preset.title}</Text>
+                </View>
+
+                {/* Stack Expand Toggle Arrow */}
+                <View style={[styles.toggleCircle, { backgroundColor: theme.badgeBg }]}>
+                  <Ionicons
+                    name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                    size={16}
+                    color={theme.accent}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              {/* Expanded Card Content */}
+              {isExpanded && (
+                <View style={styles.expandedContent}>
+                  <Text style={styles.description}>{preset.description}</Text>
+
+                  <View style={styles.phrasesList}>
+                    {preset.phrases.map((phrase, idx) => (
+                      <TouchableOpacity
+                        key={idx}
+                        style={[styles.phraseChip, { backgroundColor: theme.chipBg, borderColor: theme.border }]}
+                        onPress={() => onSelectPhrasePrompt(phrase.input, preset.title)}
+                        activeOpacity={0.7}
+                      >
+                        <Text style={styles.phraseText}>{phrase.title}</Text>
+                        <MaterialCommunityIcons name="chevron-right" size={16} color={theme.accent} />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
+              )}
             </View>
           );
         })}
@@ -95,22 +145,81 @@ const styles = StyleSheet.create({
     marginTop: 4,
     lineHeight: 18,
   },
-  directorySection: {
-    paddingHorizontal: 20,
-    marginVertical: 8,
-  },
-  sectionHeader: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: Colors.outline,
-    letterSpacing: 0.8,
-    marginBottom: 10,
-  },
   list: {
     paddingHorizontal: 20,
     marginTop: 12,
   },
-  presetCardWrapper: {
-    marginBottom: 14,
+  stackedCardContainer: {
+    borderRadius: 22,
+    padding: 16,
+    borderWidth: 1.5,
+    shadowColor: Colors.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  stackedHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  iconContainer: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerInfo: {
+    flex: 1,
+  },
+  categoryLabel: {
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+  },
+  cardTitle: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: Colors.onBackground,
+    marginTop: 2,
+  },
+  toggleCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  expandedContent: {
+    marginTop: 14,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.06)',
+  },
+  description: {
+    fontSize: 12.5,
+    color: Colors.onSurfaceVariant,
+    lineHeight: 18,
+    marginBottom: 12,
+  },
+  phrasesList: {
+    gap: 8,
+  },
+  phraseChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 11,
+    borderWidth: 1,
+  },
+  phraseText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: Colors.onBackground,
   },
 });
