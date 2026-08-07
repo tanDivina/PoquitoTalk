@@ -202,7 +202,7 @@ export function getCategoryPastelTheme(presetId: string): PastelTheme {
         bg: '#F3E8FF', // Soft Lavender
         border: '#E9D5FF',
         accent: '#7C3AED',
-        badgeBg: '#F3E8FF',
+        badgeBg: '#E9D5FF',
         chipBg: '#FFFFFF',
       };
     case 'ac_repair':

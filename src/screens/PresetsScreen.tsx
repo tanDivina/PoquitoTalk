@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -33,35 +33,26 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
 }) => {
   // Active expanded card index (starts at 0 - Medical & Pharmacy)
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const cardYPositions = useRef<{ [key: number]: number }>({});
 
   const toggleExpand = (index: number) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setActiveIndex(index);
   };
 
-  // Scroll listener: Dynamically tracks exact Y position of all 8 preset cards
+  // Scroll listener: Calculates active card index using dynamic height progression model
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollY = event.nativeEvent.contentOffset.y;
 
-    // Calculate active card index smoothly
-    let targetIndex = Math.max(
+    // Step calculation: Top section offset ~80px, each collapsed card ~72px
+    const cardStep = 80;
+    const computedIndex = Math.max(
       0,
-      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 80) / 140))
+      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 40) / cardStep))
     );
 
-    if (cardYPositions.current[1] && scrollY > 100) {
-      for (let i = SERVICE_PRESETS.length - 1; i >= 0; i--) {
-        const cardY = cardYPositions.current[i];
-        if (cardY !== undefined && scrollY >= cardY - 240) {
-          targetIndex = i;
-          break;
-        }
-      }
-    }
-
-    if (targetIndex !== activeIndex) {
-      setActiveIndex(targetIndex);
+    if (computedIndex !== activeIndex) {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setActiveIndex(computedIndex);
     }
   };
 
@@ -82,7 +73,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
         </Text>
       </View>
 
-      {/* Accordion Deck Section */}
+      {/* Accordion Deck Section: Auto-expands active card on scroll */}
       <View style={styles.list}>
         {SERVICE_PRESETS.map((preset, index) => {
           const isExpanded = activeIndex === index;
@@ -91,9 +82,6 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
           return (
             <View
               key={preset.id}
-              onLayout={(e) => {
-                cardYPositions.current[index] = e.nativeEvent.layout.y;
-              }}
               style={[
                 styles.stackedCardContainer,
                 {
@@ -177,7 +165,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '800',
-    color: Colors.onBackground,
+    color: '#111827',
   },
   subtitle: {
     fontSize: 13,
@@ -223,7 +211,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 15,
     fontWeight: '800',
-    color: Colors.onBackground,
+    color: '#111827', // Solid dark black text for max contrast across all OS themes
     marginTop: 2,
   },
   toggleCircle: {
@@ -260,6 +248,6 @@ const styles = StyleSheet.create({
   phraseText: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.onBackground,
+    color: '#111827',
   },
 });
