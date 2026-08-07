@@ -8,6 +8,8 @@ import {
   LayoutAnimation,
   Platform,
   UIManager,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from 'react-native';
 import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
@@ -31,7 +33,6 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   onSelectPhrasePrompt,
 }) => {
   // Single active expanded card ID (defaults to Medical & Pharmacy)
-  // Tapping ANY card opens it AND automatically collapses all other cards!
   const [activeCardId, setActiveCardId] = useState<string>('medical_pharmacy');
 
   const handleToggleCard = (id: string) => {
@@ -41,22 +42,44 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
     setActiveCardId((prevId) => (prevId === id ? '' : id));
   };
 
+  // Scroll listener: Bi-directional scroll-driven collapse & expansion (scrolling UP or DOWN)
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+
+    // Calibrated scroll step threshold (~140px per category)
+    const cardStep = 140;
+    const computedIndex = Math.max(
+      0,
+      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 40) / cardStep))
+    );
+
+    const targetPreset = SERVICE_PRESETS[computedIndex];
+    if (targetPreset && targetPreset.id !== activeCardId) {
+      if (Platform.OS === 'ios' || Platform.OS === 'android') {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      }
+      setActiveCardId(targetPreset.id);
+    }
+  };
+
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={true}
+      onScroll={handleScroll}
+      scrollEventThrottle={32}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
       <View style={styles.titleSection}>
         <View style={styles.versionBadge}>
           <Ionicons name="sparkles" size={12} color={Colors.tertiary} />
-          <Text style={styles.versionText}>v1.1.1 • UNIFIED OUTLINE STYLING ✨</Text>
+          <Text style={styles.versionText}>v1.1.2 • BI-DIRECTIONAL ACCORDION & SOLID FONTS ✨</Text>
         </View>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
-          Tap any category card below to view polite Panamanian Spanish phrase templates 🇵🇦.
+          Scroll up/down or tap any category to reveal Panamanian Spanish phrase templates 🇵🇦.
         </Text>
 
         {/* Quick Horizontal Category Jump Bar */}
@@ -93,7 +116,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
         </ScrollView>
       </View>
 
-      {/* Accordion Deck: Exactly 1 card open at a time, smooth collapse/expand */}
+      {/* Accordion Deck: Bi-directional Scroll & Tap Support */}
       <View style={styles.stackedDeckList}>
         {SERVICE_PRESETS.map((preset) => {
           const isExpanded = activeCardId === preset.id;
@@ -125,10 +148,11 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                   />
                 </View>
                 <View style={styles.headerInfo}>
-                  {/* Category Label: Elegant Outline Typography for ALL 11 Categories */}
                   <Text style={[styles.categoryLabel, { color: theme.accent, borderColor: theme.accent }]}>
                     {preset.category}
                   </Text>
+
+                  {/* Guaranteed 100% Solid Black Title Font across all devices */}
                   <Text style={styles.cardTitle}>{preset.title}</Text>
                 </View>
 
@@ -194,7 +218,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 100,
+    paddingBottom: 350, // Extended scroll space for smooth 11-category bi-directional scrolling
   },
   titleSection: {
     paddingHorizontal: 20,
@@ -291,7 +315,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#0F172A',
+    color: '#000000', // 100% Solid Black
     marginTop: 1,
   },
   toggleCircle: {
@@ -328,7 +352,7 @@ const styles = StyleSheet.create({
   phraseText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#0F172A',
+    color: '#000000',
   },
   sharePhrasebookBtn: {
     flexDirection: 'row',
