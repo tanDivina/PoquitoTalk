@@ -25,8 +25,8 @@ export const SERVICE_PRESETS: ServicePreset[] = [
   },
   {
     id: 'dentist_appointments',
-    category: 'Appointments',
-    title: 'Dentist & Appointments',
+    category: 'Doctor & Dentist',
+    title: 'Dentist & Health Checkups',
     icon: 'tooth',
     description: 'Schedule urgent dentist visits, toothache appointments, or general health checkups.',
     defaultInputPrompt: 'Hi, I have a severe toothache and need an urgent dentist appointment today.',
