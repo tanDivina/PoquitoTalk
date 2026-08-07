@@ -32,15 +32,14 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
     setActiveIndex(index);
   };
 
-  // Scroll listener: Dynamically opens active scrolled card at a smooth, relaxed pace
+  // Scroll listener: Dynamically opens active scrolled card in viewport (75px step matches card header height)
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollY = event.nativeEvent.contentOffset.y;
 
-    // Relaxed card scroll step (~260px per category card)
-    const cardTrackStep = 260;
+    const cardTrackStep = 75;
     const computedIndex = Math.max(
       0,
-      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 100) / cardTrackStep))
+      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 35) / cardTrackStep))
     );
 
     if (computedIndex !== activeIndex) {
@@ -52,9 +51,9 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
+      showsVerticalScrollIndicator={true}
       onScroll={handleScroll}
-      scrollEventThrottle={32}
+      scrollEventThrottle={16}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
@@ -202,7 +201,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 80,
+    paddingBottom: 220,
   },
   titleSection: {
     paddingHorizontal: 20,
