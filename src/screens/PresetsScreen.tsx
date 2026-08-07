@@ -5,20 +5,13 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  LayoutAnimation,
-  Platform,
-  UIManager,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
 } from 'react-native';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { SERVICE_PRESETS, getCategoryPastelTheme } from '../services/presets';
-
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
+import { ServicePreset } from '../types';
+import { sharePhrasebookToCommunity } from '../services/deepLinks';
 
 interface PresetsScreenProps {
   isPro: boolean;
@@ -31,40 +24,18 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   onOpenPaywall,
   onSelectPhrasePrompt,
 }) => {
-  // Active expanded card index (starts at 0 - Medical & Pharmacy)
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+  // Track open cards (all open by default for effortless scrolling without jump bugs)
+  const [collapsedMap, setCollapsedMap] = useState<{ [key: string]: boolean }>({});
 
-  const toggleExpand = (index: number) => {
-    if (Platform.OS === 'ios' || Platform.OS === 'android') {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    }
-    setActiveIndex(index);
-  };
-
-  // Scroll listener: Auto-expands card currently in viewport on scroll
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const scrollY = event.nativeEvent.contentOffset.y;
-    const cardStep = 90;
-    const computedIndex = Math.max(
-      0,
-      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 40) / cardStep))
-    );
-
-    if (computedIndex !== activeIndex) {
-      if (Platform.OS === 'ios' || Platform.OS === 'android') {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      }
-      setActiveIndex(computedIndex);
-    }
+  const toggleCollapse = (id: string) => {
+    setCollapsedMap((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
-      onScroll={handleScroll}
-      scrollEventThrottle={16}
+      showsVerticalScrollIndicator={true}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
@@ -75,72 +46,37 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
         </View>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
-          Tap any category pill or scroll down to auto-reveal polite Panamanian Spanish phrase templates 🇵🇦.
+          Tap any phrase to instantly send polite Panamanian Spanish voice notes & messages 🇵🇦.
         </Text>
-
-        {/* Quick Category Jump Bar */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.quickCategoryBar}>
-          {SERVICE_PRESETS.map((preset, idx) => {
-            const isSelected = activeIndex === idx;
-            const theme = getCategoryPastelTheme(preset.id);
-            return (
-              <TouchableOpacity
-                key={preset.id}
-                style={[
-                  styles.categoryPill,
-                  { backgroundColor: isSelected ? theme.accent : theme.bg, borderColor: theme.border },
-                ]}
-                onPress={() => toggleExpand(idx)}
-                activeOpacity={0.8}
-              >
-                <MaterialCommunityIcons
-                  name={preset.icon as any}
-                  size={14}
-                  color={isSelected ? '#FFFFFF' : theme.accent}
-                />
-                <Text
-                  style={[
-                    styles.categoryPillText,
-                    { color: isSelected ? '#FFFFFF' : theme.accent },
-                  ]}
-                >
-                  {preset.title.split('&')[0].trim()}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
       </View>
 
-      {/* Accordion Deck Section: Auto-expands active card on scroll */}
+      {/* Preset Category Cards List */}
       <View style={styles.list}>
-        {SERVICE_PRESETS.map((preset, index) => {
-          const isExpanded = activeIndex === index;
+        {SERVICE_PRESETS.map((preset) => {
+          const isCollapsed = collapsedMap[preset.id] || false;
           const theme = getCategoryPastelTheme(preset.id);
 
           return (
             <View
               key={preset.id}
               style={[
-                styles.stackedCardContainer,
+                styles.presetCard,
                 {
                   backgroundColor: theme.bg,
                   borderColor: theme.border,
-                  marginTop: index > 0 ? -10 : 0,
-                  zIndex: isExpanded ? 50 : SERVICE_PRESETS.length - index,
                 },
               ]}
             >
               {/* Card Header Row */}
               <TouchableOpacity
-                style={styles.stackedHeaderRow}
-                onPress={() => toggleExpand(index)}
+                style={styles.cardHeaderRow}
+                onPress={() => toggleCollapse(preset.id)}
                 activeOpacity={0.8}
               >
                 <View style={[styles.iconContainer, { backgroundColor: theme.badgeBg }]}>
                   <MaterialCommunityIcons
                     name={preset.icon as any}
-                    size={22}
+                    size={24}
                     color={theme.accent}
                   />
                 </View>
@@ -151,21 +87,20 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                   <Text style={styles.cardTitle}>{preset.title}</Text>
                 </View>
 
-                {/* Active Indicator Arrow */}
                 <View style={[styles.toggleCircle, { backgroundColor: theme.badgeBg }]}>
                   <Ionicons
-                    name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                    name={isCollapsed ? 'chevron-down' : 'chevron-up'}
                     size={16}
                     color={theme.accent}
                   />
                 </View>
               </TouchableOpacity>
 
-              {/* Expanded Content View */}
-              {isExpanded && (
-                <View style={styles.expandedContent}>
+              {!isCollapsed && (
+                <View style={styles.cardBody}>
                   <Text style={styles.description}>{preset.description}</Text>
 
+                  {/* Phrases List */}
                   <View style={styles.phrasesList}>
                     {preset.phrases.map((phrase, idx) => (
                       <TouchableOpacity
@@ -179,6 +114,24 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                       </TouchableOpacity>
                     ))}
                   </View>
+
+                  {/* Share Phrasebook to Bocas Expat Groups */}
+                  <TouchableOpacity
+                    style={[styles.sharePhrasebookBtn, { borderColor: theme.border }]}
+                    onPress={() =>
+                      sharePhrasebookToCommunity({
+                        id: preset.id,
+                        title: preset.title,
+                        category: preset.category,
+                        emoji: '🌴',
+                        phraseCount: preset.phrases.length,
+                      })
+                    }
+                    activeOpacity={0.8}
+                  >
+                    <FontAwesome5 name="whatsapp" size={13} color={Colors.whatsapp} />
+                    <Text style={styles.sharePhrasebookText}>Share to Bocas Expat Groups 🌴</Text>
+                  </TouchableOpacity>
                 </View>
               )}
             </View>
@@ -195,7 +148,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 70,
+    paddingBottom: 60,
   },
   titleSection: {
     paddingHorizontal: 20,
@@ -229,47 +182,30 @@ const styles = StyleSheet.create({
     marginTop: 4,
     lineHeight: 18,
   },
-  quickCategoryBar: {
-    marginTop: 12,
-    marginBottom: 4,
-  },
-  categoryPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    borderRadius: 16,
-    marginRight: 8,
-    borderWidth: 1,
-  },
-  categoryPillText: {
-    fontSize: 12,
-    fontWeight: '700',
-  },
   list: {
     paddingHorizontal: 20,
-    marginTop: 10,
+    marginTop: 8,
   },
-  stackedCardContainer: {
+  presetCard: {
     borderRadius: 22,
     padding: 16,
     borderWidth: 1.5,
+    marginBottom: 14,
     shadowColor: Colors.shadow,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    elevation: 3,
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  stackedHeaderRow: {
+  cardHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
   },
   iconContainer: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -283,9 +219,9 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   cardTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#111827', // Solid dark black text for 100% legibility
     marginTop: 2,
   },
   toggleCircle: {
@@ -295,7 +231,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  expandedContent: {
+  cardBody: {
     marginTop: 14,
     paddingTop: 12,
     borderTopWidth: 1,
@@ -321,7 +257,23 @@ const styles = StyleSheet.create({
   },
   phraseText: {
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#111827',
+  },
+  sharePhrasebookBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    marginTop: 12,
+    paddingVertical: 9,
+    borderRadius: 12,
+    borderWidth: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  sharePhrasebookText: {
+    fontSize: 11.5,
+    fontWeight: '700',
+    color: Colors.whatsapp,
   },
 });
