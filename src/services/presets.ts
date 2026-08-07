@@ -177,6 +177,72 @@ export const SERVICE_PRESETS: ServicePreset[] = [
       },
     ],
   },
+  {
+    id: 'taxi_land',
+    category: 'Transport & Taxis',
+    title: 'Land Taxi & Drivers',
+    icon: 'taxi',
+    description: 'Island taxis to Paunch/Bluff beach, airport pickup, driver fare quotes.',
+    defaultInputPrompt: 'Hi, I need a land taxi driver to pick me up for a trip to Playa Bluff.',
+    phrases: [
+      {
+        title: 'Taxi to Beach / Resort',
+        input: 'Hi! Are you available for a taxi ride to Playa Bluff / Paunch today?',
+      },
+      {
+        title: 'Airport Transfer Pickup',
+        input: 'Hello, what is your rate for an airport pickup transfer in Bocas Town?',
+      },
+      {
+        title: 'Daily Driver Hire Quote',
+        input: 'Hi, how much do you charge for half-day driver service around Isla Colón?',
+      },
+    ],
+  },
+  {
+    id: 'water_taxi',
+    category: 'Marine Shuttles',
+    title: 'Water Taxi & Boat Shuttles',
+    icon: 'ferry',
+    description: 'Boat shuttles to Carenero, Bastimentos, Red Frog, or late night boat rates.',
+    defaultInputPrompt: 'Hi, is a water taxi boat available to take us to Red Frog Beach right now?',
+    phrases: [
+      {
+        title: 'Water Taxi to Red Frog',
+        input: 'Hi! Is a water taxi available to take 2 people to Red Frog Beach right now?',
+      },
+      {
+        title: 'Carenero / Bastimentos Shuttle',
+        input: 'Hello, how much is the boat ride per person from Bocas Town to Carenero / Old Bank?',
+      },
+      {
+        title: 'Late Night Boat Inquiry',
+        input: 'Hi! Are water taxi boats running until late tonight for return trips?',
+      },
+    ],
+  },
+  {
+    id: 'restaurant_dining',
+    category: 'Food & Dining',
+    title: 'Restaurants & Reservations',
+    icon: 'silverware-fork-knife',
+    description: 'Reserve a table, ask for menu, dietary options (vegan/gluten-free), or opening hours.',
+    defaultInputPrompt: 'Hi, I would like to reserve a dinner table for 4 people tonight at 7:30 PM.',
+    phrases: [
+      {
+        title: 'Reserve Dinner Table',
+        input: 'Hi! I would like to reserve a table for 4 people tonight at 7:30 PM, please.',
+      },
+      {
+        title: 'Vegan / Dietary Options',
+        input: 'Hello, do you offer vegetarian or gluten-free meal options on your menu?',
+      },
+      {
+        title: 'Menu & Today\'s Specials',
+        input: 'Hi! Could you send me your current food menu and today\'s specials via WhatsApp?',
+      },
+    ],
+  },
 ];
 
 export interface PastelTheme {
@@ -251,6 +317,30 @@ export function getCategoryPastelTheme(presetId: string): PastelTheme {
         border: '#FDE68A',
         accent: '#D97706',
         badgeBg: '#FEF08A',
+        chipBg: '#FFFFFF',
+      };
+    case 'taxi_land':
+      return {
+        bg: '#FFF7ED', // Soft Coral/Amber
+        border: '#FFEDD5',
+        accent: '#C2410C',
+        badgeBg: '#FFEDD5',
+        chipBg: '#FFFFFF',
+      };
+    case 'water_taxi':
+      return {
+        bg: '#F0FDFA', // Soft Sea Sky
+        border: '#CCFBF1',
+        accent: '#0F766E',
+        badgeBg: '#CCFBF1',
+        chipBg: '#FFFFFF',
+      };
+    case 'restaurant_dining':
+      return {
+        bg: '#FDF2F8', // Soft Rose Dining
+        border: '#FBCFE8',
+        accent: '#BE185D',
+        badgeBg: '#FCE7F3',
         chipBg: '#FFFFFF',
       };
     default:

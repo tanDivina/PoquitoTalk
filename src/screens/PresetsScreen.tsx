@@ -35,23 +35,27 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const toggleExpand = (index: number) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    }
     setActiveIndex(index);
   };
 
-  // Scroll listener: Calculates active card index using dynamic height progression model
+  // Scroll listener: Auto-expands card currently in viewport on scroll
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollY = event.nativeEvent.contentOffset.y;
 
-    // Step calculation: Top section offset ~80px, each collapsed card ~72px
-    const cardStep = 80;
+    // Card step threshold calculation across all 11 preset categories
+    const cardStep = 90;
     const computedIndex = Math.max(
       0,
       Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 40) / cardStep))
     );
 
     if (computedIndex !== activeIndex) {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      if (Platform.OS === 'ios' || Platform.OS === 'android') {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      }
       setActiveIndex(computedIndex);
     }
   };
@@ -69,7 +73,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       <View style={styles.titleSection}>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
-          Scroll up or down to auto-reveal scenario phrases across all categories, or tap any card 🇵🇦.
+          Scroll or tap any category in the deck to auto-reveal Panamanian Spanish phrases 🇵🇦.
         </Text>
       </View>
 
@@ -156,7 +160,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 60,
+    paddingBottom: 70,
   },
   titleSection: {
     paddingHorizontal: 20,
@@ -210,8 +214,8 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 15,
-    fontWeight: '800',
-    color: '#111827', // Solid dark black text for max contrast across all OS themes
+    fontWeight: '700',
+    color: '#111827',
     marginTop: 2,
   },
   toggleCircle: {
