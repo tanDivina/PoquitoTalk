@@ -32,15 +32,15 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
     setActiveIndex(index);
   };
 
-  // Scroll listener: Dynamically opens active scrolled card as user scrolls UP or DOWN
+  // Scroll listener: Dynamically opens active scrolled card at a smooth, relaxed pace
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollY = event.nativeEvent.contentOffset.y;
 
-    // Card track scroll step (~160px per category card)
-    const cardTrackStep = 160;
+    // Relaxed card scroll step (~260px per category card)
+    const cardTrackStep = 260;
     const computedIndex = Math.max(
       0,
-      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 80) / cardTrackStep))
+      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 100) / cardTrackStep))
     );
 
     if (computedIndex !== activeIndex) {
@@ -54,7 +54,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
       onScroll={handleScroll}
-      scrollEventThrottle={16}
+      scrollEventThrottle={32}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
