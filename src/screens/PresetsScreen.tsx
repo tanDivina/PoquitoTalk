@@ -44,8 +44,6 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   // Scroll listener: Auto-expands card currently in viewport on scroll
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollY = event.nativeEvent.contentOffset.y;
-
-    // Card step threshold calculation across all 11 preset categories
     const cardStep = 90;
     const computedIndex = Math.max(
       0,
@@ -71,10 +69,47 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
       <View style={styles.titleSection}>
+        <View style={styles.versionBadge}>
+          <Ionicons name="sparkles" size={12} color={Colors.tertiary} />
+          <Text style={styles.versionText}>v1.0.8 • 11 CATEGORIES & DIRECTORY</Text>
+        </View>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
-          Scroll or tap any category in the deck to auto-reveal Panamanian Spanish phrases 🇵🇦.
+          Tap any category pill or scroll down to auto-reveal polite Panamanian Spanish phrase templates 🇵🇦.
         </Text>
+
+        {/* Quick Category Jump Bar */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.quickCategoryBar}>
+          {SERVICE_PRESETS.map((preset, idx) => {
+            const isSelected = activeIndex === idx;
+            const theme = getCategoryPastelTheme(preset.id);
+            return (
+              <TouchableOpacity
+                key={preset.id}
+                style={[
+                  styles.categoryPill,
+                  { backgroundColor: isSelected ? theme.accent : theme.bg, borderColor: theme.border },
+                ]}
+                onPress={() => toggleExpand(idx)}
+                activeOpacity={0.8}
+              >
+                <MaterialCommunityIcons
+                  name={preset.icon as any}
+                  size={14}
+                  color={isSelected ? '#FFFFFF' : theme.accent}
+                />
+                <Text
+                  style={[
+                    styles.categoryPillText,
+                    { color: isSelected ? '#FFFFFF' : theme.accent },
+                  ]}
+                >
+                  {preset.title.split('&')[0].trim()}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
       </View>
 
       {/* Accordion Deck Section: Auto-expands active card on scroll */}
@@ -166,6 +201,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginVertical: 12,
   },
+  versionBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: Colors.tertiaryContainer,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginBottom: 6,
+  },
+  versionText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: Colors.tertiary,
+    letterSpacing: 0.5,
+  },
   title: {
     fontSize: 22,
     fontWeight: '800',
@@ -176,6 +228,24 @@ const styles = StyleSheet.create({
     color: Colors.onSurfaceVariant,
     marginTop: 4,
     lineHeight: 18,
+  },
+  quickCategoryBar: {
+    marginTop: 12,
+    marginBottom: 4,
+  },
+  categoryPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 16,
+    marginRight: 8,
+    borderWidth: 1,
+  },
+  categoryPillText: {
+    fontSize: 12,
+    fontWeight: '700',
   },
   list: {
     paddingHorizontal: 20,
