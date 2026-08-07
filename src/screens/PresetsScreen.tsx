@@ -51,7 +51,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       <View style={styles.titleSection}>
         <View style={styles.versionBadge}>
           <Ionicons name="sparkles" size={12} color={Colors.tertiary} />
-          <Text style={styles.versionText}>v1.0.8 • APPLE WALLET STACKED DECK</Text>
+          <Text style={styles.versionText}>v1.0.9 • FRESH BUNDLE LOADED ✨</Text>
         </View>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
