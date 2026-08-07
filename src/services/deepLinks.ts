@@ -33,7 +33,7 @@ export async function sharePhrasebookToCommunity(pkg: PhrasebookPackage): Promis
 }
 
 export async function shareWalkieTalkieToWhatsApp(shareUrl: string, recipientName: string = 'Amigo'): Promise<void> {
-  const message = `${shareUrl}\n\n📻 Toca el enlace azul arriba para hablarme por voz en español. (No requiere instalar nada)`;
+  const message = `${shareUrl}\n\nToca el enlace para hablarme por voz en español. (Sin instalar ninguna aplicación)`;
   const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(message)}`;
 
   try {

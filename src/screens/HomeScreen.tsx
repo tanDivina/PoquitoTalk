@@ -241,7 +241,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           <View style={styles.walkieActiveHeader}>
             <View style={styles.walkieLiveBadge}>
               <View style={styles.walkieDot} />
-              <Text style={styles.walkieLiveText}>WALKIE-TALKIE LIVE 📻</Text>
+              <Text style={styles.walkieLiveText}>WALKIE-TALKIE LIVE</Text>
             </View>
             <TouchableOpacity
               onPress={() => {

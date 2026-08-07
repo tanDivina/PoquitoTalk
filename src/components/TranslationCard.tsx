@@ -231,7 +231,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
           activeOpacity={0.8}
         >
           <Ionicons name="radio-outline" size={18} color={Colors.secondary} />
-          <Text style={styles.walkieBtnText}>📻 Start 2-Way Magic Walkie-Talkie Link</Text>
+          <Text style={styles.walkieBtnText}>Start 2-Way Walkie-Talkie Link</Text>
         </TouchableOpacity>
       </View>
     );
