@@ -12,6 +12,8 @@ export interface UserTransaction {
 export interface UserProfileData {
   uid: string;
   email: string;
+  displayName?: string;
+  photoUrl?: string;
   creditsBalance: number;
   isProSubscriber: boolean;
   transactions: UserTransaction[];

@@ -6,6 +6,8 @@ import { Header } from '../components/Header';
 import { FeedbackModal } from '../components/FeedbackModal';
 import { GreenParrotLogo } from '../components/GreenParrotLogo';
 
+import { GoogleSignInButton } from '../components/GoogleSignInButton';
+
 interface SettingsScreenProps {
   isPro: boolean;
   onOpenPaywall: () => void;
@@ -21,7 +23,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
 
       <View style={styles.titleSection}>
         <Text style={styles.title}>Settings & Account</Text>
-        <Text style={styles.subtitle}>Configure preferences and subscription options.</Text>
+        <Text style={styles.subtitle}>Configure preferences and sync your Google account.</Text>
+      </View>
+
+      {/* Google Account Sign-In Card */}
+      <View style={styles.card}>
+        <GoogleSignInButton />
       </View>
 
       {/* Studio Credits Card */}
