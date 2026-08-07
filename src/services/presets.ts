@@ -178,3 +178,88 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     ],
   },
 ];
+
+export interface PastelTheme {
+  bg: string;
+  border: string;
+  accent: string;
+  badgeBg: string;
+  chipBg: string;
+}
+
+export function getCategoryPastelTheme(presetId: string): PastelTheme {
+  switch (presetId) {
+    case 'medical_pharmacy':
+      return {
+        bg: '#FFF1F2', // Soft Rose
+        border: '#FECDD3',
+        accent: '#E11D48',
+        badgeBg: '#FFE4E6',
+        chipBg: '#FFFFFF',
+      };
+    case 'dentist_appointments':
+      return {
+        bg: '#F3E8FF', // Soft Lavender
+        border: '#E9D5FF',
+        accent: '#7C3AED',
+        badgeBg: '#F3E8FF',
+        chipBg: '#FFFFFF',
+      };
+    case 'ac_repair':
+      return {
+        bg: '#F0F9FF', // Soft Ice Blue
+        border: '#BAE6FD',
+        accent: '#0284C7',
+        badgeBg: '#E0F2FE',
+        chipBg: '#FFFFFF',
+      };
+    case 'broken_fridge':
+      return {
+        bg: '#ECFDF5', // Soft Mint
+        border: '#A7F3D0',
+        accent: '#059669',
+        badgeBg: '#D1FAE5',
+        chipBg: '#FFFFFF',
+      };
+    case 'boat_repair':
+      return {
+        bg: '#E6FFFA', // Soft Seafoam
+        border: '#99F6E4',
+        accent: '#0D9488',
+        badgeBg: '#CCFBF1',
+        chipBg: '#FFFFFF',
+      };
+    case 'car_mechanic':
+      return {
+        bg: '#FFEDD5', // Soft Warm Peach
+        border: '#FED7AA',
+        accent: '#EA580C',
+        badgeBg: '#FFE4D6',
+        chipBg: '#FFFFFF',
+      };
+    case 'starlink_internet':
+      return {
+        bg: '#EEF2FF', // Soft Indigo
+        border: '#C7D2FE',
+        accent: '#4F46E5',
+        badgeBg: '#E0E7FF',
+        chipBg: '#FFFFFF',
+      };
+    case 'landlord_housing':
+      return {
+        bg: '#FEF3C7', // Soft Warm Amber
+        border: '#FDE68A',
+        accent: '#D97706',
+        badgeBg: '#FEF08A',
+        chipBg: '#FFFFFF',
+      };
+    default:
+      return {
+        bg: '#F5F3EF',
+        border: '#E4E2DE',
+        accent: '#964824',
+        badgeBg: '#EFEEEA',
+        chipBg: '#FFFFFF',
+      };
+  }
+}
