@@ -30,24 +30,15 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   onOpenPaywall,
   onSelectPhrasePrompt,
 }) => {
-  // Track open cards map (defaults to Doctor & Medical open by default)
-  const [expandedMap, setExpandedMap] = useState<{ [key: string]: boolean }>({
-    medical_pharmacy: true,
-    dentist_appointments: true,
-  });
+  // Single active expanded card ID (defaults to Medical & Pharmacy)
+  // Tapping ANY card opens it AND automatically collapses all other cards!
+  const [activeCardId, setActiveCardId] = useState<string>('medical_pharmacy');
 
-  const toggleExpand = (id: string) => {
+  const handleToggleCard = (id: string) => {
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
-    setExpandedMap((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const expandSingleCard = (id: string) => {
-    if (Platform.OS === 'ios' || Platform.OS === 'android') {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    }
-    setExpandedMap({ [id]: true });
+    setActiveCardId((prevId) => (prevId === id ? '' : id));
   };
 
   return (
@@ -61,37 +52,37 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       <View style={styles.titleSection}>
         <View style={styles.versionBadge}>
           <Ionicons name="sparkles" size={12} color={Colors.tertiary} />
-          <Text style={styles.versionText}>v1.1.0 • ACCORDION CARD DECK ✨</Text>
+          <Text style={styles.versionText}>v1.1.1 • UNIFIED OUTLINE STYLING ✨</Text>
         </View>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
-          Tap any card or top category pill to view polite Panamanian Spanish phrase templates 🇵🇦.
+          Tap any category card below to view polite Panamanian Spanish phrase templates 🇵🇦.
         </Text>
 
-        {/* Quick Category Jump Bar */}
+        {/* Quick Horizontal Category Jump Bar */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.quickCategoryBar}>
           {SERVICE_PRESETS.map((preset) => {
-            const isExpanded = !!expandedMap[preset.id];
+            const isSelected = activeCardId === preset.id;
             const theme = getCategoryPastelTheme(preset.id);
             return (
               <TouchableOpacity
                 key={preset.id}
                 style={[
                   styles.categoryPill,
-                  { backgroundColor: isExpanded ? theme.accent : theme.bg, borderColor: theme.border },
+                  { backgroundColor: isSelected ? theme.accent : theme.bg, borderColor: theme.border },
                 ]}
-                onPress={() => expandSingleCard(preset.id)}
+                onPress={() => handleToggleCard(preset.id)}
                 activeOpacity={0.8}
               >
                 <MaterialCommunityIcons
                   name={preset.icon as any}
                   size={14}
-                  color={isExpanded ? '#FFFFFF' : theme.accent}
+                  color={isSelected ? '#FFFFFF' : theme.accent}
                 />
                 <Text
                   style={[
                     styles.categoryPillText,
-                    { color: isExpanded ? '#FFFFFF' : theme.accent },
+                    { color: isSelected ? '#FFFFFF' : theme.accent },
                   ]}
                 >
                   {preset.title.split('&')[0].trim()}
@@ -102,10 +93,10 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
         </ScrollView>
       </View>
 
-      {/* Accordion Card Deck Section */}
+      {/* Accordion Deck: Exactly 1 card open at a time, smooth collapse/expand */}
       <View style={styles.stackedDeckList}>
         {SERVICE_PRESETS.map((preset) => {
-          const isExpanded = !!expandedMap[preset.id];
+          const isExpanded = activeCardId === preset.id;
           const theme = getCategoryPastelTheme(preset.id);
 
           return (
@@ -116,14 +107,14 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                 {
                   backgroundColor: theme.bg,
                   borderColor: isExpanded ? theme.accent : theme.border,
-                  borderWidth: isExpanded ? 2 : 1.5,
+                  borderWidth: isExpanded ? 2.5 : 1.5,
                 },
               ]}
             >
               {/* Card Header Row */}
               <TouchableOpacity
                 style={styles.cardHeaderRow}
-                onPress={() => toggleExpand(preset.id)}
+                onPress={() => handleToggleCard(preset.id)}
                 activeOpacity={0.8}
               >
                 <View style={[styles.iconContainer, { backgroundColor: theme.badgeBg }]}>
@@ -134,7 +125,8 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                   />
                 </View>
                 <View style={styles.headerInfo}>
-                  <Text style={[styles.categoryLabel, { color: theme.accent }]}>
+                  {/* Category Label: Elegant Outline Typography for ALL 11 Categories */}
+                  <Text style={[styles.categoryLabel, { color: theme.accent, borderColor: theme.accent }]}>
                     {preset.category}
                   </Text>
                   <Text style={styles.cardTitle}>{preset.title}</Text>
@@ -149,7 +141,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                 </View>
               </TouchableOpacity>
 
-              {/* Active Card Body (Phrasebook Chips) */}
+              {/* Expanded Phrasebook Content */}
               {isExpanded && (
                 <View style={styles.cardBody}>
                   <Text style={styles.description}>{preset.description}</Text>
@@ -284,16 +276,23 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   categoryLabel: {
-    fontSize: 10,
+    fontSize: 9.5,
     fontWeight: '800',
-    letterSpacing: 0.6,
+    letterSpacing: 0.8,
     textTransform: 'uppercase',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+    borderWidth: 1,
+    alignSelf: 'flex-start',
+    marginBottom: 3,
+    backgroundColor: '#FFFFFF',
   },
   cardTitle: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '800',
     color: '#0F172A',
-    marginTop: 2,
+    marginTop: 1,
   },
   toggleCircle: {
     width: 28,
