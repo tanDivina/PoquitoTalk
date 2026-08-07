@@ -271,7 +271,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
       {/* Action Bar Container */}
       <View style={styles.actionsBarContainer}>
-        {/* Row 1: Quick Utility Controls */}
+        {/* Row 1: Quick Utility Controls (Play Audio, Copy, Save) */}
         <View style={styles.topUtilityRow}>
           {/* Play Audio Button */}
           <TouchableOpacity
@@ -281,10 +281,14 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
           >
             <Ionicons
               name={isPlaying ? 'square' : 'volume-high'}
-              size={16}
+              size={15}
               color={isPlaying ? '#BA1A1A' : Colors.secondary}
             />
-            <Text style={[styles.actionText, isPlaying && styles.actionTextActive]}>
+            <Text
+              style={[styles.actionText, isPlaying && styles.actionTextActive]}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+            >
               {isPlaying ? 'Stop' : 'Play Audio'}
             </Text>
           </TouchableOpacity>
@@ -293,10 +297,14 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
           <TouchableOpacity style={styles.actionBtn} onPress={handleCopy} activeOpacity={0.7}>
             <Ionicons
               name={copied ? 'checkmark' : 'copy-outline'}
-              size={16}
+              size={15}
               color={copied ? Colors.tertiary : Colors.onSurfaceVariant}
             />
-            <Text style={[styles.actionText, copied && styles.actionTextSuccess]}>
+            <Text
+              style={[styles.actionText, copied && styles.actionTextSuccess]}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+            >
               {copied ? 'Copied' : 'Copy'}
             </Text>
           </TouchableOpacity>
@@ -306,23 +314,29 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
             <TouchableOpacity style={styles.actionBtn} onPress={onSave} activeOpacity={0.7}>
               <Ionicons
                 name={isSaved ? 'bookmark' : 'bookmark-outline'}
-                size={16}
+                size={15}
                 color={isSaved ? Colors.tertiary : Colors.onSurfaceVariant}
               />
-              <Text style={[styles.actionText, isSaved && styles.actionTextSuccess]}>
+              <Text
+                style={[styles.actionText, isSaved && styles.actionTextSuccess]}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+              >
                 {isSaved ? 'Saved' : 'Save'}
               </Text>
             </TouchableOpacity>
           )}
 
-          {/* Walkie-Talkie Link Button */}
+          {/* Dedicated Walkie Channel Button */}
           <TouchableOpacity style={styles.actionBtn} onPress={handleStartWalkieTalkie} activeOpacity={0.7}>
-            <Ionicons name="radio-outline" size={16} color={Colors.secondary} />
-            <Text style={styles.actionText}>Walkie Link</Text>
+            <Ionicons name="radio-outline" size={15} color={Colors.secondary} />
+            <Text style={styles.actionText} numberOfLines={1} adjustsFontSizeToFit>
+              Walkie Link
+            </Text>
           </TouchableOpacity>
         </View>
 
-        {/* Row 2: Prominent Full-Width Send Voice Note CTA */}
+        {/* Row 2: Combined 1-Tap CTA (Send Spanish Voice Note + 2-Way Walkie Link) */}
         <TouchableOpacity
           style={styles.fullWidthWhatsappBtn}
           onPress={handleSendWhatsAppVoiceNote}
@@ -334,12 +348,14 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
           ) : (
             <>
               <FontAwesome5 name="whatsapp" size={18} color="#FFF" />
-              <Text style={styles.fullWidthWhatsappBtnText}>Send Voice Note to WhatsApp</Text>
+              <Text style={styles.fullWidthWhatsappBtnText} numberOfLines={1} adjustsFontSizeToFit>
+                Send Voice Note + Walkie Link
+              </Text>
             </>
           )}
         </TouchableOpacity>
 
-        {/* Contextual Local Sponsor Ad — 100% relevant to active service category */}
+        {/* Contextual Local Sponsor Ad */}
         {contextualSponsor && (
           <View style={styles.contextualAdSection}>
             <Text style={styles.contextualAdHeader}>RELEVANT LOCAL SERVICE SPONSOR 🇵🇦</Text>
