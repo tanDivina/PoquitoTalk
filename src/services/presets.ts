@@ -266,8 +266,8 @@ export function getCategoryPastelTheme(presetId: string): PastelTheme {
     case 'dentist_appointments':
       return {
         bg: '#F3E8FF', // Soft Lavender
-        border: '#E9D5FF',
-        accent: '#7C3AED',
+        border: '#D8B4FE',
+        accent: '#5B21B6', // Solid Dark Indigo (prevents iOS text inversion)
         badgeBg: '#E9D5FF',
         chipBg: '#FFFFFF',
       };
