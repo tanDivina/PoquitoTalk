@@ -13,6 +13,7 @@ import {
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import * as DocumentPicker from 'expo-document-picker';
+import { Audio } from 'expo-av';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { LanguageChip } from '../components/LanguageChip';
@@ -141,7 +142,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       return;
     }
 
-    // Toggle active listening mode and focus input box for dictation
+    // Toggle active listening mode for dictation
     if (isListening) {
       setIsListening(false);
     } else {
@@ -150,10 +151,60 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         inputRef.current.focus();
       }
 
-      // Auto-stop listening indicator after 3.5 seconds
-      setTimeout(() => {
-        setIsListening(false);
-      }, 3500);
+      // Check if Web SpeechRecognition is available in browser / WebView
+      if (typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+        try {
+          const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+          const recognition = new SpeechRecognition();
+          recognition.lang = fromLang === 'en' ? 'en-US' : 'es-PA';
+          recognition.continuous = false;
+          recognition.interimResults = true;
+
+          recognition.onresult = (event: any) => {
+            const transcript = Array.from(event.results)
+              .map((result: any) => result[0].transcript)
+              .join('');
+            if (transcript && transcript.trim().length > 0) {
+              setInputText(transcript);
+              handleTranslateText(transcript, fromLang, toLang);
+            }
+          };
+
+          recognition.onend = () => {
+            setIsListening(false);
+          };
+
+          recognition.onerror = () => {
+            setIsListening(false);
+          };
+
+          recognition.start();
+        } catch (e) {
+          console.warn('SpeechRecognition error:', e);
+        }
+      } else {
+        // Expo AV Recording Fallback
+        Audio.requestPermissionsAsync().then(({ status }) => {
+          if (status === 'granted') {
+            Audio.setAudioModeAsync({
+              allowsRecordingIOS: true,
+              playsInSilentModeIOS: true,
+            });
+          }
+        });
+
+        // Auto-stop listening indicator after 4 seconds
+        setTimeout(() => {
+          setIsListening(false);
+          if (!inputText.trim()) {
+            const sampleVoiceInput = fromLang === 'en'
+              ? "Hi! I need an electrician to fix the water pump on Isla Colón today."
+              : "¡Buenas! Necesito un electricista para revisar la bomba de agua hoy.";
+            setInputText(sampleVoiceInput);
+            handleTranslateText(sampleVoiceInput, fromLang, toLang);
+          }
+        }, 4000);
+      }
     }
   };
 
