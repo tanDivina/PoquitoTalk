@@ -1,4 +1,5 @@
 import { getUserProfile, saveUserProfile, UserProfileData } from './userService';
+import { fetchUserDataFromFirestore, syncUserDataToFirestore } from './firestoreService';
 
 export interface GoogleAuthUser {
   uid: string;
@@ -32,7 +33,7 @@ export async function getCurrentGoogleUser(): Promise<GoogleAuthUser | null> {
 
 /**
  * Simulates or executes Google Sign-In authentication flow.
- * Accepts custom Google OAuth Web / Android Client IDs or user-provided credential objects.
+ * Syncs saved phrases, voice preferences, settings, and credits across app and web via Cloud Firestore.
  */
 export async function signInWithGoogle(googleUserPayload?: Partial<GoogleAuthUser>): Promise<{ success: boolean; user: GoogleAuthUser }> {
   try {
@@ -45,6 +46,9 @@ export async function signInWithGoogle(googleUserPayload?: Partial<GoogleAuthUse
 
     currentUser = googleUser;
 
+    // Fetch synced Cloud Firestore user document
+    await fetchUserDataFromFirestore(googleUser.uid);
+
     const currentProfile = await getUserProfile();
     const updatedProfile: UserProfileData = {
       ...currentProfile,
@@ -55,6 +59,8 @@ export async function signInWithGoogle(googleUserPayload?: Partial<GoogleAuthUse
     };
 
     await saveUserProfile(updatedProfile);
+    await syncUserDataToFirestore(googleUser.uid);
+
     return { success: true, user: googleUser };
   } catch (error) {
     console.error('Google Sign-In Error:', error);
