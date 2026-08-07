@@ -279,30 +279,52 @@
         <p>Built specifically for Bocas del Toro & serving the Panama expat community 🇵🇦</p>
       </div>
 
-      <div class="pricing-grid">
-        <!-- Credit Pack -->
+      <div class="pricing-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        <!-- 1. Unified Credits Pack -->
         <div class="pricing-card">
           <div class="plan-header">
-            <h3>50 Natural Voice Notes Pack</h3>
-            <p class="plan-desc">Great for quick trips & everyday errands</p>
+            <h3>50 Poquito Credits Pack</h3>
+            <p class="plan-desc">Flexible pay-as-you-go credits</p>
           </div>
           <div class="price-box">
             <span class="currency">$</span><span class="amount">4.99</span>
-            <span class="period">one-time payment</span>
+            <span class="period">one-time • never expires</span>
           </div>
           <ul class="features">
-            <li>✓ 50 Natural-Sounding Voice Notes</li>
-            <li>✓ Never Expires</li>
-            <li>✓ All 8 Service Presets (A/C, Boat, Starlink)</li>
-            <li>✓ Natural Male & Female Voices (Diego, Sofia)</li>
-            <li>✓ Instant Cross-Platform App Sync</li>
+            <li>✓ <strong>50 Credits</strong> for Voice Notes & Walkie-Talkie</li>
+            <li>✓ 1 Custom Voice Note = 1 Credit</li>
+            <li>✓ 1 Walkie Session = 5 Credits</li>
+            <li>✓ Free Native Device Voice Fallback</li>
+            <li>✓ Instant Cross-Platform Sync</li>
           </ul>
           <button class="btn-checkout" onclick="initiateStripeCheckout('credits_50')">
-            Get 50 Natural Voice Notes ($4.99) <span class="arrow">→</span>
+            Get 50 Credits ($4.99) <span class="arrow">→</span>
           </button>
         </div>
 
-        <!-- Unlimited Pro -->
+        <!-- 2. Weekly Tourist Pass -->
+        <div class="pricing-card">
+          <div class="plan-header">
+            <h3>Weekly Tourist Pass</h3>
+            <p class="plan-desc">For short trips & island vacations (7 Days)</p>
+          </div>
+          <div class="price-box">
+            <span class="currency">$</span><span class="amount">4.99</span>
+            <span class="period">/ week</span>
+          </div>
+          <ul class="features">
+            <li>✓ <strong>Unlimited</strong> Studio Voice Notes (7 Days)</li>
+            <li>✓ <strong>Unlimited</strong> 2-Way Walkie-Talkie Sessions</li>
+            <li>✓ All 8 Service Presets (A/C, Boat, Starlink)</li>
+            <li>✓ All Studio Voices (Diego, Sofia, Mateo)</li>
+            <li>✓ No long-term commitment</li>
+          </ul>
+          <button class="btn-checkout" onclick="initiateStripeCheckout('tourist_weekly')">
+            Get 7-Day Tourist Pass ($4.99) <span class="arrow">→</span>
+          </button>
+        </div>
+
+        <!-- 3. Unlimited Pro Monthly -->
         <div class="pricing-card featured">
           <div class="featured-badge">MOST POPULAR</div>
           <div class="plan-header">
@@ -314,10 +336,10 @@
             <span class="period">/ month</span>
           </div>
           <ul class="features">
-            <li>✓ <strong>Unlimited</strong> Natural-Sounding Voice Notes</li>
-            <li>✓ <strong>Zero Ads</strong> & Zero Sponsor Spotlights</li>
-            <li>✓ All Voice Personas (Diego, Mateo, Sofia, Valeria)</li>
-            <li>✓ 2-Way WhatsApp Conversation Threads</li>
+            <li>✓ <strong>Unlimited</strong> Studio Voice Notes</li>
+            <li>✓ <strong>Unlimited</strong> 2-Way Walkie-Talkie Sessions</li>
+            <li>✓ All Studio Voice Personas (Diego, Mateo, Sofia, Valeria)</li>
+            <li>✓ Priority Accent Cleaning Engine</li>
             <li>✓ Cancel Anytime in 1 Tap</li>
           </ul>
           <button class="btn-checkout featured-btn" onclick="initiateStripeCheckout('pro_monthly')">

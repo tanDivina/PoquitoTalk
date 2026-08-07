@@ -271,30 +271,52 @@
         <p>Diseñado específicamente para Bocas del Toro y la comunidad en Panamá 🇵🇦</p>
       </div>
 
-      <div class="pricing-grid">
-        <!-- Credit Pack -->
+      <div class="pricing-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        <!-- 1. Paquete de Créditos Unificados -->
         <div class="pricing-card">
           <div class="plan-header">
-            <h3>Paquete 50 Notas de Voz Naturales</h3>
-            <p class="plan-desc">Ideal para viajes cortos y diligencias diarias</p>
+            <h3>Paquete 50 Créditos Poquito</h3>
+            <p class="plan-desc">Créditos flexibles de pago por uso</p>
           </div>
           <div class="price-box">
             <span class="currency">$</span><span class="amount">4.99</span>
-            <span class="period">pago único</span>
+            <span class="period">pago único • nunca vence</span>
           </div>
           <ul class="features">
-            <li>✓ 50 Notas de Voz de Sonido Natural</li>
-            <li>✓ Nunca vence</li>
-            <li>✓ Todas las 8 plantillas (A/C, Lanchas, Starlink)</li>
-            <li>✓ Voces Masculinas y Femeninas (Diego, Sofía)</li>
+            <li>✓ <strong>50 Créditos</strong> para Notas de Voz y Walkie-Talkie</li>
+            <li>✓ 1 Nota de Voz Personalizada = 1 Crédito</li>
+            <li>✓ 1 Sesión de Walkie-Talkie = 5 Créditos</li>
+            <li>✓ Voz del dispositivo gratis cuando se agoten</li>
             <li>✓ Sincronización instantánea con la App Móvil</li>
           </ul>
           <button class="btn-checkout" onclick="initiateStripeCheckout('credits_50')">
-            Obtener 50 Notas de Voz ($4.99) <span class="arrow">→</span>
+            Obtener 50 Créditos ($4.99) <span class="arrow">→</span>
           </button>
         </div>
 
-        <!-- Unlimited Pro -->
+        <!-- 2. Pase Semanal Turístico -->
+        <div class="pricing-card">
+          <div class="plan-header">
+            <h3>Pase Semanal Turístico</h3>
+            <p class="plan-desc">Para vacaciones y viajes cortos (7 Días)</p>
+          </div>
+          <div class="price-box">
+            <span class="currency">$</span><span class="amount">4.99</span>
+            <span class="period">/ semana</span>
+          </div>
+          <ul class="features">
+            <li>✓ Notas de Voz de Estudio <strong>Ilimitadas</strong> (7 Días)</li>
+            <li>✓ Sesiones de Walkie-Talkie <strong>Ilimitadas</strong></li>
+            <li>✓ Todas las 8 plantillas (A/C, Lanchas, Starlink)</li>
+            <li>✓ Voces de estudio (Diego, Sofía, Mateo)</li>
+            <li>✓ Sin compromisos a largo plazo</li>
+          </ul>
+          <button class="btn-checkout" onclick="initiateStripeCheckout('tourist_weekly')">
+            Obtener Pase Turístico ($4.99) <span class="arrow">→</span>
+          </button>
+        </div>
+
+        <!-- 3. Membresía Mensual Pro -->
         <div class="pricing-card featured">
           <div class="featured-badge">MÁS POPULAR</div>
           <div class="plan-header">
@@ -306,10 +328,10 @@
             <span class="period">/ mes</span>
           </div>
           <ul class="features">
-            <li>✓ Notas de Voz Naturales <strong>Ilimitadas</strong></li>
-            <li>✓ <strong>Cero Anuncios</strong> y cero patrocinios</li>
+            <li>✓ Notas de Voz de Estudio <strong>Ilimitadas</strong></li>
+            <li>✓ Sesiones de Walkie-Talkie <strong>Ilimitadas</strong></li>
             <li>✓ Todas las voces (Diego, Mateo, Sofía, Valeria)</li>
-            <li>✓ Hilos de conversación bidireccionales en WhatsApp</li>
+            <li>✓ Motor de limpieza de acento prioritario</li>
             <li>✓ Cancela cuando quieras en 1 toque</li>
           </ul>
           <button class="btn-checkout featured-btn" onclick="initiateStripeCheckout('pro_monthly')">
