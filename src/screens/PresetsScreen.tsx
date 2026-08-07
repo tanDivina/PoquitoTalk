@@ -44,18 +44,23 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollY = event.nativeEvent.contentOffset.y;
 
-    // Determine target active card index based on measured card layout positions
-    let targetIndex = 0;
-    for (let i = SERVICE_PRESETS.length - 1; i >= 0; i--) {
-      const cardY = cardYPositions.current[i] ?? i * 80;
-      if (scrollY >= cardY - 160) {
-        targetIndex = i;
-        break;
+    // Calculate active card index smoothly
+    let targetIndex = Math.max(
+      0,
+      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 80) / 140))
+    );
+
+    if (cardYPositions.current[1] && scrollY > 100) {
+      for (let i = SERVICE_PRESETS.length - 1; i >= 0; i--) {
+        const cardY = cardYPositions.current[i];
+        if (cardY !== undefined && scrollY >= cardY - 240) {
+          targetIndex = i;
+          break;
+        }
       }
     }
 
     if (targetIndex !== activeIndex) {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       setActiveIndex(targetIndex);
     }
   };

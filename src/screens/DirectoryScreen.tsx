@@ -26,7 +26,7 @@ const CATEGORY_FILTERS = [
   { id: 'AC', label: 'A/C & Electrical', icon: 'snow-outline' },
   { id: 'BOAT', label: 'Boat & Water Taxi', icon: 'boat-outline' },
   { id: 'PLUMBING', label: 'Plumbing & Water', icon: 'water-outline' },
-  { id: 'STARLINK', label: 'Starlink & Internet', icon: 'satellite-outline' },
+  { id: 'STARLINK', label: 'Starlink & Internet', icon: 'radio-outline' },
   { id: 'MEDICAL', label: 'Doctor & Medical', icon: 'medical-outline' },
 ];
 
