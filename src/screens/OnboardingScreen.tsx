@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surfaceContainerHighest,
   },
   stepDotActive: {
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.tertiary,
   },
   stepLine: {
     width: 32,
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   stepLineActive: {
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.tertiary,
   },
   stepCard: {
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',

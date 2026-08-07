@@ -16,13 +16,16 @@ export const Colors = {
   primaryContainer: '#807264',
   onPrimary: '#FFFFFF',
   
-  secondary: '#964824', // Warm Terracotta (Main Action / Mic Button)
+  secondary: '#964824', // Warm Terracotta (Action / Mic Button)
   secondaryLight: '#FD9A6F',
   secondaryContainer: '#FFDBCD',
   onSecondary: '#FFFFFF',
   
-  tertiary: '#4F604E', // Sage Green (Success / Verified / Preset Badges)
-  tertiaryContainer: '#D5E8D1',
+  // Panama Emerald & Sage Green (Main Brand Cohesion Accent)
+  tertiary: '#4F604E', // Sage Green (Badges / Presets / Verified)
+  tertiaryContainer: '#D5E8D1', // Light Sage Container
+  emerald: '#10B981', // Panamanian Emerald Green
+  emeraldDark: '#047857',
   onTertiary: '#FFFFFF',
   
   // WhatsApp Accent
