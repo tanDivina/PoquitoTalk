@@ -11,11 +11,10 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from 'react-native';
-import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { SERVICE_PRESETS, getCategoryPastelTheme } from '../services/presets';
-import { sharePhrasebookToCommunity } from '../services/deepLinks';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -42,15 +41,15 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
     setActiveCardId((prevId) => (prevId === id ? '' : id));
   };
 
-  // Scroll listener: Bi-directional scroll-driven collapse & expansion (scrolling UP or DOWN)
+  // Relaxed scroll listener: Calibrated step (200px) & 500px bottom padding for all 11 categories
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollY = event.nativeEvent.contentOffset.y;
 
-    // Calibrated scroll step threshold (~140px per category)
-    const cardStep = 140;
+    // Relaxed scroll step threshold (~200px per category card)
+    const cardStep = 200;
     const computedIndex = Math.max(
       0,
-      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 40) / cardStep))
+      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 50) / cardStep))
     );
 
     const targetPreset = SERVICE_PRESETS[computedIndex];
@@ -75,7 +74,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       <View style={styles.titleSection}>
         <View style={styles.versionBadge}>
           <Ionicons name="sparkles" size={12} color={Colors.tertiary} />
-          <Text style={styles.versionText}>v1.1.2 • BI-DIRECTIONAL ACCORDION & SOLID FONTS ✨</Text>
+          <Text style={styles.versionText}>v1.1.3 • RELAXED PACE & ALL 11 CATEGORIES ✨</Text>
         </View>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
@@ -116,7 +115,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
         </ScrollView>
       </View>
 
-      {/* Accordion Deck: Bi-directional Scroll & Tap Support */}
+      {/* Accordion Deck: All 11 Categories with Relaxed Pace */}
       <View style={styles.stackedDeckList}>
         {SERVICE_PRESETS.map((preset) => {
           const isExpanded = activeCardId === preset.id;
@@ -151,8 +150,6 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                   <Text style={[styles.categoryLabel, { color: theme.accent, borderColor: theme.accent }]}>
                     {preset.category}
                   </Text>
-
-                  {/* Guaranteed 100% Solid Black Title Font across all devices */}
                   <Text style={styles.cardTitle}>{preset.title}</Text>
                 </View>
 
@@ -184,24 +181,6 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                       </TouchableOpacity>
                     ))}
                   </View>
-
-                  {/* Share Phrasebook */}
-                  <TouchableOpacity
-                    style={[styles.sharePhrasebookBtn, { borderColor: theme.border }]}
-                    onPress={() =>
-                      sharePhrasebookToCommunity({
-                        id: preset.id,
-                        title: preset.title,
-                        category: preset.category,
-                        emoji: '🌴',
-                        phraseCount: preset.phrases.length,
-                      })
-                    }
-                    activeOpacity={0.8}
-                  >
-                    <FontAwesome5 name="whatsapp" size={13} color={Colors.whatsapp} />
-                    <Text style={styles.sharePhrasebookText}>Share to Bocas Expat Groups 🌴</Text>
-                  </TouchableOpacity>
                 </View>
               )}
             </View>
@@ -218,7 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 350, // Extended scroll space for smooth 11-category bi-directional scrolling
+    paddingBottom: 500, // Generous scroll space for smooth visibility of all 11 categories
   },
   titleSection: {
     paddingHorizontal: 20,
@@ -315,7 +294,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#000000', // 100% Solid Black
+    color: '#000000',
     marginTop: 1,
   },
   toggleCircle: {
@@ -353,21 +332,5 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: '#000000',
-  },
-  sharePhrasebookBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-    marginTop: 12,
-    paddingVertical: 9,
-    borderRadius: 12,
-    borderWidth: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  sharePhrasebookText: {
-    fontSize: 11.5,
-    fontWeight: '700',
-    color: Colors.whatsapp,
   },
 });
