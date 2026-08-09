@@ -100,7 +100,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       setToLang('es');
       setInputText(activePresetPrompt);
       handleTranslateText(activePresetPrompt, 'en', 'es');
-      if (onClearPresetPrompt) onClearPresetPrompt();
     }
   }, [activePresetPrompt]);
 
