@@ -80,10 +80,6 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
       <View style={styles.titleSection}>
-        <View style={styles.versionBadge}>
-          <Ionicons name="sparkles" size={12} color={Colors.tertiary} />
-          <Text style={styles.versionText}>v1.1.7 • CALIBRATED STACK SCROLLING ✨</Text>
-        </View>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
           Scroll up/down or tap any card in the deck to reveal Panamanian Spanish phrase templates 🇵🇦.
