@@ -31,8 +31,8 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   onOpenPaywall,
   onSelectPhrasePrompt,
 }) => {
-  // Single active expanded card ID (auto-updates on scroll up/down or tap)
-  const [activeCardId, setActiveCardId] = useState<string>('medical_pharmacy');
+  // Single active expanded card ID (defaults to empty string so all cards start closed for a clean look)
+  const [activeCardId, setActiveCardId] = useState<string>('');
 
   const handleSelectCard = (id: string) => {
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
@@ -41,15 +41,23 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
     setActiveCardId((prevId) => (prevId === id ? '' : id));
   };
 
-  // Scroll listener: Calibrated 34px step matches overlapping stacked card height for full 11-card scrolling
+  // Scroll listener: Calm, jitter-free scroll-driven card opening
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollY = event.nativeEvent.contentOffset.y;
 
-    // 34px matches exact overlapping card spacing (-18px margin)
-    const cardStep = 34;
+    // If at top of screen (scrollY < 20), keep all cards closed for clean look
+    if (scrollY < 20) {
+      if (activeCardId !== '') {
+        setActiveCardId('');
+      }
+      return;
+    }
+
+    // Calibrated 50px scroll step for relaxed, smooth card transitions
+    const cardStep = 50;
     const computedIndex = Math.max(
       0,
-      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 20) / cardStep))
+      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY - 10) / cardStep))
     );
 
     const targetPreset = SERVICE_PRESETS[computedIndex];
@@ -67,7 +75,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={true}
       onScroll={handleScroll}
-      scrollEventThrottle={16}
+      scrollEventThrottle={48}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
