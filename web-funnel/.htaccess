@@ -7,6 +7,8 @@ Redirect 301 /index-es.html https://poquitotalk.hero-apps.com/es/
 
 RewriteRule ^talk/?$ talk.html [L,QSA]
 RewriteRule ^privacy/?$ privacy.html [L,QSA]
+RewriteRule ^contractors/?$ contractors.html [L,QSA]
+RewriteRule ^es/contratistas/?$ es/contratistas.html [L,QSA]
 
 # Prevent aggressive browser caching of HTML files so updates show instantly
 <FilesMatch "\.(html|htm)$">
