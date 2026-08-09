@@ -3,7 +3,7 @@ import { ServicePreset } from '../types';
 export const SERVICE_PRESETS: ServicePreset[] = [
   {
     id: 'medical_pharmacy',
-    category: 'Health & Emergency',
+    category: 'Medical',
     title: 'Medical & Pharmacy',
     icon: 'hospital-building',
     description: 'Describe symptoms, urgent clinic visits, ambulance, or open pharmacy inquiries.',
@@ -25,8 +25,8 @@ export const SERVICE_PRESETS: ServicePreset[] = [
   },
   {
     id: 'dentist_appointments',
-    category: 'Doctor & Dentist',
-    title: 'Dentist & Health Checkups',
+    category: 'Dentist',
+    title: 'Doctor & Dentist',
     icon: 'tooth',
     description: 'Schedule urgent dentist visits, toothache appointments, or general health checkups.',
     defaultInputPrompt: 'Hi, I have a severe toothache and need an urgent dentist appointment today.',
@@ -47,7 +47,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
   },
   {
     id: 'ac_repair',
-    category: 'Home & Climate',
+    category: 'A/C',
     title: 'Air Conditioning (A/C)',
     icon: 'snowflake',
     description: 'A/C leaking, remote control issues, refrigerant refill, or no cold air.',
@@ -70,7 +70,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
   {
     id: 'broken_fridge',
     category: 'Appliances',
-    title: 'Broken Fridge & Appliances',
+    title: 'Fridge & Appliances',
     icon: 'fridge-outline',
     description: 'Fridge not cooling, freezer defrosting, stove or washing machine broken.',
     defaultInputPrompt: 'Our refrigerator stopped cooling and the food inside is defrosting.',
@@ -91,8 +91,8 @@ export const SERVICE_PRESETS: ServicePreset[] = [
   },
   {
     id: 'boat_repair',
-    category: 'Marine & Outdoors',
-    title: 'Boat Repairs & Marine',
+    category: 'Marine',
+    title: 'Boat & Marine Repairs',
     icon: 'sail-boat',
     description: 'Outboard motor troubles, bilge pump, hull checks, or battery issues.',
     defaultInputPrompt: 'The outboard motor is turning over but will not start.',
@@ -113,8 +113,8 @@ export const SERVICE_PRESETS: ServicePreset[] = [
   },
   {
     id: 'car_mechanic',
-    category: 'Vehicles',
-    title: 'Car & Vehicle Maintenance',
+    category: 'Mechanics',
+    title: 'Car & Mechanics',
     icon: 'car-wrench',
     description: 'Flat tires, battery jump, oil changes, engine warning light, mechanic quote.',
     defaultInputPrompt: 'My car battery is dead and I need a jump start or replacement.',
@@ -135,8 +135,8 @@ export const SERVICE_PRESETS: ServicePreset[] = [
   },
   {
     id: 'starlink_internet',
-    category: 'Tech & Connectivity',
-    title: 'Internet & Starlink Repairs',
+    category: 'Starlink',
+    title: 'Internet & Starlink',
     icon: 'satellite-variant',
     description: 'Starlink dish alignment, Wi-Fi router reboot, cut fiber line, ISP setup.',
     defaultInputPrompt: 'My Starlink dish lost signal connection and the router light is red.',
@@ -157,8 +157,8 @@ export const SERVICE_PRESETS: ServicePreset[] = [
   },
   {
     id: 'landlord_housing',
-    category: 'Housing & Property',
-    title: 'Landlord & Property Care',
+    category: 'Housing',
+    title: 'Landlord & Housing',
     icon: 'home-city-outline',
     description: 'Rent inquiries, spare keys, water pressure, garbage collection, gate access.',
     defaultInputPrompt: 'Hi, the water pressure in the shower dropped significantly today.',
@@ -179,7 +179,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
   },
   {
     id: 'taxi_land',
-    category: 'Transport & Taxis',
+    category: 'Taxi',
     title: 'Land Taxi & Drivers',
     icon: 'taxi',
     description: 'Island taxis to Paunch/Bluff beach, airport pickup, driver fare quotes.',
@@ -201,8 +201,8 @@ export const SERVICE_PRESETS: ServicePreset[] = [
   },
   {
     id: 'water_taxi',
-    category: 'Marine Shuttles',
-    title: 'Water Taxi & Boat Shuttles',
+    category: 'Boats',
+    title: 'Water Taxi & Boats',
     icon: 'ferry',
     description: 'Boat shuttles to Carenero, Bastimentos, Red Frog, or late night boat rates.',
     defaultInputPrompt: 'Hi, is a water taxi boat available to take us to Red Frog Beach right now?',
@@ -223,8 +223,8 @@ export const SERVICE_PRESETS: ServicePreset[] = [
   },
   {
     id: 'restaurant_dining',
-    category: 'Food & Dining',
-    title: 'Restaurants & Reservations',
+    category: 'Dining',
+    title: 'Restaurants & Dining',
     icon: 'silverware-fork-knife',
     description: 'Reserve a table, ask for menu, dietary options (vegan/gluten-free), or opening hours.',
     defaultInputPrompt: 'Hi, I would like to reserve a dinner table for 4 people tonight at 7:30 PM.',
@@ -267,7 +267,7 @@ export function getCategoryPastelTheme(presetId: string): PastelTheme {
       return {
         bg: '#F3E8FF', // Soft Lavender
         border: '#D8B4FE',
-        accent: '#5B21B6', // Solid Dark Indigo (prevents iOS text inversion)
+        accent: '#5B21B6',
         badgeBg: '#E9D5FF',
         chipBg: '#FFFFFF',
       };
@@ -298,57 +298,57 @@ export function getCategoryPastelTheme(presetId: string): PastelTheme {
     case 'car_mechanic':
       return {
         bg: '#FFEDD5', // Soft Warm Peach
-        border: '#FED7AA',
+        border: '#FDBA74',
         accent: '#EA580C',
-        badgeBg: '#FFE4D6',
+        badgeBg: '#FFEDD5',
         chipBg: '#FFFFFF',
       };
     case 'starlink_internet':
       return {
-        bg: '#EEF2FF', // Soft Indigo
-        border: '#C7D2FE',
-        accent: '#4F46E5',
-        badgeBg: '#E0E7FF',
+        bg: '#F5F3FF', // Soft Violet
+        border: '#DDD6FE',
+        accent: '#6D28D9',
+        badgeBg: '#EDE9FE',
         chipBg: '#FFFFFF',
       };
     case 'landlord_housing':
       return {
-        bg: '#FEF3C7', // Soft Warm Amber
+        bg: '#FEF3C7', // Soft Warm Yellow
         border: '#FDE68A',
         accent: '#D97706',
-        badgeBg: '#FEF08A',
+        badgeBg: '#FEF3C7',
         chipBg: '#FFFFFF',
       };
     case 'taxi_land':
       return {
-        bg: '#FFF7ED', // Soft Coral/Amber
-        border: '#FFEDD5',
-        accent: '#C2410C',
-        badgeBg: '#FFEDD5',
+        bg: '#FEF2F2', // Soft Coral Red
+        border: '#FCA5A5',
+        accent: '#DC2626',
+        badgeBg: '#FEE2E2',
         chipBg: '#FFFFFF',
       };
     case 'water_taxi':
       return {
-        bg: '#F0FDFA', // Soft Sea Sky
-        border: '#CCFBF1',
-        accent: '#0F766E',
-        badgeBg: '#CCFBF1',
+        bg: '#E0F2FE', // Soft Sky Blue
+        border: '#7DD3FC',
+        accent: '#0369A1',
+        badgeBg: '#BAE6FD',
         chipBg: '#FFFFFF',
       };
     case 'restaurant_dining':
       return {
-        bg: '#FDF2F8', // Soft Rose Dining
-        border: '#FBCFE8',
-        accent: '#BE185D',
-        badgeBg: '#FCE7F3',
+        bg: '#FFFBEB', // Soft Warm Cream
+        border: '#FDE68A',
+        accent: '#B45309',
+        badgeBg: '#FEF3C7',
         chipBg: '#FFFFFF',
       };
     default:
       return {
-        bg: '#F5F3EF',
-        border: '#E4E2DE',
-        accent: '#964824',
-        badgeBg: '#EFEEEA',
+        bg: '#F8FAFC',
+        border: '#E2E8F0',
+        accent: '#475569',
+        badgeBg: '#F1F5F9',
         chipBg: '#FFFFFF',
       };
   }
