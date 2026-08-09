@@ -8,8 +8,6 @@ import {
   LayoutAnimation,
   Platform,
   UIManager,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
 } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
@@ -31,54 +29,32 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   onOpenPaywall,
   onSelectPhrasePrompt,
 }) => {
-  // Single active expanded card ID (defaults to Medical & Pharmacy)
+  // Single active expanded card ID in the playing cards deck (defaults to Medical & Pharmacy)
   const [activeCardId, setActiveCardId] = useState<string>('medical_pharmacy');
 
-  const handleToggleCard = (id: string) => {
+  const handleSelectCard = (id: string) => {
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
     setActiveCardId((prevId) => (prevId === id ? '' : id));
   };
 
-  // Relaxed scroll listener: Calibrated step (200px) & 500px bottom padding for all 11 categories
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const scrollY = event.nativeEvent.contentOffset.y;
-
-    // Relaxed scroll step threshold (~200px per category card)
-    const cardStep = 200;
-    const computedIndex = Math.max(
-      0,
-      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 50) / cardStep))
-    );
-
-    const targetPreset = SERVICE_PRESETS[computedIndex];
-    if (targetPreset && targetPreset.id !== activeCardId) {
-      if (Platform.OS === 'ios' || Platform.OS === 'android') {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      }
-      setActiveCardId(targetPreset.id);
-    }
-  };
-
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={true}
-      onScroll={handleScroll}
-      scrollEventThrottle={32}
+      showsVerticalScrollIndicator={false}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
       <View style={styles.titleSection}>
         <View style={styles.versionBadge}>
           <Ionicons name="sparkles" size={12} color={Colors.tertiary} />
-          <Text style={styles.versionText}>v1.1.3 • RELAXED PACE & ALL 11 CATEGORIES ✨</Text>
+          <Text style={styles.versionText}>v1.1.4 • PLAYING CARDS STACKED DECK ✨</Text>
         </View>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
-          Scroll up/down or tap any category to reveal Panamanian Spanish phrase templates 🇵🇦.
+          Tap any card in the stacked deck below to expand Panamanian Spanish phrase templates 🇵🇦.
         </Text>
 
         {/* Quick Horizontal Category Jump Bar */}
@@ -93,7 +69,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                   styles.categoryPill,
                   { backgroundColor: isSelected ? theme.accent : theme.bg, borderColor: theme.border },
                 ]}
-                onPress={() => handleToggleCard(preset.id)}
+                onPress={() => handleSelectCard(preset.id)}
                 activeOpacity={0.8}
               >
                 <MaterialCommunityIcons
@@ -107,7 +83,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                     { color: isSelected ? '#FFFFFF' : theme.accent },
                   ]}
                 >
-                  {preset.title.split('&')[0].trim()}
+                  {preset.category}
                 </Text>
               </TouchableOpacity>
             );
@@ -115,9 +91,9 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
         </ScrollView>
       </View>
 
-      {/* Accordion Deck: All 11 Categories with Relaxed Pace */}
+      {/* Playing Cards Fanned Stacked Deck */}
       <View style={styles.stackedDeckList}>
-        {SERVICE_PRESETS.map((preset) => {
+        {SERVICE_PRESETS.map((preset, index) => {
           const isExpanded = activeCardId === preset.id;
           const theme = getCategoryPastelTheme(preset.id);
 
@@ -128,15 +104,17 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                 styles.stackedCard,
                 {
                   backgroundColor: theme.bg,
-                  borderColor: isExpanded ? theme.accent : theme.border,
-                  borderWidth: isExpanded ? 2.5 : 1.5,
+                  borderColor: theme.border,
+                  marginTop: index > 0 ? -18 : 0, // Fanned playing cards overlap
+                  zIndex: isExpanded ? 100 : SERVICE_PRESETS.length - index,
+                  elevation: isExpanded ? 8 : SERVICE_PRESETS.length - index,
                 },
               ]}
             >
-              {/* Card Header Row */}
+              {/* Clean Single Title Header Row */}
               <TouchableOpacity
                 style={styles.cardHeaderRow}
-                onPress={() => handleToggleCard(preset.id)}
+                onPress={() => handleSelectCard(preset.id)}
                 activeOpacity={0.8}
               >
                 <View style={[styles.iconContainer, { backgroundColor: theme.badgeBg }]}>
@@ -146,10 +124,8 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                     color={theme.accent}
                   />
                 </View>
+                
                 <View style={styles.headerInfo}>
-                  <Text style={[styles.categoryLabel, { color: theme.accent, borderColor: theme.accent }]}>
-                    {preset.category}
-                  </Text>
                   <Text style={styles.cardTitle}>{preset.title}</Text>
                 </View>
 
@@ -197,7 +173,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 500, // Generous scroll space for smooth visibility of all 11 categories
+    paddingBottom: 80,
   },
   titleSection: {
     paddingHorizontal: 20,
@@ -255,13 +231,13 @@ const styles = StyleSheet.create({
   },
   stackedCard: {
     borderRadius: 22,
-    padding: 16,
-    marginBottom: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderWidth: 1.5,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
-    elevation: 2,
   },
   cardHeaderRow: {
     flexDirection: 'row',
@@ -269,33 +245,19 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   iconContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
   headerInfo: {
     flex: 1,
   },
-  categoryLabel: {
-    fontSize: 9.5,
-    fontWeight: '800',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 6,
-    borderWidth: 1,
-    alignSelf: 'flex-start',
-    marginBottom: 3,
-    backgroundColor: '#FFFFFF',
-  },
   cardTitle: {
-    fontSize: 16,
+    fontSize: 15.5,
     fontWeight: '800',
     color: '#000000',
-    marginTop: 1,
   },
   toggleCircle: {
     width: 28,
@@ -305,7 +267,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cardBody: {
-    marginTop: 14,
+    marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: 'rgba(0,0,0,0.06)',
