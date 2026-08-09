@@ -8,6 +8,8 @@ import {
   LayoutAnimation,
   Platform,
   UIManager,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
@@ -29,7 +31,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   onOpenPaywall,
   onSelectPhrasePrompt,
 }) => {
-  // Single active expanded card ID in the playing cards deck (defaults to Medical & Pharmacy)
+  // Single active expanded card ID (auto-updates on scroll up/down or tap)
   const [activeCardId, setActiveCardId] = useState<string>('medical_pharmacy');
 
   const handleSelectCard = (id: string) => {
@@ -39,22 +41,44 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
     setActiveCardId((prevId) => (prevId === id ? '' : id));
   };
 
+  // Scroll listener: Natural scroll-triggered card opening (scrolling UP or DOWN)
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+
+    // Calibrated 160px scroll step for natural scroll-driven card reveals
+    const cardStep = 160;
+    const computedIndex = Math.max(
+      0,
+      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 40) / cardStep))
+    );
+
+    const targetPreset = SERVICE_PRESETS[computedIndex];
+    if (targetPreset && targetPreset.id !== activeCardId) {
+      if (Platform.OS === 'ios' || Platform.OS === 'android') {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      }
+      setActiveCardId(targetPreset.id);
+    }
+  };
+
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
+      showsVerticalScrollIndicator={true}
+      onScroll={handleScroll}
+      scrollEventThrottle={32}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
       <View style={styles.titleSection}>
         <View style={styles.versionBadge}>
           <Ionicons name="sparkles" size={12} color={Colors.tertiary} />
-          <Text style={styles.versionText}>v1.1.4 • PLAYING CARDS STACKED DECK ✨</Text>
+          <Text style={styles.versionText}>v1.1.5 • NATURAL SCROLL CARD REVEALS ✨</Text>
         </View>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
-          Tap any card in the stacked deck below to expand Panamanian Spanish phrase templates 🇵🇦.
+          Scroll up or down naturally to reveal Panamanian Spanish phrase templates 🇵🇦.
         </Text>
 
         {/* Quick Horizontal Category Jump Bar */}
@@ -91,74 +115,73 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
         </ScrollView>
       </View>
 
-      {/* Playing Cards Fanned Stacked Deck */}
+      {/* Natural Scroll-Triggered Stacked Cards Deck */}
       <View style={styles.stackedDeckList}>
         {SERVICE_PRESETS.map((preset, index) => {
           const isExpanded = activeCardId === preset.id;
           const theme = getCategoryPastelTheme(preset.id);
 
           return (
-            <View
-              key={preset.id}
-              style={[
-                styles.stackedCard,
-                {
-                  backgroundColor: theme.bg,
-                  borderColor: theme.border,
-                  marginTop: index > 0 ? -18 : 0, // Fanned playing cards overlap
-                  zIndex: isExpanded ? 100 : SERVICE_PRESETS.length - index,
-                  elevation: isExpanded ? 8 : SERVICE_PRESETS.length - index,
-                },
-              ]}
-            >
-              {/* Clean Single Title Header Row */}
-              <TouchableOpacity
-                style={styles.cardHeaderRow}
-                onPress={() => handleSelectCard(preset.id)}
-                activeOpacity={0.8}
+            <View key={preset.id} style={styles.cardTrackWrapper}>
+              <View
+                style={[
+                  styles.stackedCard,
+                  {
+                    backgroundColor: theme.bg,
+                    borderColor: isExpanded ? theme.accent : theme.border,
+                    borderWidth: isExpanded ? 2.5 : 1.5,
+                  },
+                ]}
               >
-                <View style={[styles.iconContainer, { backgroundColor: theme.badgeBg }]}>
-                  <MaterialCommunityIcons
-                    name={preset.icon as any}
-                    size={22}
-                    color={theme.accent}
-                  />
-                </View>
-                
-                <View style={styles.headerInfo}>
-                  <Text style={styles.cardTitle}>{preset.title}</Text>
-                </View>
-
-                <View style={[styles.toggleCircle, { backgroundColor: theme.badgeBg }]}>
-                  <Ionicons
-                    name={isExpanded ? 'chevron-up' : 'chevron-down'}
-                    size={16}
-                    color={theme.accent}
-                  />
-                </View>
-              </TouchableOpacity>
-
-              {/* Expanded Phrasebook Content */}
-              {isExpanded && (
-                <View style={styles.cardBody}>
-                  <Text style={styles.description}>{preset.description}</Text>
-
-                  {/* Phrases List */}
-                  <View style={styles.phrasesList}>
-                    {preset.phrases.map((phrase, idx) => (
-                      <TouchableOpacity
-                        key={idx}
-                        style={[styles.phraseChip, { backgroundColor: theme.chipBg, borderColor: theme.border }]}
-                        onPress={() => onSelectPhrasePrompt(phrase.input, preset.title)}
-                        activeOpacity={0.7}
-                      >
-                        <Text style={styles.phraseText}>{phrase.title}</Text>
-                        <MaterialCommunityIcons name="chevron-right" size={16} color={theme.accent} />
-                      </TouchableOpacity>
-                    ))}
+                {/* Single Title Header Row */}
+                <TouchableOpacity
+                  style={styles.cardHeaderRow}
+                  onPress={() => handleSelectCard(preset.id)}
+                  activeOpacity={0.8}
+                >
+                  <View style={[styles.iconContainer, { backgroundColor: theme.badgeBg }]}>
+                    <MaterialCommunityIcons
+                      name={preset.icon as any}
+                      size={22}
+                      color={theme.accent}
+                    />
                   </View>
-                </View>
-              )}
+
+                  <View style={styles.headerInfo}>
+                    <Text style={styles.cardTitle}>{preset.title}</Text>
+                  </View>
+
+                  <View style={[styles.toggleCircle, { backgroundColor: theme.badgeBg }]}>
+                    <Ionicons
+                      name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                      size={16}
+                      color={theme.accent}
+                    />
+                  </View>
+                </TouchableOpacity>
+
+                {/* Expanded Phrasebook Content */}
+                {isExpanded && (
+                  <View style={styles.cardBody}>
+                    <Text style={styles.description}>{preset.description}</Text>
+
+                    {/* Phrases List */}
+                    <View style={styles.phrasesList}>
+                      {preset.phrases.map((phrase, idx) => (
+                        <TouchableOpacity
+                          key={idx}
+                          style={[styles.phraseChip, { backgroundColor: theme.chipBg, borderColor: theme.border }]}
+                          onPress={() => onSelectPhrasePrompt(phrase.input, preset.title)}
+                          activeOpacity={0.7}
+                        >
+                          <Text style={styles.phraseText}>{phrase.title}</Text>
+                          <MaterialCommunityIcons name="chevron-right" size={16} color={theme.accent} />
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </View>
+                )}
+              </View>
             </View>
           );
         })}
@@ -173,7 +196,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 80,
+    paddingBottom: 400, // Ample scroll padding for smooth natural scrolling across all 11 cards
   },
   titleSection: {
     paddingHorizontal: 20,
@@ -229,11 +252,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: 10,
   },
+  cardTrackWrapper: {
+    minHeight: 150, // Predictable outer layout track for zero scroll jumps
+    marginBottom: 10,
+  },
   stackedCard: {
     borderRadius: 22,
     paddingHorizontal: 16,
     paddingVertical: 14,
-    borderWidth: 1.5,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
