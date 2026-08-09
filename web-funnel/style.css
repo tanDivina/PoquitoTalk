@@ -1351,7 +1351,6 @@ textarea:focus {
 }
 
 .contractor-input,
-.contractor-select,
 .contractor-textarea {
   width: 100%;
   padding: 14px 18px;
@@ -1363,6 +1362,25 @@ textarea:focus {
   color: var(--text-charcoal);
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contractor-select {
+  width: 100%;
+  padding: 14px 54px 14px 18px;
+  background-color: var(--surface-container);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--text-charcoal);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234D463E' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 24px center;
+  background-size: 16px;
 }
 
 .contractor-input:focus,
