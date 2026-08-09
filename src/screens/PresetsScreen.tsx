@@ -41,15 +41,15 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
     setActiveCardId((prevId) => (prevId === id ? '' : id));
   };
 
-  // Scroll listener: Natural scroll-driven card opening across the overlapping stacked deck
+  // Scroll listener: Calibrated 34px step matches overlapping stacked card height for full 11-card scrolling
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollY = event.nativeEvent.contentOffset.y;
 
-    // Calibrated scroll step for overlapping stacked cards (~100px)
-    const cardStep = 100;
+    // 34px matches exact overlapping card spacing (-18px margin)
+    const cardStep = 34;
     const computedIndex = Math.max(
       0,
-      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 30) / cardStep))
+      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 20) / cardStep))
     );
 
     const targetPreset = SERVICE_PRESETS[computedIndex];
@@ -67,14 +67,14 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={true}
       onScroll={handleScroll}
-      scrollEventThrottle={32}
+      scrollEventThrottle={16}
     >
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} />
 
       <View style={styles.titleSection}>
         <View style={styles.versionBadge}>
           <Ionicons name="sparkles" size={12} color={Colors.tertiary} />
-          <Text style={styles.versionText}>v1.1.6 • STACKED DECK & SCROLL REVEALS ✨</Text>
+          <Text style={styles.versionText}>v1.1.7 • CALIBRATED STACK SCROLLING ✨</Text>
         </View>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
@@ -130,7 +130,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                   backgroundColor: theme.bg,
                   borderColor: isExpanded ? theme.accent : theme.border,
                   borderWidth: isExpanded ? 2.5 : 1.5,
-                  marginTop: index > 0 ? -18 : 0, // Zero white space - physical card overlap
+                  marginTop: index > 0 ? -18 : 0, // Physical playing cards overlap
                   zIndex: isExpanded ? 100 : SERVICE_PRESETS.length - index,
                   elevation: isExpanded ? 8 : SERVICE_PRESETS.length - index,
                 },
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 250, // Clean scroll padding for 100% visibility of all 11 cards
+    paddingBottom: 350, // Ample scroll space for full 11-card scrolling
   },
   titleSection: {
     paddingHorizontal: 20,
