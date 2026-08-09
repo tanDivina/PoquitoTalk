@@ -328,7 +328,19 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       {activePresetCategory && (
         <View style={styles.categoryBadgeRow}>
           <View style={styles.categoryBadge}>
-            <Ionicons name="folder-open-outline" size={14} color={Colors.secondary} />
+            <Ionicons
+              name={
+                activePresetCategory.toLowerCase().includes('taxi') || activePresetCategory.toLowerCase().includes('car')
+                  ? 'car'
+                  : activePresetCategory.toLowerCase().includes('boat') || activePresetCategory.toLowerCase().includes('water')
+                  ? 'boat'
+                  : activePresetCategory.toLowerCase().includes('restaurant') || activePresetCategory.toLowerCase().includes('dining')
+                  ? 'restaurant'
+                  : 'bookmark'
+              }
+              size={14}
+              color={Colors.secondary}
+            />
             <Text style={styles.categoryBadgeText}>{activePresetCategory}</Text>
           </View>
 
@@ -598,7 +610,10 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 16,
     color: Colors.onBackground,
-    minHeight: 70,
+    minHeight: 90,
+    lineHeight: 22,
+    paddingTop: 4,
+    paddingBottom: 4,
     textAlignVertical: 'top',
   },
   inputActions: {
