@@ -41,15 +41,15 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
     setActiveCardId((prevId) => (prevId === id ? '' : id));
   };
 
-  // Scroll listener: Natural scroll-triggered card opening (scrolling UP or DOWN)
+  // Scroll listener: Natural scroll-driven card opening across the overlapping stacked deck
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollY = event.nativeEvent.contentOffset.y;
 
-    // Calibrated 160px scroll step for natural scroll-driven card reveals
-    const cardStep = 160;
+    // Calibrated scroll step for overlapping stacked cards (~100px)
+    const cardStep = 100;
     const computedIndex = Math.max(
       0,
-      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 40) / cardStep))
+      Math.min(SERVICE_PRESETS.length - 1, Math.floor((scrollY + 30) / cardStep))
     );
 
     const targetPreset = SERVICE_PRESETS[computedIndex];
@@ -74,11 +74,11 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       <View style={styles.titleSection}>
         <View style={styles.versionBadge}>
           <Ionicons name="sparkles" size={12} color={Colors.tertiary} />
-          <Text style={styles.versionText}>v1.1.5 • NATURAL SCROLL CARD REVEALS ✨</Text>
+          <Text style={styles.versionText}>v1.1.6 • STACKED DECK & SCROLL REVEALS ✨</Text>
         </View>
         <Text style={styles.title}>Service Preset Templates</Text>
         <Text style={styles.subtitle}>
-          Scroll up or down naturally to reveal Panamanian Spanish phrase templates 🇵🇦.
+          Scroll up/down or tap any card in the deck to reveal Panamanian Spanish phrase templates 🇵🇦.
         </Text>
 
         {/* Quick Horizontal Category Jump Bar */}
@@ -115,73 +115,75 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
         </ScrollView>
       </View>
 
-      {/* Natural Scroll-Triggered Stacked Cards Deck */}
+      {/* Playing Cards Fanned Overlapping Stacked Deck */}
       <View style={styles.stackedDeckList}>
         {SERVICE_PRESETS.map((preset, index) => {
           const isExpanded = activeCardId === preset.id;
           const theme = getCategoryPastelTheme(preset.id);
 
           return (
-            <View key={preset.id} style={styles.cardTrackWrapper}>
-              <View
-                style={[
-                  styles.stackedCard,
-                  {
-                    backgroundColor: theme.bg,
-                    borderColor: isExpanded ? theme.accent : theme.border,
-                    borderWidth: isExpanded ? 2.5 : 1.5,
-                  },
-                ]}
+            <View
+              key={preset.id}
+              style={[
+                styles.stackedCard,
+                {
+                  backgroundColor: theme.bg,
+                  borderColor: isExpanded ? theme.accent : theme.border,
+                  borderWidth: isExpanded ? 2.5 : 1.5,
+                  marginTop: index > 0 ? -18 : 0, // Zero white space - physical card overlap
+                  zIndex: isExpanded ? 100 : SERVICE_PRESETS.length - index,
+                  elevation: isExpanded ? 8 : SERVICE_PRESETS.length - index,
+                },
+              ]}
+            >
+              {/* Single Title Header Row */}
+              <TouchableOpacity
+                style={styles.cardHeaderRow}
+                onPress={() => handleSelectCard(preset.id)}
+                activeOpacity={0.8}
               >
-                {/* Single Title Header Row */}
-                <TouchableOpacity
-                  style={styles.cardHeaderRow}
-                  onPress={() => handleSelectCard(preset.id)}
-                  activeOpacity={0.8}
-                >
-                  <View style={[styles.iconContainer, { backgroundColor: theme.badgeBg }]}>
-                    <MaterialCommunityIcons
-                      name={preset.icon as any}
-                      size={22}
-                      color={theme.accent}
-                    />
-                  </View>
+                <View style={[styles.iconContainer, { backgroundColor: theme.badgeBg }]}>
+                  <MaterialCommunityIcons
+                    name={preset.icon as any}
+                    size={22}
+                    color={theme.accent}
+                  />
+                </View>
 
-                  <View style={styles.headerInfo}>
-                    <Text style={styles.cardTitle}>{preset.title}</Text>
-                  </View>
+                <View style={styles.headerInfo}>
+                  <Text style={styles.cardTitle}>{preset.title}</Text>
+                </View>
 
-                  <View style={[styles.toggleCircle, { backgroundColor: theme.badgeBg }]}>
-                    <Ionicons
-                      name={isExpanded ? 'chevron-up' : 'chevron-down'}
-                      size={16}
-                      color={theme.accent}
-                    />
-                  </View>
-                </TouchableOpacity>
+                <View style={[styles.toggleCircle, { backgroundColor: theme.badgeBg }]}>
+                  <Ionicons
+                    name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                    size={16}
+                    color={theme.accent}
+                  />
+                </View>
+              </TouchableOpacity>
 
-                {/* Expanded Phrasebook Content */}
-                {isExpanded && (
-                  <View style={styles.cardBody}>
-                    <Text style={styles.description}>{preset.description}</Text>
+              {/* Expanded Phrasebook Content */}
+              {isExpanded && (
+                <View style={styles.cardBody}>
+                  <Text style={styles.description}>{preset.description}</Text>
 
-                    {/* Phrases List */}
-                    <View style={styles.phrasesList}>
-                      {preset.phrases.map((phrase, idx) => (
-                        <TouchableOpacity
-                          key={idx}
-                          style={[styles.phraseChip, { backgroundColor: theme.chipBg, borderColor: theme.border }]}
-                          onPress={() => onSelectPhrasePrompt(phrase.input, preset.title)}
-                          activeOpacity={0.7}
-                        >
-                          <Text style={styles.phraseText}>{phrase.title}</Text>
-                          <MaterialCommunityIcons name="chevron-right" size={16} color={theme.accent} />
-                        </TouchableOpacity>
-                      ))}
-                    </View>
+                  {/* Phrases List */}
+                  <View style={styles.phrasesList}>
+                    {preset.phrases.map((phrase, idx) => (
+                      <TouchableOpacity
+                        key={idx}
+                        style={[styles.phraseChip, { backgroundColor: theme.chipBg, borderColor: theme.border }]}
+                        onPress={() => onSelectPhrasePrompt(phrase.input, preset.title)}
+                        activeOpacity={0.7}
+                      >
+                        <Text style={styles.phraseText}>{phrase.title}</Text>
+                        <MaterialCommunityIcons name="chevron-right" size={16} color={theme.accent} />
+                      </TouchableOpacity>
+                    ))}
                   </View>
-                )}
-              </View>
+                </View>
+              )}
             </View>
           );
         })}
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 400, // Ample scroll padding for smooth natural scrolling across all 11 cards
+    paddingBottom: 250, // Clean scroll padding for 100% visibility of all 11 cards
   },
   titleSection: {
     paddingHorizontal: 20,
@@ -251,10 +253,6 @@ const styles = StyleSheet.create({
   stackedDeckList: {
     paddingHorizontal: 20,
     marginTop: 10,
-  },
-  cardTrackWrapper: {
-    minHeight: 150, // Predictable outer layout track for zero scroll jumps
-    marginBottom: 10,
   },
   stackedCard: {
     borderRadius: 22,
