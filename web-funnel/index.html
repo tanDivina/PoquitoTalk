@@ -6,10 +6,10 @@
   <title>PoquitoTalk — 1-Tap WhatsApp Voice Notes for Panamá 🇵🇦</title>
   <meta name="description" content="Translate and send 1-tap Panamanian Spanish WhatsApp voice notes to local plumbers, landlords, mechanics, and A/C repair services in Bocas del Toro, Panama." />
   
-  <!-- Canonical & Multilingual Hreflang Tags -->
+  <!-- Canonical & Multilingual Hreflang Tags per multilingual-url-seo skill -->
   <link rel="canonical" href="https://poquitotalk.hero-apps.com/" />
   <link rel="alternate" hreflang="en" href="https://poquitotalk.hero-apps.com/" />
-  <link rel="alternate" hreflang="es-PA" href="https://poquitotalk.hero-apps.com/index-es.html" />
+  <link rel="alternate" hreflang="es-PA" href="https://poquitotalk.hero-apps.com/es/" />
   <link rel="alternate" hreflang="x-default" href="https://poquitotalk.hero-apps.com/" />
 
   <!-- Open Graph & Social Cards -->
@@ -27,7 +27,7 @@
   <meta name="twitter:description" content="Generate polite Panamanian Spanish voice notes ready for WhatsApp in 1-tap." />
   <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/expo_go_qr.png" />
 
-  <link rel="stylesheet" href="style.css?v=1.1.3" />
+  <link rel="stylesheet" href="style.css?v=1.2.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
 
@@ -109,9 +109,10 @@
         <!-- Language Switcher Toggle -->
         <div class="lang-toggle">
           <a href="index.html" class="lang-btn active">🇺🇸 EN</a>
-          <a href="index-es.html" class="lang-btn">🇵🇦 ES</a>
+          <a href="es/" class="lang-btn">🇵🇦 ES</a>
         </div>
         <a href="#demo" class="nav-link">Live Demo</a>
+        <a href="#playstore" class="nav-link">Google Play</a>
         <a href="#faq" class="nav-link">FAQ</a>
         <a href="#pricing" class="nav-link">Pricing</a>
         <a href="#pricing" class="btn-primary-nav">Get Started <span class="arrow">→</span></a>
@@ -201,6 +202,47 @@
               <button id="play-audio-btn" class="btn-secondary-action" onclick="playDemoAudio()">
                 🔊 Play 👨 Diego Audio Note
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Google Play Store Waitlist Section -->
+  <section id="playstore" class="playstore-section">
+    <div class="container">
+      <div class="playstore-card">
+        <div class="playstore-icon-wrapper">
+          <svg width="48" height="48" viewBox="0 0 512 512" fill="none">
+            <path d="M48 44.5v423c0 10.3 8.3 18.6 18.6 18.6 3.7 0 7.3-1.1 10.4-3.1L274.6 270 77 72.4c-3.1-2-6.7-3.1-10.4-3.1C56.3 69.3 48 77.6 48 87.9v-43.4z" fill="#00E676"/>
+            <path d="M344.8 199.8L274.6 270l70.2 70.2 78.4-45.3c14.2-8.2 14.2-21.6 0-29.8l-78.4-65.3z" fill="#FFD600"/>
+            <path d="M77 439.6L274.6 270 344.8 340.2l-241.6 139.5c-7.9 4.6-17.6 2.8-23.4-4.2-1.8-2.2-2.8-5-2.8-7.9v-27.9z" fill="#FF3D00"/>
+            <path d="M77 72.4L344.8 199.8 274.6 270 77 439.6V72.4z" fill="#00B0FF"/>
+          </svg>
+        </div>
+        
+        <div class="playstore-content">
+          <div class="playstore-badge">🤖 Android Release Incoming</div>
+          <h2>Get Notified When PoquitoTalk Hits Google Play</h2>
+          <p>Be the first in Bocas del Toro & Panama to download the official Android app. Drop your email below to get VIP launch access and bonus credits!</p>
+          
+          <form id="playstore-form-en" class="playstore-form" onsubmit="submitPlayStoreSignup(event, 'playstore-form-en')">
+            <div class="playstore-input-group">
+              <input type="email" id="playstore-email-en" required placeholder="Enter your email address..." class="playstore-input" />
+              <button type="submit" id="playstore-btn-en" class="btn-playstore-submit">
+                <span>Notify Me</span>
+                <span class="arrow">→</span>
+              </button>
+            </div>
+            <p class="playstore-disclaimer">🔒 We respect your privacy. Zero spam — only 1 email when the app goes live.</p>
+          </form>
+
+          <div id="playstore-success-en" class="playstore-success-box" style="display: none;">
+            <div class="success-icon">🎉</div>
+            <div class="success-text">
+              <h4>You're on the Play Store VIP List!</h4>
+              <p>We've reserved your spot. We'll send a direct download link to your email the second PoquitoTalk goes live on Google Play Store.</p>
             </div>
           </div>
         </div>
@@ -448,6 +490,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=1.1.0"></script>
+  <script src="script.js?v=1.2.0"></script>
 </body>
 </html>

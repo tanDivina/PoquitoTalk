@@ -1035,3 +1035,209 @@ textarea:focus {
   padding: 0 24px 24px;
 }
 
+/* Google Play Store Waitlist Section (Hero-Apps Dark Glassmorphism) */
+.playstore-section {
+  padding: 60px 0 80px;
+  background: var(--bg-cream);
+}
+
+.playstore-card {
+  background: #0C0C0F;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  padding: 48px;
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.playstore-card::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(37, 211, 102, 0.18) 0%, rgba(0, 0, 0, 0) 70%);
+  pointer-events: none;
+}
+
+.playstore-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.05);
+}
+
+.playstore-content {
+  flex: 1;
+}
+
+.playstore-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 230, 118, 0.12);
+  border: 1px solid rgba(0, 230, 118, 0.25);
+  color: #00E676;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.playstore-content h2 {
+  font-family: 'Lexend', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+
+.playstore-content p {
+  color: #A1A1AA;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 620px;
+}
+
+.playstore-form {
+  max-width: 580px;
+}
+
+.playstore-input-group {
+  display: flex;
+  gap: 12px;
+  background: rgba(24, 24, 27, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 6px;
+  transition: border-color 0.25s ease;
+}
+
+.playstore-input-group:focus-within {
+  border-color: #25D366;
+  box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.15);
+}
+
+.playstore-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 12px 18px;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+}
+
+.playstore-input::placeholder {
+  color: #71717A;
+}
+
+.btn-playstore-submit {
+  background: linear-gradient(135deg, #25D366 0%, #10B981 100%);
+  color: #042F13;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 24px;
+  font-family: 'Lexend', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-playstore-submit:hover {
+  filter: brightness(1.1);
+}
+
+.btn-playstore-submit:hover .arrow {
+  transform: translateX(4px);
+}
+
+.playstore-disclaimer {
+  font-size: 12px !important;
+  color: #71717A !important;
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
+}
+
+.playstore-success-box {
+  background: rgba(37, 211, 102, 0.08);
+  border: 1px solid rgba(37, 211, 102, 0.2);
+  border-radius: 18px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 580px;
+}
+
+.playstore-success-box .success-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.playstore-success-box h4 {
+  font-family: 'Lexend', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  color: #25D366;
+  margin-bottom: 6px;
+}
+
+.playstore-success-box p {
+  color: #D4D4D8 !important;
+  font-size: 14px !important;
+  margin-bottom: 0 !important;
+  line-height: 1.5 !important;
+}
+
+@media (max-width: 768px) {
+  .playstore-card {
+    padding: 28px 20px;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .playstore-input-group {
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    padding: 0;
+    gap: 10px;
+  }
+
+  .playstore-input {
+    background: rgba(24, 24, 27, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    padding: 14px 16px;
+  }
+
+  .btn-playstore-submit {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+  }
+}
+

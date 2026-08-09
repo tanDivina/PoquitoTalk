@@ -6,10 +6,10 @@
   <title>PoquitoTalk — Notas de Voz de WhatsApp en 1-Tap para Panamá 🇵🇦</title>
   <meta name="description" content="Traduce y envía notas de voz de WhatsApp en español panameño a plomeros, mecánicos, arrendadores y técnicos de aire acondicionado en Bocas del Toro, Panamá." />
   
-  <!-- Canonical & Multilingual Hreflang Tags -->
-  <link rel="canonical" href="https://poquitotalk.hero-apps.com/index-es.html" />
+  <!-- Canonical & Multilingual Hreflang Tags per multilingual-url-seo skill -->
+  <link rel="canonical" href="https://poquitotalk.hero-apps.com/es/" />
   <link rel="alternate" hreflang="en" href="https://poquitotalk.hero-apps.com/" />
-  <link rel="alternate" hreflang="es-PA" href="https://poquitotalk.hero-apps.com/index-es.html" />
+  <link rel="alternate" hreflang="es-PA" href="https://poquitotalk.hero-apps.com/es/" />
   <link rel="alternate" hreflang="x-default" href="https://poquitotalk.hero-apps.com/" />
 
   <!-- Open Graph & Social Cards -->
@@ -17,7 +17,7 @@
   <meta property="og:site_name" content="PoquitoTalk" />
   <meta property="og:title" content="PoquitoTalk — Notas de Voz de WhatsApp para Panamá 🇵🇦" />
   <meta property="og:description" content="Comunícate fácilmente con servicios locales en Bocas del Toro. Impulsado por Google Gemini AI." />
-  <meta property="og:url" content="https://poquitotalk.hero-apps.com/index-es.html" />
+  <meta property="og:url" content="https://poquitotalk.hero-apps.com/es/" />
   <meta property="og:image" content="https://poquitotalk.hero-apps.com/expo_go_qr.png" />
   <meta property="og:locale" content="es_PA" />
 
@@ -27,7 +27,7 @@
   <meta name="twitter:description" content="Genera notas de voz amables en español panameño listas para enviar por WhatsApp en 1-tap." />
   <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/expo_go_qr.png" />
 
-  <link rel="stylesheet" href="style.css?v=1.1.3" />
+  <link rel="stylesheet" href="../style.css?v=1.2.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
 
@@ -42,7 +42,7 @@
         "name": "PoquitoTalk",
         "operatingSystem": "iOS, Android, Web",
         "applicationCategory": "TravelApplication",
-        "url": "https://poquitotalk.hero-apps.com/index-es.html",
+        "url": "https://poquitotalk.hero-apps.com/es/",
         "description": "Generador de notas de voz de WhatsApp en español de Panamá en 1-tap para extranjeros y residentes en Bocas del Toro, Panamá.",
         "offers": {
           "@type": "AggregateOffer",
@@ -101,10 +101,11 @@
       <div class="nav-links">
         <!-- Language Switcher Toggle -->
         <div class="lang-toggle">
-          <a href="index.html" class="lang-btn">🇺🇸 EN</a>
-          <a href="index-es.html" class="lang-btn active">🇵🇦 ES</a>
+          <a href="../" class="lang-btn">🇺🇸 EN</a>
+          <a href="./" class="lang-btn active">🇵🇦 ES</a>
         </div>
         <a href="#demo" class="nav-link">Demo en Vivo</a>
+        <a href="#playstore" class="nav-link">Google Play</a>
         <a href="#faq" class="nav-link">Preguntas Frecuentes</a>
         <a href="#pricing" class="nav-link">Precios</a>
         <a href="#pricing" class="btn-primary-nav">Comenzar <span class="arrow">→</span></a>
@@ -129,8 +130,8 @@
         <a href="#demo" class="btn-hero-primary">
           Probar Demo en Vivo <span class="arrow">→</span>
         </a>
-        <a href="#pricing" class="btn-hero-secondary">
-          Obtener Créditos Ilimitados
+        <a href="#playstore" class="btn-hero-secondary">
+          Lista de Espera Google Play 🤖
         </a>
       </div>
 
@@ -159,18 +160,18 @@
         </div>
 
         <div class="demo-box">
-          <label for="demo-input">MENSAJE ORIGINAL (INGLÉS / ESPAÑOL)</label>
-          <textarea id="demo-input" rows="3" placeholder="ej. ¡Hola! Mi aire acondicionado está goteando agua en la habitación..."></textarea>
+          <label for="demo-input">MENSAJE ORIGINAL (INGLÉS O ESPAÑOL)</label>
+          <textarea id="demo-input" rows="3" placeholder="Ej. ¡Hola! Mi aire acondicionado está goteando agua en la recámara..."></textarea>
 
           <div class="presets-pills">
-            <button class="pill-btn" onclick="setDemoPrompt('A/C Leaking', 'Hi! My air conditioning is leaking water inside the bedroom.')">❄️ Reparación de A/C</button>
-            <button class="pill-btn" onclick="setDemoPrompt('Boat Outboard', 'Hi! The outboard motor on my boat won\'t start at the dock.')">🚤 Motor Fuera de Borda</button>
-            <button class="pill-btn" onclick="setDemoPrompt('Starlink Issue', 'Hello! My Starlink dish lost signal connection today.')">📡 Antena Starlink</button>
-            <button class="pill-btn" onclick="setDemoPrompt('Plumber Help', 'Hi! The water pressure in the main bathroom dropped.')">🔧 Plomería / Agua</button>
+            <button class="pill-btn" onclick="setDemoPrompt('Aire Acondicionado', '¡Hola! Mi aire acondicionado está goteando agua en la recámara.')">❄️ Aire Acondicionado</button>
+            <button class="pill-btn" onclick="setDemoPrompt('Motor Fuera de Borda', '¡Buenas! El motor fuera de borda de mi lancha no arranca.')">🚤 Motor de Lancha</button>
+            <button class="pill-btn" onclick="setDemoPrompt('Problema Starlink', '¡Buenas! La antena de Starlink perdió la señal hoy.')">📡 Starlink</button>
+            <button class="pill-btn" onclick="setDemoPrompt('Plomería', '¡Buenas! Bajó la presión del agua en el baño principal.')">🔧 Plomero</button>
           </div>
 
           <button id="translate-btn" class="btn-translate" onclick="runDemoTranslation()">
-            Traducir a Español Panameño 🇵🇦 <span class="arrow">→</span>
+            Traducir al Español Panameño 🇵🇦 <span class="arrow">→</span>
           </button>
 
           <div id="result-box" class="result-box" style="display: none;">
@@ -179,7 +180,7 @@
               
               <div class="voice-selector-chips">
                 <button class="voice-chip-btn active" data-voice="Diego" onclick="selectDemoVoice('Diego')">👨 Diego</button>
-                <button class="voice-chip-btn" data-voice="Sofia" onclick="selectDemoVoice('Sofia')">👩 Sofía</button>
+                <button class="voice-chip-btn" data-voice="Sofia" onclick="selectDemoVoice('Sofia')">👩 Sofia</button>
                 <button class="voice-chip-btn" data-voice="Valeria" onclick="selectDemoVoice('Valeria')">👧 Valeria</button>
                 <button class="voice-chip-btn" data-voice="Mateo" onclick="selectDemoVoice('Mateo')">🧔 Mateo</button>
               </div>
@@ -189,11 +190,53 @@
             <div class="result-actions">
               <button class="btn-whatsapp" onclick="sendDemoWhatsApp()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-                Enviar Nota de Voz por WhatsApp
+                Enviar Nota de Voz a WhatsApp
               </button>
+
               <button id="play-audio-btn-es" class="btn-secondary-action" onclick="playDemoAudio()">
                 🔊 Reproducir Audio 👨 Diego
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Google Play Store Waitlist -->
+  <section id="playstore" class="playstore-section">
+    <div class="container">
+      <div class="playstore-card">
+        <div class="playstore-icon-wrapper">
+          <svg width="48" height="48" viewBox="0 0 512 512" fill="none">
+            <path d="M48 44.5v423c0 10.3 8.3 18.6 18.6 18.6 3.7 0 7.3-1.1 10.4-3.1L274.6 270 77 72.4c-3.1-2-6.7-3.1-10.4-3.1C56.3 69.3 48 77.6 48 87.9v-43.4z" fill="#00E676"/>
+            <path d="M344.8 199.8L274.6 270l70.2 70.2 78.4-45.3c14.2-8.2 14.2-21.6 0-29.8l-78.4-65.3z" fill="#FFD600"/>
+            <path d="M77 439.6L274.6 270 344.8 340.2l-241.6 139.5c-7.9 4.6-17.6 2.8-23.4-4.2-1.8-2.2-2.8-5-2.8-7.9v-27.9z" fill="#FF3D00"/>
+            <path d="M77 72.4L344.8 199.8 274.6 270 77 439.6V72.4z" fill="#00B0FF"/>
+          </svg>
+        </div>
+        
+        <div class="playstore-content">
+          <div class="playstore-badge">🤖 Lanzamiento Android Próximamente</div>
+          <h2>¡Recibe una Notificación cuando Estemos en Google Play!</h2>
+          <p>Sé el primero en Bocas del Toro y Panamá en descargar la app oficial para Android. Deja tu correo a continuación para recibir acceso VIP al lanzamiento y créditos de regalo.</p>
+          
+          <form id="playstore-form-es" class="playstore-form" onsubmit="submitPlayStoreSignup(event, 'playstore-form-es')">
+            <div class="playstore-input-group">
+              <input type="email" id="playstore-email-es" required placeholder="Tu correo electrónico..." class="playstore-input" />
+              <button type="submit" id="playstore-btn-es" class="btn-playstore-submit">
+                <span>Notificarme</span>
+                <span class="arrow">→</span>
+              </button>
+            </div>
+            <p class="playstore-disclaimer">🔒 Respetamos tu privacidad. Cero spam: solo 1 correo cuando la app esté disponible en la tienda.</p>
+          </form>
+
+          <div id="playstore-success-es" class="playstore-success-box" style="display: none;">
+            <div class="success-icon">🎉</div>
+            <div class="success-text">
+              <h4>¡Estás en la Lista VIP de Google Play!</h4>
+              <p>Hemos reservado tu lugar. Te enviaremos el enlace directo de descarga a tu correo en cuanto PoquitoTalk esté disponible en Google Play Store.</p>
             </div>
           </div>
         </div>
@@ -212,51 +255,31 @@
       <div class="faq-grid">
         <div class="faq-card">
           <button class="faq-question" onclick="toggleFaq(this)">
-            <span>¿El técnico o plomero necesita instalar PoquitoTalk?</span>
+            <span>¿El trabajador o plomero necesita instalar PoquitoTalk?</span>
             <span class="faq-toggle-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>¡No! PoquitoTalk genera archivos de audio .mp3 estándar y texto educado que se envían directamente a los chats nativos de WhatsApp. El destinatario no necesita instalar ninguna aplicación especial.</p>
+            <p>¡No! PoquitoTalk genera archivos de voz .mp3 estándar y texto educado que se comparten directamente en los chats nativos de WhatsApp. El destinatario no necesita ninguna app especial.</p>
           </div>
         </div>
 
         <div class="faq-card">
           <button class="faq-question" onclick="toggleFaq(this)">
-            <span>¿Por qué las notas de voz son mejores que el texto traducido en Panamá?</span>
+            <span>¿Por qué las notas de voz funcionan mejor que el texto traducido en Panamá?</span>
             <span class="faq-toggle-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>Los profesionales y trabajadores en Bocas del Toro suelen estar manejando lanchas o en el trabajo. Escuchar una nota de voz breve y amable en español panameño recibe una respuesta 3 veces más rápida que el texto traducido formal.</p>
+            <p>Los trabajadores locales en Bocas del Toro conducen lanchas o están en obras. Escuchar una nota de voz educada en español panameño de 10 segundos recibe una respuesta más rápida que un texto formal traducido.</p>
           </div>
         </div>
 
         <div class="faq-card">
           <button class="faq-question" onclick="toggleFaq(this)">
-            <span>¿Qué escenarios locales de Panamá vienen incluidos?</span>
+            <span>¿Qué escenarios locales de Panamá están incluidos?</span>
             <span class="faq-toggle-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>PoquitoTalk incluye plantillas para fugas de aire acondicionado, fallas en motores fuera de borda, alineación de Starlink, plomería, consultas al arrendador, citas médicas y solicitud de taxis.</p>
-          </div>
-        </div>
-
-        <div class="faq-card" onclick="toggleFaq(this)">
-          <button class="faq-question" type="button">
-            <span>¿Cómo funcionan las notas de voz entre la aplicación móvil y la página web?</span>
-            <span class="faq-toggle-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>Tu Paquete de 50 Notas de Voz o Membresía Pro desbloquea instantáneamente las voces naturales tanto en nuestro sitio web como en la app móvil. ¡Las notas de voz nunca vencen!</p>
-          </div>
-        </div>
-
-        <div class="faq-card" onclick="toggleFaq(this)">
-          <button class="faq-question" type="button">
-            <span>¿Qué pasa si pierdo la señal de internet en Panamá?</span>
-            <span class="faq-toggle-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>¡No te preocupes! Puedes seguir manteniendo presionado para hablar incluso sin internet o viajando en lancha. PoquitoTalk guarda tu mensaje de forma segura y lo envía automáticamente apenas recuperes la señal.</p>
+            <p>PoquitoTalk incluye frases predeterminadas para reparación de aire acondicionado, motores de lanchas, antenas Starlink, plomería, citas médicas y consultas para arrendadores.</p>
           </div>
         </div>
 
@@ -266,7 +289,7 @@
             <span class="faq-toggle-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>PoquitoTalk está disponible actualmente en Google Play para dispositivos Android y en la web. ¡Nuestra aplicación para iPhone (iOS) está en desarrollo y se lanzará muy pronto!</p>
+            <p>PoquitoTalk está disponible en la web y muy pronto estará disponible en Google Play Store para Android. ¡Regístrate en nuestro formulario arriba para ser notificado al instante!</p>
           </div>
         </div>
       </div>
@@ -277,72 +300,72 @@
   <section id="pricing" class="pricing-section">
     <div class="container">
       <div class="section-title">
-        <h2>Elige tu Pase de PoquitoTalk</h2>
-        <p>Diseñado específicamente para Bocas del Toro y la comunidad en Panamá 🇵🇦</p>
+        <h2>Selecciona tu Pase de PoquitoTalk</h2>
+        <p>Diseñado para Bocas del Toro y la comunidad en Panamá 🇵🇦</p>
       </div>
 
       <div class="pricing-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-        <!-- 1. Paquete de Créditos Unificados -->
+        <!-- 1. Paquete de Créditos -->
         <div class="pricing-card">
           <div class="plan-header">
-            <h3>Paquete 50 Créditos Poquito</h3>
-            <p class="plan-desc">Créditos flexibles de pago por uso</p>
+            <h3>Paquete de 50 Créditos</h3>
+            <p class="plan-desc">Créditos flexibles sin vencimiento</p>
           </div>
           <div class="price-box">
             <span class="currency">$</span><span class="amount">4.99</span>
-            <span class="period">pago único • nunca vence</span>
+            <span class="period">pago único • no vence</span>
           </div>
           <ul class="features">
             <li>✓ <strong>50 Créditos</strong> para Notas de Voz y Walkie-Talkie</li>
             <li>✓ 1 Nota de Voz Personalizada = 1 Crédito</li>
-            <li>✓ 1 Sesión de Walkie-Talkie = 5 Créditos</li>
-            <li>✓ Voz del dispositivo gratis cuando se agoten</li>
-            <li>✓ Sincronización instantánea con la App Móvil</li>
+            <li>✓ 1 Sesión de Walkie = 5 Créditos</li>
+            <li>✓ Voz nativa de respaldo sin costo</li>
+            <li>✓ Sincronización instantánea</li>
           </ul>
           <button class="btn-checkout" onclick="initiateStripeCheckout('credits_50')">
             Obtener 50 Créditos ($4.99) <span class="arrow">→</span>
           </button>
         </div>
 
-        <!-- 2. Pase Semanal Turístico -->
+        <!-- 2. Pase Turista -->
         <div class="pricing-card">
           <div class="plan-header">
-            <h3>Pase Semanal Turístico</h3>
-            <p class="plan-desc">Para vacaciones y viajes cortos (7 Días)</p>
+            <h3>Pase Turista Semanal</h3>
+            <p class="plan-desc">Para viajes cortos y vacaciones (7 Días)</p>
           </div>
           <div class="price-box">
             <span class="currency">$</span><span class="amount">4.99</span>
             <span class="period">/ semana</span>
           </div>
           <ul class="features">
-            <li>✓ <strong>100</strong> Notas de Voz de Estudio / semana</li>
+            <li>✓ <strong>100</strong> Notas de Voz Studio / semana</li>
             <li>✓ <strong>25</strong> Sesiones de Walkie-Talkie / semana</li>
-            <li>✓ Todas las 8 plantillas (A/C, Lanchas, Starlink)</li>
-            <li>✓ Voces de estudio (Diego, Sofía, Mateo)</li>
+            <li>✓ Los 8 escenarios de servicio</li>
+            <li>✓ Todas las voces de estudio</li>
             <li>✓ Sin compromisos a largo plazo</li>
           </ul>
           <button class="btn-checkout" onclick="initiateStripeCheckout('tourist_weekly')">
-            Obtener Pase Turístico ($4.99) <span class="arrow">→</span>
+            Pase de 7 Días ($4.99) <span class="arrow">→</span>
           </button>
         </div>
 
-        <!-- 3. Membresía Mensual Pro -->
+        <!-- 3. Pro Mensual -->
         <div class="pricing-card featured">
           <div class="featured-badge">MÁS POPULAR</div>
           <div class="plan-header">
-            <h3>Membresía Mensual Pro</h3>
-            <p class="plan-desc">Para residentes permanentes de Panamá, nómadas y expatriados</p>
+            <h3>Membresía Pro Mensual</h3>
+            <p class="plan-desc">Para residentes permanentes y nómadas digitales</p>
           </div>
           <div class="price-box">
             <span class="currency">$</span><span class="amount">12.99</span>
             <span class="period">/ mes</span>
           </div>
           <ul class="features">
-            <li>✓ <strong>300</strong> Notas de Voz de Estudio / mes</li>
+            <li>✓ <strong>300</strong> Notas de Voz Studio / mes</li>
             <li>✓ <strong>65</strong> Sesiones de Walkie-Talkie / mes</li>
-            <li>✓ Todas las voces (Diego, Mateo, Sofía, Valeria)</li>
-            <li>✓ Motor de limpieza de acento prioritario</li>
-            <li>✓ Cancela cuando quieras en 1 toque</li>
+            <li>✓ Personajes de Voz (Diego, Mateo, Sofia, Valeria)</li>
+            <li>✓ Motor Prioritario de Modismos Panameños</li>
+            <li>✓ Cancela cuando quieras en 1-Tap</li>
           </ul>
           <button class="btn-checkout featured-btn" onclick="initiateStripeCheckout('pro_monthly')">
             Suscribirse a Pro ($12.99/mes) <span class="arrow">→</span>
@@ -357,8 +380,8 @@
     <div class="container footer-content">
       <p>© 2026 Hero-Apps • Diseñado para Bocas del Toro y Panamá 🇵🇦</p>
       <div class="footer-links">
-        <a href="privacy.html">Política de Privacidad</a>
-        <a href="mailto:support@hero-apps.com">Soporte Técnico</a>
+        <a href="../privacy.html">Política de Privacidad</a>
+        <a href="mailto:support@hero-apps.com">Soporte</a>
       </div>
     </div>
   </footer>
@@ -379,7 +402,7 @@
     <div class="drawer-header">
       <div>
         <h3>Comparte tus Comentarios</h3>
-        <p>¡Ayúdanos a mejorar PoquitoTalk para la comunidad!</p>
+        <p>¡Ayúdanos a mejorar PoquitoTalk!</p>
       </div>
       <button class="drawer-close-btn" onclick="closeFeedbackDrawer()">✕</button>
     </div>
@@ -399,7 +422,7 @@
 
         <!-- Rating Stars -->
         <div class="form-group">
-          <label>CALIFICACIÓN</label>
+          <label>VALORACIÓN</label>
           <div class="stars-row">
             <span class="star" onclick="setRating(1)">★</span>
             <span class="star" onclick="setRating(2)">★</span>
@@ -412,34 +435,26 @@
         <!-- Comments -->
         <div class="form-group">
           <label for="fb-comment">TUS COMENTARIOS</label>
-          <textarea id="fb-comment" required rows="4" placeholder="Dinos qué te gusta o qué función necesitas..."></textarea>
+          <textarea id="fb-comment" required rows="4" placeholder="Escribe tus comentarios aquí..."></textarea>
         </div>
 
         <!-- Email -->
         <div class="form-group">
-          <label for="fb-email">CORREO ELECTRÓNICO <span class="subtext">(Opcional para respuesta)</span></label>
+          <label for="fb-email">CORREO ELECTRÓNICO <span class="subtext">(Opcional)</span></label>
           <input type="email" id="fb-email" placeholder="tu@ejemplo.com" />
         </div>
 
         <button type="submit" id="fb-submit-btn" class="btn-submit-feedback">
-          Enviar Comentario →
+          Enviar Comentarios →
         </button>
       </form>
 
       <div id="fb-success-msg" class="success-msg" style="display: none;">
-        🎉 ¡Gracias! Tus comentarios se han enviado directamente a nuestro equipo.
+        🎉 ¡Gracias! Tus comentarios han sido enviados directamente a nuestro equipo.
       </div>
     </div>
   </div>
 
-  <!-- Cookie Consent Banner -->
-  <div id="cookie-banner" class="cookie-banner">
-    <div class="cookie-content">
-      <span>🍪 <strong>Aviso de Cookies y Privacidad</strong>: Utilizamos cookies esenciales para recordar tus preferencias de idioma y guardar la sesión de tus traducciones de forma local. Consulta nuestra <a href="privacy.html">Política de Privacidad</a>.</span>
-      <button class="btn-cookie-accept" onclick="acceptCookieConsent()">Aceptar Cookies Esenciales</button>
-    </div>
-  </div>
-
-  <script src="script.js?v=1.1.0"></script>
+  <script src="../script.js?v=1.2.0"></script>
 </body>
 </html>

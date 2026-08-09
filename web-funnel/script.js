@@ -169,7 +169,7 @@ async function submitWebFeedback(e) {
   document.getElementById('fb-success-msg').style.display = 'block';
 }
 
-// Cookie Consent Banner Handling
+// Cookie Consent Banner & Waitlist Persistence Handling
 window.addEventListener('DOMContentLoaded', () => {
   const consent = localStorage.getItem('poquitotalk_cookie_consent');
   if (!consent) {
@@ -178,6 +178,22 @@ window.addEventListener('DOMContentLoaded', () => {
       if (banner) banner.classList.add('show');
     }, 1000);
   }
+
+  // Check if user already signed up for Google Play Store waitlist
+  try {
+    const waitlist = JSON.parse(localStorage.getItem('poquitotalk_playstore_waitlist') || '[]');
+    if (waitlist.length > 0) {
+      ['playstore-form-en', 'playstore-form-es'].forEach(id => {
+        const form = document.getElementById(id);
+        const isEs = id.endsWith('-es');
+        const successBox = document.getElementById(isEs ? 'playstore-success-es' : 'playstore-success-en');
+        if (form && successBox) {
+          form.style.display = 'none';
+          successBox.style.display = 'flex';
+        }
+      });
+    }
+  } catch (e) {}
 });
 
 function acceptCookieConsent() {
@@ -195,5 +211,53 @@ function toggleFaq(target) {
   if (!isOpen) {
     card.classList.add('open');
   }
+}
+
+// Google Play Store Waitlist Sign-up Handler (FormSubmit.co AJAX + LocalStorage Caching)
+async function submitPlayStoreSignup(e, formId) {
+  e.preventDefault();
+  const isSpanish = formId.endsWith('-es');
+  const emailInput = document.getElementById(isSpanish ? 'playstore-email-es' : 'playstore-email-en');
+  const submitBtn = document.getElementById(isSpanish ? 'playstore-btn-es' : 'playstore-btn-en');
+  const successBox = document.getElementById(isSpanish ? 'playstore-success-es' : 'playstore-success-en');
+  const formElement = document.getElementById(formId);
+
+  const email = emailInput ? emailInput.value.trim() : '';
+  if (!email || !email.includes('@')) return;
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span>${isSpanish ? 'Enviando...' : 'Registering...'}</span>`;
+  }
+
+  const payload = {
+    _subject: `[PoquitoTalk Play Store Waitlist] New Android Sign-Up`,
+    Email: email,
+    Source: 'PoquitoTalk Web Funnel',
+    Language: isSpanish ? 'Spanish (es-PA)' : 'English (en-US)',
+    SubmittedAt: new Date().toLocaleString('en-US', { timeZone: 'America/Panama' }),
+    PageURL: window.location.href,
+    _captcha: 'false'
+  };
+
+  try {
+    await fetch('https://formsubmit.co/ajax/support@hero-apps.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {
+    console.warn('FormSubmit dispatch error:', err);
+  }
+
+  // Cache locally to prevent redundant submissions
+  try {
+    const history = JSON.parse(localStorage.getItem('poquitotalk_playstore_waitlist') || '[]');
+    history.unshift({ ...payload, timestamp: Date.now() });
+    localStorage.setItem('poquitotalk_playstore_waitlist', JSON.stringify(history));
+  } catch (e) {}
+
+  if (formElement) formElement.style.display = 'none';
+  if (successBox) successBox.style.display = 'flex';
 }
 
