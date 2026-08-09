@@ -63,6 +63,24 @@ export async function translateWithGemma(
     'hello, i accidentally locked myself out. do you have a spare key nearby?': 'Hola, me quedé fuera por accidente. ¿Tendrá un duplicado de la llave cerca?',
     'hi, i sent the rent payment via transfer and attached the proof.': 'Buenas, ya le envié el pago del alquiler por transferencia y le adjunté el comprobante.',
     'hi, the water pressure in the shower dropped significantly today.': '¡Buenas! La presión del agua en la ducha bajó por completo hoy.',
+
+    // Land Taxi & Drivers
+    'hi! are you available for a taxi ride to playa bluff / paunch today?': '¡Buenas! ¿Tendrá disponibilidad para un viaje en taxi a Playa Bluff / Paunch hoy?',
+    'hello, what is your rate for an airport pickup transfer in bocas town?': 'Hola, ¿cuál es su tarifa para un traslado desde el aeropuerto en Bocas Town?',
+    'hi, how much do you charge for half-day driver service around isla colón?': '¡Buenas! ¿Cuánto cobra por el servicio de chofer por medio día alrededor de Isla Colón?',
+    'hi, i need a land taxi driver to pick me up for a trip to playa bluff.': '¡Buenas! Necesito un chofer de taxi para ir a Playa Bluff, por favor.',
+
+    // Water Taxi & Boats
+    'hi! is a water taxi available to take 2 people to red frog beach right now?': '¡Buenas! ¿Tendrá lancha disponible para llevar a 2 personas a Red Frog Beach ahora mismo?',
+    'hello, how much is the boat ride per person from bocas town to carenero / old bank?': 'Hola, ¿cuánto cuesta el pasaje en lancha por persona de Bocas Town a Carenero / Old Bank?',
+    'hi! are water taxi boats running until late tonight for return trips?': '¡Buenas! ¿Las lanchas estarán prestando servicio hasta tarde noche para el viaje de regreso?',
+    'hi, is a water taxi boat available to take us to red frog beach right now?': '¡Buenas! ¿Tendrá lancha disponible para llevarnos a Red Frog Beach ahora mismo?',
+
+    // Restaurants & Reservations
+    'hi! i would like to reserve a table for 4 people tonight at 7:30 pm, please.': '¡Buenas! Quisiera reservar una mesa para 4 personas esta noche a las 7:30 PM, por favor.',
+    'hello, do you offer vegetarian or gluten-free meal options on your menu?': 'Hola, ¿ofrecen opciones vegetarianas o sin gluten en su menú?',
+    'hi! could you send me your current food menu and today\'s specials via whatsapp?': '¡Buenas! ¿Podría enviarme el menú actual y los platos del día por WhatsApp, por favor?',
+    'hi, i would like to reserve a dinner table for 4 people tonight at 7:30 pm.': '¡Buenas! Quisiera reservar una mesa para cenar para 4 personas esta noche a las 7:30 PM.',
   };
 
   if (panamaQuickMap[normalizedInput]) {
