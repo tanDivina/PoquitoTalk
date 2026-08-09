@@ -194,6 +194,22 @@ window.addEventListener('DOMContentLoaded', () => {
       });
     }
   } catch (e) {}
+
+  // Check if user already registered as contractor
+  try {
+    const registrations = JSON.parse(localStorage.getItem('poquitotalk_provider_registration') || '[]');
+    if (registrations.length > 0) {
+      ['contractor-form-en', 'contractor-form-es'].forEach(id => {
+        const form = document.getElementById(id);
+        const isEs = id.endsWith('-es');
+        const successBox = document.getElementById(isEs ? 'contractor-success-es' : 'contractor-success-en');
+        if (form && successBox) {
+          form.style.display = 'none';
+          successBox.style.display = 'flex';
+        }
+      });
+    }
+  } catch (e) {}
 });
 
 function acceptCookieConsent() {
@@ -255,6 +271,71 @@ async function submitPlayStoreSignup(e, formId) {
     const history = JSON.parse(localStorage.getItem('poquitotalk_playstore_waitlist') || '[]');
     history.unshift({ ...payload, timestamp: Date.now() });
     localStorage.setItem('poquitotalk_playstore_waitlist', JSON.stringify(history));
+  } catch (e) {}
+
+  if (formElement) formElement.style.display = 'none';
+  if (successBox) successBox.style.display = 'flex';
+}
+
+// Contractor Registration Handler (FormSubmit.co AJAX + LocalStorage Caching)
+async function submitContractorRegistration(e, formId) {
+  e.preventDefault();
+  const isSpanish = formId.endsWith('-es');
+  const nameInput = document.getElementById(isSpanish ? 'contractor-name-es' : 'contractor-name-en');
+  const tradeSelect = document.getElementById(isSpanish ? 'contractor-trade-es' : 'contractor-trade-en');
+  const locationSelect = document.getElementById(isSpanish ? 'contractor-location-es' : 'contractor-location-en');
+  const phoneInput = document.getElementById(isSpanish ? 'contractor-phone-es' : 'contractor-phone-en');
+  const emailInput = document.getElementById(isSpanish ? 'contractor-email-es' : 'contractor-email-en');
+  const notesInput = document.getElementById(isSpanish ? 'contractor-notes-es' : 'contractor-notes-en');
+  const submitBtn = document.getElementById(isSpanish ? 'contractor-submit-es' : 'contractor-submit-en');
+  const successBox = document.getElementById(isSpanish ? 'contractor-success-es' : 'contractor-success-en');
+  const formElement = document.getElementById(formId);
+
+  // Aggregate checked languages
+  const langCheckboxes = document.querySelectorAll(`input[name="${isSpanish ? 'contractor-lang-es' : 'contractor-lang-en'}"]:checked`);
+  const selectedLanguages = Array.from(langCheckboxes).map(cb => cb.value).join(', ');
+
+  const name = nameInput ? nameInput.value.trim() : '';
+  const trade = tradeSelect ? tradeSelect.value : '';
+  const location = locationSelect ? locationSelect.value : '';
+  const phone = phoneInput ? phoneInput.value.trim() : '';
+
+  if (!name || !trade || !location || !phone) return;
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span>${isSpanish ? 'Registrando...' : 'Registering...'}</span>`;
+  }
+
+  const payload = {
+    _subject: `[PoquitoTalk Bocas Directory] New Provider: ${name} (${trade})`,
+    BusinessName: name,
+    TradeCategory: trade,
+    PrimaryLocation: location,
+    LanguagesSpoken: selectedLanguages || 'Español',
+    WhatsAppPhone: phone,
+    Email: emailInput ? emailInput.value.trim() || 'N/A' : 'N/A',
+    ServiceSummary: notesInput ? notesInput.value.trim() || 'N/A' : 'N/A',
+    SubmittedAt: new Date().toLocaleString('en-US', { timeZone: 'America/Panama' }),
+    PageURL: window.location.href,
+    _captcha: 'false'
+  };
+
+  try {
+    await fetch('https://formsubmit.co/ajax/support@hero-apps.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {
+    console.warn('FormSubmit dispatch error:', err);
+  }
+
+  // Cache registration locally
+  try {
+    const history = JSON.parse(localStorage.getItem('poquitotalk_provider_registration') || '[]');
+    history.unshift({ ...payload, timestamp: Date.now() });
+    localStorage.setItem('poquitotalk_provider_registration', JSON.stringify(history));
   } catch (e) {}
 
   if (formElement) formElement.style.display = 'none';
