@@ -48,7 +48,7 @@ function runDemoTranslation() {
   if (!input) return;
 
   const btn = document.getElementById('translate-btn');
-  btn.innerText = 'Translating with Gemma AI...';
+  btn.innerText = 'Generating Voice Note...';
 
   setTimeout(() => {
     const key = input.toLowerCase();
