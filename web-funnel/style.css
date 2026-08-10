@@ -1071,40 +1071,57 @@ textarea:focus {
 }
 
 .playstore-card {
-  background: #0C0C0F;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, #18110E 0%, #131217 50%, #0C1A14 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 28px;
   padding: 48px;
   display: flex;
   align-items: flex-start;
-  gap: 32px;
+  gap: 36px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), 0 0 35px rgba(37, 211, 102, 0.12);
 }
 
 .playstore-card::before {
   content: '';
   position: absolute;
-  top: -80px;
-  right: -80px;
-  width: 260px;
-  height: 260px;
-  background: radial-gradient(circle, rgba(37, 211, 102, 0.18) 0%, rgba(0, 0, 0, 0) 70%);
+  top: -90px;
+  right: -90px;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(150, 72, 36, 0.25) 0%, rgba(37, 211, 102, 0.15) 50%, rgba(0, 0, 0, 0) 75%);
   pointer-events: none;
 }
 
 .playstore-icon-wrapper {
-  width: 80px;
-  height: 80px;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 96px;
+  height: 96px;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 2px 10px rgba(255, 255, 255, 0.08);
+}
+
+.playstore-parrot-img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  animation: parrotFloat 4s ease-in-out infinite;
+  filter: drop-shadow(0 4px 12px rgba(37, 211, 102, 0.3));
+}
+
+@keyframes parrotFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
 }
 
 .playstore-content {
