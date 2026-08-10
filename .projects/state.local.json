@@ -9,6 +9,16 @@
     "projectName": "poquito-talk"
   },
   "providers": {
+    "revenuecat": {
+      "accountRequestId": "facctrq_61VC7CcwaOHv4Gmq516UyxXWMYSQyawOV4GM7DJt23PM",
+      "configuration": {},
+      "linkedAt": "2026-08-10T02:47:26.751Z",
+      "providerId": "prvdr_61UvIBCNECigaYpha53zM",
+      "providerName": "RevenueCat",
+      "redirectUrl": null,
+      "requestedAt": "2026-08-10T02:47:26.751Z",
+      "status": "complete"
+    },
     "turso": {
       "accountRequestId": "facctrq_61VC3fOOrHX0Epllj16UyxXWMYSQyawOV4GM7DJt2SPg",
       "configuration": {},
@@ -34,6 +44,17 @@
       "providerName": "Turso",
       "resourceId": "fres_61VC3fpjJYe9t7rBN16UyxXWMYSQyawOV4GM7DJt2BBA",
       "serviceId": "database"
+    },
+    "revenuecat-app": {
+      "configuration": {},
+      "createdAt": "2026-08-10T02:47:28.074Z",
+      "lastRevealedAt": "2026-08-10T02:47:28.492Z",
+      "lastStatus": "complete",
+      "name": "revenuecat-app",
+      "providerId": "prvdr_61UvIBCNECigaYpha53zM",
+      "providerName": "RevenueCat",
+      "resourceId": "fres_61VC7ChWVok7HbNU916UyxXWMYSQyawOV4GM7DJt2MXo",
+      "serviceId": "app"
     },
     "turso-plan": {
       "configuration": {},

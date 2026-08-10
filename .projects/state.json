@@ -1,6 +1,9 @@
 {
   "version": 1,
   "providers": {
+    "revenuecat": {
+      "name": "RevenueCat"
+    },
     "turso": {
       "name": "Turso"
     }
@@ -10,6 +13,11 @@
       "name": "poquitotalk_db",
       "providerName": "Turso",
       "serviceId": "database"
+    },
+    "revenuecat-app": {
+      "name": "revenuecat-app",
+      "providerName": "RevenueCat",
+      "serviceId": "app"
     },
     "turso-plan": {
       "name": "turso-plan",
