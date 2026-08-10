@@ -93,61 +93,37 @@ function initiateStripeCheckout(plan) {
     'credits_50': { 
       name: '50 Poquito Credits Pack (Never Expires)', 
       price: '$3.74 (Reg. $4.99)', 
-      stripeUrl: 'https://buy.stripe.com/test_00w14n3nn5Oe7hA6tr4sE00',
-      isDirectPay: true 
+      promo: true 
     },
     'tourist_weekly': { 
       name: 'Weekly Tourist Pass (7 Days)', 
-      price: '$4.99/wk (Starts at launch)', 
-      isDirectPay: false 
+      price: '$4.99/wk (Starts on launch day)', 
+      promo: false 
     },
     'pro_monthly': { 
       name: 'Pro Monthly Membership', 
-      price: '$12.99/mo (Starts at launch)', 
-      isDirectPay: false 
+      price: '$12.99/mo (Starts on launch day)', 
+      promo: false 
     }
   };
   const selected = planNames[plan] || planNames['credits_50'];
   const isSpanish = window.location.pathname.includes('/es/');
 
-  if (selected.isDirectPay && selected.stripeUrl) {
-    // 1. Log order reservation in background database & notify email
-    const payload = {
-      _subject: `[PoquitoTalk Stripe Order Initiated] 25% Off Credits Pack ($3.74)`,
-      PlanSelected: selected.name,
-      PromoPrice: selected.price,
-      SubmittedAt: new Date().toLocaleString('en-US', { timeZone: 'America/Panama' }),
-      _captcha: 'false'
-    };
-
-    fetch('https://formsubmit.co/ajax/support@hero-apps.com', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    const apiPath = isSpanish ? '../api/waitlist.php' : 'api/waitlist.php';
-    fetch(apiPath, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...payload, Type: 'prelaunch_stripe_checkout' })
-    });
-
-    // 2. Direct seamless redirect to Stripe Checkout ($3.74)
-    window.location.href = selected.stripeUrl;
-    return;
-  }
-
-  // Fallback for launch-day subscriptions
-  const promptText = isSpanish
-    ? `🚀 RESERVA DE LANZAMIENTO\n\nHas seleccionado: ${selected.name}\nPrecio: ${selected.price}\n\nTu periodo de pase comenzará el día del lanzamiento oficial en Google Play.\n\nIngresa tu correo para reservar tu acceso:`
-    : `🚀 LAUNCH DAY RESERVATION\n\nYou selected: ${selected.name}\nPrice: ${selected.price}\n\nYour pass period will start counting on official launch day on Google Play.\n\nEnter your email to reserve your spot:`;
+  const promptText = selected.promo
+    ? (isSpanish 
+        ? `🎉 ¡25% DE DESCUENTO PRE-LANZAMIENTO!\n\nHas seleccionado: ${selected.name}\nPrecio Promo: ${selected.price}\n\nLos créditos NUNCA vencen y estarán listos el día del lanzamiento.\n\nIngresa tu correo para reservar tu 25% de descuento:` 
+        : `🎉 25% PRE-LAUNCH PROMO DISCOUNT!\n\nYou selected: ${selected.name}\nPromo Price: ${selected.price}\n\nCredits NEVER expire and will be active on Day 1.\n\nEnter your email to lock in your 25% discount:`)
+    : (isSpanish
+        ? `🚀 RESERVA DE LANZAMIENTO\n\nHas seleccionado: ${selected.name}\nPrecio: ${selected.price}\n\nTu periodo de pase comenzará el día del lanzamiento oficial en Google Play.\n\nIngresa tu correo para reservar tu acceso:`
+        : `🚀 LAUNCH DAY RESERVATION\n\nYou selected: ${selected.name}\nPrice: ${selected.price}\n\nYour pass period will start counting on official launch day on Google Play.\n\nEnter your email to reserve your spot:`);
 
   const userEmail = prompt(promptText, '');
 
   if (userEmail && userEmail.includes('@')) {
     const payload = {
-      _subject: `[PoquitoTalk Launch Order] Pass Reservation (${selected.name})`,
+      _subject: selected.promo
+        ? `[PoquitoTalk Pre-Launch Promo] 25% Off Credits Pack Order (${userEmail})`
+        : `[PoquitoTalk Launch Order] Pass Reservation (${selected.name})`,
       Email: userEmail,
       PlanSelected: selected.name,
       PromoPrice: selected.price,
@@ -170,8 +146,8 @@ function initiateStripeCheckout(plan) {
 
     alert(
       isSpanish 
-        ? `¡Reserva Confirmada!\n\nHemos registrado tu solicitud para ${selected.name} a ${selected.price}. Te enviaremos el enlace directo de pago a ${userEmail}!`
-        : `Reservation Confirmed!\n\nWe've locked in your request for ${selected.name} at ${selected.price}. We will email your direct payment checkout link to ${userEmail}!`
+        ? `¡Reserva Confirmada!\n\nHemos registrado tu solicitud para ${selected.name} a ${selected.price}. Te enviaremos tu enlace de acceso y pago a ${userEmail}!`
+        : `Reservation Confirmed!\n\nWe've locked in your request for ${selected.name} at ${selected.price}. We will email your checkout and access link to ${userEmail}!`
     );
   }
 }
