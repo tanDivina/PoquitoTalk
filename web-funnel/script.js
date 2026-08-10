@@ -112,28 +112,6 @@ function initiateStripeCheckout(plan) {
 
   // 1. Direct Pay for 50 Credits Pack (Zero friction — goes straight to Stripe Checkout)
   if (selected.isDirectPay && selected.stripeUrl) {
-    const payload = {
-      _subject: `[PoquitoTalk Stripe Checkout Initiated] 25% Off Credits Pack ($3.74)`,
-      PlanSelected: selected.name,
-      PromoPrice: selected.price,
-      SubmittedAt: new Date().toLocaleString('en-US', { timeZone: 'America/Panama' }),
-      _captcha: 'false'
-    };
-
-    // Silently log checkout attempt in background
-    fetch('https://formsubmit.co/ajax/support@hero-apps.com', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    const apiPath = isSpanish ? '../api/waitlist.php' : 'api/waitlist.php';
-    fetch(apiPath, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...payload, Type: 'prelaunch_stripe_checkout' })
-    });
-
     window.location.href = selected.stripeUrl;
     return;
   }
