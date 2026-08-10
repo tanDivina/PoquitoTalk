@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "project": {
+    "catalog": "prod",
+    "initializedAt": "2026-08-09T23:00:09.859Z",
+    "merchantDisplayName": "Hero Apps",
+    "merchantId": "acct_1TpZaAE2l36pee1J",
+    "projectId": "project_61VC3ejLcfvADIF0K16UyxXWMYSQyawOV4GM7DJt25a4",
+    "projectName": "poquito-talk"
+  },
+  "providers": {
+    "turso": {
+      "accountRequestId": "facctrq_61VC3fOOrHX0Epllj16UyxXWMYSQyawOV4GM7DJt2SPg",
+      "configuration": {},
+      "linkedAt": "2026-08-09T23:00:50.999Z",
+      "providerId": "prvdr_61UGLtrGjcXK8rTq15RWq",
+      "providerName": "Turso",
+      "redirectUrl": null,
+      "requestedAt": "2026-08-09T23:00:50.998Z",
+      "status": "complete"
+    }
+  },
+  "resources": {
+    "poquitotalk_db": {
+      "configuration": {
+        "name": "poquitotalk_db",
+        "location": "aws-us-east-1"
+      },
+      "createdAt": "2026-08-09T23:01:20.050Z",
+      "lastRevealedAt": "2026-08-09T23:01:20.443Z",
+      "lastStatus": "complete",
+      "name": "poquitotalk_db",
+      "providerId": "prvdr_61UGLtrGjcXK8rTq15RWq",
+      "providerName": "Turso",
+      "resourceId": "fres_61VC3fpjJYe9t7rBN16UyxXWMYSQyawOV4GM7DJt2BBA",
+      "serviceId": "database"
+    },
+    "turso-plan": {
+      "configuration": {},
+      "createdAt": "2026-08-09T23:00:55.556Z",
+      "lastRevealedAt": "2026-08-09T23:00:55.963Z",
+      "lastStatus": "complete",
+      "name": "turso-plan",
+      "providerId": "prvdr_61UGLtrGjcXK8rTq15RWq",
+      "providerName": "Turso",
+      "resourceId": "fres_61VC3fQuSFVnawxix16UyxXWMYSQyawOV4GM7DJt20wi",
+      "serviceId": "starter"
+    }
+  }
+}
