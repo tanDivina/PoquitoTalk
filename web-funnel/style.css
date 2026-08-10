@@ -1071,8 +1071,8 @@ textarea:focus {
 }
 
 .playstore-card {
-  background: linear-gradient(135deg, #18110E 0%, #131217 50%, #0C1A14 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(135deg, #0B2516 0%, #123821 50%, #091C11 100%);
+  border: 1px solid rgba(52, 211, 153, 0.25);
   border-radius: 28px;
   padding: 48px;
   display: flex;
@@ -1080,17 +1080,17 @@ textarea:focus {
   gap: 36px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), 0 0 35px rgba(37, 211, 102, 0.12);
+  box-shadow: 0 20px 50px rgba(9, 28, 17, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .playstore-card::before {
   content: '';
   position: absolute;
-  top: -90px;
-  right: -90px;
-  width: 320px;
-  height: 320px;
-  background: radial-gradient(circle, rgba(150, 72, 36, 0.25) 0%, rgba(37, 211, 102, 0.15) 50%, rgba(0, 0, 0, 0) 75%);
+  top: -100px;
+  right: -100px;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(150, 72, 36, 0.3) 0%, rgba(16, 185, 129, 0.2) 50%, rgba(0, 0, 0, 0) 80%);
   pointer-events: none;
 }
 
@@ -1098,29 +1098,38 @@ textarea:focus {
   width: 96px;
   height: 96px;
   border-radius: 26px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 2px 10px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 30px rgba(16, 185, 129, 0.25), inset 0 2px 10px rgba(255, 255, 255, 0.15);
 }
 
 .playstore-parrot-img {
-  width: 64px;
-  height: 64px;
+  width: 68px;
+  height: 68px;
   object-fit: contain;
-  animation: parrotFloat 4s ease-in-out infinite;
-  filter: drop-shadow(0 4px 12px rgba(37, 211, 102, 0.3));
+  animation: parrotAlive 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  filter: drop-shadow(0 6px 16px rgba(16, 185, 129, 0.4));
 }
 
-@keyframes parrotFloat {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+@keyframes parrotAlive {
+  0% {
+    transform: translateY(0px) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translateY(-7px) rotate(-3.5deg) scale(1.04);
   }
   50% {
-    transform: translateY(-8px) rotate(2deg);
+    transform: translateY(-11px) rotate(0deg) scale(1.06);
+  }
+  75% {
+    transform: translateY(-5px) rotate(3.5deg) scale(1.03);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg) scale(1);
   }
 }
 

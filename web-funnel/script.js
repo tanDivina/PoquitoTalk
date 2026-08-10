@@ -93,7 +93,7 @@ function initiateStripeCheckout(plan) {
     'credits_50': { 
       name: '50 Poquito Credits Pack (Never Expires)', 
       price: '$3.74 (Reg. $4.99)', 
-      stripeUrl: 'https://buy.stripe.com/bJe3cv0bbb8y6dw2db4sE0a',
+      stripeUrl: 'https://buy.stripe.com/8x214n3nngsS6dw8Bz4sE0b',
       isDirectPay: true 
     },
     'tourist_weekly': { 
