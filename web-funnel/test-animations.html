@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PoquitoTalk — Mascot Animation Prototypes</title>
+  <link rel="stylesheet" href="style.css?v=2.8.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #08120B;
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 40px 20px;
+    }
+    .test-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+    .test-header h1 {
+      font-family: 'Lexend', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #10B981;
+      margin-bottom: 12px;
+    }
+    .test-header p {
+      color: #A1A1AA;
+      font-size: 16px;
+    }
+    .concepts-grid {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+    .concept-card {
+      background: linear-gradient(135deg, #0B2516 0%, #123821 50%, #091C11 100%);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      border-radius: 28px;
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    .concept-title {
+      font-family: 'Lexend', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #34D399;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .concept-subtitle {
+      color: #A1A1AA;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    
+    /* Concept 1: Walkie Soundwaves */
+    .c1-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .c1-parrot-box {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .c1-parrot-img {
+      width: 76px;
+      height: 76px;
+      object-fit: contain;
+      z-index: 2;
+      animation: parrotPulse 4s ease-in-out infinite;
+    }
+    .c1-wave-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 28px;
+      border: 2px solid rgba(52, 211, 153, 0.5);
+      pointer-events: none;
+      animation: waveExpand 2.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    .c1-wave-ring:nth-child(2) {
+      animation-delay: 0.8s;
+    }
+    @keyframes waveExpand {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+    @keyframes parrotPulse {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.08) rotate(3deg); }
+    }
+
+    /* Concept 2: Fly-In & Drop Badge */
+    .c2-stage {
+      position: relative;
+      height: 140px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 20px;
+      border: 1px dashed rgba(52, 211, 153, 0.3);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding: 0 30px;
+    }
+    .c2-parrot-flyer {
+      width: 70px;
+      height: 70px;
+      position: absolute;
+      left: -80px;
+      animation: flyInParrot 5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+    }
+    .c2-drop-badge {
+      opacity: 0;
+      transform: translateY(-20px) scale(0.8);
+      animation: badgeDrop 5s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid #10B981;
+      color: #34D399;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    @keyframes flyInParrot {
+      0% { left: -80px; top: 10px; transform: rotate(15deg); }
+      30% { left: 40px; top: 35px; transform: rotate(0deg); }
+      70% { left: 40px; top: 35px; transform: rotate(0deg); }
+      100% { left: 40px; top: 35px; transform: rotate(0deg); }
+    }
+    @keyframes badgeDrop {
+      0%, 25% { opacity: 0; transform: translateY(-20px) scale(0.8); }
+      35%, 85% { opacity: 1; transform: translateY(0px) scale(1); }
+      100% { opacity: 0; transform: translateY(10px) scale(0.9); }
+    }
+
+    /* Concept 3: Interactive WhatsApp Voice Bubble */
+    .c3-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .c3-wa-bubble {
+      background: #005C4B;
+      border-radius: 18px 18px 18px 4px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      max-width: 420px;
+    }
+    .c3-play-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #25D366;
+      border: none;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .c3-wave-bars {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 24px;
+      flex: 1;
+    }
+    .c3-bar {
+      width: 3px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 2px;
+      height: 100%;
+      animation: soundBar 1.2s ease-in-out infinite alternate;
+    }
+    .c3-bar:nth-child(1) { height: 40%; animation-delay: 0.1s; }
+    .c3-bar:nth-child(2) { height: 80%; animation-delay: 0.3s; }
+    .c3-bar:nth-child(3) { height: 100%; animation-delay: 0.2s; }
+    .c3-bar:nth-child(4) { height: 60%; animation-delay: 0.4s; }
+    .c3-bar:nth-child(5) { height: 90%; animation-delay: 0.15s; }
+    .c3-bar:nth-child(6) { height: 50%; animation-delay: 0.35s; }
+    .c3-bar:nth-child(7) { height: 75%; animation-delay: 0.25s; }
+    @keyframes soundBar {
+      0% { transform: scaleY(0.3); background: rgba(255, 255, 255, 0.4); }
+      100% { transform: scaleY(1); background: #25D366; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="test-header">
+    <h1>Poquito Mascot Animation Prototypes</h1>
+    <p>Compare the 3 visual mascot concepts below for the PoquitoTalk landing page section!</p>
+  </div>
+
+  <div class="concepts-grid">
+    
+    <!-- Concept 1 -->
+    <div class="concept-card">
+      <div class="concept-title">
+        <span>1.</span> Walkie-Talkie & Radiant Soundwaves
+      </div>
+      <div class="concept-subtitle">
+        Poquito perches in a glowing emerald frame while continuous gold/emerald audio waves pulse outwards.
+      </div>
+      <div class="c1-wrapper">
+        <div class="c1-parrot-box">
+          <div class="c1-wave-ring"></div>
+          <div class="c1-wave-ring"></div>
+          <img src="poquitotalk_parrot_logo_v6_transparent.png" class="c1-parrot-img" alt="Poquito Mascot" />
+        </div>
+        <div>
+          <h3 style="color: #FFFFFF; font-size: 18px; margin-bottom: 6px;">Android App Pre-Launch Access</h3>
+          <p style="color: #A1A1AA; font-size: 14px;">Be the first in Bocas del Toro to download the official mobile app when it hits Google Play!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Concept 2 (Selected) -->
+    <div class="concept-card">
+      <div class="concept-title">
+        <span>2.</span> Poquito Flying In (Selected Concept — Updated with Eye & Clean Card)
+      </div>
+      <div class="concept-subtitle">
+        Poquito glides in smoothly from the corner with his friendly eye, perching beside the Android release form.
+      </div>
+      <div class="c2-stage" style="height: 180px; justify-content: space-between; padding: 0 40px;">
+        <img src="poquito_parrot_eye.png" class="c2-parrot-flyer" style="width: 90px; height: 90px;" alt="Poquito Mascot with Eye" />
+        <div style="margin-left: 140px; flex: 1;">
+          <h3 style="color: #FFFFFF; font-size: 20px; margin-bottom: 6px;">Google Play Release Incoming</h3>
+          <p style="color: #A1A1AA; font-size: 14px;">Be the first in Bocas del Toro to download the official Android app!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Concept 3 -->
+    <div class="concept-card">
+      <div class="concept-title">
+        <span>3.</span> Live WhatsApp Voice Note Bubble Interaction
+      </div>
+      <div class="concept-subtitle">
+        Interactive WhatsApp voice note card showing Poquito sending a 1-tap Spanish audio clip.
+      </div>
+      <div class="c3-wrapper">
+        <div class="c1-parrot-box" style="width: 80px; height: 80px;">
+          <img src="poquitotalk_parrot_logo_v6_transparent.png" style="width: 54px; height: 54px;" alt="Poquito Mascot" />
+        </div>
+        <div class="c3-wa-bubble">
+          <button class="c3-play-btn">▶</button>
+          <div class="c3-wave-bars">
+            <div class="c3-bar"></div><div class="c3-bar"></div><div class="c3-bar"></div>
+            <div class="c3-bar"></div><div class="c3-bar"></div><div class="c3-bar"></div>
+            <div class="c3-bar"></div>
+          </div>
+          <span style="font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 600;">0:08</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

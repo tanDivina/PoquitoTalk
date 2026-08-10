@@ -1108,28 +1108,25 @@ textarea:focus {
 }
 
 .playstore-parrot-img {
-  width: 68px;
-  height: 68px;
+  width: 72px;
+  height: 72px;
   object-fit: contain;
-  animation: parrotAlive 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation: flyInParrot 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
   filter: drop-shadow(0 6px 16px rgba(16, 185, 129, 0.4));
 }
 
-@keyframes parrotAlive {
+@keyframes flyInParrot {
   0% {
-    transform: translateY(0px) rotate(0deg) scale(1);
+    transform: translateX(-40px) translateY(12px) rotate(12deg);
+    opacity: 0;
   }
-  25% {
-    transform: translateY(-7px) rotate(-3.5deg) scale(1.04);
-  }
-  50% {
-    transform: translateY(-11px) rotate(0deg) scale(1.06);
-  }
-  75% {
-    transform: translateY(-5px) rotate(3.5deg) scale(1.03);
+  20%, 85% {
+    transform: translateX(0px) translateY(0px) rotate(0deg);
+    opacity: 1;
   }
   100% {
-    transform: translateY(0px) rotate(0deg) scale(1);
+    transform: translateX(0px) translateY(0px) rotate(0deg);
+    opacity: 1;
   }
 }
 
