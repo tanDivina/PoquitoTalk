@@ -27,7 +27,7 @@
   <meta name="twitter:description" content="Generate polite Panamanian Spanish voice notes ready for WhatsApp in 1-tap." />
   <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/expo_go_qr.png" />
 
-  <link rel="stylesheet" href="style.css?v=1.4.0" />
+  <link rel="stylesheet" href="style.css?v=1.8.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
 
@@ -145,14 +145,16 @@
 
       <!-- Factual Platform Badges -->
       <div class="trust-proof-bar">
+      <!-- Factual Platform Badges -->
+      <div class="trust-proof-bar">
         <div class="proof-badge">
           <span>🇵🇦 Native Panamanian Spanish Phrasing</span>
         </div>
         <div class="proof-badge">
-          <span>🎙️ 1-Tap Panamanian Audio Notes</span>
+          <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: text-bottom;"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg> 1-Tap Panamanian Audio Notes</span>
         </div>
         <div class="proof-badge">
-          <span>💬 Direct WhatsApp Integration — No App Needed for Recipient</span>
+          <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: text-bottom;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Direct WhatsApp Integration — No App Needed for Recipient</span>
         </div>
       </div>
     </div>
@@ -172,10 +174,10 @@
           <textarea id="demo-input" rows="3" placeholder="e.g., Hi! My air conditioning is leaking water inside the bedroom..."></textarea>
 
           <div class="presets-pills">
-            <button class="pill-btn" onclick="setDemoPrompt('A/C Leaking', 'Hi! My air conditioning is leaking water inside the bedroom.')">❄️ A/C Repair</button>
-            <button class="pill-btn" onclick="setDemoPrompt('Boat Outboard', 'Hi! The outboard motor on my boat won\'t start at the dock.')">🚤 Boat Engine</button>
-            <button class="pill-btn" onclick="setDemoPrompt('Starlink Issue', 'Hello! My Starlink dish lost signal connection today.')">📡 Starlink</button>
-            <button class="pill-btn" onclick="setDemoPrompt('Plumber Help', 'Hi! The water pressure in the main bathroom dropped.')">🔧 Plumber</button>
+            <button class="pill-btn" onclick="setDemoPrompt('A/C Leaking', 'Hi! My air conditioning is leaking water inside the bedroom.')">A/C Repair</button>
+            <button class="pill-btn" onclick="setDemoPrompt('Boat Outboard', 'Hi! The outboard motor on my boat won\'t start at the dock.')">Boat Engine</button>
+            <button class="pill-btn" onclick="setDemoPrompt('Starlink Issue', 'Hello! My Starlink dish lost signal connection today.')">Starlink</button>
+            <button class="pill-btn" onclick="setDemoPrompt('Plumber Help', 'Hi! The water pressure in the main bathroom dropped.')">Plumber</button>
           </div>
 
           <button id="translate-btn" class="btn-translate" onclick="runDemoTranslation()">
@@ -187,10 +189,10 @@
               <span class="result-label">ESPAÑOL PANAMÁ 🇵🇦 (AUDIO NOTE)</span>
               
               <div class="voice-selector-chips">
-                <button class="voice-chip-btn active" data-voice="Diego" onclick="selectDemoVoice('Diego')">👨 Diego</button>
-                <button class="voice-chip-btn" data-voice="Sofia" onclick="selectDemoVoice('Sofia')">👩 Sofia</button>
-                <button class="voice-chip-btn" data-voice="Valeria" onclick="selectDemoVoice('Valeria')">👧 Valeria</button>
-                <button class="voice-chip-btn" data-voice="Mateo" onclick="selectDemoVoice('Mateo')">🧔 Mateo</button>
+                <button class="voice-chip-btn active" data-voice="Diego" onclick="selectDemoVoice('Diego')">Diego</button>
+                <button class="voice-chip-btn" data-voice="Sofia" onclick="selectDemoVoice('Sofia')">Sofia</button>
+                <button class="voice-chip-btn" data-voice="Valeria" onclick="selectDemoVoice('Valeria')">Valeria</button>
+                <button class="voice-chip-btn" data-voice="Mateo" onclick="selectDemoVoice('Mateo')">Mateo</button>
               </div>
             </div>
             <p id="result-text" class="result-text"></p>
@@ -201,7 +203,7 @@
                 Send Voice Note to WhatsApp
               </button>
               <button id="play-audio-btn" class="btn-secondary-action" onclick="playDemoAudio()">
-                🔊 Play 👨 Diego Audio Note
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px; vertical-align: text-bottom;"><polygon points="5 3 19 12 5 21 5 3"/></svg> Play Diego Audio Note
               </button>
             </div>
           </div>
@@ -239,11 +241,13 @@
                 <span class="arrow">→</span>
               </button>
             </div>
-            <p class="playstore-disclaimer">🔒 We respect your privacy. Zero spam — only 1 email when the app goes live.</p>
+            <p class="playstore-disclaimer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: text-bottom;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> We respect your privacy. Zero spam — only 1 email when the app goes live.</p>
           </form>
 
           <div id="playstore-success-en" class="playstore-success-box" style="display: none;">
-            <div class="success-icon">🎉</div>
+            <div class="success-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
             <div class="success-text">
               <h4>You're on the Play Store VIP List!</h4>
               <p>We've reserved your spot. We'll send a direct download link to your email the second PoquitoTalk goes live on Google Play Store.</p>
@@ -345,30 +349,36 @@
 
     <div class="container">
       <div class="section-title">
+        <span class="promo-tag-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          25% PRE-LAUNCH PROMO ON CREDITS PACK (NEVER EXPIRES)
+        </span>
         <h2>Choose Your PoquitoTalk Pass</h2>
         <p>Built specifically for Bocas del Toro & serving the Panama expat community 🇵🇦</p>
       </div>
 
-      <div class="pricing-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-        <!-- 1. Unified Credits Pack -->
-        <div class="pricing-card">
+      <div class="pricing-grid">
+        <!-- 1. Unified Credits Pack (Featured 25% Pre-Launch Promo) -->
+        <div class="pricing-card featured">
+          <div class="featured-badge">25% PRE-LAUNCH PROMO</div>
           <div class="plan-header">
             <h3>50 Poquito Credits Pack</h3>
-            <p class="plan-desc">Flexible pay-as-you-go credits</p>
+            <p class="plan-desc">Flexible pay-as-you-go credits • Never expires!</p>
           </div>
           <div class="price-box">
-            <span class="currency">$</span><span class="amount">4.99</span>
-            <span class="period">one-time • never expires</span>
+            <span class="original-price">$4.99</span>
+            <span class="currency">$</span><span class="amount">3.74</span>
+            <span class="period">one-time • 25% OFF</span>
           </div>
           <ul class="features">
             <li>✓ <strong>50 Credits</strong> for Voice Notes & Walkie-Talkie</li>
             <li>✓ 1 Custom Voice Note = 1 Credit</li>
             <li>✓ 1 Walkie Session = 5 Credits</li>
+            <li>✓ Credits <strong>never expire</strong> (ready for Day 1)</li>
             <li>✓ Free Native Device Voice Fallback</li>
-            <li>✓ Instant Cross-Platform Sync</li>
           </ul>
-          <button class="btn-checkout" onclick="initiateStripeCheckout('credits_50')">
-            Get 50 Credits ($4.99) <span class="arrow">→</span>
+          <button class="btn-checkout featured-btn" onclick="initiateStripeCheckout('credits_50')">
+            Buy 50 Credits ($3.74) <span class="arrow">→</span>
           </button>
         </div>
 
@@ -380,7 +390,7 @@
           </div>
           <div class="price-box">
             <span class="currency">$</span><span class="amount">4.99</span>
-            <span class="period">/ week</span>
+            <span class="period">/ week • starts at launch</span>
           </div>
           <ul class="features">
             <li>✓ <strong>100</strong> Studio Voice Notes / week</li>
@@ -390,20 +400,19 @@
             <li>✓ No long-term commitment</li>
           </ul>
           <button class="btn-checkout" onclick="initiateStripeCheckout('tourist_weekly')">
-            Get 7-Day Tourist Pass ($4.99) <span class="arrow">→</span>
+            Reserve Tourist Pass ($4.99) <span class="arrow">→</span>
           </button>
         </div>
 
         <!-- 3. Unlimited Pro Monthly -->
-        <div class="pricing-card featured">
-          <div class="featured-badge">MOST POPULAR</div>
+        <div class="pricing-card">
           <div class="plan-header">
             <h3>Pro Monthly Membership</h3>
             <p class="plan-desc">For expats, digital nomads & permanent Panama residents</p>
           </div>
           <div class="price-box">
             <span class="currency">$</span><span class="amount">12.99</span>
-            <span class="period">/ month</span>
+            <span class="period">/ month • starts at launch</span>
           </div>
           <ul class="features">
             <li>✓ <strong>300</strong> Studio Voice Notes / month</li>
@@ -412,8 +421,8 @@
             <li>✓ Priority Accent Cleaning Engine</li>
             <li>✓ Cancel Anytime in 1 Tap</li>
           </ul>
-          <button class="btn-checkout featured-btn" onclick="initiateStripeCheckout('pro_monthly')">
-            Subscribe to Pro ($12.99/mo) <span class="arrow">→</span>
+          <button class="btn-checkout" onclick="initiateStripeCheckout('pro_monthly')">
+            Reserve Pro Pass ($12.99/mo) <span class="arrow">→</span>
           </button>
         </div>
       </div>
@@ -458,10 +467,22 @@
         <div class="form-group">
           <label>FEEDBACK TYPE</label>
           <div class="category-grid">
-            <button type="button" class="cat-btn active" data-cat="Feature Request" onclick="selectCategory(this)">💡 Feature Request</button>
-            <button type="button" class="cat-btn" data-cat="Bug Report" onclick="selectCategory(this)">🐛 Bug Report</button>
-            <button type="button" class="cat-btn" data-cat="Praise" onclick="selectCategory(this)">👍 Praise</button>
-            <button type="button" class="cat-btn" data-cat="General Feedback" onclick="selectCategory(this)">💬 General</button>
+            <button type="button" class="cat-btn active" data-cat="Feature Request" onclick="selectCategory(this)" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+              Feature Request
+            </button>
+            <button type="button" class="cat-btn" data-cat="Bug Report" onclick="selectCategory(this)" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="14" x="8" y="6" rx="4"/><path d="m19 7-3 2"/><path d="m5 7 3 2"/><path d="m19 19-3-2"/><path d="m5 19 3-2"/><path d="M20 13h-4"/><path d="M4 13h4"/></svg>
+              Bug Report
+            </button>
+            <button type="button" class="cat-btn" data-cat="Praise" onclick="selectCategory(this)" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>
+              Praise
+            </button>
+            <button type="button" class="cat-btn" data-cat="General Feedback" onclick="selectCategory(this)" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              General
+            </button>
           </div>
         </div>
 
@@ -495,7 +516,7 @@
       </form>
 
       <div id="fb-success-msg" class="success-msg" style="display: none;">
-        🎉 Thank you! Your feedback has been sent directly to our product team.
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Thank you! Your feedback has been sent directly to our product team.
       </div>
     </div>
   </div>
@@ -508,6 +529,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=1.4.0"></script>
+  <script src="script.js?v=1.8.0"></script>
 </body>
 </html>

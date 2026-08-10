@@ -16,4 +16,12 @@ If Expo Go outputs *"The installed version of Expo Go is for SDK XX. The project
   - **Automated Web Funnel Deployment**: Deploy static `web-funnel/` updates using:
     `rsync -avz -e "ssh -p 21098 -i ~/.ssh/id_rsa_cpanel -o StrictHostKeyChecking=no" ./web-funnel/ finclazc@premium225-5.web-hosting.com:/home/finclazc/public_html/poquitotalk/`
 
+<!-- stripe-projects-cli managed:agents-md:start -->
+## Stripe Projects CLI
 
+This repository is initialized for the Stripe project "poquito-talk".
+
+## Tools used
+
+- [Stripe CLI](https://docs.stripe.com/stripe-cli) with the `projects` plugin to manage third-party services, credentials, and deployments for this project. Use the stripe-projects-cli to manage deploying and access to third party services.
+<!-- stripe-projects-cli managed:agents-md:end -->

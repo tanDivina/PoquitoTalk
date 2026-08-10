@@ -9,10 +9,10 @@ const DEMO_TRANSLATIONS = {
 
 // Natural Voice Personas & Pitch Calibrations matching app (src/services/googleVoice.ts)
 const VOICE_PITCHES = {
-  'Diego': { pitch: 0.96, rate: 0.88, name: 'Diego', flag: '👨' },
-  'Mateo': { pitch: 0.90, rate: 0.84, name: 'Mateo', flag: '🧔' },
-  'Sofia': { pitch: 1.02, rate: 0.92, name: 'Sofia', flag: '👩' },
-  'Valeria': { pitch: 1.08, rate: 0.95, name: 'Valeria', flag: '👧' }
+  'Diego': { pitch: 0.96, rate: 0.88, name: 'Diego' },
+  'Mateo': { pitch: 0.90, rate: 0.84, name: 'Mateo' },
+  'Sofia': { pitch: 1.02, rate: 0.92, name: 'Sofia' },
+  'Valeria': { pitch: 1.08, rate: 0.95, name: 'Valeria' }
 };
 
 let currentDemoVoice = 'Diego';
@@ -30,11 +30,11 @@ function selectDemoVoice(name) {
   const voice = VOICE_PITCHES[name] || VOICE_PITCHES['Diego'];
   const playBtn = document.getElementById('play-audio-btn');
   if (playBtn) {
-    playBtn.innerHTML = `🔊 Play ${voice.flag} ${voice.name} Audio Note`;
+    playBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px; vertical-align: text-bottom;"><polygon points="5 3 19 12 5 21 5 3"/></svg> Play ${voice.name} Audio Note`;
   }
   const playBtnEs = document.getElementById('play-audio-btn-es');
   if (playBtnEs) {
-    playBtnEs.innerHTML = `🔊 Reproducir Audio ${voice.flag} ${voice.name}`;
+    playBtnEs.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px; vertical-align: text-bottom;"><polygon points="5 3 19 12 5 21 5 3"/></svg> Reproducir Audio (${voice.name})`;
   }
 }
 
@@ -89,9 +89,55 @@ function playDemoAudio() {
 }
 
 function initiateStripeCheckout(plan) {
-  // Redirect to Stripe Checkout / RevenueCat Web Funnel
-  alert(`Redirecting to Stripe Checkout for ${plan === 'pro_monthly' ? 'Pro Monthly Membership ($9.99/mo)' : '50 Natural Voice Notes Pack ($4.99)'}...`);
-  window.location.href = `https://checkout.stripe.com/pay/poquitotalk_${plan}`;
+  const planNames = {
+    'credits_50': { name: '50 Poquito Credits Pack (Never Expires)', price: '$3.74 (Reg. $4.99)', promo: true },
+    'tourist_weekly': { name: 'Weekly Tourist Pass (7 Days)', price: '$4.99/wk (Starts at launch)', promo: false },
+    'pro_monthly': { name: 'Pro Monthly Membership', price: '$12.99/mo (Starts at launch)', promo: false }
+  };
+  const selected = planNames[plan] || planNames['credits_50'];
+  const isSpanish = window.location.pathname.includes('/es/');
+
+  const promptText = selected.promo
+    ? (isSpanish 
+        ? `🎉 ¡25% DE DESCUENTO PRE-LANZAMIENTO!\n\nHas seleccionado: ${selected.name}\nPrecio Promo: ${selected.price}\n\nLos créditos NUNCA vencen y estarán listos el día del lanzamiento.\n\nIngresa tu correo para reservar tu 25% de descuento:` 
+        : `🎉 25% PRE-LAUNCH PROMO DISCOUNT!\n\nYou selected: ${selected.name}\nPromo Price: ${selected.price}\n\nCredits NEVER expire and will be active on Day 1.\n\nEnter your email to lock in your 25% discount:`)
+    : (isSpanish
+        ? `🚀 RESERVA DE LANZAMIENTO\n\nHas seleccionado: ${selected.name}\nPrecio: ${selected.price}\n\nTu periodo de pase comenzará el día del lanzamiento oficial en Google Play.\n\nIngresa tu correo para reservar tu acceso:`
+        : `🚀 LAUNCH DAY RESERVATION\n\nYou selected: ${selected.name}\nPrice: ${selected.price}\n\nYour pass period will start counting on official launch day on Google Play.\n\nEnter your email to reserve your spot:`);
+
+  const userEmail = prompt(promptText, '');
+
+  if (userEmail && userEmail.includes('@')) {
+    const payload = {
+      _subject: selected.promo
+        ? `[PoquitoTalk Pre-Launch Promo] 25% Off Credits Pack Order (${userEmail})`
+        : `[PoquitoTalk Launch Order] Pass Reservation (${selected.name})`,
+      Email: userEmail,
+      PlanSelected: selected.name,
+      PromoPrice: selected.price,
+      SubmittedAt: new Date().toLocaleString('en-US', { timeZone: 'America/Panama' }),
+      _captcha: 'false'
+    };
+
+    fetch('https://formsubmit.co/ajax/support@hero-apps.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const apiPath = isSpanish ? '../api/waitlist.php' : 'api/waitlist.php';
+    fetch(apiPath, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...payload, Type: 'prelaunch_order' })
+    });
+
+    alert(
+      isSpanish 
+        ? `¡Reserva Confirmada!\n\nHemos registrado tu solicitud para ${selected.name} a ${selected.price}. Te enviaremos el enlace directo de pago a ${userEmail}!`
+        : `Reservation Confirmed!\n\nWe've locked in your request for ${selected.name} at ${selected.price}. We will email your direct payment checkout link to ${userEmail}!`
+    );
+  }
 }
 
 // Feedback Drawer Logic & FormSubmit.co Email Dispatch
@@ -266,6 +312,18 @@ async function submitPlayStoreSignup(e, formId) {
     console.warn('FormSubmit dispatch error:', err);
   }
 
+  // Dispatch to private server-side database
+  try {
+    const apiPath = window.location.pathname.includes('/es/') ? '../api/waitlist.php' : 'api/waitlist.php';
+    await fetch(apiPath, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...payload, Type: 'playstore' })
+    });
+  } catch (err) {
+    console.warn('Server API waitlist error:', err);
+  }
+
   // Cache locally to prevent redundant submissions
   try {
     const history = JSON.parse(localStorage.getItem('poquitotalk_playstore_waitlist') || '[]');
@@ -277,7 +335,7 @@ async function submitPlayStoreSignup(e, formId) {
   if (successBox) successBox.style.display = 'flex';
 }
 
-// Contractor Registration Handler (FormSubmit.co AJAX + LocalStorage Caching)
+// Contractor Registration Handler (FormSubmit.co AJAX + Server Storage + LocalStorage)
 async function submitContractorRegistration(e, formId) {
   e.preventDefault();
   const isSpanish = formId.endsWith('-es');
@@ -329,6 +387,18 @@ async function submitContractorRegistration(e, formId) {
     });
   } catch (err) {
     console.warn('FormSubmit dispatch error:', err);
+  }
+
+  // Dispatch to private server-side database
+  try {
+    const apiPath = window.location.pathname.includes('/es/') ? '../api/waitlist.php' : 'api/waitlist.php';
+    await fetch(apiPath, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...payload, Type: 'contractor' })
+    });
+  } catch (err) {
+    console.warn('Server API contractor error:', err);
   }
 
   // Cache registration locally

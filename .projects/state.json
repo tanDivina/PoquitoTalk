@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "providers": {
+    "turso": {
+      "name": "Turso"
+    }
+  },
+  "resources": {
+    "poquitotalk_db": {
+      "name": "poquitotalk_db",
+      "providerName": "Turso",
+      "serviceId": "database"
+    },
+    "turso-plan": {
+      "name": "turso-plan",
+      "providerName": "Turso",
+      "serviceId": "starter"
+    }
+  }
+}
