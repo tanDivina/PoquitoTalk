@@ -1,16 +1,8 @@
 {
   "version": "v2",
-  "poquitotalk_db": {
-    "auth_token": "fBBy+CXOqpnyiruEXGmHL8c4Sd3zOKDiK2yw3avlxplje644aJQ5/40Wi1r4asLk7XuzZld/P4ERYNkUwqF7/bxHfeNjTyq2j+eDi3bofvBKzh8uh8KVZqPB0A4zN8/wxXFyCCLrF4SYGUyWfyuFrIogVd/NYlISfI/d+DlHz5MKlqG/318+DA/whk8w4VHVA0cI9oppvAhsqcas/A9GcUfINLABzRh1MiLyoKi3A0TpV3RO/sPrM+AeI+O0YVK14tuHVeOgZn2WX/fp8knHfm4DaSRaDQY2of7lXeOncyFnr+t4rsaSOgYeZ6M5nsOcpEExgBweeDfzjxhD3WKJwKscbNedOQUAgoVXhIer8eek+aWJDrQN6Y/RL12qaYFYEY7yL4IKSsgKYcs0F2zSl0K4nckvGpxfr1xE2xlaiFVNjWkx/3nm5wxDI1jSBmB1FcZMLteepuhrIfa/jBWOWqumQ7rP46e8Mzbk6Zeqoi3nw8JijjlRbqg+",
-    "database_url": "i+mhjRcC2n3juW6RriXz0WYSRfdcNzSI4G6whBlXClEc2JvKPiP9KtWAVLHo+5SG/bPEahGEosW4uXZcdddqAJ7+neOna5olxMaG9DC1dedo1Hmga3eP1hYQ"
-  },
   "revenuecat-app": {
-    "app_uuid": "uDraj2/VGjc8ZAu8EfMysTL7rnRMD4GQIVeQ8WKLDmhyOZVW4z0=",
-    "dashboard_url": "sMaWJl2gXiix5PHepX5gbC/ZK4hEz45+27pRrvAH1URAyTnp+nonl55IAILt4RTWH83A0KOUyfLX6tJTMKBBr/fpRFZPk0tcNj4=",
-    "secret_api_key": "Kqo3SE3qjaV7ujYJa6zG791xPrZgWFnBP+JNZcxo3SuErPMS9+9d0I+DZwraYfZb08bVdiPuz7p6+ZH9pzE="
-  },
-  "turso-plan": {
-    "overages": "Mq1qNr8BUkZtyKJTeWox7Be/vSyFQI44RVQTD1WHX2Tw",
-    "plan": "agdImn+Ig5tCvxUu+BSqxqcmuCN5L75liYbrBXGW/9X/Nk9dlA=="
+    "app_uuid": "+HWE/tzwkDZUpCQidQiCykZVuBIHOb3YJYwpI6kFWm6XKRCMar0=",
+    "dashboard_url": "qSqsFUPLOfm3dB1KsPwCn4LxNILSRB4mDWt6PYos21rHwnOCLVjVOfiq4dbnebgy1EjeVtvk2Sy/cfL37UWjZgaDoIVng1PWDpU=",
+    "secret_api_key": "LznFBIzDw66TYcX1rZP5UmuX/DFi4wVHlGcSBjNNmyR9Er4pLSiWegPtMaLlFdMC3V1FGNPttWS6cxDdfzg="
   }
 }

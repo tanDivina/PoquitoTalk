@@ -31,20 +31,6 @@
     }
   },
   "resources": {
-    "poquitotalk_db": {
-      "configuration": {
-        "name": "poquitotalk_db",
-        "location": "aws-us-east-1"
-      },
-      "createdAt": "2026-08-09T23:01:20.050Z",
-      "lastRevealedAt": "2026-08-09T23:01:20.443Z",
-      "lastStatus": "complete",
-      "name": "poquitotalk_db",
-      "providerId": "prvdr_61UGLtrGjcXK8rTq15RWq",
-      "providerName": "Turso",
-      "resourceId": "fres_61VC3fpjJYe9t7rBN16UyxXWMYSQyawOV4GM7DJt2BBA",
-      "serviceId": "database"
-    },
     "revenuecat-app": {
       "configuration": {},
       "createdAt": "2026-08-10T02:47:28.074Z",
@@ -55,17 +41,6 @@
       "providerName": "RevenueCat",
       "resourceId": "fres_61VC7ChWVok7HbNU916UyxXWMYSQyawOV4GM7DJt2MXo",
       "serviceId": "app"
-    },
-    "turso-plan": {
-      "configuration": {},
-      "createdAt": "2026-08-09T23:00:55.556Z",
-      "lastRevealedAt": "2026-08-09T23:00:55.963Z",
-      "lastStatus": "complete",
-      "name": "turso-plan",
-      "providerId": "prvdr_61UGLtrGjcXK8rTq15RWq",
-      "providerName": "Turso",
-      "resourceId": "fres_61VC3fQuSFVnawxix16UyxXWMYSQyawOV4GM7DJt20wi",
-      "serviceId": "starter"
     }
   }
 }
