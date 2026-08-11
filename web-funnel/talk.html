@@ -23,6 +23,7 @@
   <meta name="twitter:description" content="Toca aquí para hablar por voz en español sin instalar nada." />
   <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/logo_v6_og.png?v=1.0.4" />
 
+  <link rel="stylesheet" href="style.css?v=4.0.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet" />
 
@@ -34,11 +35,11 @@
       --surface-container-high: #EFEEEA;
       --text-charcoal: #1B1C1A;
       --text-muted: #4D463E;
-      --text-outline: #7E766D;
+      --text-outline: #5C554D;
       --action-terracotta: #964824;
       --action-terracotta-light: #FD9A6F;
       --action-terracotta-bg: #FFDBCD;
-      --sage-green: #4F604E;
+      --sage-green: #2E402D;
       --sage-green-bg: #D5E8D1;
       --whatsapp-green: #25D366;
       --card-border: #E4E2DE;
@@ -280,7 +281,7 @@
 <body>
 
   <!-- Header Bar with Back Button & Brand Logo -->
-  <div class="header-bar">
+  <header class="header-bar">
     <a href="index.html" class="btn-back-nav">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -324,10 +325,10 @@
       <div class="live-dot"></div>
       En Vivo
     </div>
-  </div>
+  </header>
 
-  <!-- Main Walkie Card -->
-  <div class="main-card">
+  <!-- Main Walkie Card Landmark -->
+  <main id="main-content" class="main-card">
     <div class="room-info">
       <h1 class="room-title" id="room-title">Canal Walkie-Talkie</h1>
       <p class="room-subtitle">Habla en español. Tu cliente escuchará tu mensaje traducido en inglés claro con IA.</p>
@@ -362,7 +363,7 @@
         <span>Reproducir Respuesta en Español</span>
       </button>
     </div>
-  </div>
+  </main>
 
   <!-- Footer Note -->
   <p class="footer-note">Conectado a <span>WhatsApp Walkie-Talkie</span> • Sin instalar aplicaciones</p>

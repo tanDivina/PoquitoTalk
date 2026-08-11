@@ -6,13 +6,13 @@
   --surface-container-high: #EFEEEA;
   --text-charcoal: #1B1C1A;
   --text-muted: #4D463E;
-  --text-outline: #7E766D;
-  --brand-taupe: #665A4C;
+  --text-outline: #5C554D;
+  --brand-taupe: #594F42;
   --brand-taupe-container: #807264;
   --action-terracotta: #964824;
   --action-terracotta-light: #FD9A6F;
   --action-terracotta-bg: #FFDBCD;
-  --sage-green: #4F604E;
+  --sage-green: #2E402D;
   --sage-green-bg: #D5E8D1;
   --whatsapp-green: #25D366;
   --card-border: #E4E2DE;
@@ -293,9 +293,9 @@ textarea:focus {
   background: var(--surface-container);
   border: 1px solid var(--card-border);
   color: var(--text-charcoal);
-  padding: 8px 14px;
+  padding: 10px 16px;
   border-radius: 16px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
@@ -489,7 +489,7 @@ textarea:focus {
 
 .original-price {
   text-decoration: line-through;
-  color: #A1A1AA;
+  color: #52525B;
   font-size: 18px;
   font-weight: 600;
   margin-right: 6px;
@@ -630,6 +630,9 @@ textarea:focus {
 .footer-links a {
   color: var(--text-muted);
   text-decoration: none;
+  padding: 8px 12px;
+  margin: -8px -4px;
+  display: inline-block;
 }
 
 .footer-links a:hover {
@@ -740,7 +743,7 @@ textarea:focus {
 }
 
 .feedback-drawer .drawer-close-btn {
-  background: transparent;
+  background: none;
   border: none;
   font-size: 20px;
   color: var(--text-muted);
@@ -780,12 +783,11 @@ textarea:focus {
   border-radius: 12px;
   border: 1px solid var(--card-border);
   background: var(--surface-container);
-  color: var(--text-charcoal);
+  color: var(--text-muted);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  text-align: center;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   width: 100%;
   box-sizing: border-box;
 }
@@ -805,7 +807,7 @@ textarea:focus {
 
 .feedback-drawer .star {
   font-size: 26px;
-  color: var(--card-border);
+  color: #475569;
   cursor: pointer;
   transition: color 0.15s ease;
 }
@@ -1187,7 +1189,7 @@ textarea:focus {
 }
 
 .playstore-input::placeholder {
-  color: #9CA3AF;
+  color: #4B5563;
 }
 
 .btn-playstore-submit {
@@ -1217,7 +1219,7 @@ textarea:focus {
 
 .playstore-disclaimer {
   font-size: 13px !important;
-  color: #4B5563 !important;
+  color: #374151 !important;
   margin-top: 10px !important;
   margin-bottom: 0 !important;
 }
@@ -1269,16 +1271,19 @@ textarea:focus {
   }
 
   .playstore-input {
-    background: rgba(24, 24, 27, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #FBF9F5;
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 14px;
     padding: 14px 16px;
+    color: #1A1A1E;
+    font-size: 16px; /* Prevents iOS Safari auto-zoom on mobile touch */
   }
 
   .btn-playstore-submit {
     width: 100%;
     justify-content: center;
     padding: 14px 20px;
+    font-size: 15px;
   }
 }
 
@@ -1399,7 +1404,7 @@ textarea:focus {
   border: 1px solid var(--card-border);
   border-radius: 14px;
   font-family: inherit;
-  font-size: 15px;
+  font-size: 16px; /* Prevents iOS Safari auto-zoom */
   color: var(--text-charcoal);
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -1412,7 +1417,7 @@ textarea:focus {
   border: 1px solid var(--card-border);
   border-radius: 14px;
   font-family: inherit;
-  font-size: 15px;
+  font-size: 16px; /* Prevents iOS Safari auto-zoom */
   color: var(--text-charcoal);
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
