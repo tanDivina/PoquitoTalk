@@ -1188,8 +1188,13 @@ textarea:focus {
   outline: none;
 }
 
-.playstore-input::placeholder {
-  color: #4B5563;
+.playstore-input::placeholder,
+.contractor-input::placeholder,
+.contractor-textarea::placeholder,
+textarea::placeholder,
+input::placeholder {
+  color: #8C919D !important;
+  opacity: 1;
 }
 
 .btn-playstore-submit {
@@ -1256,6 +1261,76 @@ textarea:focus {
 }
 
 @media (max-width: 768px) {
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background: rgba(251, 249, 245, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--card-border);
+    padding: 10px 0 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  .nav-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 0 16px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .brand-name {
+    font-size: 18px;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 2px 0 4px;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-link {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 12px;
+    background: var(--surface-container);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    color: var(--text-charcoal);
+    flex-shrink: 0;
+    text-decoration: none;
+  }
+
+  .btn-primary-nav {
+    padding: 6px 14px;
+    font-size: 12px;
+    border-radius: 16px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .lang-toggle {
+    flex-shrink: 0;
+  }
+
   .playstore-card {
     padding: 28px 20px;
     flex-direction: column;
