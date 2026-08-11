@@ -27,7 +27,7 @@
   <meta name="twitter:description" content="Genera notas de voz amables en español panameño listas para enviar por WhatsApp en 1-tap." />
   <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/expo_go_qr.png" />
 
-  <link rel="stylesheet" href="../style.css?v=3.7.0" />
+  <link rel="stylesheet" href="../style.css?v=4.0.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
 
@@ -78,7 +78,7 @@
 </head>
 <body>
   <!-- Header / Navigation -->
-  <header class="navbar">
+  <header class="navbar" role="banner">
     <div class="nav-container">
       <div class="brand">
         <svg width="40" height="40" viewBox="0 0 200 200" fill="none" style="margin-right: 8px; filter: drop-shadow(0 2px 10px rgba(37, 211, 102, 0.4));">
@@ -98,7 +98,7 @@
         </svg>
         <span class="brand-name">PoquitoTalk <span class="badge-tag">Panamá 🇵🇦</span></span>
       </div>
-      <div class="nav-links">
+      <nav class="nav-links" aria-label="Navegación Principal">
         <!-- Language Switcher Toggle -->
         <div class="lang-toggle">
           <a href="../" class="lang-btn">🇺🇸 EN</a>
@@ -110,12 +110,15 @@
         <a href="#faq" class="nav-link">Preguntas Frecuentes</a>
         <a href="#pricing" class="nav-link">Precios</a>
         <a href="#pricing" class="btn-primary-nav">Comenzar <span class="arrow">→</span></a>
-      </div>
+      </nav>
     </div>
   </header>
 
+  <!-- Main Landmark Container for Accessibility -->
+  <main id="main-content">
+
   <!-- Hero Section -->
-  <section class="hero-section">
+  <section class="hero-section" aria-label="Sección Principal">
     <div class="container">
       <div class="hero-badge">
         <span class="sparkle">🇵🇦</span> Notas de Voz para WhatsApp en 1-Tap para Bocas y Panamá
@@ -152,7 +155,7 @@
   </section>
 
   <!-- Interactive Live Web Demo -->
-  <section id="demo" class="demo-section">
+  <section id="demo" class="demo-section" aria-label="Sección Demostración en Vivo">
     <div class="container">
       <div class="card-panel">
         <div class="card-header">
@@ -205,7 +208,7 @@
   </section>
 
   <!-- Section: Google Play Store Waitlist -->
-  <section id="playstore" class="playstore-section">
+  <section id="playstore" class="playstore-section" aria-label="Sección Google Play Store">
     <div class="container">
       <div class="playstore-card">
         <div class="playstore-icon-wrapper">
@@ -241,7 +244,7 @@
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
             <div class="success-text">
-              <h4>¡Estás en la Lista VIP de Google Play!</h4>
+              <p class="playstore-success-title" style="font-weight: 700; font-size: 16px; color: #10B981; margin: 0 0 4px 0;">¡Estás en la Lista VIP de Google Play!</p>
               <p>Hemos reservado tu lugar. Te enviaremos el enlace directo de descarga a tu correo en cuanto PoquitoTalk esté disponible en Google Play Store.</p>
             </div>
           </div>
@@ -265,7 +268,7 @@
   </section>
 
   <!-- FAQ Accordion Section -->
-  <section id="faq" class="faq-section">
+  <section id="faq" class="faq-section" aria-label="Preguntas Frecuentes">
     <div class="container">
       <div class="section-title">
         <h2>Preguntas Frecuentes</h2>
@@ -317,7 +320,7 @@
   </section>
 
   <!-- Pricing / Checkout Section -->
-  <section id="pricing" class="pricing-section">
+  <section id="pricing" class="pricing-section" aria-label="Precios y Planes">
     <div class="container">
       <div class="section-title">
         <span class="promo-tag-pill">
@@ -400,19 +403,21 @@
     </div>
   </section>
 
+  </main>
+
   <!-- Footer -->
-  <footer class="footer">
+  <footer class="footer" role="contentinfo">
     <div class="container footer-content">
       <p>© 2026 Hero-Apps • Diseñado para Bocas del Toro y Panamá 🇵🇦</p>
-      <div class="footer-links">
+      <nav class="footer-links" aria-label="Enlaces del Pie de Página">
         <a href="../privacy.html">Política de Privacidad</a>
         <a href="mailto:support@hero-apps.com">Soporte</a>
-      </div>
+      </nav>
     </div>
   </footer>
 
   <!-- Floating Feedback Trigger Button -->
-  <button id="floating-feedback-btn" class="floating-feedback-btn" onclick="openFeedbackDrawer()">
+  <button id="floating-feedback-btn" class="floating-feedback-btn" aria-label="Abrir Panel de Comentarios" onclick="openFeedbackDrawer()">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
       <line x1="12" y1="8" x2="12" y2="12"></line>
@@ -423,17 +428,17 @@
 
   <!-- Sliding Feedback Drawer Panel -->
   <div id="feedback-drawer-overlay" class="drawer-overlay" onclick="closeFeedbackDrawer()"></div>
-  <div id="feedback-drawer" class="feedback-drawer">
+  <div id="feedback-drawer" class="feedback-drawer" role="dialog" aria-label="Panel de Comentarios">
     <div class="drawer-header">
       <div>
         <h3>Comparte tus Comentarios</h3>
         <p>¡Ayúdanos a mejorar PoquitoTalk!</p>
       </div>
-      <button class="drawer-close-btn" onclick="closeFeedbackDrawer()">✕</button>
+      <button class="drawer-close-btn" aria-label="Cerrar Panel de Comentarios" onclick="closeFeedbackDrawer()">✕</button>
     </div>
 
     <div class="drawer-body">
-      <form id="feedback-form" onsubmit="submitWebFeedback(event)">
+      <form id="feedback-form" aria-label="Formulario de Comentarios" onsubmit="submitWebFeedback(event)">
         <!-- Feedback Type / Category -->
         <div class="form-group">
           <label>TIPO DE COMENTARIO</label>
@@ -461,11 +466,11 @@
         <div class="form-group">
           <label>VALORACIÓN</label>
           <div class="stars-row">
-            <span class="star" onclick="setRating(1)">★</span>
-            <span class="star" onclick="setRating(2)">★</span>
-            <span class="star" onclick="setRating(3)">★</span>
-            <span class="star" onclick="setRating(4)">★</span>
-            <span class="star" onclick="setRating(5)">★</span>
+            <span class="star" aria-hidden="true" onclick="setRating(1)">★</span>
+            <span class="star" aria-hidden="true" onclick="setRating(2)">★</span>
+            <span class="star" aria-hidden="true" onclick="setRating(3)">★</span>
+            <span class="star" aria-hidden="true" onclick="setRating(4)">★</span>
+            <span class="star" aria-hidden="true" onclick="setRating(5)">★</span>
           </div>
         </div>
 
@@ -497,6 +502,6 @@
     </div>
   </div>
 
-  <script src="../script.js?v=3.7.0"></script>
+  <script src="../script.js?v=3.8.0"></script>
 </body>
 </html>
