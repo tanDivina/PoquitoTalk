@@ -2,7 +2,11 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/es", "destination": "/index-es.html" },
+    { "source": "/es", "destination": "/es/index.html" },
+    { "source": "/directory", "destination": "/directory.html" },
+    { "source": "/es/directorio", "destination": "/es/directorio.html" },
+    { "source": "/contractors", "destination": "/contractors.html" },
+    { "source": "/es/contratistas", "destination": "/es/contratistas.html" },
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/talk", "destination": "/talk.html" }
   ],

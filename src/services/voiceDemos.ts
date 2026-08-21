@@ -43,14 +43,23 @@ export const VOICE_DEMO_SAMPLES: Record<string, VoiceDemoSample> = {
 };
 
 let currentSoundObject: Audio.Sound | null = null;
+let isPlayingDemo = false;
 
 export async function playVoiceDemoSample(persona: VoiceOption): Promise<void> {
   const sample = VOICE_DEMO_SAMPLES[persona.name] || VOICE_DEMO_SAMPLES.Diego;
   
-  // Stop any currently playing audio
-  await stopVoiceDemoSample();
+  // If already playing, stop playback and return (toggle)
+  if (isPlayingDemo) {
+    await stopVoiceDemoSample();
+    isPlayingDemo = false;
+    return;
+  }
 
-  // 1. First Priority: Try Hyper-Realistic ElevenLabs Studio Voices (Diego, Mateo, Sofia, Valeria)
+  // Stop any currently playing audio across the whole app
+  await stopVoiceDemoSample();
+  isPlayingDemo = true;
+
+  // 1. First Priority: Try Hyper-Realistic ElevenLabs Voices (Diego, Mateo, Sofia, Valeria)
   try {
     const elevenMp3Uri = await generateElevenLabsAudio(sample.spanishDemoText, persona.name);
     if (elevenMp3Uri) {
@@ -66,6 +75,12 @@ export async function playVoiceDemoSample(persona: VoiceOption): Promise<void> {
         { shouldPlay: true }
       );
       currentSoundObject = sound;
+      sound.setOnPlaybackStatusUpdate((status) => {
+        if (status.isLoaded && status.didJustFinish) {
+          isPlayingDemo = false;
+          sound.unloadAsync();
+        }
+      });
       return;
     }
   } catch (e) {
@@ -116,17 +131,22 @@ export async function playVoiceDemoSample(persona: VoiceOption): Promise<void> {
       voice: esVoice ? esVoice.identifier : undefined,
       pitch: Math.max(0.4, Math.min(pitch, 2.0)),
       rate,
+      onDone: () => { isPlayingDemo = false; },
+      onError: () => { isPlayingDemo = false; },
     });
   } catch (error) {
     Speech.speak(sample.spanishDemoText, {
       language: 'es-419',
       pitch: Math.max(0.4, Math.min(pitch, 2.0)),
       rate,
+      onDone: () => { isPlayingDemo = false; },
+      onError: () => { isPlayingDemo = false; },
     });
   }
 }
 
 export async function stopVoiceDemoSample(): Promise<void> {
+  isPlayingDemo = false;
   try {
     await Speech.stop();
   } catch (e) {}

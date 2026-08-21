@@ -5,6 +5,7 @@ import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { FeedbackModal } from '../components/FeedbackModal';
 import { GreenParrotLogo } from '../components/GreenParrotLogo';
+import { AnimatedParrotMascot } from '../components/AnimatedParrotMascot';
 
 import { GoogleSignInButton } from '../components/GoogleSignInButton';
 
@@ -35,10 +36,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
       <View style={styles.card}>
         <View style={styles.cardRow}>
           <View style={[styles.iconCircle, { backgroundColor: 'transparent' }]}>
-            <GreenParrotLogo size={42} />
+            <AnimatedParrotMascot size={46} isAnimating={true} showSpeechBubble={false} />
           </View>
           <View style={styles.cardText}>
-            <Text style={styles.cardTitle}>Natural Voice Notes</Text>
+            <Text style={styles.cardTitle}>Premium Voice Notes</Text>
             <Text style={styles.cardSubtitle}>
               {isPro ? 'Pro Member (Unlimited Voice Notes)' : '5 Free Welcome Voice Notes Active'}
             </Text>
@@ -50,7 +51,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
           onPress={onOpenPaywall}
           activeOpacity={0.8}
         >
-          <Text style={styles.actionBtnText}>{isPro ? 'Manage Membership' : 'Get 50 Studio Credits ($4.99)'}</Text>
+          <Text style={styles.actionBtnText}>{isPro ? 'Manage Membership' : 'Get 50 Poquito Credits ($4.99)'}</Text>
         </TouchableOpacity>
       </View>
 
@@ -105,7 +106,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.versionText}>PoquitoTalk v1.0.2 • Bocas del Toro, Panamá 🇵🇦</Text>
+      <Text style={styles.versionText}>PoquitoTalk v1.5.0 • Bocas del Toro (Panama) 🇵🇦</Text>
 
       {/* In-App Feedback Modal */}
       <FeedbackModal

@@ -27,8 +27,8 @@ export const MicButton: React.FC<MicButtonProps> = ({
           color={Colors.onSecondary}
         />
       </TouchableOpacity>
-      <Text style={styles.label}>
-        {isListening ? 'Listening...' : label}
+      <Text style={[styles.label, isListening && styles.labelActive]}>
+        {isListening ? 'Listening... Tap to Translate' : label}
       </Text>
     </View>
   );
@@ -63,5 +63,9 @@ const styles = StyleSheet.create({
     color: Colors.onSurfaceVariant,
     marginTop: 8,
     letterSpacing: 0.2,
+  },
+  labelActive: {
+    color: Colors.secondary,
+    fontWeight: '700',
   },
 });

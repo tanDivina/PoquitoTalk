@@ -9,6 +9,7 @@ export const Colors = {
   
   // Text Colors
   onBackground: '#1B1C1A', // Charcoal for output text
+  onSurface: '#1B1C1A',
   onSurfaceVariant: '#4D463E', // Muted text
   
   // Brand Accent Colors

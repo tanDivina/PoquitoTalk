@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Keyboard,
   Alert,
+  Platform,
 } from 'react-native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
@@ -19,17 +20,23 @@ import { Header } from '../components/Header';
 import { LanguageChip } from '../components/LanguageChip';
 import { TranslationCard } from '../components/TranslationCard';
 import { VoiceQualityModal } from '../components/VoiceQualityModal';
+import { VoiceNoteDecoderModal } from '../components/VoiceNoteDecoderModal';
+import { DocumentScannerModal } from '../components/DocumentScannerModal';
 import { MicButton } from '../components/MicButton';
+import { AnimatedParrotMascot } from '../components/AnimatedParrotMascot';
 import { translateWithGemma } from '../services/gemma';
 import { TranslationItem } from '../types';
-import { VoiceOption } from '../services/googleVoice';
+import { VoiceOption, GOOGLE_SPANISH_VOICES } from '../services/googleVoice';
 import { walkieTalkieService } from '../services/walkieTalkie';
 import { shareWalkieTalkieToWhatsApp } from '../services/deepLinks';
+import { startVoiceRecording, stopVoiceRecording, transcribeAudioFile } from '../services/transcriptionService';
 
 interface HomeScreenProps {
   navigation?: any;
   isPro: boolean;
   onOpenPaywall: () => void;
+  onOpenSaved?: () => void;
+  onOpenSettings?: () => void;
   savedTranslations: TranslationItem[];
   onToggleSave: (item: TranslationItem) => void;
   activePresetPrompt?: string;
@@ -43,6 +50,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   navigation,
   isPro,
   onOpenPaywall,
+  onOpenSaved,
+  onOpenSettings,
   savedTranslations,
   onToggleSave,
   activePresetPrompt,
@@ -57,8 +66,27 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const [outputText, setOutputText] = useState('');
   const [isTranslating, setIsTranslating] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [selectedVoice, setSelectedVoice] = useState<VoiceOption>(initialVoice || GOOGLE_SPANISH_VOICES[0]);
   const [clipboardReplyText, setClipboardReplyText] = useState<string | null>(null);
   const [showVoiceQualityModal, setShowVoiceQualityModal] = useState(false);
+
+  useEffect(() => {
+    if (initialVoice) {
+      setSelectedVoice(initialVoice);
+    }
+  }, [initialVoice]);
+  const [showVoiceDecoderModal, setShowVoiceDecoderModal] = useState(() => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('decoder') === 'true';
+    }
+    return false;
+  });
+  const [showDocScannerModal, setShowDocScannerModal] = useState(() => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('scanner') === 'true';
+    }
+    return false;
+  });
 
   // Auto-detect copied WhatsApp Spanish reply from clipboard
   useEffect(() => {
@@ -133,78 +161,60 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   };
 
   const inputRef = React.useRef<TextInput>(null);
+  const recordingTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
-  const handleMicPress = () => {
-    // If text already present, translate immediately
+  const handleStopVoiceAndTranslate = async () => {
+    if (recordingTimerRef.current) {
+      clearTimeout(recordingTimerRef.current);
+      recordingTimerRef.current = null;
+    }
+    setIsListening(false);
+    setIsTranslating(true);
+    try {
+      const audioUri = await stopVoiceRecording();
+      if (audioUri) {
+        const result = await transcribeAudioFile(audioUri, fromLang);
+        if (result && result.text && result.text.trim().length > 0) {
+          setInputText(result.text);
+          await handleTranslateText(result.text, fromLang, toLang);
+          return;
+        }
+      }
+      // If voice could not be decoded, focus input for typing or keyboard dictation
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    } catch (err) {
+      console.error('Error during voice transcription:', err);
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
+  const handleMicPress = async () => {
+    // 1. If text already typed in input, translate immediately
     if (inputText.trim().length > 0) {
       handleTranslateText(inputText);
       return;
     }
 
-    // Toggle active listening mode for dictation
+    // 2. If already listening / recording, STOP recording and TRANSCRIBE
     if (isListening) {
-      setIsListening(false);
-    } else {
-      setIsListening(true);
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-
-      // Check if Web SpeechRecognition is available in browser / WebView
-      if (typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
-        try {
-          const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-          const recognition = new SpeechRecognition();
-          recognition.lang = fromLang === 'en' ? 'en-US' : 'es-PA';
-          recognition.continuous = false;
-          recognition.interimResults = true;
-
-          recognition.onresult = (event: any) => {
-            const transcript = Array.from(event.results)
-              .map((result: any) => result[0].transcript)
-              .join('');
-            if (transcript && transcript.trim().length > 0) {
-              setInputText(transcript);
-              handleTranslateText(transcript, fromLang, toLang);
-            }
-          };
-
-          recognition.onend = () => {
-            setIsListening(false);
-          };
-
-          recognition.onerror = () => {
-            setIsListening(false);
-          };
-
-          recognition.start();
-        } catch (e) {
-          console.warn('SpeechRecognition error:', e);
-        }
-      } else {
-        // Expo AV Recording Fallback
-        Audio.requestPermissionsAsync().then(({ status }) => {
-          if (status === 'granted') {
-            Audio.setAudioModeAsync({
-              allowsRecordingIOS: true,
-              playsInSilentModeIOS: true,
-            });
-          }
-        });
-
-        // Auto-stop listening indicator after 4 seconds
-        setTimeout(() => {
-          setIsListening(false);
-          if (!inputText.trim()) {
-            const sampleVoiceInput = fromLang === 'en'
-              ? "Hi! I need an electrician to fix the water pump on Isla Colón today."
-              : "¡Buenas! Necesito un electricista para revisar la bomba de agua hoy.";
-            setInputText(sampleVoiceInput);
-            handleTranslateText(sampleVoiceInput, fromLang, toLang);
-          }
-        }, 4000);
-      }
+      await handleStopVoiceAndTranslate();
+      return;
     }
+
+    // 3. START real native microphone recording
+    setIsListening(true);
+    await startVoiceRecording();
+
+    // Set 5.5s auto-transcribe timer in case user finishes speaking and waits
+    if (recordingTimerRef.current) {
+      clearTimeout(recordingTimerRef.current);
+    }
+    recordingTimerRef.current = setTimeout(() => {
+      handleStopVoiceAndTranslate();
+    }, 5500);
   };
 
   const handleListenToIncomingVoiceNote = () => {
@@ -261,10 +271,17 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   );
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Header isPro={isPro} onOpenPaywall={onOpenPaywall} onResetOnboarding={onResetOnboarding} />
+    <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <Header
+        isPro={isPro}
+        onOpenPaywall={onOpenPaywall}
+        onOpenSaved={onOpenSaved}
+        savedCount={savedTranslations.length}
+        onOpenSettings={onOpenSettings}
+        onResetOnboarding={onResetOnboarding}
+      />
 
-      {/* WhatsApp Clipboard Reply Detection Banner */}
+      {/* WhatsApp Clipboard Reply Detection Banner (Only if clipboard content exists) */}
       {clipboardReplyText && (
         <TouchableOpacity
           style={styles.replyBanner}
@@ -273,7 +290,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         >
           <View style={styles.replyBannerHeader}>
             <FontAwesome5 name="whatsapp" size={16} color="#FFF" />
-            <Text style={styles.replyBannerTitle}>Copied WhatsApp Reply Detected!</Text>
+            <Text style={styles.replyBannerTitle}>Copied WhatsApp Reply Detected</Text>
           </View>
           <Text style={styles.replyBannerText} numberOfLines={2}>
             "{clipboardReplyText}"
@@ -285,45 +302,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </TouchableOpacity>
       )}
 
-      {/* Active Magic Walkie-Talkie HUD Banner */}
-      {walkieTalkieService.getActiveSession() && (
-        <View style={styles.walkieActiveBanner}>
-          <View style={styles.walkieActiveHeader}>
-            <View style={styles.walkieLiveBadge}>
-              <View style={styles.walkieDot} />
-              <Text style={styles.walkieLiveText}>WALKIE-TALKIE LIVE</Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                walkieTalkieService.closeSession();
-                Alert.alert('Session Ended', 'Walkie-Talkie channel closed.');
-              }}
-            >
-              <Ionicons name="close-circle" size={20} color={Colors.outline} />
-            </TouchableOpacity>
-          </View>
-
-          <Text style={styles.walkieActiveTitle}>
-            Contractor link active ({walkieTalkieService.getActiveSession()?.roomId})
-          </Text>
-          <Text style={styles.walkieActiveDesc}>
-            The contractor can press hold-to-talk inside WhatsApp. Audio translates into clean English automatically.
-          </Text>
-
-          <TouchableOpacity
-            style={styles.walkieShareBtn}
-            onPress={() => {
-              const s = walkieTalkieService.getActiveSession();
-              if (s) shareWalkieTalkieToWhatsApp(s.shareUrl, 'Amigo');
-            }}
-          >
-            <FontAwesome5 name="whatsapp" size={14} color={Colors.secondary} />
-            <Text style={styles.walkieShareBtnText}>Share Link to WhatsApp</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* Language Switcher Row */}
       {/* Category Badge Context & Back Button */}
       {activePresetCategory && (
         <View style={styles.categoryBadgeRow}>
@@ -361,19 +339,50 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       {/* Active Dictation Helper Banner */}
       {isListening && (
         <View style={styles.dictationActiveBanner}>
-          <Ionicons name="mic-circle" size={18} color={Colors.secondary} />
+          <Ionicons name="mic" size={18} color={Colors.secondary} />
           <Text style={styles.dictationActiveText}>
-            Dictation active: Speak or type your message in English above.
+            🎙️ Recording active: Speak now, then tap mic again to translate
           </Text>
         </View>
       )}
 
-      {/* Primary Input Card */}
+      {/* Voice Selection & Language Control Row */}
+      <View style={styles.voiceStatusRow}>
+        <View style={styles.voiceToggleRow}>
+          {GOOGLE_SPANISH_VOICES.map((v) => {
+            const isSelected = selectedVoice.id === v.id || selectedVoice.gender === v.gender;
+            return (
+              <TouchableOpacity
+                key={v.id}
+                style={[styles.voiceToggleBtn, isSelected && styles.voiceToggleBtnActive]}
+                onPress={() => setSelectedVoice(v)}
+                activeOpacity={0.8}
+              >
+                <Text style={[styles.voiceToggleBtnText, isSelected && styles.voiceToggleBtnTextActive]}>
+                  {v.gender === 'MALE' ? '♂ Male' : '♀ Female'}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        <TouchableOpacity
+          style={styles.languageToggleChip}
+          onPress={handleSwapLanguages}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.langTagText}>{fromLang === 'en' ? '🇺🇸 EN' : '🇵🇦 ES'}</Text>
+          <Ionicons name="swap-horizontal" size={14} color={Colors.secondary} />
+          <Text style={styles.langTagText}>{toLang === 'es' ? '🇵🇦 ES' : '🇺🇸 EN'}</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Primary Translation Input Card (The Clear Starting Point) */}
       <View style={styles.inputCard}>
         <TextInput
           ref={inputRef}
           style={styles.textInput}
-          placeholder={fromLang === 'en' ? 'Type or tap mic to speak...' : 'Pega la respuesta de WhatsApp en español...'}
+          placeholder={fromLang === 'en' ? 'Type or tap mic to speak in English...' : 'Pega el mensaje de WhatsApp en español...'}
           placeholderTextColor={Colors.outline}
           multiline
           value={inputText}
@@ -386,7 +395,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
         {inputText.length > 0 && (
           <View style={styles.inputActions}>
-            <TouchableOpacity onPress={() => { setInputText(''); setOutputText(''); }}>
+            <TouchableOpacity onPress={() => { setInputText(''); setOutputText(''); }} style={styles.clearInputBtn}>
               <Ionicons name="close-circle-outline" size={20} color={Colors.outline} />
             </TouchableOpacity>
 
@@ -400,7 +409,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 <ActivityIndicator color="#FFF" size="small" />
               ) : (
                 <>
-                  <Ionicons name="send" size={16} color="#FFF" />
+                  <Ionicons name="send" size={15} color="#FFF" />
                   <Text style={styles.translateBtnText}>Translate</Text>
                 </>
               )}
@@ -412,6 +421,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       {/* Mic Record Button */}
       <MicButton isListening={isListening} onPress={handleMicPress} />
 
+      {/* Mascot Translating Loader */}
+      {isTranslating && (
+        <View style={styles.translatingLoaderCard}>
+          <AnimatedParrotMascot size={58} isAnimating={true} isDancing={true} showSpeechBubble={true} customTip="¡Tranquilo compa! Estamos afinando tu mensaje..." />
+          <Text style={styles.translatingLoaderText}>Afinando traducción en español de Panamá...</Text>
+        </View>
+      )}
+
       {/* Translation Output Card */}
       <TranslationCard
         inputText={inputText}
@@ -420,17 +437,69 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         toLang={toLang}
         onSave={() => onToggleSave(currentTranslationItem)}
         isSaved={isSaved}
-        initialVoice={initialVoice}
+        initialVoice={selectedVoice}
+        onSelectQuickPrompt={(prompt) => {
+          setFromLang('en');
+          setToLang('es');
+          setInputText(prompt);
+          handleTranslateText(prompt, 'en', 'es');
+        }}
       />
+
+      {/* Secondary Fast Tools (Voice Decoder & Bill Scanner) */}
+      <View style={styles.superToolsSection}>
+        <Text style={styles.superToolsHeading}>MORE TOOLS</Text>
+        <View style={styles.superToolsRow}>
+          <TouchableOpacity
+            style={styles.superToolBtn}
+            onPress={() => setShowVoiceDecoderModal(true)}
+            activeOpacity={0.85}
+          >
+            <View style={[styles.superToolIconCircle, { backgroundColor: Colors.tertiaryContainer }]}>
+              <Ionicons name="mic" size={17} color="#0F172A" />
+            </View>
+            <View style={styles.superToolTextBox}>
+              <Text style={styles.superToolTitle} numberOfLines={1}>Decode Voice Note</Text>
+              <Text style={styles.superToolSubtitle} numberOfLines={1}>WhatsApp audio</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.superToolBtn}
+            onPress={() => setShowDocScannerModal(true)}
+            activeOpacity={0.85}
+          >
+            <View style={[styles.superToolIconCircle, { backgroundColor: '#F0FDF4' }]}>
+              <Ionicons name="camera" size={17} color="#0F172A" />
+            </View>
+            <View style={styles.superToolTextBox}>
+              <Text style={styles.superToolTitle} numberOfLines={1}>Scan Bill or Menu</Text>
+              <Text style={styles.superToolSubtitle} numberOfLines={1}>Itemized breakdown</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
 
       <VoiceQualityModal
         visible={showVoiceQualityModal}
         onClose={() => setShowVoiceQualityModal(false)}
-        selectedVoice={initialVoice || { name: 'Diego', tone: 'Warm & Natural', gender: 'MALE', id: 'es-US-Neural2-B', flag: '👨', pitch: 0.96, rate: 0.88 }}
+        selectedVoice={selectedVoice}
         onSelectFreeStandardVoice={() => {
-          Alert.alert("Standard Free Voice Selected ⚡", "Your audio message will be generated using the local standard free voice.");
+          Alert.alert("Standard Free Voice Selected", "Your audio message will be generated using the local standard free voice.");
         }}
         onBuyCreditsOrPro={onOpenPaywall}
+      />
+
+      {/* Inbound Voice Note Decoder Modal */}
+      <VoiceNoteDecoderModal
+        visible={showVoiceDecoderModal}
+        onClose={() => setShowVoiceDecoderModal(false)}
+      />
+
+      {/* Document & Utility Bill Scanner Modal */}
+      <DocumentScannerModal
+        visible={showDocScannerModal}
+        onClose={() => setShowDocScannerModal(false)}
       />
     </ScrollView>
   );
@@ -774,5 +843,172 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 14,
     fontWeight: '800',
+  },
+  voiceStatusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    gap: 8,
+  },
+  voiceToggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#F1F5F9',
+    borderRadius: 16,
+    padding: 3,
+  },
+  voiceToggleBtn: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 13,
+  },
+  voiceToggleBtnActive: {
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.12,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  voiceToggleBtnText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#64748B',
+  },
+  voiceToggleBtnTextActive: {
+    color: '#059669',
+    fontWeight: '800',
+  },
+  utilityBarRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 4,
+    marginBottom: 12,
+  },
+  utilityBarBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
+    borderWidth: 1,
+    borderColor: Colors.cardBorder || '#E8E4DE',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 4,
+  },
+  utilityBarBtnText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.onSurfaceVariant,
+  },
+  languageToggleChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
+    borderWidth: 1,
+    borderColor: Colors.cardBorder || '#E8E4DE',
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    borderRadius: 100,
+  },
+  langTagText: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: Colors.secondary || '#A04A26',
+  },
+  clearInputBtn: {
+    padding: 4,
+  },
+  superToolsSection: {
+    marginTop: 18,
+    marginBottom: 8,
+  },
+  superToolsHeading: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: Colors.outline,
+    letterSpacing: 0.8,
+    marginBottom: 10,
+    marginLeft: 4,
+  },
+  superToolsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  superToolBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 10,
+    paddingVertical: 12,
+    minHeight: 60,
+    borderRadius: 16,
+    borderWidth: 1.2,
+    borderColor: '#E2E8F0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.03,
+    shadowRadius: 5,
+    elevation: 1,
+  },
+  superToolIconCircle: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  superToolTextBox: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  superToolTitle: {
+    fontSize: 11.5,
+    fontWeight: '800',
+    color: Colors.onBackground,
+    letterSpacing: -0.1,
+  },
+  superToolSubtitle: {
+    fontSize: 10,
+    fontWeight: '500',
+    color: Colors.onSurfaceVariant,
+    marginTop: 2,
+  },
+  translatingLoaderCard: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    paddingVertical: 24,
+    paddingHorizontal: 20,
+    marginVertical: 12,
+    borderWidth: 1.5,
+    borderColor: 'rgba(37, 211, 102, 0.3)',
+    shadowColor: '#25D366',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  translatingLoaderText: {
+    marginTop: 14,
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#047857',
+    textAlign: 'center',
   },
 });

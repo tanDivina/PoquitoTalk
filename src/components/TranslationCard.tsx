@@ -7,9 +7,8 @@ import {
   Linking,
   Alert,
   ActivityIndicator,
-  Modal,
 } from 'react-native';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
 import * as Clipboard from 'expo-clipboard';
 import * as Sharing from 'expo-sharing';
@@ -18,13 +17,16 @@ import { Colors } from '../theme/colors';
 import {
   generateGoogleGeminiAudio,
   playGoogleAudioFile,
+  stopAllAudioPlayback,
   GOOGLE_SPANISH_VOICES,
   VoiceOption,
 } from '../services/googleVoice';
+import { AnimatedParrotMascot } from './AnimatedParrotMascot';
 import { DirectoryCard } from './DirectoryCard';
 import { getMatchingProviderForCategory } from '../services/directory';
 import { walkieTalkieService } from '../services/walkieTalkie';
 import { shareWalkieTalkieToWhatsApp } from '../services/deepLinks';
+import { shareVoiceNoteToWhatsApp, sendTextToWhatsApp } from '../services/sharing';
 
 interface TranslationCardProps {
   inputText: string;
@@ -35,6 +37,7 @@ interface TranslationCardProps {
   onSave?: () => void;
   isSaved?: boolean;
   initialVoice?: VoiceOption;
+  onSelectQuickPrompt?: (prompt: string, categoryTitle?: string) => void;
 }
 
 export const TranslationCard: React.FC<TranslationCardProps> = ({
@@ -46,13 +49,16 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
   onSave,
   isSaved = false,
   initialVoice,
+  onSelectQuickPrompt,
 }) => {
   const [selectedVoice, setSelectedVoice] = useState<VoiceOption>(initialVoice || GOOGLE_SPANISH_VOICES[0]);
-  const [showVoiceModal, setShowVoiceModal] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSharingVoice, setIsSharingVoice] = useState(false);
   const [copied, setCopied] = useState(false);
   const contextualSponsor = getMatchingProviderForCategory(category);
+
+  // Clean, high-quality translation output text directly
+  const currentDisplayText = outputText;
 
   useEffect(() => {
     if (initialVoice) {
@@ -62,19 +68,21 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
   // Play audio using selected Voice Persona or Native TTS
   const handlePlayTTS = async () => {
-    if (!outputText) return;
+    if (!currentDisplayText) return;
 
     if (isPlaying) {
-      Speech.stop();
+      await stopAllAudioPlayback();
       setIsPlaying(false);
       return;
     }
 
+    // Stop any existing sound globally
+    await stopAllAudioPlayback();
     setIsPlaying(true);
 
     try {
       // 1. Synthesize audio file via Google Speech API with SSML if API key available
-      const fileUri = await generateGoogleGeminiAudio(outputText, selectedVoice.id);
+      const fileUri = await generateGoogleGeminiAudio(currentDisplayText, selectedVoice.id);
       if (fileUri) {
         const sound = await playGoogleAudioFile(fileUri, selectedVoice);
         if (sound) {
@@ -91,120 +99,55 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
       console.warn('Google audio playback:', e);
     }
 
-    // 2. Native Expo Speech Fallback with distinct Male vs Female pitch & question intonation
-    let speechText = outputText;
+    // 2. Native Expo Speech Fallback
+    let speechText = currentDisplayText;
     const isQuestion = speechText.includes('?') || speechText.includes('¿');
     if (isQuestion && !speechText.startsWith('¿')) {
       speechText = `¿${speechText}`;
     }
 
-    // Determine distinct base pitch per persona
-    let basePitch = 1.0;
-    if (selectedVoice.name === 'Diego') basePitch = 0.96;
-    else if (selectedVoice.name === 'Mateo') basePitch = 0.90;
-    else if (selectedVoice.name === 'Sofia') basePitch = 1.02;
-    else if (selectedVoice.name === 'Valeria') basePitch = 1.08;
+    const isMale = selectedVoice.gender === 'MALE';
+    const basePitch = isMale ? 0.92 : 1.04;
+    const finalPitch = isQuestion ? basePitch + 0.04 : basePitch;
 
-    // Subtle question pitch boost for natural sentence-ending intonation
-    const finalPitch = isQuestion ? basePitch + 0.05 : basePitch;
-
-    try {
-      const availableVoices = await Speech.getAvailableVoicesAsync();
-      const spanishVoices = availableVoices.filter((v) => v.language.startsWith('es'));
-
-      let matchedVoice = undefined;
-      if (selectedVoice.gender === 'MALE') {
-        matchedVoice = spanishVoices.find(
-          (v) =>
-            v.identifier.toLowerCase().includes('juan') ||
-            v.identifier.toLowerCase().includes('jorge') ||
-            v.identifier.toLowerCase().includes('carlos') ||
-            v.identifier.toLowerCase().includes('male') ||
-            v.identifier.toLowerCase().includes('diego')
-        );
-      } else {
-        matchedVoice = spanishVoices.find(
-          (v) =>
-            v.identifier.toLowerCase().includes('monica') ||
-            v.identifier.toLowerCase().includes('paulina') ||
-            v.identifier.toLowerCase().includes('female') ||
-            v.identifier.toLowerCase().includes('sofia')
-        );
-      }
-
-      Speech.speak(speechText, {
-        language: 'es-PA',
-        voice: matchedVoice?.identifier,
-        pitch: Math.max(0.1, Math.min(finalPitch, 2.0)),
-        rate: selectedVoice.rate || 0.88,
-        onDone: () => setIsPlaying(false),
-        onError: () => setIsPlaying(false),
-      });
-    } catch (err) {
-      Speech.speak(speechText, {
-        language: 'es-PA',
-        pitch: Math.max(0.1, Math.min(finalPitch, 2.0)),
-        rate: selectedVoice.rate || 0.88,
-        onDone: () => setIsPlaying(false),
-        onError: () => setIsPlaying(false),
-      });
-    }
+    Speech.speak(speechText, {
+      language: 'es-US',
+      pitch: finalPitch,
+      rate: 0.82, // Calm, natural conversational pace (not rushed)
+      onDone: () => setIsPlaying(false),
+      onError: () => setIsPlaying(false),
+    });
   };
 
   const handleCopy = async () => {
-    if (!outputText) return;
-    const textWithSignature = `${outputText}\n\n— Sent via PoquitoTalk.app 🇵🇦`;
-    await Clipboard.setStringAsync(textWithSignature);
+    await Clipboard.setStringAsync(currentDisplayText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Send Text to WhatsApp
   const handleSendWhatsAppText = async () => {
-    if (!outputText) return;
-    const textWithSignature = `${outputText}\n\n— Sent via PoquitoTalk.app 🇵🇦`;
-    const url = `whatsapp://send?text=${encodeURIComponent(textWithSignature)}`;
-    const canOpen = await Linking.canOpenURL(url);
-
-    if (canOpen) {
-      await Linking.openURL(url);
-    } else {
-      Alert.alert(
-        'WhatsApp Not Found',
-        'Text copied to clipboard! You can paste it directly into your chat.',
-        [{ text: 'OK', onPress: handleCopy }]
-      );
-    }
+    await sendTextToWhatsApp(currentDisplayText);
   };
 
   // Send AUDIO VOICE NOTE (.mp3 file) to WhatsApp
   const handleSendWhatsAppVoiceNote = async () => {
-    if (!outputText) return;
-    setIsSharingVoice(true);
-
     try {
+      setIsSharingVoice(true);
       const isAvailable = await Sharing.isAvailableAsync();
       if (!isAvailable) {
-        handleSendWhatsAppText();
+        await handleSendWhatsAppText();
         setIsSharingVoice(false);
         return;
       }
 
-      // Generate local MP3 file with selected Google voice
-      let audioUri = await generateGoogleGeminiAudio(outputText, selectedVoice.id);
-
+      let audioUri = await generateGoogleGeminiAudio(currentDisplayText, selectedVoice.id);
       if (audioUri) {
-        // Trigger Native Share Sheet for WhatsApp Audio Attachment
-        await Sharing.shareAsync(audioUri, {
-          mimeType: 'audio/mp3',
-          dialogTitle: `Send ${selectedVoice.name}'s Voice Note to WhatsApp`,
-          UTI: 'public.mp3',
-        });
+        await shareVoiceNoteToWhatsApp(audioUri, 'Contact', currentDisplayText);
       } else {
-        handleSendWhatsAppText();
+        await handleSendWhatsAppText();
       }
     } catch (error) {
-      handleSendWhatsAppText();
+      await handleSendWhatsAppText();
     } finally {
       setIsSharingVoice(false);
     }
@@ -213,26 +156,95 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
   const handleStartWalkieTalkie = async () => {
     const session = walkieTalkieService.createSession();
     await shareWalkieTalkieToWhatsApp(session.shareUrl, 'Amigo');
-    Alert.alert('📻 Magic Walkie-Talkie Active!', `Sent link to WhatsApp. The contractor can speak Spanish voice audio without installing an app!`);
+    Alert.alert('Magic Walkie-Talkie Active!', `Sent link to WhatsApp. The contractor can speak Spanish voice audio without installing an app!`);
   };
+
+  const QUICK_SCENARIOS = [
+    {
+      id: 'water',
+      icon: 'water-pump',
+      title: 'Water Delivery Refill',
+      prompt: 'Hi! Do you have a water tanker truck available to fill a reserve cistern tank at my property today?',
+      category: 'Water Delivery & Cisterns',
+    },
+    {
+      id: 'ac',
+      icon: 'snowflake',
+      title: 'A/C Leaking Repair',
+      prompt: 'Hello, the air conditioner in the main bedroom is leaking water and not cooling. Can someone inspect it today?',
+      category: 'Air Conditioning (A/C)',
+    },
+    {
+      id: 'boat',
+      icon: 'ferry',
+      title: 'Water Taxi to Old Bank',
+      prompt: 'Hi Captain! Are you available to take two of us to Old Bank on Bastimentos tonight, and how much would it be for the two of us?',
+      category: 'Water Taxi & Boats',
+    },
+    {
+      id: 'power',
+      icon: 'flash',
+      title: 'Power Outage Check',
+      prompt: 'Hi, is there a power outage or blackout affecting our sector in Bocas right now?',
+      category: 'Power Outages & Generators',
+    },
+    {
+      id: 'vet',
+      icon: 'paw',
+      title: 'Urgent Vet Consultation',
+      prompt: 'Hello! My dog is showing signs of cane toad contact / fever. Is the vet clinic open right now?',
+      category: 'Pet Care & Island Vet',
+    },
+    {
+      id: 'taxi',
+      icon: 'taxi',
+      title: 'Taxi to Bluff Beach',
+      prompt: 'Hi! Are you available for a land taxi ride to Playa Bluff from Bocas Town today?',
+      category: 'Land Taxi & Drivers',
+    },
+  ];
 
   if (!inputText && !outputText) {
     return (
       <View style={styles.placeholderCard}>
-        <Ionicons name="chatbubbles-outline" size={32} color={Colors.outline} />
-        <Text style={styles.placeholderTitle}>Say or type a message...</Text>
+        {/* Local Spanish Voice Notes Badge */}
+        <View style={styles.dialectBadge}>
+          <Text style={styles.dialectFlag}>🇵🇦</Text>
+          <Text style={styles.dialectText}>Instant Spanish Voice Notes • Bocas del Toro</Text>
+        </View>
+
+        <Text style={styles.placeholderTitle}>Quick 1-Tap Island Scenarios</Text>
         <Text style={styles.placeholderDesc}>
-          Tap the microphone or choose a service preset below for instant Panamanian Spanish WhatsApp voice notes & text.
+          Tap any scenario below for instant Panamanian Spanish translations & voice notes:
         </Text>
 
+        {/* Quick Island Scenario Chips Grid */}
+        <View style={styles.quickGrid}>
+          {QUICK_SCENARIOS.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              style={styles.quickChip}
+              onPress={() => onSelectQuickPrompt && onSelectQuickPrompt(item.prompt, item.category)}
+              activeOpacity={0.75}
+            >
+              <MaterialCommunityIcons name={item.icon as any} size={16} color="#0F172A" />
+              <Text style={styles.quickChipText}>{item.title}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* 2-Way Magic Walkie-Talkie CTA */}
         <TouchableOpacity
           style={styles.walkieBtn}
           onPress={handleStartWalkieTalkie}
           activeOpacity={0.8}
         >
-          <Ionicons name="radio-outline" size={18} color={Colors.secondary} />
-          <Text style={styles.walkieBtnText}>Start 2-Way Walkie-Talkie Link</Text>
+          <Ionicons name="radio-outline" size={18} color="#FFF" />
+          <Text style={styles.walkieBtnText}>Start 2-Way Walkie-Talkie Channel</Text>
         </TouchableOpacity>
+        <Text style={styles.walkieSubtext}>
+          Contractors speak Spanish via WhatsApp — audio translates into English automatically.
+        </Text>
       </View>
     );
   }
@@ -245,48 +257,49 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
         </View>
       )}
 
-      {/* Gemma Output Block */}
       <View style={styles.sectionBlock}>
         <View style={styles.outputHeader}>
           <Text style={styles.outputLabel}>ESPAÑOL PANAMÁ 🇵🇦</Text>
           
-          {/* Voice Selector Badge */}
-          <TouchableOpacity
-            style={styles.voiceSelectorChip}
-            onPress={() => setShowVoiceModal(true)}
-            activeOpacity={0.7}
-          >
-            <FontAwesome5
-              name={selectedVoice.gender === 'MALE' ? 'male' : 'female'}
-              size={12}
-              color={Colors.secondary}
-            />
-            <Text style={styles.voiceSelectorText}>{selectedVoice.name}</Text>
-            <Ionicons name="chevron-down" size={12} color={Colors.secondary} />
-          </TouchableOpacity>
+          {/* Simple 2-Option Voice Toggle (♂ Male / ♀ Female) */}
+          <View style={styles.voiceToggleRow}>
+            {GOOGLE_SPANISH_VOICES.map((v) => {
+              const isSelected = selectedVoice.id === v.id || selectedVoice.gender === v.gender;
+              return (
+                <TouchableOpacity
+                  key={v.id}
+                  style={[styles.voiceToggleBtn, isSelected && styles.voiceToggleBtnActive]}
+                  onPress={() => setSelectedVoice(v)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={[styles.voiceToggleBtnText, isSelected && styles.voiceToggleBtnTextActive]}>
+                    {v.gender === 'MALE' ? '♂ Male' : '♀ Female'}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </View>
 
-        <Text style={styles.outputText}>{outputText}</Text>
+        <Text style={styles.outputText}>{currentDisplayText}</Text>
       </View>
 
       {/* Action Bar Container */}
       <View style={styles.actionsBarContainer}>
-        {/* Row 1: Quick Utility Controls (Play Audio, Copy, Save) */}
+        {/* Row 1: In-Person Speaker Audio, Copy, Save */}
         <View style={styles.topUtilityRow}>
-          {/* Play Audio Button */}
+          {/* In-Person Speaker Audio Playback (Icon Only) */}
           <TouchableOpacity
-            style={[styles.actionBtn, isPlaying && styles.actionBtnActive]}
+            style={[styles.speakerIconBtn, isPlaying && styles.actionBtnActive]}
             onPress={handlePlayTTS}
             activeOpacity={0.7}
+            accessibilityLabel={isPlaying ? 'Stop Audio' : 'Play Speaker Audio'}
           >
             <Ionicons
-              name={isPlaying ? 'square' : 'volume-high'}
-              size={16}
-              color={isPlaying ? '#BA1A1A' : Colors.secondary}
+              name={isPlaying ? 'stop-circle' : 'volume-high'}
+              size={18}
+              color={isPlaying ? '#BA1A1A' : '#0F172A'}
             />
-            <Text style={[styles.actionText, isPlaying && styles.actionTextActive]}>
-              {isPlaying ? 'Stop' : 'Play Audio'}
-            </Text>
           </TouchableOpacity>
 
           {/* Copy Button */}
@@ -294,7 +307,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
             <Ionicons
               name={copied ? 'checkmark' : 'copy-outline'}
               size={16}
-              color={copied ? Colors.tertiary : Colors.onSurfaceVariant}
+              color={copied ? '#059669' : '#0F172A'}
             />
             <Text style={[styles.actionText, copied && styles.actionTextSuccess]}>
               {copied ? 'Copied' : 'Copy'}
@@ -307,7 +320,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
               <Ionicons
                 name={isSaved ? 'bookmark' : 'bookmark-outline'}
                 size={16}
-                color={isSaved ? Colors.tertiary : Colors.onSurfaceVariant}
+                color={isSaved ? '#059669' : '#0F172A'}
               />
               <Text style={[styles.actionText, isSaved && styles.actionTextSuccess]}>
                 {isSaved ? 'Saved' : 'Save'}
@@ -316,84 +329,52 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
           )}
         </View>
 
-        {/* Row 2: Combined 1-Tap CTA (Send Spanish Voice Note + 2-Way Walkie Link) */}
+        {/* Row 2: Dual WhatsApp Dispatch Options (Text & Voice Note) */}
+        <View style={styles.dualDispatchRow}>
+          <TouchableOpacity
+            style={styles.dispatchTextBtn}
+            onPress={handleSendWhatsAppText}
+            activeOpacity={0.85}
+          >
+            <FontAwesome5 name="whatsapp" size={15} color="#059669" />
+            <Text style={styles.dispatchTextBtnLabel}>Text</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.dispatchVoiceBtn}
+            onPress={handleSendWhatsAppVoiceNote}
+            disabled={isSharingVoice}
+            activeOpacity={0.85}
+          >
+            {isSharingVoice ? (
+              <ActivityIndicator color="#FFF" size="small" />
+            ) : (
+              <>
+                <FontAwesome5 name="whatsapp" size={15} color="#FFF" />
+                <Text style={styles.dispatchVoiceBtnLabel}>Voice Note</Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
+
+        {/* Row 3: 2-Way Magic Walkie-Talkie Channel Trigger */}
         <TouchableOpacity
-          style={styles.fullWidthWhatsappBtn}
-          onPress={handleSendWhatsAppVoiceNote}
-          disabled={isSharingVoice}
+          style={styles.walkieInlineBtn}
+          onPress={handleStartWalkieTalkie}
           activeOpacity={0.8}
         >
-          {isSharingVoice ? (
-            <ActivityIndicator color="#FFF" size="small" />
-          ) : (
-            <>
-              <FontAwesome5 name="whatsapp" size={18} color="#FFF" />
-              <Text style={styles.fullWidthWhatsappBtnText} numberOfLines={1} adjustsFontSizeToFit>
-                Send Voice Note + Walkie Link
-              </Text>
-            </>
-          )}
+          <Ionicons name="radio" size={15} color="#2563EB" />
+          <Text style={styles.walkieInlineBtnText}>Start 2-Way PoquitoTalkie Live Channel</Text>
         </TouchableOpacity>
 
         {/* Contextual Local Sponsor Ad */}
         {contextualSponsor && (
           <View style={styles.contextualAdSection}>
             <Text style={styles.contextualAdHeader}>RELEVANT LOCAL SERVICE SPONSOR 🇵🇦</Text>
-            <DirectoryCard provider={contextualSponsor} translatedMessage={outputText} />
+            <DirectoryCard provider={contextualSponsor} translatedMessage={currentDisplayText} />
           </View>
         )}
       </View>
-
-      {/* Voice Persona Picker Modal */}
-      <Modal
-        visible={showVoiceModal}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowVoiceModal(false)}
-      >
-        <TouchableOpacity
-          style={styles.modalOverlay}
-          activeOpacity={1}
-          onPress={() => setShowVoiceModal(false)}
-        >
-          <View style={styles.modalCard}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Select WhatsApp Voice Persona</Text>
-              <TouchableOpacity onPress={() => setShowVoiceModal(false)}>
-                <Ionicons name="close" size={20} color={Colors.onSurfaceVariant} />
-              </TouchableOpacity>
-            </View>
-
-            {GOOGLE_SPANISH_VOICES.map((v) => {
-              const isSelected = selectedVoice.id === v.id;
-              return (
-                <TouchableOpacity
-                  key={v.id}
-                  style={[styles.voiceOptionRow, isSelected && styles.voiceOptionRowSelected]}
-                  onPress={() => {
-                    setSelectedVoice(v);
-                    setShowVoiceModal(false);
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <FontAwesome5
-                    name={v.gender === 'MALE' ? 'male' : 'female'}
-                    size={20}
-                    color={isSelected ? Colors.secondary : Colors.outline}
-                  />
-                  <View style={styles.voiceOptionInfo}>
-                    <Text style={[styles.voiceOptionName, isSelected && styles.voiceOptionNameSelected]}>
-                      {v.name}
-                    </Text>
-                    <Text style={styles.voiceOptionTone}>{v.tone}</Text>
-                  </View>
-                  {isSelected && <Ionicons name="checkmark" size={18} color={Colors.secondary} />}
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </TouchableOpacity>
-      </Modal>
     </View>
   );
 };
@@ -479,19 +460,35 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
     letterSpacing: 0.5,
   },
-  voiceSelectorChip: {
+  voiceToggleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    backgroundColor: Colors.secondaryContainer,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
+    gap: 4,
+    backgroundColor: '#F1F5F9',
+    borderRadius: 14,
+    padding: 3,
   },
-  voiceSelectorText: {
+  voiceToggleBtn: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 11,
+  },
+  voiceToggleBtnActive: {
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.12,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  voiceToggleBtnText: {
     fontSize: 11,
     fontWeight: '700',
-    color: Colors.secondary,
+    color: '#64748B',
+  },
+  voiceToggleBtnTextActive: {
+    color: '#059669',
+    fontWeight: '800',
   },
   outputText: {
     fontSize: 17,
@@ -510,6 +507,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+  },
+  speakerIconBtn: {
+    width: 44,
+    height: 38,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.surfaceContainer,
+    borderRadius: 14,
   },
   actionBtn: {
     flex: 1,
@@ -569,76 +574,201 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
     marginBottom: 8,
   },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 24,
-  },
-  modalCard: {
-    width: '100%',
-    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
-    borderRadius: 24,
-    padding: 20,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  modalTitle: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: Colors.onBackground,
-  },
-  voiceOptionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    borderRadius: 16,
-    marginBottom: 6,
-    backgroundColor: Colors.surfaceContainer,
-  },
-  voiceOptionRowSelected: {
-    backgroundColor: Colors.secondaryContainer,
-    borderWidth: 1,
-    borderColor: Colors.secondary,
-  },
-  voiceOptionInfo: {
-    flex: 1,
-  },
-  voiceOptionName: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: Colors.onBackground,
-  },
-  voiceOptionNameSelected: {
-    color: Colors.secondary,
-  },
   walkieBtn: {
-    marginTop: 10,
-    backgroundColor: Colors.secondaryContainer || '#FFDBCD',
-    borderWidth: 1,
-    borderColor: Colors.secondary,
+    marginTop: 14,
+    backgroundColor: Colors.secondary || '#A04A26',
     borderRadius: 24,
     paddingVertical: 13,
     paddingHorizontal: 20,
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
+    shadowColor: Colors.secondary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 4,
   },
   walkieBtnText: {
-    color: Colors.secondary,
+    color: '#FFFFFF',
     fontWeight: '800',
-    fontSize: 14,
+    fontSize: 13.5,
+  },
+  walkieSubtext: {
+    fontSize: 11,
+    color: Colors.outline,
+    textAlign: 'center',
+    marginTop: 8,
+    lineHeight: 16,
+  },
+  dialectBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: Colors.tertiaryContainer || '#F6F0E6',
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 100,
+    marginBottom: 6,
+  },
+  dialectFlag: {
+    fontSize: 12,
+  },
+  dialectText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#5A4632',
+  },
+  quickGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 14,
+    marginBottom: 4,
+    justifyContent: 'center',
+  },
+  quickChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: Colors.surfaceContainer || '#F5F5F5',
+    borderWidth: 1,
+    borderColor: Colors.cardBorder || '#E8E4DE',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 16,
+  },
+  quickChipText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.onBackground || '#222',
   },
   voiceOptionTone: {
     fontSize: 12,
     color: Colors.onSurfaceVariant,
+  },
+  toneSliderContainer: {
+    marginTop: 8,
+    marginBottom: 12,
+  },
+  toneMascotRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  tonePillsRow: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: Colors.surfaceContainer || '#F1ECE4',
+    padding: 4,
+    borderRadius: 20,
+  },
+  tonePill: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    paddingVertical: 6,
+    paddingHorizontal: 8,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'transparent',
+    backgroundColor: 'transparent',
+  },
+  tonePillActive: {
+    backgroundColor: '#047857',
+    borderColor: '#047857',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  tonePillActiveFull: {
+    backgroundColor: '#B45309',
+    borderColor: '#B45309',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  toneIcon: {
+    fontSize: 12,
+  },
+  tonePillText: {
+    fontSize: 11.5,
+    fontWeight: '600',
+    color: Colors.onSurfaceVariant || '#64748B',
+  },
+  tonePillTextActive: {
+    color: '#FFFFFF',
+    fontWeight: '800',
+  },
+  dualDispatchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 10,
+    width: '100%',
+  },
+  dispatchTextBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#ECFDF5',
+    borderWidth: 1.5,
+    borderColor: '#A7F3D0',
+    paddingVertical: 12,
+    borderRadius: 14,
+  },
+  dispatchTextBtnLabel: {
+    color: '#047857',
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  dispatchVoiceBtn: {
+    flex: 1.2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#059669',
+    paddingVertical: 12,
+    borderRadius: 14,
+    shadowColor: '#059669',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  dispatchVoiceBtnLabel: {
+    color: '#FFFFFF',
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  walkieInlineBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#EFF6FF',
+    borderWidth: 1,
+    borderColor: '#BFDBFE',
+    paddingVertical: 10,
+    borderRadius: 12,
+    marginTop: 8,
+  },
+  walkieInlineBtnText: {
+    color: '#1D4ED8',
+    fontSize: 12,
+    fontWeight: '700',
   },
 });

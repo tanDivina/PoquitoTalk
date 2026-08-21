@@ -37,7 +37,7 @@ export const DEFAULT_PRESET_THREADS: ConversationThread[] = [
         sender: 'EXPAT',
         textEnglish: 'Hi Carlos! My air conditioning unit in the main bedroom is leaking water inside.',
         textSpanish: '¡Buenas Carlos! El aire acondicionado en la recámara principal está goteando agua por dentro. ¿Cuándo podría revisarlo?',
-        personaName: 'Diego',
+        personaName: 'Male',
         timestamp: Date.now() - 3600000,
       },
       {

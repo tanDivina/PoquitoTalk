@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <link rel="alternate icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>PoquitoTalk — Admin Directory Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-cream: #FBF9F5;
+      --surface-card: #FFFFFF;
+      --surface-container: #F5F3EF;
+      --surface-container-high: #EFEEEA;
+      --text-charcoal: #1B1C1A;
+      --text-muted: #594F42;
+      --text-outline: #7A6F66;
+      --brand-terracotta: #964824;
+      --brand-terracotta-hover: #7A3618;
+      --brand-terracotta-bg: #FFDBCD;
+      --brand-green: #2E7D32;
+      --brand-green-hover: #1B5E20;
+      --brand-green-bg: #E8F5E9;
+      --whatsapp-green: #25D366;
+      --whatsapp-green-hover: #1EBE5D;
+      --card-border: #E4E2DE;
+      --card-border-focus: #D5C3B5;
+      --danger: #DC2626;
+      --danger-bg: #FEE2E2;
+      --warning: #D97706;
+      --warning-bg: #FEF3C7;
+      --info: #2563EB;
+      --info-bg: #DBEAFE;
+      --shadow-soft: 0 4px 20px rgba(142, 128, 113, 0.08);
+      --shadow-card: 0 2px 10px rgba(77, 43, 26, 0.04);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-cream);
+      color: var(--text-charcoal);
+      min-height: 100vh;
+      padding-bottom: 60px;
+      line-height: 1.5;
+    }
+
+    /* Auth Overlay */
+    #auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(27, 28, 26, 0.7);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .auth-box {
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 36px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(77, 43, 26, 0.15);
+    }
+
+    .auth-box h2 {
+      font-family: 'Lexend', sans-serif;
+      font-size: 22px;
+      margin-bottom: 8px;
+      color: var(--text-charcoal);
+    }
+
+    .auth-box p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--surface-card);
+      border: 1px solid var(--card-border-focus);
+      border-radius: 12px;
+      color: var(--text-charcoal);
+      font-size: 15px;
+      margin-bottom: 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .auth-input:focus { 
+      border-color: var(--brand-terracotta);
+      box-shadow: 0 0 0 3px rgba(150, 72, 36, 0.15);
+    }
+
+    .btn-auth {
+      width: 100%;
+      padding: 12px;
+      background: var(--brand-terracotta);
+      color: #FFF;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-auth:hover { background: var(--brand-terracotta-hover); }
+
+    /* Admin Navbar */
+    .admin-nav {
+      background: rgba(251, 249, 245, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-charcoal);
+      font-weight: 800;
+      font-size: 18px;
+      font-family: 'Lexend', sans-serif;
+    }
+
+    .admin-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-secondary {
+      background: var(--surface-container);
+      border: 1px solid var(--card-border);
+      color: var(--text-charcoal);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-container-high);
+      border-color: var(--card-border-focus);
+    }
+
+    /* Container */
+    .admin-container {
+      max-width: 1100px;
+      margin: 30px auto 0;
+      padding: 0 20px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .stat-pending { background: var(--warning-bg); color: var(--warning); }
+    .stat-approved { background: var(--brand-green-bg); color: var(--brand-green); }
+    .stat-waitlist { background: var(--info-bg); color: var(--info); }
+
+    .stat-val {
+      font-size: 28px;
+      font-weight: 800;
+      font-family: 'Lexend', sans-serif;
+      color: var(--text-charcoal);
+      line-height: 1.1;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    /* Tab Switcher */
+    .tabs-bar {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 12px 18px;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--brand-terracotta);
+    }
+
+    .tab-btn.active {
+      color: var(--brand-terracotta);
+      border-bottom-color: var(--brand-terracotta);
+    }
+
+    /* Contractor Cards */
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .admin-card {
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: var(--shadow-card);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .admin-card:hover {
+      border-color: var(--card-border-focus);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .admin-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .card-title-group h3 {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text-charcoal);
+      margin-bottom: 4px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-pending { background: var(--warning-bg); color: var(--warning); border: 1px solid #FCD34D; }
+    .badge-approved { background: var(--brand-green-bg); color: var(--brand-green); border: 1px solid #86EFAC; }
+    .badge-rejected { background: var(--danger-bg); color: var(--danger); border: 1px solid #FCA5A5; }
+
+    .card-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      font-size: 13.5px;
+      color: var(--text-charcoal);
+      background: var(--surface-container);
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 1px solid #EFEAE4;
+    }
+
+    .card-meta-item { display: flex; align-items: center; gap: 6px; }
+    .card-meta-item strong { color: var(--text-muted); font-size: 11px; text-transform: uppercase; }
+
+    .card-notes {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      background: #FAF8F5;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border-left: 3px solid var(--brand-terracotta);
+    }
+
+    /* Actions */
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+      padding-top: 14px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-approve {
+      background: var(--brand-green);
+      color: #FFF;
+    }
+    .btn-approve:hover { background: var(--brand-green-hover); }
+
+    .btn-reject {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #FECACA;
+    }
+    .btn-reject:hover { background: #FEE2E2; }
+
+    .btn-edit {
+      background: var(--surface-container);
+      color: var(--text-charcoal);
+      border: 1px solid var(--card-border);
+    }
+    .btn-edit:hover { 
+      background: var(--surface-container-high);
+      border-color: var(--card-border-focus);
+    }
+
+    .btn-wa-welcome {
+      background: var(--whatsapp-green);
+      color: #FFF;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-wa-welcome:hover { background: var(--whatsapp-green-hover); }
+
+    .btn-delete {
+      background: transparent;
+      color: var(--text-outline);
+      border: 1px solid var(--card-border);
+    }
+    .btn-delete:hover { background: var(--danger-bg); color: var(--danger); border-color: #FECACA; }
+
+    .btn-wa-test {
+      background: var(--brand-green-bg);
+      color: var(--brand-green);
+      border: 1px solid #BBF7D0;
+    }
+    .btn-wa-test:hover { background: #DCFCE7; }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--text-muted);
+      font-size: 15px;
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+    }
+
+    /* Edit Modal */
+    #edit-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(27, 28, 26, 0.7);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 20px;
+    }
+
+    .edit-modal-box {
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 30px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(77, 43, 26, 0.2);
+    }
+
+    .edit-modal-box h3 {
+      font-family: 'Lexend', sans-serif;
+      font-size: 20px;
+      color: var(--text-charcoal);
+      margin-bottom: 6px;
+    }
+
+    .edit-modal-box p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .edit-form-group {
+      margin-bottom: 16px;
+    }
+
+    .edit-form-group label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .edit-input, .edit-select, .edit-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--card-border-focus);
+      border-radius: 10px;
+      color: var(--text-charcoal);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .edit-input:focus, .edit-select:focus, .edit-textarea:focus {
+      border-color: var(--brand-terracotta);
+      box-shadow: 0 0 0 3px rgba(150, 72, 36, 0.12);
+    }
+
+    .edit-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--text-charcoal);
+      color: #FFF;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      display: none;
+      z-index: 10000;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Analytics & Proof Dashboard Styles */
+    .analytics-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-card);
+    }
+    .range-pills {
+      display: flex;
+      gap: 6px;
+      background: var(--surface-container);
+      padding: 4px;
+      border-radius: 10px;
+    }
+    .range-pill {
+      border: none;
+      background: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .range-pill.active {
+      background: #FFFFFF;
+      color: var(--brand-terracotta);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .export-btns {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-proof {
+      background: linear-gradient(135deg, #25D366 0%, #10B981 100%);
+      color: #0A0D14;
+      font-weight: 800;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.25);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .btn-proof:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35);
+    }
+    .analytics-grid-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .analytics-kpi-card {
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 18px 16px;
+      box-shadow: var(--shadow-card);
+    }
+    .analytics-kpi-val {
+      font-size: 26px;
+      font-weight: 800;
+      font-family: 'Lexend', sans-serif;
+      color: var(--text-charcoal);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .analytics-kpi-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .analytics-two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .analytics-panel {
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+    }
+    .analytics-panel h4 {
+      font-family: 'Lexend', sans-serif;
+      font-size: 15px;
+      color: var(--text-charcoal);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--surface-container);
+      font-size: 13.5px;
+    }
+    .metric-row:last-child { border-bottom: none; }
+    .metric-bar-bg {
+      background: var(--surface-container-high);
+      border-radius: 6px;
+      height: 6px;
+      width: 100%;
+      margin-top: 4px;
+      overflow: hidden;
+    }
+    .metric-bar-fill {
+      background: var(--brand-terracotta);
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.4s ease;
+    }
+    .live-stream-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .live-stream-table th {
+      background: var(--surface-container);
+      padding: 10px 12px;
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+    .live-stream-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--card-border);
+      vertical-align: middle;
+    }
+    .ev-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .ev-pageview { background: #E0F2FE; color: #0369A1; }
+    .ev-waitlist { background: #DCFCE7; color: #15803D; font-weight: 800; }
+    .ev-whatsapp { background: #DCFCE7; color: #166534; }
+    .ev-audio { background: #FEF3C7; color: #B45309; }
+    .ev-tone { background: #F3E8FF; color: #7E22CE; }
+    .ev-click { background: #F1F5F9; color: #475569; }
+  </style>
+</head>
+<body>
+
+  <!-- Auth Modal -->
+  <div id="auth-overlay">
+    <div class="auth-box">
+      <h2>🇵🇦 PoquitoTalk Admin</h2>
+      <p>Enter Master Secret Key to manage contractor registrations and live directory.</p>
+      <input type="password" id="admin-key-input" class="auth-input" placeholder="Enter Admin Secret..." onkeydown="if(event.key==='Enter') loginAdmin()" />
+      <button class="btn-auth" onclick="loginAdmin()">Unlock Dashboard</button>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="admin-nav">
+    <a href="index.html" class="admin-brand">
+      <img src="poquitotalk_parrot_logo_with_feet.png" width="30" height="30" alt="PoquitoTalk Logo" />
+      <span>PoquitoTalk Admin</span>
+    </a>
+    <div class="admin-controls">
+      <a href="directory.html" target="_blank" class="btn-secondary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> View Live Directory</a>
+      <button class="btn-secondary" onclick="loadAdminData()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Refresh</button>
+      <button class="btn-secondary" onclick="logoutAdmin()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Lock</button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="admin-container">
+    
+    <!-- Stats Strip -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon stat-pending">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="stat-val" id="stat-pending-val">0</div>
+          <div class="stat-label">Pending Approvals</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon stat-approved">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div>
+          <div class="stat-val" id="stat-approved-val">0</div>
+          <div class="stat-label">Live Verified Pros</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #10B981;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <div class="stat-val" id="stat-referrals-joined-val">0</div>
+          <div class="stat-label">Neighbor Referrals Joined</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(59, 130, 246, 0.15); color: #3B82F6;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div>
+          <div class="stat-val" id="stat-visitors-val">0</div>
+          <div class="stat-label">Unique Visitors / Views</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-bar">
+      <button class="tab-btn active" onclick="switchTab('pending')">Pending Review (<span id="tab-count-pending">0</span>)</button>
+      <button class="tab-btn" onclick="switchTab('approved')">Live Directory (<span id="tab-count-approved">0</span>)</button>
+      <button class="tab-btn" onclick="switchTab('referrals')">Neighbor Referrals (<span id="tab-count-referrals">0</span>)</button>
+      <button class="tab-btn" onclick="switchTab('rejected')">Archive / Rejected (<span id="tab-count-rejected">0</span>)</button>
+      <button class="tab-btn" onclick="switchTab('claims')">Listing Claims & Cédulas (<span id="tab-count-claims">0</span>)</button>
+      <button class="tab-btn" onclick="switchTab('waitlist')">Play Store Waitlist (<span id="tab-count-waitlist">0</span>)</button>
+      <button class="tab-btn" onclick="switchTab('analytics')">📊 Analytics & Proof (<span id="tab-count-analytics">0</span>)</button>
+    </div>
+
+    <!-- List Containers -->
+    <div id="list-pending" class="card-list"></div>
+    <div id="list-approved" class="card-list" style="display: none;"></div>
+    <div id="list-referrals" class="card-list" style="display: none;"></div>
+    <div id="list-rejected" class="card-list" style="display: none;"></div>
+    <div id="list-claims" class="card-list" style="display: none;"></div>
+    <div id="list-waitlist" class="card-list" style="display: none;"></div>
+    <div id="list-analytics" class="card-list" style="display: none;"></div>
+
+  </main>
+
+  <div id="toast"></div>
+
+  <script>
+    let adminKey = localStorage.getItem('poquitotalk_admin_token') || sessionStorage.getItem('poquitotalk_admin_token') || '';
+    let currentTab = 'pending';
+    let adminData = { pending: [], approved: [], rejected: [], waitlist: [] };
+
+    function escapeHtml(str) {
+      if (str === undefined || str === null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 3000);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (adminKey) {
+        document.getElementById('auth-overlay').style.display = 'none';
+        loadAdminData();
+      } else {
+        document.getElementById('auth-overlay').style.display = 'flex';
+      }
+    });
+
+    function loginAdmin() {
+      const input = document.getElementById('admin-key-input');
+      const key = input ? input.value.trim() : '';
+      if (!key) return;
+      adminKey = key;
+      localStorage.setItem('poquitotalk_admin_token', key);
+      sessionStorage.setItem('poquitotalk_admin_token', key);
+      loadAdminData(true);
+    }
+
+    function logoutAdmin() {
+      localStorage.removeItem('poquitotalk_admin_token');
+      sessionStorage.removeItem('poquitotalk_admin_token');
+      adminKey = '';
+      document.getElementById('auth-overlay').style.display = 'flex';
+    }
+
+    async function loadAdminData(fromLogin = false) {
+      try {
+        const cacheBuster = `?t=${Date.now()}`;
+        const res = await fetch(`api/admin.php${cacheBuster}`, {
+          cache: 'no-store',
+          headers: { 
+            'Authorization': 'Bearer ' + adminKey,
+            'X-Admin-Key': adminKey
+          }
+        });
+        
+        if (!res.ok) {
+          if (fromLogin) alert('Invalid secret key. Please check your credentials.');
+          logoutAdmin();
+          return;
+        }
+
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('auth-overlay').style.display = 'none';
+          adminData = data;
+          renderDashboard();
+          loadClaimsData();
+          showToast(`Synced with live database (${data.stats.pending_count} pending reviews)`);
+        }
+      } catch (err) {
+        console.error('Failed to load admin data:', err);
+        showToast('Error connecting to server API');
+      }
+    }
+
+    function renderDashboard() {
+      // Stats
+      document.getElementById('stat-pending-val').textContent = adminData.pending.length;
+      document.getElementById('stat-approved-val').textContent = adminData.approved.length;
+      document.getElementById('stat-waitlist-val').textContent = adminData.waitlist.length;
+      
+      const joinedCount = adminData.referrals ? adminData.referrals.filter(r => r.status === 'joined').length : 0;
+      const sentCount = adminData.referrals ? adminData.referrals.length : 0;
+      const joinedEl = document.getElementById('stat-referrals-joined-val');
+      if (joinedEl) joinedEl.textContent = `${joinedCount} (+${joinedCount * 5} credits)`;
+
+      // Tab Counts
+      document.getElementById('tab-count-pending').textContent = adminData.pending.length;
+      document.getElementById('tab-count-approved').textContent = adminData.approved.length;
+      document.getElementById('tab-count-rejected').textContent = adminData.rejected.length;
+      document.getElementById('tab-count-waitlist').textContent = adminData.waitlist.length;
+      const refCountEl = document.getElementById('tab-count-referrals');
+      if (refCountEl) refCountEl.textContent = sentCount;
+
+      const statVisEl = document.getElementById('stat-visitors-val');
+      if (statVisEl && adminData.stats) {
+        statVisEl.textContent = `${adminData.stats.unique_visitors || 0} / ${adminData.stats.total_pageviews || 0}`;
+      }
+      const tabAnalyticsCount = document.getElementById('tab-count-analytics');
+      if (tabAnalyticsCount && adminData.stats) {
+        tabAnalyticsCount.textContent = adminData.stats.unique_visitors || 0;
+      }
+
+      // Render Lists
+      renderContractorCards('list-pending', adminData.pending, 'pending');
+      renderContractorCards('list-approved', adminData.approved, 'approved');
+      renderContractorCards('list-rejected', adminData.rejected, 'rejected');
+      renderWaitlistCards('list-waitlist', adminData.waitlist);
+      renderReferralCards('list-referrals', adminData.referrals || []);
+    }
+
+    function renderReferralCards(containerId, list) {
+      const el = document.getElementById(containerId);
+      if (!list || list.length === 0) {
+        el.innerHTML = `<div class="empty-state">No neighbor invite activity tracked yet. Tap "Invite a Bocas Neighbor" inside the app or share link to populate.</div>`;
+        return;
+      }
+
+      el.innerHTML = list.map(item => {
+        const isJoined = item.status === 'joined';
+        const dateStr = item.date_formatted || (item.timestamp ? new Date(item.timestamp * 1000).toLocaleString() : 'Recent');
+        const referrer = item.referrer_code || item.referrer_uid || 'Anonymous Guest';
+
+        return `
+          <div class="admin-card" style="padding: 18px; border-left: 4px solid ${isJoined ? 'var(--brand-green)' : 'var(--info)'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <strong style="color: var(--text-charcoal); font-size: 15px;">Referrer: ${escapeHtml(referrer)}</strong>
+                  <span class="badge" style="background: ${isJoined ? 'var(--brand-green-bg)' : 'var(--info-bg)'}; color: ${isJoined ? 'var(--brand-green)' : 'var(--info)'};">
+                    ${isJoined ? '🎉 NEIGHBOR JOINED (+5 CREDITS)' : 'INVITE LINK SHARED'}
+                  </span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+                  Date: ${escapeHtml(dateStr)} • Channel: ${escapeHtml(item.channel || 'WhatsApp')} ${item.neighbor_uid ? `• Neighbor Device: ${escapeHtml(item.neighbor_uid)}` : ''}
+                </div>
+              </div>
+              <div>
+                <span style="font-size: 13px; font-weight: 700; color: ${isJoined ? 'var(--brand-green)' : 'var(--text-muted)'};">
+                  ${isJoined ? '+5 Voice Notes Awarded' : 'Pending Neighbor Install'}
+                </span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.card-list').forEach(l => l.style.display = 'none');
+
+      const tabs = ['pending', 'approved', 'referrals', 'rejected', 'claims', 'waitlist', 'analytics'];
+      const targetBtn = document.querySelectorAll('.tab-btn')[tabs.indexOf(tab)];
+      if (targetBtn) targetBtn.classList.add('active');
+
+      const targetList = document.getElementById('list-' + tab);
+      if (targetList) targetList.style.display = 'flex';
+
+      if (tab === 'analytics') {
+        loadAnalyticsData(currentAnalyticsRange || 'all');
+      }
+    }
+
+    let currentAnalyticsRange = 'all';
+    let cachedAnalytics = null;
+
+    async function loadAnalyticsData(range = 'all') {
+      currentAnalyticsRange = range;
+      const el = document.getElementById('list-analytics');
+      if (!el) return;
+      el.innerHTML = `<div style="text-align: center; padding: 40px; color: var(--text-muted); width: 100%;">
+        <div style="font-size: 24px; margin-bottom: 8px;">⏳</div>
+        <div>Loading live analytics & traction metrics...</div>
+      </div>`;
+
+      try {
+        const res = await fetch(`api/analytics.php?action=overview&range=${encodeURIComponent(range)}&t=${Date.now()}`, {
+          headers: {
+            'Authorization': 'Bearer ' + adminKey,
+            'X-Admin-Key': adminKey
+          }
+        });
+        if (!res.ok) {
+          el.innerHTML = `<div class="empty-state" style="width: 100%;">Unable to load analytics (HTTP ${res.status}). Please check admin secret key.</div>`;
+          return;
+        }
+        const json = await res.json();
+        if (json.success) {
+          cachedAnalytics = json;
+          const totalVis = json.data.overview.unique_visitors || 0;
+          const totalPV = json.data.overview.total_pageviews || 0;
+          const visEl = document.getElementById('stat-visitors-val');
+          if (visEl) visEl.textContent = `${totalVis} / ${totalPV}`;
+          const tabVisEl = document.getElementById('tab-count-analytics');
+          if (tabVisEl) tabVisEl.textContent = totalVis;
+
+          renderAnalyticsDashboard(json.data, range);
+        } else {
+          el.innerHTML = `<div class="empty-state" style="width: 100%;">Error: ${escapeHtml(json.error || 'Failed to fetch analytics')}</div>`;
+        }
+      } catch (err) {
+        console.error('Analytics load error:', err);
+        el.innerHTML = `<div class="empty-state" style="width: 100%;">Error fetching analytics: ${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    function renderAnalyticsDashboard(data, range) {
+      const el = document.getElementById('list-analytics');
+      if (!el) return;
+
+      const o = data.overview || {};
+      const referrers = data.breakdowns.referrers || [];
+      const pages = data.breakdowns.pages || [];
+      const devices = data.breakdowns.devices || [];
+      const osList = data.breakdowns.os || [];
+      const countries = data.breakdowns.countries || [];
+      const liveEvents = data.live_stream || [];
+
+      const maxRef = referrers.length > 0 ? Math.max(...referrers.map(r => r.count), 1) : 1;
+      const maxPage = pages.length > 0 ? Math.max(...pages.map(p => p.count), 1) : 1;
+
+      el.innerHTML = `
+        <div style="width: 100%;">
+          <!-- Top Toolbar with Range Filters & Proof Actions -->
+          <div class="analytics-toolbar">
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+              <strong style="font-size: 14px; color: var(--text-charcoal); font-family: 'Lexend', sans-serif;">Period:</strong>
+              <div class="range-pills">
+                <button class="range-pill ${range === 'today' ? 'active' : ''}" onclick="loadAnalyticsData('today')">Today</button>
+                <button class="range-pill ${range === '7d' ? 'active' : ''}" onclick="loadAnalyticsData('7d')">Last 7 Days</button>
+                <button class="range-pill ${range === '30d' ? 'active' : ''}" onclick="loadAnalyticsData('30d')">Last 30 Days</button>
+                <button class="range-pill ${range === 'all' ? 'active' : ''}" onclick="loadAnalyticsData('all')">All Time</button>
+              </div>
+            </div>
+
+            <div class="export-btns">
+              <button class="btn-secondary" onclick="exportAnalyticsCSV('visitors')" title="Export Unique Visitors CSV">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Visitors CSV
+              </button>
+              <button class="btn-secondary" onclick="exportAnalyticsCSV('events')" title="Export Raw Telemetry Events CSV">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Events CSV
+              </button>
+              <button class="btn-secondary" onclick="exportAnalyticsCSV('daily')" title="Export Daily Aggregations CSV">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Daily CSV
+              </button>
+              <button class="btn-secondary" onclick="exportAnalyticsJSON()" title="Export Raw Telemetry Dump JSON">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                JSON Dump
+              </button>
+              <a href="javascript:void(0)" onclick="openProofReport()" class="btn-proof" title="Generate Standalone Proof of Traction Report for Hackathons / Shippathon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7v2h10v-2h-2c-.55 0-1-.45-1-1v-2.34c3.08-.82 5-3.37 5-6.66V3H6v5c0 3.29 1.92 5.84 5 6.66z"/></svg>
+                🏆 Hackathon Proof Certificate
+              </a>
+            </div>
+          </div>
+
+          <!-- KPI Grid -->
+          <div class="analytics-grid-kpis">
+            <div class="analytics-kpi-card">
+              <div class="analytics-kpi-val" style="color: #3B82F6;">${(o.total_pageviews || 0).toLocaleString()}</div>
+              <div class="analytics-kpi-label">Total Pageviews</div>
+            </div>
+            <div class="analytics-kpi-card">
+              <div class="analytics-kpi-val" style="color: var(--brand-terracotta);">${(o.unique_visitors || 0).toLocaleString()}</div>
+              <div class="analytics-kpi-label">Unique Human Visitors</div>
+            </div>
+            <div class="analytics-kpi-card">
+              <div class="analytics-kpi-val" style="color: #8B5CF6;">${(o.total_sessions || 0).toLocaleString()}</div>
+              <div class="analytics-kpi-label">Total User Sessions</div>
+            </div>
+            <div class="analytics-kpi-card">
+              <div class="analytics-kpi-val" style="color: #10B981;">${(o.waitlist_submissions || 0).toLocaleString()} <span style="font-size: 13px; font-weight: 600; color: #059669;">(${o.waitlist_conversion_rate || '0%'})</span></div>
+              <div class="analytics-kpi-label">Waitlist Signups</div>
+            </div>
+            <div class="analytics-kpi-card">
+              <div class="analytics-kpi-val" style="color: #F59E0B;">${(o.voice_demo_plays || 0).toLocaleString()}</div>
+              <div class="analytics-kpi-label">Voice Demo Plays</div>
+            </div>
+            <div class="analytics-kpi-card">
+              <div class="analytics-kpi-val" style="color: #25D366;">${(o.whatsapp_outbound_clicks || 0).toLocaleString()}</div>
+              <div class="analytics-kpi-label">WhatsApp Leads</div>
+            </div>
+          </div>
+
+          <!-- 2 Column Breakdown Grid -->
+          <div class="analytics-two-col">
+            <!-- Referrers & Acquisition -->
+            <div class="analytics-panel">
+              <h4>
+                <span>🌐 Traffic Sources & Hackathon Referrals</span>
+                <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">${referrers.length} Sources</span>
+              </h4>
+              ${referrers.length === 0 ? '<div style="color: var(--text-muted); font-size: 13px;">No referrer data recorded yet for this timeframe.</div>' : `
+                <div>
+                  ${referrers.map(r => {
+                    const pct = Math.round((r.count / maxRef) * 100);
+                    const isDevpost = (r.source || '').toLowerCase().includes('devpost');
+                    const isSocial = (r.source || '').toLowerCase().includes('x.com') || (r.source || '').toLowerCase().includes('twitter') || (r.source || '').toLowerCase().includes('product hunt');
+                    return `
+                      <div style="margin-bottom: 12px;">
+                        <div class="metric-row" style="padding-bottom: 2px;">
+                          <span style="font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                            ${isDevpost ? '🏆 ' : (isSocial ? '🚀 ' : '🔗 ')}
+                            ${escapeHtml(r.source || 'Direct / Bookmark')}
+                          </span>
+                          <strong>${r.count.toLocaleString()} <span style="font-size: 11px; font-weight: 500; color: var(--text-muted);">(${r.unique_visitors || r.count} vis)</span></strong>
+                        </div>
+                        <div class="metric-bar-bg">
+                          <div class="metric-bar-fill" style="width: ${pct}%; background: ${isDevpost ? '#3B82F6' : 'var(--brand-terracotta)'};"></div>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              `}
+            </div>
+
+            <!-- Top Pages -->
+            <div class="analytics-panel">
+              <h4>
+                <span>📄 Top Pages Visited</span>
+                <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">${pages.length} Pages</span>
+              </h4>
+              ${pages.length === 0 ? '<div style="color: var(--text-muted); font-size: 13px;">No pageview events recorded yet for this timeframe.</div>' : `
+                <div>
+                  ${pages.map(p => {
+                    const pct = Math.round((p.count / maxPage) * 100);
+                    return `
+                      <div style="margin-bottom: 12px;">
+                        <div class="metric-row" style="padding-bottom: 2px;">
+                          <span style="font-weight: 600; color: var(--text-charcoal); word-break: break-all;">
+                            ${escapeHtml(p.path || '/')}
+                          </span>
+                          <strong>${p.count.toLocaleString()} <span style="font-size: 11px; font-weight: 500; color: var(--text-muted);">views</span></strong>
+                        </div>
+                        <div class="metric-bar-bg">
+                          <div class="metric-bar-fill" style="width: ${pct}%;"></div>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              `}
+            </div>
+          </div>
+
+          <!-- Devices & Operating Systems Grid -->
+          <div class="analytics-two-col">
+            <div class="analytics-panel">
+              <h4>
+                <span>📱 Devices & Operating Systems</span>
+              </h4>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div>
+                  <strong style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 8px;">Device Type</strong>
+                  ${devices.length === 0 ? '<div style="color: var(--text-muted); font-size: 12px;">N/A</div>' : devices.map(d => `
+                    <div class="metric-row">
+                      <span>${d.device === 'mobile' ? '📱 Mobile' : (d.device === 'tablet' ? '📟 Tablet' : '💻 Desktop')}</span>
+                      <strong>${d.count}</strong>
+                    </div>
+                  `).join('')}
+                </div>
+                <div>
+                  <strong style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 8px;">Operating System</strong>
+                  ${osList.length === 0 ? '<div style="color: var(--text-muted); font-size: 12px;">N/A</div>' : osList.map(o => `
+                    <div class="metric-row">
+                      <span>${escapeHtml(o.os)}</span>
+                      <strong>${o.count}</strong>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <div class="analytics-panel">
+              <h4>
+                <span>⚡ Interaction Breakdown</span>
+              </h4>
+              <div>
+                <div class="metric-row">
+                  <span>Play Store Waitlist Submissions</span>
+                  <strong style="color: #10B981;">${(o.waitlist_submissions || 0).toLocaleString()}</strong>
+                </div>
+                <div class="metric-row">
+                  <span>Voice Demo Listen Events</span>
+                  <strong style="color: #F59E0B;">${(o.voice_demo_plays || 0).toLocaleString()}</strong>
+                </div>
+                <div class="metric-row">
+                  <span>WhatsApp Local Pro Inquiries</span>
+                  <strong style="color: #25D366;">${(o.whatsapp_outbound_clicks || 0).toLocaleString()}</strong>
+                </div>
+                <div class="metric-row">
+                  <span>Direct Contractor Call Clicks</span>
+                  <strong style="color: #3B82F6;">${(o.call_clicks || 0).toLocaleString()}</strong>
+                </div>
+                <div class="metric-row">
+                  <span>Voice Tone Toggle Switches</span>
+                  <strong style="color: #8B5CF6;">${(o.tone_switches || 0).toLocaleString()}</strong>
+                </div>
+                <div class="metric-row">
+                  <span>Directory Searches / Filtering</span>
+                  <strong style="color: var(--brand-terracotta);">${(o.directory_searches || 0).toLocaleString()}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Activity Stream -->
+          <div class="analytics-panel" style="margin-bottom: 30px;">
+            <h4>
+              <span>⚡ Real-Time Visitor Activity Stream (Latest 50 Events)</span>
+              <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Auto-Buffered Telemetry</span>
+            </h4>
+            ${liveEvents.length === 0 ? '<div style="color: var(--text-muted); font-size: 13px;">No visitor telemetry recorded yet. Activity will stream here automatically when users browse the site.</div>' : `
+              <div style="overflow-x: auto;">
+                <table class="live-stream-table">
+                  <thead>
+                    <tr>
+                      <th>Event</th>
+                      <th>Path / Page</th>
+                      <th>Referrer Source</th>
+                      <th>Device & OS</th>
+                      <th>Visitor ID</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${liveEvents.map(ev => {
+                      let badgeClass = 'ev-pageview';
+                      if (ev.event === 'waitlist_submit') badgeClass = 'ev-waitlist';
+                      else if (ev.event === 'whatsapp_click' || ev.event === 'call_click') badgeClass = 'ev-whatsapp';
+                      else if (ev.event === 'play_voice_demo') badgeClass = 'ev-audio';
+                      else if (ev.event === 'toggle_tone') badgeClass = 'ev-tone';
+                      else if (ev.event !== 'pageview') badgeClass = 'ev-click';
+
+                      const timeStr = ev.date_formatted || (ev.timestamp ? new Date(ev.timestamp * 1000).toLocaleTimeString() : 'Just now');
+                      const vidShort = (ev.visitor_id || 'anon').substring(0, 10);
+                      const isMobile = (ev.device || '').toLowerCase() === 'mobile';
+
+                      return `
+                        <tr>
+                          <td><span class="ev-badge ${badgeClass}">${escapeHtml(ev.event)}</span></td>
+                          <td style="font-weight: 600; color: var(--text-charcoal); font-family: monospace; font-size: 12px;">${escapeHtml(ev.path || '/')}</td>
+                          <td style="color: var(--text-muted); font-size: 12px;">${escapeHtml(ev.referrer_category || ev.referrer || 'Direct')}</td>
+                          <td style="font-size: 12px;">${isMobile ? '📱' : '💻'} ${escapeHtml(ev.os || 'Unknown')}</td>
+                          <td style="font-family: monospace; font-size: 11px; color: var(--text-muted);">${escapeHtml(vidShort)}...</td>
+                          <td style="font-size: 12px; color: var(--text-muted); white-space: nowrap;">${escapeHtml(timeStr)}</td>
+                        </tr>
+                      `;
+                    }).join('')}
+                  </tbody>
+                </table>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    function exportAnalyticsCSV(type = 'events') {
+      const url = `api/analytics.php?action=export_csv&type=${encodeURIComponent(type)}&key=${encodeURIComponent(adminKey)}`;
+      window.open(url, '_blank');
+      showToast(`Downloading ${type.toUpperCase()} CSV export...`);
+    }
+
+    function exportAnalyticsJSON() {
+      const url = `api/analytics.php?action=export_json&key=${encodeURIComponent(adminKey)}`;
+      window.open(url, '_blank');
+      showToast('Downloading full telemetry JSON dump...');
+    }
+
+    function openProofReport() {
+      const url = `api/analytics.php?action=proof_report&key=${encodeURIComponent(adminKey)}`;
+      window.open(url, '_blank');
+      showToast('Opening Hackathon Proof of Traction Certificate...');
+    }
+
+    function renderContractorCards(containerId, list, type) {
+      const el = document.getElementById(containerId);
+      if (!list || list.length === 0) {
+        el.innerHTML = `<div class="empty-state">No contractors in this queue.</div>`;
+        return;
+      }
+
+      el.innerHTML = list.map(c => {
+        const phone = c.WhatsAppPhone || c.phone || 'N/A';
+        const cleanPhone = phone.replace(/[^0-9]/g, '');
+        const waLink = cleanPhone ? `https://wa.me/${cleanPhone.startsWith('507') ? cleanPhone : '507' + cleanPhone}` : '#';
+        const submitted = c.SubmittedAt || c.created_at || 'Recent';
+
+        return `
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div class="card-title-group">
+                <h3>${escapeHtml(c.BusinessName || c.name || 'Unnamed')}</h3>
+                <span class="badge badge-${type}">${type.toUpperCase()}</span>
+                <span style="font-size: 12px; color: var(--text-muted); margin-left: 8px;">Submitted: ${submitted}</span>
+              </div>
+            </div>
+
+            <div class="card-meta-grid">
+              <div class="card-meta-item">
+                <strong>Trade:</strong> <span>${escapeHtml(c.TradeCategory || 'General')}</span>
+              </div>
+              <div class="card-meta-item">
+                <strong>Location:</strong> <span>${escapeHtml(c.PrimaryLocation || 'Bocas del Toro')}</span>
+              </div>
+              <div class="card-meta-item">
+                <strong>Languages:</strong> <span>${escapeHtml(c.LanguagesSpoken || 'Español')}</span>
+              </div>
+              <div class="card-meta-item">
+                <strong>WhatsApp:</strong> <span>${escapeHtml(phone)}</span>
+              </div>
+              <div class="card-meta-item">
+                <strong>Email:</strong> <span>${escapeHtml(c.Email || 'N/A')}</span>
+              </div>
+              ${(c.Website && c.Website !== 'N/A' && c.Website !== '') || (c.website && c.website !== 'N/A' && c.website !== '') ? `
+              <div class="card-meta-item" style="grid-column: 1 / -1;">
+                <strong>Website:</strong> <a href="${(c.Website || c.website).startsWith('http') ? (c.Website || c.website) : 'https://' + (c.Website || c.website)}" target="_blank" style="color: var(--brand-terracotta); text-decoration: underline; word-break: break-all;">${escapeHtml(c.Website || c.website)}</a>
+              </div>` : ''}
+            </div>
+
+            ${c.ServiceSummary ? `<div class="card-notes">“${escapeHtml(c.ServiceSummary)}”</div>` : ''}
+
+            <div class="card-actions">
+              ${type === 'pending' ? `
+                <button class="btn-action btn-approve" onclick="performAction('${c.id}', 'approve')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Approve & Publish</button>
+                <button class="btn-action btn-reject" onclick="performAction('${c.id}', 'reject')">Reject</button>
+              ` : ''}
+
+              <button class="btn-action btn-edit" onclick="openEditContractorModal('${c.id}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Details</button>
+
+              ${cleanPhone ? `
+                <button class="btn-action btn-wa-welcome" onclick="sendWhatsAppWelcome('${c.id}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg> 💬 WhatsApp Welcome</button>
+                <a href="${waLink}" target="_blank" class="btn-action btn-wa-test">Open Chat</a>
+              ` : ''}
+
+              ${type === 'approved' ? `
+                <button class="btn-action btn-reject" onclick="performAction('${c.id}', 'pending')">Move to Pending</button>
+              ` : ''}
+
+              ${type === 'rejected' ? `
+                <button class="btn-action btn-approve" onclick="performAction('${c.id}', 'approve')">Re-Approve</button>
+              ` : ''}
+
+              <button class="btn-action btn-delete" onclick="performAction('${c.id}', 'delete')">Delete</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderWaitlistCards(containerId, list) {
+      const el = document.getElementById(containerId);
+      if (!list || list.length === 0) {
+        el.innerHTML = `<div class="empty-state">No waitlist signups recorded yet.</div>`;
+        return;
+      }
+
+      el.innerHTML = list.map(item => `
+        <div class="admin-card" style="padding: 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <strong style="color: var(--text-charcoal); font-size: 15px;">${escapeHtml(item.email || item.Email || 'N/A')}</strong>
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                Registered: ${item.registeredAt || item.SubmittedAt || 'Recent'} • Lang: ${item.language || item.Language || 'en'}
+              </div>
+            </div>
+            <span class="badge" style="background: var(--info-bg); color: var(--info); border: 1px solid #BFDBFE;">Android Waitlist</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function performAction(id, action) {
+      if (action === 'delete' && !confirm('Are you sure you want to permanently delete this contractor record?')) {
+        return;
+      }
+
+      try {
+        const res = await fetch('api/admin.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + adminKey,
+            'X-Admin-Key': adminKey
+          },
+          body: JSON.stringify({ id, action })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message);
+          loadAdminData();
+        } else {
+          alert(data.error || 'Action failed');
+        }
+      } catch (err) {
+        console.error('Action error:', err);
+        showToast('Server communication error');
+      }
+    }
+  
+    async function loadClaimsData() {
+      try {
+        const res = await fetch(`api/claim_listing.php?t=${Date.now()}`, { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success && data.data) {
+          renderClaims(data.data);
+        }
+      } catch (e) {
+        console.warn('Could not load claims:', e);
+      }
+    }
+
+    function renderClaims(claims) {
+      const container = document.getElementById('list-claims');
+      const countEl = document.getElementById('tab-count-claims');
+      const pendingClaims = claims.filter(c => c.status !== 'approved' && c.status !== 'rejected');
+      if (countEl) countEl.innerText = pendingClaims.length;
+
+      if (!claims || claims.length === 0) {
+        container.innerHTML = '<div class="empty-state">No listing claims or Cédula ID updates pending.</div>';
+        return;
+      }
+
+      container.innerHTML = claims.map(c => `
+        <div class="admin-card" style="border-left: 4px solid ${c.status === 'approved' ? 'var(--brand-green)' : (c.status === 'rejected' ? 'var(--danger)' : 'var(--warning)')};">
+          <div class="admin-card-header">
+            <div>
+              <div style="font-size: 16px; font-weight: 800; color: var(--text-charcoal);">${escapeHtml(c.provider_name)}</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Claimant: <strong style="color: var(--text-charcoal);">${escapeHtml(c.claimant_name || 'Owner')}</strong> • Phone: <strong style="color: var(--brand-green);">${escapeHtml(c.new_phone || c.current_phone)}</strong></div>
+            </div>
+            <span class="badge ${c.status === 'approved' ? 'badge-approved' : 'badge-pending'}">${escapeHtml(c.status)}</span>
+          </div>
+
+          <div style="margin: 12px 0; font-size: 13px; color: var(--text-charcoal); background: var(--surface-container); padding: 14px 18px; border-radius: 12px; border: 1px solid #EFEAE4;">
+            <div><strong>Verification Method:</strong> ${escapeHtml(c.verification_method)}</div>
+            ${c.current_phone ? `<div><strong>Current Listed Phone:</strong> ${escapeHtml(c.current_phone)}</div>` : ''}
+            ${c.new_phone ? `<div><strong>New WhatsApp Phone:</strong> ${escapeHtml(c.new_phone)}</div>` : ''}
+            ${c.requested_changes ? `
+              <div style="margin-top: 6px;"><strong>Requested Changes:</strong>
+                <pre style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px; white-space: pre-wrap;">${escapeHtml(JSON.stringify(c.requested_changes, null, 2))}</pre>
+              </div>` : ''}
+            ${c.id_photo_url ? `
+              <div style="margin-top: 8px;">
+                <strong>ID Document Photo:</strong><br/>
+                <a href="${c.id_photo_url}" target="_blank" style="color: var(--brand-terracotta); text-decoration: underline; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> View Uploaded Cédula / License Image
+                </a>
+              </div>` : ''}
+          </div>
+
+          ${c.status !== 'approved' && c.status !== 'rejected' ? `
+          <div class="card-actions">
+            <button class="btn-action btn-approve" onclick="handleAdminClaimAction('${c.id}', 'approve')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Approve & Update Listing
+            </button>
+            <button class="btn-action btn-reject" onclick="handleAdminClaimAction('${c.id}', 'reject')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject
+            </button>
+            <a href="https://wa.me/${(c.new_phone || c.current_phone || '').replace(/[^0-9]/g, '')}" target="_blank" class="btn-action btn-wa-test">
+              WhatsApp Claimant
+            </a>
+          </div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    async function handleAdminClaimAction(claimId, action) {
+      if (!confirm(`Are you sure you want to ${action} this claim?`)) return;
+      try {
+        const res = await fetch('api/claim_listing.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: action, claim_id: claimId })
+        });
+        const result = await res.json();
+        showToast(result.message || `Claim ${action}d`);
+        loadClaimsData();
+      } catch (e) {
+        showToast('Error performing action');
+      }
+    }
+
+    // --- CONTRACTOR EDIT MODAL & WHATSAPP WELCOME ---
+    function openEditContractorModal(id) {
+      const allContractors = [...(adminData.pending || []), ...(adminData.approved || []), ...(adminData.rejected || [])];
+      const contractor = allContractors.find(c => c.id === id);
+      if (!contractor) return;
+
+      document.getElementById('edit-contractor-id').value = contractor.id;
+      document.getElementById('edit-name').value = contractor.BusinessName || contractor.name || '';
+      document.getElementById('edit-trade').value = contractor.TradeCategory || '';
+      document.getElementById('edit-location').value = contractor.PrimaryLocation || '';
+      document.getElementById('edit-phone').value = contractor.WhatsAppPhone || contractor.phone || '';
+      document.getElementById('edit-languages').value = contractor.LanguagesSpoken || 'Español';
+      document.getElementById('edit-email').value = (contractor.Email && contractor.Email !== 'N/A') ? contractor.Email : '';
+      document.getElementById('edit-website').value = (contractor.Website && contractor.Website !== 'N/A') ? contractor.Website : (contractor.website || '');
+      document.getElementById('edit-summary').value = contractor.ServiceSummary || '';
+      document.getElementById('edit-status').value = contractor.status || 'pending';
+
+      document.getElementById('edit-modal-overlay').style.display = 'flex';
+    }
+
+    function closeEditContractorModal() {
+      document.getElementById('edit-modal-overlay').style.display = 'none';
+    }
+
+    function autoAdd507() {
+      const phoneInput = document.getElementById('edit-phone');
+      if (!phoneInput) return;
+      let val = phoneInput.value.replace(/[^0-9]/g, '');
+      if (val.startsWith('507')) val = val.substring(3);
+      if (val.length === 8) {
+        phoneInput.value = `+507 ${val.substring(0, 4)}-${val.substring(4)}`;
+      } else if (val.length > 0) {
+        phoneInput.value = `+507 ${val}`;
+      } else {
+        phoneInput.value = '+507 ';
+      }
+    }
+
+    async function saveContractorChanges(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-contractor-id').value;
+      const name = document.getElementById('edit-name').value.trim();
+      const trade = document.getElementById('edit-trade').value.trim();
+      const location = document.getElementById('edit-location').value.trim();
+      let phone = document.getElementById('edit-phone').value.trim();
+      const languages = document.getElementById('edit-languages').value.trim();
+      const email = document.getElementById('edit-email').value.trim() || 'N/A';
+      const website = document.getElementById('edit-website').value.trim() || 'N/A';
+      const summary = document.getElementById('edit-summary').value.trim();
+      const status = document.getElementById('edit-status').value;
+
+      try {
+        const res = await fetch('api/admin.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + adminKey,
+            'X-Admin-Key': adminKey
+          },
+          body: JSON.stringify({
+            action: 'update',
+            id: id,
+            BusinessName: name,
+            TradeCategory: trade,
+            PrimaryLocation: location,
+            WhatsAppPhone: phone,
+            LanguagesSpoken: languages,
+            Email: email,
+            Website: website,
+            website: website,
+            ServiceSummary: summary,
+            status: status,
+            verified: status === 'approved'
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          showToast('Provider details updated successfully!');
+          closeEditContractorModal();
+          loadAdminData();
+        } else {
+          alert(data.error || 'Failed to update contractor');
+        }
+      } catch (err) {
+        console.error('Update error:', err);
+        showToast('Error connecting to server');
+      }
+    }
+
+    function sendWhatsAppWelcome(id) {
+      const allContractors = [...(adminData.pending || []), ...(adminData.approved || []), ...(adminData.rejected || [])];
+      const contractor = allContractors.find(c => c.id === id);
+      if (!contractor) return;
+
+      const name = contractor.BusinessName || contractor.name || 'Amigo';
+      const trade = contractor.TradeCategory || 'servicios';
+      const rawPhone = contractor.WhatsAppPhone || contractor.phone || '';
+      let cleanPhone = rawPhone.replace(/[^0-9]/g, '');
+      if (!cleanPhone.startsWith('507') && cleanPhone.length === 8) {
+        cleanPhone = '507' + cleanPhone;
+      }
+
+      if (!cleanPhone) {
+        alert('No valid phone number found for this contractor.');
+        return;
+      }
+
+      const isEnglishOnly = (contractor.LanguagesSpoken || '').toLowerCase().includes('english') && 
+                            !(contractor.LanguagesSpoken || '').toLowerCase().includes('español') && 
+                            !(contractor.LanguagesSpoken || '').toLowerCase().includes('spanish');
+
+      let msg = '';
+      if (isEnglishOnly) {
+        msg = `Hi ${name}! Welcome to PoquitoTalk Bocas del Toro 🇵🇦.\n\nYour profile for ${trade} is now approved and live in the Bocas Verified Directory:\nhttps://poquitotalk.hero-apps.com/directory.html\n\nLocal clients, tourists, and residents can now reach you directly on WhatsApp.\n\nWishing you great success!`;
+      } else {
+        msg = `¡Hola ${name}! Te damos la bienvenida a PoquitoTalk Bocas del Toro 🇵🇦.\n\nTu perfil para el servicio de ${trade} ya ha sido aprobado y verificado en el Directorio Local:\nhttps://poquitotalk.hero-apps.com/es/directorio.html\n\nA partir de ahora, los clientes locales, residentes y turistas te podrán contactar directamente a este WhatsApp cuando necesiten tus servicios.\n\n¡Muchos éxitos!`;
+      }
+
+      const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+  </script>
+
+  <!-- Edit Contractor Modal -->
+  <div id="edit-modal-overlay">
+    <div class="edit-modal-box">
+      <h3>✏️ Edit Provider Details</h3>
+      <p>Modify provider information, phone number (+507), or location.</p>
+      
+      <form id="edit-contractor-form" onsubmit="saveContractorChanges(event)">
+        <input type="hidden" id="edit-contractor-id" />
+        
+        <div class="edit-form-group">
+          <label for="edit-name">Business / Contractor Name *</label>
+          <input type="text" id="edit-name" class="edit-input" required />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="edit-form-group">
+            <label for="edit-trade">Primary Trade *</label>
+            <input type="text" id="edit-trade" class="edit-input" required />
+          </div>
+          <div class="edit-form-group">
+            <label for="edit-location">Primary Location *</label>
+            <input type="text" id="edit-location" class="edit-input" required />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="edit-form-group">
+            <label for="edit-phone">WhatsApp Phone Number *</label>
+            <div style="display: flex; gap: 6px;">
+              <input type="text" id="edit-phone" class="edit-input" placeholder="+507 6123-4567" required />
+              <button type="button" class="btn-secondary" onclick="autoAdd507()" style="padding: 0 10px; font-size: 11px; white-space: nowrap;">+507</button>
+            </div>
+          </div>
+          <div class="edit-form-group">
+            <label for="edit-languages">Languages Spoken</label>
+            <input type="text" id="edit-languages" class="edit-input" placeholder="Español, English" />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="edit-form-group">
+            <label for="edit-email">Email Address</label>
+            <input type="text" id="edit-email" class="edit-input" placeholder="you@example.com" />
+          </div>
+          <div class="edit-form-group">
+            <label for="edit-website">Website / Link (Optional)</label>
+            <input type="text" id="edit-website" class="edit-input" placeholder="https://example.com" />
+          </div>
+        </div>
+
+        <div class="edit-form-group">
+          <label for="edit-status">Status</label>
+          <select id="edit-status" class="edit-select">
+            <option value="pending">Pending</option>
+            <option value="approved">Approved (Live)</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+
+        <div class="edit-form-group">
+          <label for="edit-summary">Service Summary & Bio</label>
+          <textarea id="edit-summary" class="edit-textarea" rows="3"></textarea>
+        </div>
+
+        <div class="edit-modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeEditContractorModal()">Cancel</button>
+          <button type="submit" class="btn-action btn-approve">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
