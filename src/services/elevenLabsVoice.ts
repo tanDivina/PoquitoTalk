@@ -15,10 +15,14 @@ export interface ElevenLabsVoice {
 }
 
 export const ELEVENLABS_PERSONAS: Record<string, string> = {
-  Diego: 'JBFqnCBsd6RMkjVDRZzb', // George - Warm Conversational Male
-  Mateo: 'ErXwobaYiN019PkySvjV', // Antoni - Authoritative Deep Male
-  Sofia: 'cgSgspJ2msm6clMCkdW9', // Jessica - Clear Friendly Female
-  Valeria: 'EXAVITQu4vr4xnSDxMaL', // Bella - Young Expressive Female
+  Male: 'JBFqnCBsd6RMkjVDRZzb', // George - Warm Conversational Male (Male 1)
+  Female: 'cgSgspJ2msm6clMCkdW9', // Jessica - Clear Friendly Female (Female 1)
+  male: 'JBFqnCBsd6RMkjVDRZzb',
+  female: 'cgSgspJ2msm6clMCkdW9',
+  male_warm: 'JBFqnCBsd6RMkjVDRZzb',
+  female_clear: 'cgSgspJ2msm6clMCkdW9',
+  Diego: 'JBFqnCBsd6RMkjVDRZzb',
+  Sofia: 'cgSgspJ2msm6clMCkdW9',
 };
 
 let elevenLabsApiKey = process.env.EXPO_PUBLIC_ELEVENLABS_API_KEY || 'sk_64d48eca9c2c52a559dfc4e40da1a2dc76870f3f851f4c49';
@@ -33,13 +37,13 @@ export function getElevenLabsApiKey(): string {
 
 export async function generateElevenLabsAudio(
   text: string,
-  personaName: string = 'Diego'
+  personaName: string = 'Male'
 ): Promise<string | null> {
   if (!elevenLabsApiKey) {
     return null;
   }
 
-  const voiceId = ELEVENLABS_PERSONAS[personaName] || ELEVENLABS_PERSONAS['Diego'];
+  const voiceId = ELEVENLABS_PERSONAS[personaName] || ELEVENLABS_PERSONAS['Male'];
   const endpoint = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`;
 
   try {

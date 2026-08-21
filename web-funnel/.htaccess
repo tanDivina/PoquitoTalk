@@ -4,9 +4,12 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Multilingual Subdirectory Redirects & Clean URLs per multilingual-url-seo skill
 Redirect 301 /index-es.html https://poquitotalk.hero-apps.com/es/
+RewriteRule ^es/directory(\.html)?$ https://poquitotalk.hero-apps.com/es/directorio.html [R=301,L]
 
 RewriteRule ^talk/?$ talk.html [L,QSA]
 RewriteRule ^privacy/?$ privacy.html [L,QSA]
+RewriteRule ^directory/?$ directory.html [L,QSA]
+RewriteRule ^es/directorio/?$ es/directorio.html [L,QSA]
 RewriteRule ^contractors/?$ contractors.html [L,QSA]
 RewriteRule ^es/contratistas/?$ es/contratistas.html [L,QSA]
 

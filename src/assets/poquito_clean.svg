@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none" id="poquito-clean">
+  <!-- 1. Wooden Perch Branch -->
+  <g id="clean-perch">
+    <path d="M 30 135 Q 70 132 115 135" stroke="#B45309" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <!-- 2. Golden Parrot Claws -->
+  <g id="clean-claws">
+    <path
+      d="M 48 124 C 46 131 48 138 52 138 M 56 124 C 54 131 56 138 60 138 M 70 124 C 68 131 70 138 74 138 M 78 124 C 76 131 78 138 82 138"
+      stroke="#F59E0B"
+      stroke-width="4.5"
+      stroke-linecap="round"
+    />
+  </g>
+
+  <!-- 3. Body & Crown Group (Permanently anchored) -->
+  <g id="clean-body-group">
+    <!-- Green Body -->
+    <path
+      d="M 35 125 C 27 108 25 90 29 70 C 33 42 50 18 73 18 C 91 18 100 34 98 52 C 95 72 97 100 92 116 C 82 131 58 136 35 125 Z"
+      fill="#10B981"
+      stroke="#047857"
+      stroke-width="4.5"
+      stroke-linejoin="round"
+    />
+
+    <!-- Expressive Crown Feathers (Seamless root contact, zero gap, naturally curved, non-touching) -->
+    <g id="clean-crest">
+      <!-- Left / Back Hair (Anchored flush on skull slope at y:19.2) -->
+      <path d="M 58 19.2 C 55 13 52 9 47 8" stroke="#047857" stroke-width="3.5" stroke-linecap="round" fill="none" />
+      <!-- Right / Front Hair (Anchored flush on top crown at y:17.8) -->
+      <path d="M 67 17.8 C 64 12 61 9 56 7" stroke="#047857" stroke-width="3" stroke-linecap="round" fill="none" />
+    </g>
+  </g>
+
+  <!-- 4. Sleek & Proportionate Cyan Wing -->
+  <g id="clean-wing">
+    <path
+      d="M 35 83 C 40 68 53 63 64 78 C 70 93 64 116 47 119 C 39 111 34 97 35 83 Z"
+      fill="#06B6D4"
+      stroke="#047857"
+      stroke-width="3.5"
+      stroke-linejoin="round"
+    />
+  </g>
+
+  <!-- 5. Head Group -->
+  <g id="clean-head">
+    <!-- Eye -->
+    <g id="clean-eye">
+      <circle id="clean-eye-white" cx="76" cy="42" r="9" fill="#FFFFFF" stroke="#047857" stroke-width="2.5" />
+      <circle id="clean-pupil" cx="74.5" cy="42" r="4.5" fill="#0F172A" />
+      <circle cx="72.5" cy="40" r="1.8" fill="#FFFFFF" />
+    </g>
+
+    <!-- Clean Golden Beak (Completely visible, never covered) -->
+    <g id="clean-beak-top">
+      <path
+        d="M 90 36 C 106 36 114 50 100 62 C 95 65 88 61 89 55 C 91 49 88 40 90 36 Z"
+        fill="#F59E0B"
+        stroke="#047857"
+        stroke-width="3.5"
+        stroke-linejoin="round"
+      />
+    </g>
+    <g id="clean-beak-bottom">
+      <path
+        d="M 90 56 C 96 58 98 62 92 63 C 89 63 88 59 90 56 Z"
+        fill="#D97706"
+        stroke="#047857"
+        stroke-width="1.8"
+        stroke-linejoin="round"
+      />
+    </g>
+  </g>
+</svg>

@@ -32,7 +32,7 @@ const INITIAL_USER_PROFILE: UserProfileData = {
       type: 'BONUS_FREE',
       amount: 5,
       source: 'Welcome Bonus',
-      details: '5 Free Natural-Sounding Voice Notes on app install 🎁',
+      details: '5 Free Natural-Sounding Voice Notes on app install',
       timestamp: Date.now(),
     },
   ],

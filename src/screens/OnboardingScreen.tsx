@@ -15,6 +15,7 @@ import { Colors } from '../theme/colors';
 import { GOOGLE_SPANISH_VOICES, VoiceOption } from '../services/googleVoice';
 import { playVoiceDemoSample, VOICE_DEMO_SAMPLES } from '../services/voiceDemos';
 import { GreenParrotLogo } from '../components/GreenParrotLogo';
+import { AnimatedParrotMascot } from '../components/AnimatedParrotMascot';
 
 interface OnboardingScreenProps {
   onComplete: (userName: string, selectedVoice: VoiceOption) => void;
@@ -23,33 +24,7 @@ interface OnboardingScreenProps {
 export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }) => {
   const [step, setStep] = useState(1);
   const [userName, setUserName] = useState('');
-  const [selectedGender, setSelectedGender] = useState<'MALE' | 'FEMALE'>('MALE');
-  const [selectedAgeGroup, setSelectedAgeGroup] = useState<'YOUNG' | 'MATURE'>('YOUNG');
   const [selectedVoice, setSelectedVoice] = useState<VoiceOption>(GOOGLE_SPANISH_VOICES[0]);
-
-  // Auto-pair voice based on gender & age preference
-  const updateVoicePreference = (gender: 'MALE' | 'FEMALE', age: 'YOUNG' | 'MATURE') => {
-    setSelectedGender(gender);
-    setSelectedAgeGroup(age);
-
-    if (gender === 'FEMALE') {
-      if (age === 'YOUNG') {
-        const valeria = GOOGLE_SPANISH_VOICES.find((v) => v.name === 'Valeria') || GOOGLE_SPANISH_VOICES[3];
-        setSelectedVoice(valeria); // Valeria (Young & Expressive Female)
-      } else {
-        const sofia = GOOGLE_SPANISH_VOICES.find((v) => v.name === 'Sofia') || GOOGLE_SPANISH_VOICES[2];
-        setSelectedVoice(sofia); // Sofia (Clear & Friendly Female)
-      }
-    } else {
-      if (age === 'YOUNG') {
-        const diego = GOOGLE_SPANISH_VOICES.find((v) => v.name === 'Diego') || GOOGLE_SPANISH_VOICES[0];
-        setSelectedVoice(diego); // Diego (Warm & Natural Male)
-      } else {
-        const mateo = GOOGLE_SPANISH_VOICES.find((v) => v.name === 'Mateo') || GOOGLE_SPANISH_VOICES[1];
-        setSelectedVoice(mateo); // Mateo (Calm & Authoritative Male)
-      }
-    }
-  };
 
   const handleFinish = () => {
     onComplete(userName.trim() || 'Expat Friend', selectedVoice);
@@ -74,12 +49,12 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
         {step === 1 && (
           <View style={styles.stepCard}>
             <View style={styles.heroBadge}>
-              <GreenParrotLogo size={64} />
+              <AnimatedParrotMascot size={72} isAnimating={true} showSpeechBubble={false} />
             </View>
 
             <Text style={styles.heroTitle}>Welcome to PoquitoTalk</Text>
             <Text style={styles.heroSubtitle}>
-              Your friendly local messaging assistant for Bocas del Toro & Panama 🇵🇦
+              Your friendly local messaging assistant for Bocas del Toro (Panama) 🇵🇦
             </Text>
 
             <View style={styles.featuresBox}>
@@ -115,7 +90,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
             </View>
 
             <TouchableOpacity style={styles.primaryBtn} onPress={() => setStep(2)} activeOpacity={0.8}>
-              <Text style={styles.primaryBtnText}>Set Up My Voice Persona</Text>
+              <Text style={styles.primaryBtnText}>Set Up My Voice</Text>
               <Ionicons name="arrow-forward" size={18} color="#FFF" />
             </TouchableOpacity>
           </View>
@@ -125,9 +100,9 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
         {step === 2 && (
           <View style={styles.stepCard}>
             <Text style={styles.stepTag}>STEP 2 OF 3</Text>
-            <Text style={styles.title}>Personalize Your Voice Persona</Text>
+            <Text style={styles.title}>Personalize Your Voice</Text>
             <Text style={styles.subtitle}>
-              Choose your preferred voice persona for sending natural Spanish WhatsApp voice notes.
+              Choose your preferred voice for sending natural Spanish WhatsApp voice notes.
             </Text>
 
             {/* Name Input */}
@@ -142,103 +117,28 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
               />
             </View>
 
-            {/* Gender Selection */}
+            {/* Voice Selection */}
             <View style={styles.fieldBlock}>
-              <Text style={styles.fieldLabel}>PREFERRED VOICE GENDER</Text>
+              <Text style={styles.fieldLabel}>CHOOSE VOICE</Text>
               <View style={styles.optionsRow}>
-                <TouchableOpacity
-                  style={[styles.optionChip, selectedGender === 'MALE' && styles.optionChipSelected]}
-                  onPress={() => updateVoicePreference('MALE', selectedAgeGroup)}
-                  activeOpacity={0.8}
-                >
-                  <FontAwesome5
-                    name="male"
-                    size={22}
-                    color={selectedGender === 'MALE' ? Colors.secondary : Colors.outline}
-                  />
-                  <Text style={[styles.optionText, selectedGender === 'MALE' && styles.optionTextSelected]}>
-                    Male Voice
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={[styles.optionChip, selectedGender === 'FEMALE' && styles.optionChipSelected]}
-                  onPress={() => updateVoicePreference('FEMALE', selectedAgeGroup)}
-                  activeOpacity={0.8}
-                >
-                  <FontAwesome5
-                    name="female"
-                    size={22}
-                    color={selectedGender === 'FEMALE' ? Colors.secondary : Colors.outline}
-                  />
-                  <Text style={[styles.optionText, selectedGender === 'FEMALE' && styles.optionTextSelected]}>
-                    Female Voice
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Tone Selection */}
-            <View style={styles.fieldBlock}>
-              <Text style={styles.fieldLabel}>VOICE TONE / STYLE</Text>
-              <View style={styles.optionsRow}>
-                <TouchableOpacity
-                  style={[styles.optionChip, selectedAgeGroup === 'YOUNG' && styles.optionChipSelected]}
-                  onPress={() => updateVoicePreference(selectedGender, 'YOUNG')}
-                  activeOpacity={0.8}
-                >
-                  <Ionicons
-                    name="flash-outline"
-                    size={22}
-                    color={selectedAgeGroup === 'YOUNG' ? Colors.secondary : Colors.outline}
-                  />
-                  <Text style={[styles.optionText, selectedAgeGroup === 'YOUNG' && styles.optionTextSelected]}>
-                    Casual & Energetic
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={[styles.optionChip, selectedAgeGroup === 'MATURE' && styles.optionChipSelected]}
-                  onPress={() => updateVoicePreference(selectedGender, 'MATURE')}
-                  activeOpacity={0.8}
-                >
-                  <MaterialCommunityIcons
-                    name="microphone-outline"
-                    size={22}
-                    color={selectedAgeGroup === 'MATURE' ? Colors.secondary : Colors.outline}
-                  />
-                  <Text style={[styles.optionText, selectedAgeGroup === 'MATURE' && styles.optionTextSelected]}>
-                    Calm & Authoritative
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Selected Paired Voice Badge */}
-            <View style={styles.voiceResultCard}>
-              <View style={styles.voiceResultHeader}>
-                <View style={styles.voiceIconBubble}>
-                  <FontAwesome5
-                    name={selectedVoice.gender === 'MALE' ? 'male' : 'female'}
-                    size={18}
-                    color={Colors.secondary}
-                  />
-                </View>
-                <View style={styles.voiceResultInfo}>
-                  <Text style={styles.voiceResultName}>{selectedVoice.name} ({selectedVoice.tone})</Text>
-                  <Text style={styles.demoScenarioTitle} numberOfLines={1}>
-                    {VOICE_DEMO_SAMPLES[selectedVoice.name]?.scenarioTitle}
-                  </Text>
-                </View>
-
-                <TouchableOpacity
-                  style={styles.listenDemoBtn}
-                  onPress={() => playVoiceDemoSample(selectedVoice)}
-                  activeOpacity={0.8}
-                >
-                  <Ionicons name="play" size={14} color={Colors.secondary} />
-                  <Text style={styles.listenDemoBtnText}>Demo</Text>
-                </TouchableOpacity>
+                {GOOGLE_SPANISH_VOICES.map((v) => {
+                  const isSelected = selectedVoice.id === v.id || selectedVoice.gender === v.gender;
+                  return (
+                    <TouchableOpacity
+                      key={v.id}
+                      style={[styles.optionChip, isSelected && styles.optionChipSelected]}
+                      onPress={() => setSelectedVoice(v)}
+                      activeOpacity={0.8}
+                    >
+                      <Text style={[styles.optionSymbol, isSelected && styles.optionSymbolSelected]}>
+                        {v.gender === 'MALE' ? '♂' : '♀'}
+                      </Text>
+                      <Text style={[styles.optionText, isSelected && styles.optionTextSelected]}>
+                        {v.gender === 'MALE' ? 'Male' : 'Female'}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             </View>
 
@@ -252,28 +152,35 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
         {/* STEP 3: Ready & Confirmation */}
         {step === 3 && (
           <View style={styles.stepCard}>
-            <View style={styles.checkBadge}>
-              <Ionicons name="checkmark-circle" size={54} color={Colors.tertiary} />
+            <View style={styles.heroBadge}>
+              <AnimatedParrotMascot
+                size={84}
+                isAnimating={true}
+                isDancing={true}
+                showSpeechBubble={true}
+                customTip={`¡Wepa! ¡Todo listo, ${userName.trim() || 'amigo'}! 🇵🇦`}
+              />
             </View>
 
-            <Text style={styles.title}>You’re All Set, {userName || 'Friend'}!</Text>
-            <Text style={styles.subtitle}>
-              Your voice persona <Text style={styles.highlightText}>{selectedVoice.name} ({selectedVoice.tone.toLowerCase()})</Text> is locked in and ready for WhatsApp voice notes.
+            <Text style={styles.heroTitle}>You’re All Set, {userName.trim() || 'Friend'}!</Text>
+            <Text style={styles.heroSubtitle}>
+              Poquito is ready to turn your voice into natural Panamanian Spanish.
             </Text>
 
-            <View style={styles.summaryCard}>
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>Target Location:</Text>
-                <Text style={styles.summaryVal}>Bocas del Toro, Panamá 🇵🇦</Text>
+            {/* Cute Selected Voice Pill */}
+            <View style={styles.voiceConfirmedPill}>
+              <View style={styles.voiceGenderCircle}>
+                <Text style={styles.voiceGenderSymbol}>
+                  {selectedVoice.gender === 'MALE' ? '♂' : '♀'}
+                </Text>
               </View>
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>Default Language:</Text>
-                <Text style={styles.summaryVal}>Español (Panamá)</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.voiceConfirmedLabel}>VOICE READY</Text>
+                <Text style={styles.voiceConfirmedValue}>
+                  {selectedVoice.gender === 'MALE' ? 'Male Voice' : 'Female Voice'}
+                </Text>
               </View>
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>Voice Persona:</Text>
-                <Text style={styles.summaryVal}>{selectedVoice.name} ({selectedVoice.tone.toLowerCase()})</Text>
-              </View>
+              <Ionicons name="checkmark-circle" size={22} color={Colors.tertiary} />
             </View>
 
             <TouchableOpacity style={styles.primaryBtn} onPress={handleFinish} activeOpacity={0.8}>
@@ -445,9 +352,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondaryContainer,
     borderColor: Colors.secondary,
   },
+  optionSymbol: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: Colors.outline,
+    marginBottom: 4,
+  },
+  optionSymbolSelected: {
+    color: Colors.secondary,
+  },
   optionText: {
-    fontSize: 11,
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: '700',
     color: Colors.onSurfaceVariant,
     textAlign: 'center',
   },
@@ -511,26 +427,43 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: Colors.secondary,
   },
-  summaryCard: {
+  voiceConfirmedPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
     backgroundColor: Colors.surfaceContainer,
     borderRadius: 18,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     marginTop: 20,
-    gap: 10,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
   },
-  summaryRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  voiceGenderCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: Colors.secondaryContainer,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  summaryLabel: {
-    fontSize: 12,
-    color: Colors.onSurfaceVariant,
+  voiceGenderSymbol: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: Colors.secondary,
   },
-  summaryVal: {
-    fontSize: 13,
+  voiceConfirmedLabel: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: Colors.outline,
+    letterSpacing: 0.5,
+  },
+  voiceConfirmedValue: {
+    fontSize: 14,
     fontWeight: '700',
     color: Colors.onBackground,
+    marginTop: 1,
   },
   primaryBtn: {
     flexDirection: 'row',

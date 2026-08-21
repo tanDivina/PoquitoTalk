@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Poquito Mascot Studio — Animation, Voice Engine & Print Suite</title>
+  <link rel="icon" href="logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-cream: #FBF9F5;
+      --surface-card: #FFFFFF;
+      --surface-container: #F5F3EF;
+      --surface-container-high: #EFEEEA;
+      --text-charcoal: #1B1C1A;
+      --text-muted: #5C554D;
+      --brand-taupe: #594F42;
+      --accent-green: #10B981;
+      --accent-green-dark: #047857;
+      --accent-cyan: #06B6D4;
+      --accent-gold: #D97706;
+      --accent-terracotta: #964824;
+      --brand-orange: #F59E0B;
+      --whatsapp-green: #25D366;
+      --card-border: #E4E2DE;
+      --card-shadow: 0 12px 32px rgba(142, 128, 113, 0.08);
+      --card-shadow-hover: 0 16px 40px rgba(142, 128, 113, 0.14);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(180deg, #FBF9F5 0%, #F5F3EF 100%);
+      color: var(--text-charcoal);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 36px 20px 80px;
+    }
+
+    header {
+      text-align: center;
+      max-width: 860px;
+      margin-bottom: 28px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--accent-green-dark);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--text-charcoal);
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-tab {
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-tab:hover, .nav-tab.active {
+      background: var(--text-charcoal);
+      color: #FFF;
+      border-color: var(--text-charcoal);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 26px;
+      max-width: 1160px;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 960px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--card-shadow);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-charcoal);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 12px;
+      border-radius: 12px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: var(--accent-green-dark);
+    }
+
+    .stage {
+      background: var(--bg-cream);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      height: 310px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .stage svg {
+      width: 210px;
+      height: 210px;
+      transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .stage-bubble {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--card-border);
+      padding: 8px 14px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-charcoal);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      max-width: 210px;
+      line-height: 1.4;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #side-eye-white, #talkie-eye-white {
+      transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .view-label {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--brand-taupe);
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--card-border);
+      padding: 4px 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      z-index: 10;
+    }
+
+    /* HAPPY DANCE */
+    .side-dance svg, .talkie-dance svg, .front-dance svg {
+      animation: danceBounce 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) infinite alternate;
+    }
+    .side-dance #side-wing, .talkie-dance #talkie-wing {
+      animation: wingDanceFlap 0.24s ease-in-out infinite alternate;
+      transform-origin: 35px 83px;
+    }
+    .front-dance #front-wing-left {
+      animation: frontWingDanceL 0.24s ease-in-out infinite alternate;
+      transform-origin: 48px 68px;
+    }
+    .front-dance #front-wing-right {
+      animation: frontWingDanceR 0.24s ease-in-out infinite alternate;
+      transform-origin: 112px 68px;
+    }
+    .side-dance #side-head, .talkie-dance #talkie-head {
+      animation: headDanceGroove 0.48s ease-in-out infinite alternate;
+      transform-origin: 75px 45px;
+    }
+    .front-dance #front-head {
+      animation: frontHeadDance 0.48s ease-in-out infinite alternate;
+      transform-origin: 80px 56px;
+    }
+    .front-dance #front-crest, .side-dance #side-crest, .talkie-dance #talkie-crest {
+      animation: crestDanceWiggle 0.24s ease-in-out infinite alternate;
+    }
+    .side-dance #side-eye-white, .talkie-dance #talkie-eye-white, .front-dance circle[id*="eye-white"] {
+      animation: danceEyeJoy 0.96s ease-in-out infinite;
+    }
+    .side-dance #side-beak-bottom, .talkie-dance #talkie-beak-bottom, .front-dance #front-beak-bottom {
+      animation: cleanBeakTalk 0.16s ease-in-out infinite alternate;
+      transform-origin: 90px 56px;
+    }
+
+    @keyframes danceBounce {
+      0% { transform: translateY(0px) rotate(-3deg) scale(1, 1); }
+      50% { transform: translateY(-14px) rotate(0deg) scale(0.96, 1.06); }
+      100% { transform: translateY(-4px) rotate(4deg) scale(1.04, 0.96); }
+    }
+    @keyframes wingDanceFlap {
+      0% { transform: rotate(-8deg) scaleY(0.95); }
+      100% { transform: rotate(20deg) scaleY(1.1); }
+    }
+    @keyframes frontWingDanceL {
+      0% { transform: rotate(-12deg) translateY(-2px); }
+      100% { transform: rotate(18deg) translateY(4px); }
+    }
+    @keyframes frontWingDanceR {
+      0% { transform: rotate(12deg) translateY(-2px); }
+      100% { transform: rotate(-18deg) translateY(4px); }
+    }
+    @keyframes headDanceGroove {
+      0% { transform: rotate(-7deg); }
+      100% { transform: rotate(7deg); }
+    }
+    @keyframes frontHeadDance {
+      0% { transform: rotate(-6deg) translateY(-2px); }
+      100% { transform: rotate(6deg) translateY(0px); }
+    }
+    @keyframes crestDanceWiggle {
+      0% { transform: rotate(-6deg); }
+      100% { transform: rotate(8deg); }
+    }
+    @keyframes danceEyeJoy {
+      0%, 80%, 100% { transform: scale(1.08); }
+      90% { transform: scale(1.18, 0.82); }
+    }
+
+    /* SIDE PROFILE */
+    .side-idle #side-body-group {
+      animation: breathe 2.8s ease-in-out infinite alternate;
+      transform-origin: 65px 125px;
+    }
+    .side-idle #side-eye-white {
+      animation: blink 4.2s infinite;
+      transform-origin: 76px 42px;
+    }
+    .side-pensive svg {
+      transform: rotate(13deg) translateY(-5px);
+    }
+    .side-pensive #side-pupil {
+      animation: pensiveDrift 3.2s ease-in-out infinite alternate;
+    }
+    .side-pensive #side-body-group {
+      animation: slowBreathe 3.8s ease-in-out infinite alternate;
+      transform-origin: 65px 125px;
+    }
+    .side-listening svg {
+      animation: listeningNod 1.8s ease-in-out infinite;
+      transform-origin: 70px 135px;
+    }
+    .side-listening #side-eye-white {
+      transform: scale(1.08);
+      transform-origin: 76px 42px;
+    }
+    .side-curious svg {
+      animation: curiousBob 1.6s ease-in-out infinite alternate;
+      transform-origin: 70px 135px;
+    }
+    .side-curious #side-pupil {
+      animation: pupilCurious 1.2s ease-in-out infinite alternate;
+    }
+    .side-fluff svg {
+      animation: featherRuffle 1.3s ease-in-out infinite alternate;
+      transform-origin: 70px 125px;
+    }
+    .side-fluff #side-body-group {
+      animation: bodyPoof 1.3s ease-in-out infinite alternate;
+      transform-origin: 65px 125px;
+    }
+    .side-fluff #side-wing {
+      animation: wingFlutterSide 0.16s ease-in-out infinite alternate;
+      transform-origin: 35px 83px;
+    }
+    .side-sleepy #side-eye-white {
+      transform: scaleY(0.35);
+      transform-origin: 76px 42px;
+    }
+    .side-sleepy #side-body-group {
+      animation: sleepyBreathe 4.5s ease-in-out infinite alternate;
+      transform-origin: 65px 125px;
+    }
+
+    /* POQUITOTALKIE */
+    .talkie-standby #talkie-eye-white {
+      transform: scaleY(0.35);
+      transform-origin: 82px 54px;
+    }
+    .talkie-standby #talkie-body-group {
+      animation: sleepyBreathe 4.5s ease-in-out infinite alternate;
+      transform-origin: 78px 142px;
+    }
+    .talkie-standby #talkie-led {
+      fill: #25D366 !important;
+      animation: ledGreenFlash 1.6s infinite ease-in-out;
+    }
+    .talkie-standby #talkie-ptt {
+      fill: #25D366 !important;
+    }
+
+    .talkie-tx svg {
+      transform: rotate(-1.5deg) translateY(-2px);
+    }
+    .talkie-tx #talkie-eye-white {
+      transform: scale(1);
+      transform-origin: 82px 54px;
+    }
+    .talkie-tx #talkie-radio-group {
+      animation: radioSmoothLiftTalk 1.3s ease-in-out infinite alternate;
+      transform-origin: 50px 105px;
+    }
+    .talkie-tx #talkie-ptt {
+      fill: #EF4444 !important;
+      filter: drop-shadow(0 0 5px rgba(239, 68, 68, 0.8));
+      transform: translateX(-1.2px);
+    }
+    .talkie-tx #talkie-led {
+      fill: #EF4444 !important;
+      filter: drop-shadow(0 0 7px rgba(239, 68, 68, 0.9));
+    }
+    .talkie-tx #talkie-antenna-tip {
+      fill: #F59E0B !important;
+    }
+    .talkie-tx #talkie-radio-waves {
+      opacity: 1 !important;
+    }
+    .talkie-tx #talkie-radio-waves path {
+      stroke: #F59E0B !important;
+    }
+    .talkie-tx #talkie-wave-1 {
+      animation: wavePulseGradual 1.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+      animation-delay: 0s;
+      transform-origin: 129px 43px;
+    }
+    .talkie-tx #talkie-wave-2 {
+      animation: wavePulseGradual 1.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+      animation-delay: 0.3s;
+      transform-origin: 129px 43px;
+    }
+    .talkie-tx #talkie-wave-3 {
+      animation: wavePulseGradual 1.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+      animation-delay: 0.6s;
+      transform-origin: 129px 43px;
+    }
+    .talkie-tx #talkie-beak-bottom {
+      animation: cleanBeakTalk 0.16s ease-in-out infinite alternate;
+      transform-origin: 96px 68px;
+    }
+
+    .talkie-rx svg {
+      animation: listeningNod 1.6s ease-in-out infinite;
+      transform-origin: 78px 142px;
+    }
+    .talkie-rx #talkie-eye-white {
+      transform: scale(1.08);
+      transform-origin: 82px 54px;
+    }
+    .talkie-rx #talkie-antenna-group {
+      animation: antennaReceiveVibrate 0.6s ease-in-out infinite alternate;
+      transform-origin: 129px 70px;
+    }
+    .talkie-rx #talkie-ptt {
+      fill: #25D366 !important;
+      filter: drop-shadow(0 0 5px rgba(37, 211, 102, 0.7));
+    }
+    .talkie-rx #talkie-led {
+      fill: #25D366 !important;
+      filter: drop-shadow(0 0 6px rgba(37, 211, 102, 0.85));
+    }
+    .talkie-rx #talkie-radio-waves {
+      opacity: 1 !important;
+    }
+    .talkie-rx #talkie-radio-waves path {
+      stroke: #25D366 !important;
+    }
+    .talkie-rx #talkie-wave-1 {
+      animation: wavePulseGradual 1.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+      animation-delay: 0s;
+      transform-origin: 129px 43px;
+    }
+    .talkie-rx #talkie-wave-2 {
+      animation: wavePulseGradual 1.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+      animation-delay: 0.3s;
+      transform-origin: 129px 43px;
+    }
+    .talkie-rx #talkie-wave-3 {
+      animation: wavePulseGradual 1.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+      animation-delay: 0.6s;
+      transform-origin: 129px 43px;
+    }
+
+    /* FRONT VIEW */
+    .front-talking #front-beak-bottom {
+      animation: cleanBeakTalk 0.16s ease-in-out infinite alternate;
+      transform-origin: 80px 72px;
+    }
+    .front-talking svg {
+      animation: talkBob 0.32s ease-in-out infinite alternate;
+    }
+    .front-talking #front-soundwaves {
+      opacity: 1 !important;
+    }
+    .front-talking #front-wave-1 {
+      animation: wavePulseGradual 1.3s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+      animation-delay: 0s;
+      transform-origin: 80px 72px;
+    }
+    .front-talking #front-wave-2 {
+      animation: wavePulseGradual 1.3s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+      animation-delay: 0.26s;
+      transform-origin: 80px 72px;
+    }
+    .front-talking #front-wave-3 {
+      animation: wavePulseGradual 1.3s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+      animation-delay: 0.52s;
+      transform-origin: 80px 72px;
+    }
+    .front-talking #front-body-group {
+      animation: breathe 2.4s ease-in-out infinite alternate;
+      transform-origin: 80px 132px;
+    }
+
+    .front-sway svg {
+      animation: tropicalSway 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+      transform-origin: 80px 138px;
+    }
+    .front-sway #front-wing-left {
+      animation: swayWingL 1.6s ease-in-out infinite alternate;
+      transform-origin: 48px 68px;
+    }
+    .front-sway #front-wing-right {
+      animation: swayWingR 1.6s ease-in-out infinite alternate;
+      transform-origin: 112px 68px;
+    }
+    .front-sway #front-crest {
+      animation: crestSway 1.6s ease-in-out infinite alternate;
+      transform-origin: 80px 18px;
+    }
+
+    /* KEYFRAMES */
+    @keyframes breathe {
+      0% { transform: scale(1) translateY(0); }
+      100% { transform: scale(1.02, 0.98) translateY(2.5px); }
+    }
+    @keyframes slowBreathe {
+      0% { transform: scale(1) translateY(0); }
+      100% { transform: scale(1.03, 0.97) translateY(3px); }
+    }
+    @keyframes sleepyBreathe {
+      0% { transform: scale(1) translateY(1px); }
+      100% { transform: scale(1.015, 0.985) translateY(4px); }
+    }
+    @keyframes blink {
+      0%, 92%, 100% { transform: scaleY(1); }
+      96% { transform: scaleY(0.1); }
+    }
+    @keyframes pensiveDrift {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(2.5px, -3.5px); }
+      100% { transform: translate(1px, -4px); }
+    }
+    @keyframes listeningNod {
+      0% { transform: rotate(-5deg) translateY(-2px) scale(1.04); }
+      50% { transform: rotate(4deg) translateY(2px) scale(1.01); }
+      100% { transform: rotate(-5deg) translateY(-2px) scale(1.04); }
+    }
+    @keyframes curiousBob {
+      0% { transform: rotate(0deg) translateY(0); }
+      100% { transform: rotate(-8deg) translateY(-4px) scale(1.03); }
+    }
+    @keyframes pupilCurious {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(3px, -1px); }
+    }
+    @keyframes featherRuffle {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(-3deg) scale(1.06, 0.96); }
+      100% { transform: rotate(3deg) scale(0.97, 1.05); }
+    }
+    @keyframes bodyPoof {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.08, 1.04); }
+    }
+    @keyframes wingFlutterSide {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(14deg) translateY(-2px); }
+    }
+    @keyframes talkBob {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-3.5px) scale(1.02); }
+    }
+    @keyframes cleanBeakTalk {
+      0% { transform: translateY(0) scaleY(1); }
+      100% { transform: translateY(3.5px) scaleY(1.4); }
+    }
+    @keyframes tropicalSway {
+      0% { transform: rotate(-6deg) translateX(-3px); }
+      100% { transform: rotate(6deg) translateX(3px); }
+    }
+    @keyframes swayWingL {
+      0% { transform: rotate(-8deg); }
+      100% { transform: rotate(10deg); }
+    }
+    @keyframes swayWingR {
+      0% { transform: rotate(10deg); }
+      100% { transform: rotate(-8deg); }
+    }
+    @keyframes crestSway {
+      0% { transform: rotate(-8deg); }
+      100% { transform: rotate(8deg); }
+    }
+    @keyframes ledGreenFlash {
+      0%, 100% { opacity: 0.25; filter: drop-shadow(0 0 0px transparent); }
+      50% { opacity: 1; filter: drop-shadow(0 0 6px #25D366); }
+    }
+    @keyframes radioSmoothLiftTalk {
+      0% { transform: translateY(-2px) translateX(0px) rotate(-1.5deg); }
+      100% { transform: translateY(-5px) translateX(-1px) rotate(-3.5deg); }
+    }
+    @keyframes antennaReceiveVibrate {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(-3.5deg); }
+      75% { transform: rotate(4deg); }
+      100% { transform: rotate(-1deg); }
+    }
+    @keyframes wavePulseGradual {
+      0% { opacity: 0; transform: scale(0.92); }
+      22% { opacity: 1; transform: scale(1); }
+      65% { opacity: 0.85; transform: scale(1.04); }
+      100% { opacity: 0; transform: scale(1.1); }
+    }
+
+    /* CONTROLS */
+    .controls-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .controls-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .btn {
+      background: var(--surface-card);
+      border: 1px solid var(--card-border);
+      color: var(--text-charcoal);
+      padding: 10px 4px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(142, 128, 113, 0.05);
+    }
+
+    .btn:hover {
+      border-color: #CBD5E1;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(142, 128, 113, 0.1);
+    }
+
+    .btn.active {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: var(--accent-green);
+      color: var(--accent-green-dark);
+    }
+
+    .btn.btn-dance {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(16, 185, 129, 0.15));
+      border: 1.5px solid var(--brand-orange);
+      color: #B45309;
+    }
+
+    .btn.btn-dance.active {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(16, 185, 129, 0.25));
+      border-color: #D97706;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
+    }
+
+    .btn small {
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .btn.active small {
+      color: var(--accent-green-dark);
+      opacity: 0.85;
+    }
+
+    .sim-box {
+      background: var(--surface-container);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 14px;
+      margin-top: auto;
+    }
+
+    .sim-btn {
+      width: 100%;
+      background: var(--whatsapp-green);
+      color: #07090E;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+    }
+
+    .sim-btn:hover {
+      background: #20BA5A;
+      transform: scale(1.01);
+    }
+
+    .sim-status {
+      margin-top: 8px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      text-align: center;
+      min-height: 18px;
+      font-weight: 500;
+    }
+
+    /* Voice Cards */
+    .voice-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .voice-item {
+      background: var(--surface-container);
+      border: 1.5px solid var(--card-border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .voice-item:hover {
+      border-color: var(--accent-green);
+      background: #FFF;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+
+    .voice-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .voice-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-charcoal);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .voice-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .voice-id-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      background: rgba(0,0,0,0.04);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--brand-taupe);
+    }
+
+    .btn-play-voice {
+      background: #FFF;
+      border: 1px solid var(--card-border);
+      border-radius: 9999px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-green-dark);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .btn-play-voice:hover {
+      background: var(--accent-green);
+      color: #FFF;
+      border-color: var(--accent-green);
+      transform: scale(1.04);
+    }
+
+    /* Print & Sticker Cards */
+    .print-showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .print-showcase {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card-mockup {
+      background: #1B1C1A;
+      color: #FFF;
+      border-radius: 14px;
+      padding: 20px;
+      aspect-ratio: 3.5 / 2;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.18);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .card-mockup.back-side {
+      background: #FBF9F5;
+      color: #1B1C1A;
+      border: 1.5px solid var(--card-border);
+    }
+
+    .qr-box {
+      background: #FFF;
+      padding: 6px;
+      border-radius: 8px;
+      width: 68px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge">🦜 PoquitoTalk Studio v1.5.0</div>
+  <h1>Poquito Mascot, Voice & Local Launch Studio</h1>
+  <p class="subtitle">
+    Live preview of the <strong>🕺 Happy Dance Animation</strong>, <strong>Function-First Voice Persona Labels</strong>, and <strong>Printable O2O Business Cards & Stickers</strong> for Bocas del Toro (Panama) 🇵🇦.
+  </p>
+  
+  <div class="nav-tabs">
+    <a href="#mascot-section" class="nav-tab active">🦜 Mascot Animations</a>
+    <a href="#voice-section" class="nav-tab">🎙️ Voice Personas</a>
+    <a href="#print-section" class="nav-tab">📇 Business Cards & Stickers</a>
+    <a href="#pipeline-section" class="nav-tab">📍 Merchant Town Walk Pipeline</a>
+  </div>
+</header>
+
+<div class="grid" id="mascot-section">
+  <!-- ═══ LEFT: Interactive Stage ═══ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">Live Mascot Stage</div>
+      <div class="pill" id="state-pill">HAPPY DANCE · BOUNCY</div>
+    </div>
+
+    <div class="stage side-dance" id="stage">
+      <div class="view-label" id="view-label">SIDE VIEW (DANCE MODE)</div>
+      
+      <div class="stage-bubble" id="stage-bubble">
+        <span>¡Wepa! Escuchando la voz de Bocas 🇵🇦</span>
+      </div>
+
+      <!-- ─── 1. Standard Side-View SVG ─── -->
+      <svg id="svg-side" viewBox="0 0 160 160" fill="none">
+        <g id="side-perch"><path d="M 30 135 Q 70 132 115 135" stroke="#B45309" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" /></g>
+        <g id="side-claws"><path d="M 48 124 C 46 131 48 138 52 138 M 56 124 C 54 131 56 138 60 138 M 70 124 C 68 131 70 138 74 138 M 78 124 C 76 131 78 138 82 138" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round" /></g>
+        <!-- Body & Crown Group -->
+        <g id="side-body-group">
+          <path d="M 35 125 C 27 108 25 90 29 70 C 33 42 50 18 73 18 C 91 18 100 34 98 52 C 95 72 97 100 92 116 C 82 131 58 136 35 125 Z" fill="#10B981" stroke="#047857" stroke-width="4.5" stroke-linejoin="round" />
+          <g id="side-crest">
+            <path d="M 58 19.2 C 55 13 52 9 47 8" stroke="#047857" stroke-width="3.5" stroke-linecap="round" fill="none" />
+            <path d="M 67 17.8 C 64 12 61 9 56 7" stroke="#047857" stroke-width="3.5" stroke-linecap="round" fill="none" />
+          </g>
+        </g>
+        <!-- Sleek Wing -->
+        <g id="side-wing"><path d="M 35 83 C 40 68 53 63 64 78 C 70 93 64 116 47 119 C 39 111 34 97 35 83 Z" fill="#06B6D4" stroke="#047857" stroke-width="3.5" stroke-linejoin="round" /></g>
+        <g id="side-head">
+          <g id="side-eye">
+            <circle id="side-eye-white" cx="76" cy="42" r="9" fill="#FFF" stroke="#047857" stroke-width="2.5" />
+            <circle id="side-pupil" cx="74.5" cy="42" r="4.5" fill="#0F172A" />
+            <circle cx="72.5" cy="40" r="1.8" fill="#FFF" />
+          </g>
+          <g id="side-beak-top"><path d="M 90 36 C 106 36 114 50 100 62 C 95 65 88 61 89 55 C 91 49 88 40 90 36 Z" fill="#F59E0B" stroke="#047857" stroke-width="3.5" stroke-linejoin="round" /></g>
+          <g id="side-beak-bottom"><path d="M 90 56 C 96 58 98 62 92 63 C 89 63 88 59 90 56 Z" fill="#D97706" stroke="#047857" stroke-width="1.8" stroke-linejoin="round" /></g>
+        </g>
+      </svg>
+
+      <!-- ─── 2. PoquitoTalkie SVG ─── -->
+      <svg id="svg-talkie" viewBox="0 0 180 180" fill="none" style="display:none">
+        <g id="talkie-perch"><path d="M 30 152 Q 80 148 135 152" stroke="#B45309" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" /></g>
+        <g id="talkie-claws">
+          <path d="M 52 142 C 50 149 52 156 56 156 M 60 142 C 58 149 60 156 64 156 M 74 142 C 72 149 74 156 78 156 M 82 142 C 80 149 82 156 86 156" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round" />
+        </g>
+        <g id="talkie-body-group">
+          <path d="M 40 142 C 30 124 28 104 32 82 C 36 54 54 30 78 30 C 98 30 108 48 106 68 C 103 90 104 118 98 134 C 88 150 62 154 40 142 Z" fill="#10B981" stroke="#047857" stroke-width="4.5" stroke-linejoin="round" />
+          <g id="talkie-crest">
+            <path d="M 63 31.4 C 59 24 55 19 49 18" stroke="#047857" stroke-width="3.5" stroke-linecap="round" fill="none" />
+            <path d="M 73 29.8 C 69 23 65 19 59 17" stroke="#047857" stroke-width="3.5" stroke-linecap="round" fill="none" />
+          </g>
+        </g>
+        <g id="talkie-head">
+          <circle id="talkie-eye-white" cx="82" cy="54" r="9" fill="#FFF" stroke="#047857" stroke-width="2.5" />
+          <circle id="talkie-pupil" cx="80.5" cy="54" r="4.5" fill="#0F172A" />
+          <circle cx="78.5" cy="52" r="1.8" fill="#FFF" />
+          <g id="talkie-beak-top"><path d="M 96 48 C 112 48 120 62 106 74 C 101 77 94 73 95 67 C 97 61 94 52 96 48 Z" fill="#F59E0B" stroke="#047857" stroke-width="3.5" stroke-linejoin="round" /></g>
+          <g id="talkie-beak-bottom"><path d="M 96 68 C 102 70 104 74 98 75 C 95 75 94 71 96 68 Z" fill="#D97706" stroke="#047857" stroke-width="1.8" stroke-linejoin="round" /></g>
+        </g>
+        <g id="talkie-radio-group" transform="translate(-4, 0)">
+          <g id="talkie-antenna-group">
+            <path id="talkie-antenna" d="M 129 45 L 129 70" stroke="#1E293B" stroke-width="3.5" stroke-linecap="round" />
+            <circle id="talkie-antenna-tip" cx="129" cy="43" r="3.5" fill="#F59E0B" />
+          </g>
+          <rect x="116" y="70" width="28" height="46" rx="6" fill="#1E293B" stroke="#047857" stroke-width="2.5" />
+          <line x1="122" y1="90" x2="138" y2="90" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+          <line x1="122" y1="96" x2="138" y2="96" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+          <line x1="122" y1="102" x2="138" y2="102" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+          <rect id="talkie-ptt" x="143" y="76" width="4.5" height="14" rx="2.2" fill="#25D366" />
+          <rect x="120" y="65" width="7" height="6" rx="1.5" fill="#475569" />
+          <circle cx="125" cy="78" r="3.8" fill="#0F172A" />
+          <circle id="talkie-led" cx="125" cy="78" r="2.8" fill="#25D366" />
+          <g id="talkie-radio-waves" opacity="0">
+            <path id="talkie-wave-1" d="M 135 38 A 10 10 0 0 1 145 48" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" />
+            <path id="talkie-wave-2" d="M 139 32 A 16 16 0 0 1 153 46" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" />
+            <path id="talkie-wave-3" d="M 143 26 A 22 22 0 0 1 161 44" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" opacity="0.75" />
+          </g>
+        </g>
+        <path id="talkie-wing" d="M 44 94 C 48 80 60 76 72 84 C 84 92 98 94 112 96 C 116 98 116 103 110 105 C 97 108 82 124 60 126 C 49 120 42 108 44 94 Z" fill="#06B6D4" stroke="#047857" stroke-width="3.5" stroke-linejoin="round" />
+      </svg>
+
+      <!-- ─── 3. Front-View SVG ─── -->
+      <svg id="svg-front" viewBox="0 0 160 160" fill="none" style="display:none">
+        <g id="front-perch"><path d="M 30 138 Q 80 134 130 138" stroke="#B45309" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" /></g>
+        <g id="front-claws">
+          <path d="M 62 127 C 60 133 62 139 66 139 M 70 127 C 68 133 70 139 74 139" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" />
+          <path d="M 86 127 C 84 133 86 139 90 139 M 94 127 C 92 133 94 139 98 139" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" />
+        </g>
+        <g id="front-body-group">
+          <path d="M 80 18 C 96 18 108 30 112 50 C 116 72 118 100 110 118 C 104 130 96 132 80 132 C 64 132 56 130 50 118 C 42 100 44 72 48 50 C 52 30 64 18 80 18 Z" fill="#10B981" stroke="#047857" stroke-width="4.5" stroke-linejoin="round" />
+          <ellipse cx="80" cy="100" rx="18" ry="22" fill="#34D399" opacity="0.4" />
+          <g id="front-crest">
+            <path d="M 77 18.5 C 73 12 68 9 63 8" stroke="#047857" stroke-width="3.2" stroke-linecap="round" fill="none" />
+            <path d="M 83 18.5 C 87 12 92 9 97 8" stroke="#047857" stroke-width="3.2" stroke-linecap="round" fill="none" />
+          </g>
+        </g>
+        <g id="front-wing-left"><path d="M 48 68 C 38 74 34 90 38 104 C 40 110 46 112 50 108 C 48 96 47 80 48 68 Z" fill="#06B6D4" stroke="#047857" stroke-width="3" stroke-linejoin="round" /></g>
+        <g id="front-wing-right"><path d="M 112 68 C 122 74 126 90 122 104 C 120 110 114 112 110 108 C 112 96 113 80 112 68 Z" fill="#06B6D4" stroke="#047857" stroke-width="3" stroke-linejoin="round" /></g>
+        <g id="front-head">
+          <circle cx="67" cy="56" r="9" fill="#FFF" stroke="#047857" stroke-width="2.5" />
+          <circle cx="69" cy="56" r="4.5" fill="#0F172A" />
+          <circle cx="67" cy="54" r="1.8" fill="#FFF" />
+          <circle cx="93" cy="56" r="9" fill="#FFF" stroke="#047857" stroke-width="2.5" />
+          <circle cx="95" cy="56" r="4.5" fill="#0F172A" />
+          <circle cx="93" cy="54" r="1.8" fill="#FFF" />
+          <g id="front-beak-bottom"><path d="M 74 72 C 76 81 84 81 86 72 L 83 75 C 81 77 79 77 77 75 Z" fill="#D97706" stroke="#047857" stroke-width="2" stroke-linejoin="round" /></g>
+          <g id="front-beak-top"><path d="M 72 65 C 74 61 86 61 88 65 L 83 76 C 82 78 78 78 77 76 Z" fill="#F59E0B" stroke="#047857" stroke-width="3" stroke-linejoin="round" /></g>
+        </g>
+        <g id="front-soundwaves" opacity="0">
+          <path id="front-wave-1" d="M 70 86 A 12 12 0 0 0 90 86" fill="none" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" />
+          <path id="front-wave-2" d="M 64 92 A 20 20 0 0 0 96 92" fill="none" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" />
+          <path id="front-wave-3" d="M 58 98 A 26 26 0 0 0 102 98" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" opacity="0.75" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- ─── Category 0: ⭐ Special Animations ─── -->
+    <div class="controls-label" style="color: #D97706;">⭐ Special Animations</div>
+    <div class="controls-grid">
+      <button class="btn btn-dance active" data-state="dance" onclick="setState('dance')">
+        <span>🕺 Happy Dance</span><small>Bouncy Head Groove & Wing</small>
+      </button>
+      <button class="btn" data-state="fluff" onclick="setState('fluff')">
+        <span>✨ Feather Flutter</span><small>Poof & Ruffle</small>
+      </button>
+      <button class="btn" data-state="sway" onclick="setState('sway')">
+        <span>🌴 Tropical Sway</span><small>Front Perch Groove</small>
+      </button>
+    </div>
+
+    <!-- ─── Category 1: 📻 PoquitoTalkie Live Channel ─── -->
+    <div class="controls-label" style="color: #0284C7;">📻 PoquitoTalkie (Walkie-Talkie)</div>
+    <div class="controls-grid">
+      <button class="btn" data-state="talkie-standby" onclick="setState('talkie-standby')">
+        <span>📻 Standby (Sleepy)</span><small>Closed Eye · Flashing Green</small>
+      </button>
+      <button class="btn" data-state="talkie-tx" onclick="setState('talkie-tx')">
+        <span>🎙️ Poquito Talking</span><small>Wakes Up · Orange Waves</small>
+      </button>
+      <button class="btn" data-state="talkie-rx" onclick="setState('talkie-rx')">
+        <span>🔊 Receiving Audio</span><small>Wakes Up · Green Waves</small>
+      </button>
+    </div>
+
+    <!-- ─── Category 2: 🌿 Personality States ─── -->
+    <div class="controls-label">🌿 Personality States</div>
+    <div class="controls-grid">
+      <button class="btn" data-state="idle" onclick="setState('idle')">
+        <span>🌿 Idle</span><small>Breathe & Blink</small>
+      </button>
+      <button class="btn" data-state="sleepy" onclick="setState('sleepy')">
+        <span>😴 Sleepy</span><small>Closed Eye Chill</small>
+      </button>
+      <button class="btn" data-state="pensive" onclick="setState('pensive')">
+        <span>🤔 Pensive</span><small>Head Cock 13°</small>
+      </button>
+      <button class="btn" data-state="listening" onclick="setState('listening')">
+        <span>👂 Listening</span><small>Attentive Nod</small>
+      </button>
+      <button class="btn" data-state="curious" onclick="setState('curious')">
+        <span>🤨 Curious</span><small>Pupil Drift Tilt</small>
+      </button>
+      <button class="btn" data-state="talking" onclick="setState('talking')">
+        <span>🗣️ Front Talk</span><small>Crest & Waves</small>
+      </button>
+    </div>
+
+    <!-- Simulation -->
+    <div class="sim-box">
+      <button class="sim-btn" onclick="runSim()">📻 Simulate Live Standby → Wake-Up → Happy Dance Sequence</button>
+      <div class="sim-status" id="sim-status">Click to test the full lifecycle: Sleepy standby nap → Wake-up call → Happy dance celebration!</div>
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT: Voice Persona Overhaul Suite ═══ -->
+  <div class="card" id="voice-section">
+    <div class="card-head">
+      <div class="card-title">🎙️ Function-First Voice Personas</div>
+      <div class="pill" style="color:var(--accent-green-dark); background: rgba(16, 185, 129, 0.1);">AUDIO ENGINE</div>
+    </div>
+
+    <p class="subtitle" style="font-size: 13px; margin-bottom: 12px;">
+      Clear, functional labels so expats immediately know how their WhatsApp voice notes will sound without guessing who "Diego" or "Sofia" is:
+    </p>
+
+    <div class="voice-list">
+      <!-- Voice 1 -->
+      <div class="voice-item">
+        <div class="voice-meta">
+          <div class="voice-title">
+            <span>👨 Male Voice — Warm & Natural</span>
+            <span class="voice-id-badge">Diego</span>
+          </div>
+          <div class="voice-desc">Approachable, friendly Panamanian cadence for daily requests.</div>
+        </div>
+        <button class="btn-play-voice" onclick="playVoiceDemo('Male Warm & Natural (Diego)', '¡Buenas! Con mucho gusto le ayudo con el servicio hoy en Bocas del Toro.')">
+          ▶️ Play Demo
+        </button>
+      </div>
+
+      <!-- Voice 2 -->
+      <div class="voice-item">
+        <div class="voice-meta">
+          <div class="voice-title">
+            <span>👩 Female Voice — Warm & Clear</span>
+            <span class="voice-id-badge">Sofia</span>
+          </div>
+          <div class="voice-desc">Polite, crisp, friendly articulation for shops, pharmacies & restaurants.</div>
+        </div>
+        <button class="btn-play-voice" onclick="playVoiceDemo('Female Warm & Clear (Sofia)', 'Hola, ¿a qué hora podemos coordinar la entrega en Isla Colón?')">
+          ▶️ Play Demo
+        </button>
+      </div>
+
+      <!-- Voice 3 -->
+      <div class="voice-item">
+        <div class="voice-meta">
+          <div class="voice-title">
+            <span>👨‍💼 Male Voice — Calm & Direct</span>
+            <span class="voice-id-badge">Mateo</span>
+          </div>
+          <div class="voice-desc">Clear, authoritative tone for contractors, electricians & boat mechanics.</div>
+        </div>
+        <button class="btn-play-voice" onclick="playVoiceDemo('Male Calm & Direct (Mateo)', 'Buenas tardes, necesito revisar el aire acondicionado en Isla Bastimentos.')">
+          ▶️ Play Demo
+        </button>
+      </div>
+
+      <!-- Voice 4 -->
+      <div class="voice-item">
+        <div class="voice-meta">
+          <div class="voice-title">
+            <span>👩‍🦱 Female Voice — Casual & Expressive</span>
+            <span class="voice-id-badge">Valeria</span>
+          </div>
+          <div class="voice-desc">Lively, modern cadence for social events, tours & casual island chat.</div>
+        </div>
+        <button class="btn-play-voice" onclick="playVoiceDemo('Female Casual & Expressive (Valeria)', '¡Hola amigo! ¿A qué hora sale la lancha para Carenero?')">
+          ▶️ Play Demo
+        </button>
+      </div>
+    </div>
+
+    <div style="margin-top: 16px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 12px; font-size: 12px; color: var(--accent-green-dark); line-height: 1.5;">
+      💡 <strong>Pro Tip:</strong> Playing any voice demo automatically triggers Poquito’s <strong>Happy Dance</strong> on the live stage!
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 2: Physical Collateral (Business Cards & Stickers) ═══ -->
+<div class="card" id="print-section" style="max-width: 1160px; width: 100%; margin-bottom: 30px;">
+  <div class="card-head">
+    <div class="card-title">📇 Physical Collateral Studio (3.5" × 2" Business Cards & Stickers)</div>
+    <div class="pill" style="color:var(--brand-orange); background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.25);">O2O MARKETING</div>
+  </div>
+
+  <p class="subtitle" style="font-size: 13.5px;">
+    High-contrast pocket collateral designed for counter placement at expat cafes, grocery stores, and water taxi docks across Bocas del Toro.
+  </p>
+
+  <div class="print-showcase">
+    <!-- Card Front -->
+    <div>
+      <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase;">
+        Front Side (Expat & Tourist Focus)
+      </div>
+      <div class="card-mockup">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <div>
+            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.4); padding: 3px 8px; border-radius: 9999px; font-size: 10px; font-weight: 700; color: #34D399; margin-bottom: 6px;">
+              BOCAS DEL TORO (PANAMA) 🇵🇦
+            </div>
+            <div style="font-size: 20px; font-weight: 800; letter-spacing: -0.02em;">PoquitoTalk</div>
+            <div style="font-size: 11px; color: #94A3B8; max-width: 170px; line-height: 1.3; margin-top: 2px;">
+              Expat WhatsApp Voice Translator & Verified Local Directory
+            </div>
+          </div>
+          <div class="qr-box">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https%3A%2F%2Fpoquitotalk.hero-apps.com%2F%3Fsrc%3Dcard_front" alt="QR Code" style="width: 100%; height: 100%;" />
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 10px; color: #CBD5E1; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
+          <span>🚤 Water Taxis • 🛠️ Contractors • 💊 Health</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #34D399;">poquitotalk.hero-apps.com</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Back -->
+    <div>
+      <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase;">
+        Back Side (Local Merchant & Captain Onboarding)
+      </div>
+      <div class="card-mockup back-side">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <div>
+            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); padding: 3px 8px; border-radius: 9999px; font-size: 10px; font-weight: 700; color: #B45309; margin-bottom: 6px;">
+              ¿ERES CAPITÁN O COMERCIANTE? 🚤
+            </div>
+            <div style="font-size: 16px; font-weight: 800; color: #1B1C1A; line-height: 1.2;">¡Anúnciate Gratis en Nuestro Directorio!</div>
+            <div style="font-size: 10.5px; color: #5C554D; max-width: 175px; line-height: 1.3; margin-top: 3px;">
+              Recibe mensajes directos de clientes extranjeros en WhatsApp.
+            </div>
+          </div>
+          <div class="qr-box" style="border: 1px solid var(--card-border);">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https%3A%2F%2Fpoquitotalk.hero-apps.com%2Fcontractors.html%3Fsrc%3Dcard_back" alt="QR Code" style="width: 100%; height: 100%;" />
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 10px; color: var(--text-muted); border-top: 1px solid var(--card-border); padding-top: 8px;">
+          <span>✅ Perfil Verificado Gratis</span>
+          <span style="font-weight: 700; color: var(--accent-green-dark);">Escanea para Unirte →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 3: Town Walk Merchant Ingestion Pipeline ═══ -->
+<div class="card" id="pipeline-section" style="max-width: 1160px; width: 100%;">
+  <div class="card-head">
+    <div class="card-title">📍 Zero-Hassle Town Walk Merchant Ingestion Pipeline</div>
+    <div class="pill" style="color:var(--accent-terracotta); background: rgba(150, 72, 36, 0.08); border-color: rgba(150, 72, 36, 0.2);">AI WORKFLOW</div>
+  </div>
+
+  <p class="subtitle" style="font-size: 13.5px; margin-bottom: 16px;">
+    How you can effortlessly collect contacts when walking through Isla Colón without filling out spreadsheets:
+  </p>
+
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+    <div style="background: var(--surface-container); border: 1px solid var(--card-border); border-radius: 14px; padding: 16px;">
+      <div style="font-size: 24px; margin-bottom: 6px;">📸</div>
+      <div style="font-size: 14px; font-weight: 700; margin-bottom: 4px;">1. Snap Storefront / Card</div>
+      <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+        Take a 1-second photo of business signs, chalkboard menus, or WhatsApp business cards and drop them in the project folder.
+      </div>
+    </div>
+
+    <div style="background: var(--surface-container); border: 1px solid var(--card-border); border-radius: 14px; padding: 16px;">
+      <div style="font-size: 24px; margin-bottom: 6px;">🎙️</div>
+      <div style="font-size: 14px; font-weight: 700; margin-bottom: 4px;">2. Record a 15s Voice Memo</div>
+      <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+        E.g. <em>"Captain Carlos, WhatsApp +507-6543-2100, does private trips from Carenero to Red Frog, great English."</em>
+      </div>
+    </div>
+
+    <div style="background: var(--surface-container); border: 1px solid var(--card-border); border-radius: 14px; padding: 16px;">
+      <div style="font-size: 24px; margin-bottom: 6px;">⚡</div>
+      <div style="font-size: 14px; font-weight: 700; margin-bottom: 4px;">3. Automated Extraction</div>
+      <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+        Antigravity extracts phone numbers, tags, and descriptions automatically and populates both the app and web directory!
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const stage = document.getElementById('stage');
+  const svgSide = document.getElementById('svg-side');
+  const svgTalkie = document.getElementById('svg-talkie');
+  const svgFront = document.getElementById('svg-front');
+  const pill = document.getElementById('state-pill');
+  const viewLabel = document.getElementById('view-label');
+  const stageBubble = document.getElementById('stage-bubble');
+  const simStatus = document.getElementById('sim-status');
+  let simTimer = null;
+
+  const TALKIE_STATES = ['talkie-standby', 'talkie-tx', 'talkie-rx'];
+  const FRONT_STATES = ['talking', 'sway'];
+
+  function setState(stateName, customBubbleText) {
+    if (simTimer) { clearTimeout(simTimer); simTimer = null; }
+
+    // Reset visibility
+    svgSide.style.display = 'none';
+    svgTalkie.style.display = 'none';
+    svgFront.style.display = 'none';
+    stage.className = 'stage';
+
+    if (customBubbleText) {
+      stageBubble.innerHTML = `<span>${customBubbleText}</span>`;
+      stageBubble.style.opacity = '1';
+    }
+
+    if (stateName === 'dance') {
+      svgSide.style.display = '';
+      stage.classList.add('side-dance');
+      viewLabel.textContent = 'SIDE VIEW (HAPPY DANCE)';
+      pill.textContent = 'HAPPY DANCE · BOUNCY GROOVE';
+      pill.style.color = '#B45309';
+      pill.style.background = 'rgba(245, 158, 11, 0.15)';
+      pill.style.borderColor = 'rgba(245, 158, 11, 0.35)';
+      if (!customBubbleText) {
+        stageBubble.innerHTML = `<span>¡Wepa! Escuchando la voz de Bocas 🇵🇦</span>`;
+      }
+    } else if (TALKIE_STATES.includes(stateName)) {
+      svgTalkie.style.display = '';
+      stage.classList.add(stateName);
+      viewLabel.textContent = 'POQUITOTALKIE (WALKIE-TALKIE)';
+      if (stateName === 'talkie-standby') {
+        pill.textContent = 'STANDBY · SLEEPY NAP';
+        pill.style.color = '#D97706';
+        pill.style.background = 'rgba(217, 119, 6, 0.1)';
+        pill.style.borderColor = 'rgba(217, 119, 6, 0.3)';
+        stageBubble.innerHTML = `<span>😴 Monitoreando canal en reposo...</span>`;
+      } else if (stateName === 'talkie-tx') {
+        pill.textContent = 'TRANSMITTING · AWAKE';
+        pill.style.color = '#EF4444';
+        pill.style.background = 'rgba(239, 68, 68, 0.1)';
+        pill.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+        stageBubble.innerHTML = `<span>🎙️ Transmitiendo nota de voz...</span>`;
+      } else {
+        pill.textContent = 'RECEIVING · AWAKE';
+        pill.style.color = '#047857';
+        pill.style.background = 'rgba(16, 185, 129, 0.1)';
+        pill.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+        stageBubble.innerHTML = `<span>🔊 Recibiendo respuesta de contratista...</span>`;
+      }
+    } else if (FRONT_STATES.includes(stateName)) {
+      svgFront.style.display = '';
+      stage.classList.add('front-' + stateName);
+      viewLabel.textContent = 'FRONT VIEW (WITH CROWN FEATHERS)';
+      pill.textContent = stateName.toUpperCase() + ' · FRONT';
+      pill.style.color = '#047857';
+      pill.style.background = 'rgba(16, 185, 129, 0.1)';
+      pill.style.borderColor = 'rgba(16, 185, 129, 0.25)';
+      stageBubble.innerHTML = `<span>🌴 ¡Pura vida en Bocas del Toro!</span>`;
+    } else {
+      svgSide.style.display = '';
+      stage.classList.add('side-' + stateName);
+      viewLabel.textContent = 'SIDE VIEW';
+      pill.textContent = stateName.toUpperCase() + ' · SIDE';
+      pill.style.color = stateName === 'sleepy' ? '#D97706' : '#B45309';
+      pill.style.background = 'rgba(180, 83, 9, 0.1)';
+      pill.style.borderColor = 'rgba(180, 83, 9, 0.25)';
+      stageBubble.innerHTML = `<span>🦜 PoquitoTalk v1.5.0</span>`;
+    }
+
+    // Update active button
+    document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.btn[data-state="${stateName}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+  }
+
+  function playVoiceDemo(voiceName, sampleText) {
+    setState('dance', `🔊 Probando: <strong>${voiceName}</strong>`);
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(sampleText);
+      utterance.lang = 'es-US';
+      utterance.rate = 0.95;
+      
+      const voices = window.speechSynthesis.getVoices();
+      const spanishVoice = voices.find(v => v.lang.startsWith('es'));
+      if (spanishVoice) utterance.voice = spanishVoice;
+
+      utterance.onend = () => {
+        setTimeout(() => {
+          setState('idle', '🦜 ¡Listo! ¿Cómo sonó esa voz?');
+        }, 800);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    } else {
+      setTimeout(() => {
+        setState('idle', '🦜 ¡Listo! ¿Cómo sonó esa voz?');
+      }, 3500);
+    }
+  }
+
+  function runSim() {
+    if (simTimer) { clearTimeout(simTimer); simTimer = null; }
+
+    setState('talkie-standby');
+    simStatus.textContent = '😴 1. Standby: Poquito dozing peacefully with closed eyes on standby channel...';
+
+    simTimer = setTimeout(() => {
+      setState('talkie-tx');
+      simStatus.textContent = '🎙️ 2. Push-To-Talk: Poquito wakes up, opens eyes, and speaks in orange waves!';
+
+      simTimer = setTimeout(() => {
+        setState('talkie-rx');
+        simStatus.textContent = '🔊 3. Incoming Reply: Poquito listens attentively with green waves!';
+
+        simTimer = setTimeout(() => {
+          setState('dance', '🎉 ¡Traducción enviada con éxito por WhatsApp!');
+          simStatus.textContent = '🕺 4. Translation Complete: Poquito does the Happy Dance!';
+
+          simTimer = setTimeout(() => {
+            setState('talkie-standby');
+            simStatus.textContent = '😴 5. Completed: Poquito returns to peaceful sleepy standby.';
+          }, 4500);
+        }, 3200);
+      }, 3000);
+    }, 2500);
+  }
+
+  // Initial state: Happy Dance
+  setState('dance');
+</script>
+<script src="tracker.js?v=1.0.0" defer></script>
+</body>
+</html>

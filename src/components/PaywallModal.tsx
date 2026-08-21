@@ -9,12 +9,14 @@ import {
   ActivityIndicator,
   Alert,
   Share,
+  Linking,
 } from 'react-native';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { GoogleSignInButton } from './GoogleSignInButton';
 import { GreenParrotLogo } from './GreenParrotLogo';
 import { revenueCat } from '../services/revenuecat';
+import { getUserProfile } from '../services/userService';
 
 interface PaywallModalProps {
   visible: boolean;
@@ -37,7 +39,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
     try {
       const success = await revenueCat.purchaseProPackage();
       if (success) {
-        Alert.alert('Welcome to PoquitoTalk Pro!', 'You now have full studio voice notes and Walkie-Talkie access.');
+        Alert.alert('Welcome to PoquitoTalk Pro!', 'You now have full access to Premium voice notes and Walkie-Talkie.');
         onSuccess();
         onClose();
       }
@@ -50,7 +52,22 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
   const handleInviteNeighbor = async () => {
     try {
-      const inviteUrl = 'https://poquitotalk.hero-apps.com?ref=bocas_expat';
+      const profile = await getUserProfile();
+      const refCode = profile.uid || 'usr_guest_bocas';
+      const inviteUrl = `https://poquitotalk.hero-apps.com?ref=${encodeURIComponent(refCode)}`;
+      
+      // Fire-and-forget background analytics log
+      fetch('https://poquitotalk.hero-apps.com/api/referral.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'track_invite',
+          referrer_code: refCode,
+          referrer_uid: profile.uid,
+          channel: 'share_modal'
+        })
+      }).catch(() => {});
+
       await Share.share({
         message: '🌴 Hey! Try PoquitoTalk to translate WhatsApp voice notes with local Bocas plumbers, boat captains, and landlords: ' + inviteUrl,
         url: inviteUrl,
@@ -78,7 +95,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
             {/* Single Line Clean Title */}
             <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit>
-              Unlock Natural Sounding Voices
+              Unlock Premium Voices
             </Text>
             <Text style={styles.subtitle}>
               Human-grade Spanish voice notes with natural Panamanian cadence.
@@ -89,7 +106,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               <View style={styles.featureRow}>
                 <Ionicons name="volume-high-outline" size={20} color={Colors.tertiary} />
                 <Text style={styles.featureText}>
-                  Natural Panamanian Voices (Diego, Mateo, Sofia, Valeria)
+                  Natural Panamanian Premium Voices
                 </Text>
               </View>
 
@@ -187,10 +204,26 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               )}
             </TouchableOpacity>
 
-            {/* Google Sign-In Sync Card */}
-            <View style={{ width: '100%', marginTop: 12 }}>
-              <GoogleSignInButton />
-            </View>
+            {/* Web Stripe Discount Callout */}
+            <TouchableOpacity
+              style={styles.webDiscountBox}
+              onPress={() => Linking.openURL('https://poquitotalk.hero-apps.com/#pricing')}
+              activeOpacity={0.8}
+            >
+              <View style={styles.webDiscountIconCircle}>
+                <Ionicons name="globe-outline" size={17} color="#047857" />
+              </View>
+              <View style={{ flex: 1 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                  <Text style={styles.webDiscountTitle}>Prefer paying on Web via Stripe?</Text>
+                  <View style={styles.discountBadge}>
+                    <Text style={styles.discountBadgeText}>25% OFF UNTIL SEPT 30</Text>
+                  </View>
+                </View>
+                <Text style={styles.webDiscountSub}>Get 50 Credits for $3.74 on poquitotalk.hero-apps.com (Valid until Sept 30, 2026)</Text>
+              </View>
+              <Ionicons name="open-outline" size={16} color="#047857" />
+            </TouchableOpacity>
 
             {/* Growth Loop: Invite a Neighbor */}
             <TouchableOpacity
@@ -202,15 +235,15 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
                 <Ionicons name="gift-outline" size={20} color={Colors.tertiary} />
               </View>
               <View style={styles.referralTextContainer}>
-                <Text style={styles.referralTitle}>Invite a Bocas Neighbor 🎁</Text>
+                <Text style={styles.referralTitle}>Invite a Bocas Neighbor</Text>
                 <Text style={styles.referralSub}>Get +5 Free Voice Notes when they try PoquitoTalk!</Text>
               </View>
               <Ionicons name="chevron-forward" size={16} color={Colors.tertiary} />
             </TouchableOpacity>
 
-            {/* Android / Web Secured Checkout Footer */}
+            {/* In-App Store Secured Checkout Footer */}
             <Text style={styles.footerNote}>
-              Secured checkout via Stripe • Google Play & Web • Cancel anytime
+              In-App purchases processed securely via Apple & Google Play • 1-Tap restore
             </Text>
           </ScrollView>
         </View>
@@ -353,6 +386,49 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#FFF',
   },
+  webDiscountBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    backgroundColor: '#F4FAF6',
+    borderRadius: 16,
+    padding: 12,
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: '#A7F3D0',
+  },
+  webDiscountIconCircle: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: '#E6F4EA',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  webDiscountTitle: {
+    fontSize: 12.5,
+    fontWeight: '800',
+    color: '#065F46',
+  },
+  discountBadge: {
+    backgroundColor: '#047857',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  discountBadgeText: {
+    color: '#FFF',
+    fontSize: 9,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  webDiscountSub: {
+    fontSize: 11,
+    color: '#047857',
+    marginTop: 2,
+    fontWeight: '600',
+  },
   referralCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -360,7 +436,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.tertiaryContainer,
     borderRadius: 16,
     padding: 12,
-    marginTop: 14,
+    marginTop: 10,
     borderWidth: 1,
     borderColor: Colors.tertiary,
   },

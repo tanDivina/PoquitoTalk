@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none" id="poquito-front">
+  <!-- 1. Wooden Perch Branch -->
+  <g id="front-perch">
+    <path d="M 30 138 Q 80 134 130 138" stroke="#B45309" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <!-- 2. Claws (symmetric pair) -->
+  <g id="front-claws">
+    <path d="M 62 127 C 60 133 62 139 66 139  M 70 127 C 68 133 70 139 74 139" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" />
+    <path d="M 86 127 C 84 133 86 139 90 139  M 94 127 C 92 133 94 139 98 139" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" />
+  </g>
+
+  <!-- 3. Body: elongated pear/teardrop -->
+  <g id="front-body">
+    <path
+      d="M 80 18 C 96 18 108 30 112 50 C 116 72 118 100 110 118 C 104 130 96 132 80 132 C 64 132 56 130 50 118 C 42 100 44 72 48 50 C 52 30 64 18 80 18 Z"
+      fill="#10B981"
+      stroke="#047857"
+      stroke-width="4.5"
+      stroke-linejoin="round"
+    />
+    <ellipse cx="80" cy="100" rx="18" ry="22" fill="#34D399" opacity="0.4" />
+  </g>
+
+  <!-- 4. Left Wing -->
+  <g id="front-wing-left">
+    <path
+      d="M 48 68 C 38 74 34 90 38 104 C 40 110 46 112 50 108 C 48 96 47 80 48 68 Z"
+      fill="#06B6D4"
+      stroke="#047857"
+      stroke-width="3"
+      stroke-linejoin="round"
+    />
+  </g>
+
+  <!-- 5. Right Wing -->
+  <g id="front-wing-right">
+    <path
+      d="M 112 68 C 122 74 126 90 122 104 C 120 110 114 112 110 108 C 112 96 113 80 112 68 Z"
+      fill="#06B6D4"
+      stroke="#047857"
+      stroke-width="3"
+      stroke-linejoin="round"
+    />
+  </g>
+
+  <!-- 6. Face -->
+  <g id="front-head">
+    <circle cx="67" cy="56" r="9" fill="#FFFFFF" stroke="#047857" stroke-width="2.5" />
+    <circle cx="69" cy="56" r="4.5" fill="#0F172A" />
+    <circle cx="67" cy="54" r="1.8" fill="#FFFFFF" />
+
+    <circle cx="93" cy="56" r="9" fill="#FFFFFF" stroke="#047857" stroke-width="2.5" />
+    <circle cx="95" cy="56" r="4.5" fill="#0F172A" />
+    <circle cx="93" cy="54" r="1.8" fill="#FFFFFF" />
+
+    <!-- Lower Beak Mandible (Solid amber depth, no red string) -->
+    <g id="front-beak-bottom">
+      <path d="M 74 72 C 76 81 84 81 86 72 L 83 75 C 81 77 79 77 77 75 Z" fill="#D97706" stroke="#047857" stroke-width="2" stroke-linejoin="round" />
+    </g>
+
+    <!-- Upper Beak Cone -->
+    <g id="front-beak-top">
+      <path
+        d="M 72 65 C 74 61 86 61 88 65 L 83 76 C 82 78 78 78 77 76 Z"
+        fill="#F59E0B"
+        stroke="#047857"
+        stroke-width="3"
+        stroke-linejoin="round"
+      />
+    </g>
+  </g>
+
+  <!-- 7. Soundwaves radiating from beak -->
+  <g id="front-soundwaves" opacity="0">
+    <path d="M 70 86 A 12 12 0 0 0 90 86" fill="none" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" />
+    <path d="M 64 92 A 20 20 0 0 0 96 92" fill="none" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" />
+    <path d="M 58 98 A 26 26 0 0 0 102 98" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" opacity="0.7" />
+  </g>
+</svg>

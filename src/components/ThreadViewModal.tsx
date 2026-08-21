@@ -54,7 +54,7 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
         sender: 'EXPAT',
         textEnglish: userText,
         textSpanish: translatedSpanish,
-        personaName: 'Diego',
+        personaName: 'Male',
         timestamp: Date.now(),
       };
 
@@ -75,7 +75,7 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
   const handlePlayMessageAudio = async (msg: ThreadMessage) => {
     try {
       setPlayingMsgId(msg.id);
-      const fileUri = await generateGoogleGeminiAudio(msg.textSpanish, msg.personaName || 'Diego');
+      const fileUri = await generateGoogleGeminiAudio(msg.textSpanish, msg.personaName || 'Male');
       if (fileUri) {
         const sound = await playGoogleAudioFile(fileUri, GOOGLE_SPANISH_VOICES[0]);
         if (sound) {
@@ -94,7 +94,7 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
 
   const handleShareToWhatsApp = async (msg: ThreadMessage) => {
     try {
-      const fileUri = await generateGoogleGeminiAudio(msg.textSpanish, msg.personaName || 'Diego');
+      const fileUri = await generateGoogleGeminiAudio(msg.textSpanish, msg.personaName || 'Male');
       if (fileUri) {
         await Sharing.shareAsync(fileUri, {
           mimeType: 'audio/mp3',

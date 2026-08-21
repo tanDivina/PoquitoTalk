@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Path, Circle } from 'react-native-svg';
+import Svg, { Path, Circle, G } from 'react-native-svg';
 
 interface GreenParrotLogoProps {
   size?: number;
@@ -18,61 +18,70 @@ export const GreenParrotLogo: React.FC<GreenParrotLogoProps> = ({ size = 42 }) =
         strokeLinejoin="round"
       />
 
-      {/* Wooden Perch Branch */}
-      <Path
-        d="M 62 161 Q 86 159 112 161"
-        stroke="#B45309"
-        strokeWidth={6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      {/* Canonical Studio Parrot Group (Scaled & centered within speech bubble with zero overlap) */}
+      <G transform="translate(43, 39) scale(0.75)">
+        {/* 1. Wooden Perch Branch */}
+        <Path d="M 30 135 Q 70 132 115 135" stroke="#B45309" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
 
-      {/* Golden Parrot Claws */}
-      <Path
-        d="M 74 152 C 72 158 74 164 78 164 M 80 152 C 78 158 80 164 84 164 M 91 152 C 89 158 91 164 95 164 M 97 152 C 95 158 97 164 101 164"
-        stroke="#F59E0B"
-        strokeWidth={4}
-        strokeLinecap="round"
-      />
+        {/* 2. Golden Parrot Claws */}
+        <Path
+          d="M 48 124 C 46 131 48 138 52 138 M 56 124 C 54 131 56 138 60 138 M 70 124 C 68 131 70 138 74 138 M 78 124 C 76 131 78 138 82 138"
+          stroke="#F59E0B"
+          strokeWidth={4.5}
+          strokeLinecap="round"
+        />
 
-      {/* Green Panamanian Parrot Head & Body */}
-      <Path
-        d="M 62 152 C 55 138 52 122 55 105 C 58 78 72 55 92 55 C 108 55 116 70 114 85 C 112 102 114 128 110 142 C 102 155 82 160 62 152 Z"
-        fill="#10B981"
-        stroke="#047857"
-        strokeWidth={4.5}
-      />
+        {/* 3. Body & Anchored 2 Crown Feathers (Zero Gap, seamless skull connection) */}
+        <G id="body-group">
+          <Path
+            d="M 35 125 C 27 108 25 90 29 70 C 33 42 50 18 73 18 C 91 18 100 34 98 52 C 95 72 97 100 92 116 C 82 131 58 136 35 125 Z"
+            fill="#10B981"
+            stroke="#047857"
+            strokeWidth={4.5}
+            strokeLinejoin="round"
+          />
+          {/* Two Feathers seamlessly rooted in head */}
+          <Path d="M 58 19.2 C 55 13 52 9 47 8" stroke="#047857" strokeWidth={3.5} strokeLinecap="round" fill="none" />
+          <Path d="M 67 17.8 C 64 12 61 9 56 7" stroke="#047857" strokeWidth={3} strokeLinecap="round" fill="none" />
+        </G>
 
-      {/* Wing Curve (Cyan Accent) */}
-      <Path
-        d="M 58 112 C 62 98 76 92 86 108 C 92 122 86 145 70 148 C 62 140 57 126 58 112 Z"
-        fill="#06B6D4"
-        stroke="#047857"
-        strokeWidth={3.5}
-      />
+        {/* 4. Sleek Cyan Wing */}
+        <Path
+          d="M 35 83 C 40 68 53 63 64 78 C 70 93 64 116 47 119 C 39 111 34 97 35 83 Z"
+          fill="#06B6D4"
+          stroke="#047857"
+          strokeWidth={3.5}
+          strokeLinejoin="round"
+        />
 
-      {/* Cute Big Eye */}
-      <Circle cx={95} cy={74} r={8} fill="#FFFFFF" stroke="#047857" strokeWidth={2.5} />
-      <Circle cx={93.5} cy={74} r={4} fill="#0F172A" />
-      <Circle cx={92} cy={72} r={1.5} fill="#FFFFFF" />
+        {/* 5. Head Group (Big Eye & Golden Beak) */}
+        <G id="head-group">
+          <Circle cx={76} cy={42} r={9} fill="#FFFFFF" stroke="#047857" strokeWidth={2.5} />
+          <Circle cx={74.5} cy={42} r={4.5} fill="#0F172A" />
+          <Circle cx={72.5} cy={40} r={1.8} fill="#FFFFFF" />
 
-      {/* Open Friendly Beak (Gold & Aligned Red Tongue) */}
-      <Path
-        d="M 110 70 C 124 70 130 82 118 94 C 113 98 106 94 108 88 C 110 82 108 74 110 70 Z"
-        fill="#F59E0B"
-        stroke="#047857"
-        strokeWidth={3.5}
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M 114 84 C 120 86 119 92 112.4 92 C 113.2 88 113.6 86 114 84 Z"
-        fill="#EF4444"
-      />
+          {/* Golden Beak */}
+          <Path
+            d="M 90 36 C 106 36 114 50 100 62 C 95 65 88 61 89 55 C 91 49 88 40 90 36 Z"
+            fill="#F59E0B"
+            stroke="#047857"
+            strokeWidth={3.5}
+            strokeLinejoin="round"
+          />
+          <Path
+            d="M 90 56 C 96 58 98 62 92 63 C 89 63 88 59 90 56 Z"
+            fill="#D97706"
+            stroke="#047857"
+            strokeWidth={1.8}
+            strokeLinejoin="round"
+          />
+        </G>
 
-      {/* Audio Soundwave Arcs */}
-      <Path d="M 130 73 A 12 12 0 0 1 130 93" fill="none" stroke="#F59E0B" strokeWidth={4.5} strokeLinecap="round" />
-      <Path d="M 140 66 A 19 19 0 0 1 140 100" fill="none" stroke="#F59E0B" strokeWidth={4.5} strokeLinecap="round" />
-      <Path d="M 150 60 A 25 25 0 0 1 150 106" fill="none" stroke="#F59E0B" strokeWidth={4} strokeLinecap="round" opacity={0.8} />
+        {/* 6. Compact Proportionate Soundwave Arcs (Generous breathing room) */}
+        <Path d="M 112 43 A 11 11 0 0 1 112 60" fill="none" stroke="#F59E0B" strokeWidth={4} strokeLinecap="round" />
+        <Path d="M 121 37 A 17 17 0 0 1 121 66" fill="none" stroke="#F59E0B" strokeWidth={4} strokeLinecap="round" />
+        <Path d="M 130 31 A 23 23 0 0 1 130 72" fill="none" stroke="#F59E0B" strokeWidth={4} strokeLinecap="round" opacity={0.8} />
+      </G>
     </Svg>
   );
 };

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PoquitoTalk — Voice Calibration Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --primary: #10B981;
+      --primary-dark: #059669;
+      --primary-light: #ECFDF5;
+      --border: #E2E8F0;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 6px 16px rgba(0,0,0,0.08);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      padding: 36px 16px 80px;
+      line-height: 1.5;
+    }
+    .container { max-width: 920px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 28px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #E6F4EA; color: #047857;
+      padding: 6px 14px; border-radius: 99px; font-size: 13px; font-weight: 700; margin-bottom: 12px;
+    }
+    h1 { font-family: 'Lexend', sans-serif; font-size: 30px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; letter-spacing: -0.02em; }
+    .subtitle { color: var(--text-muted); font-size: 15px; max-width: 680px; margin: 0 auto; }
+    
+    .scenario-tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+    .scenario-tab {
+      background: #FFF; border: 1.5px solid var(--border);
+      padding: 12px 20px; border-radius: 14px; font-size: 14.5px; font-weight: 700;
+      color: var(--text-muted); cursor: pointer; transition: all 0.2s ease;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .scenario-tab:hover { border-color: var(--primary); color: var(--text-main); }
+    .scenario-tab.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary-dark); }
+    
+    .phrase-box {
+      background: #FFF; border: 1.5px solid var(--border); border-radius: var(--radius);
+      padding: 22px 26px; margin-bottom: 32px; box-shadow: var(--shadow-sm);
+    }
+    .phrase-label { font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+    .phrase-spanish { font-size: 19px; font-weight: 700; color: #0F172A; margin-bottom: 6px; }
+    .phrase-english { font-size: 14.5px; color: var(--text-muted); font-style: italic; }
+    
+    .section-title {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border);
+    }
+    .section-title h2 { font-family: 'Lexend', sans-serif; font-size: 19px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    .tier-badge { font-size: 11.5px; font-weight: 800; padding: 5px 12px; border-radius: 8px; letter-spacing: 0.03em; text-transform: uppercase; }
+    .tier-badge.free { background: #E0E7FF; color: #3730A3; }
+    .tier-badge.premium { background: #FEF3C7; color: #92400E; }
+    .tier-badge.device { background: #F1F5F9; color: #334155; }
+    
+    .voices-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-bottom: 36px; }
+    .voice-card {
+      background: var(--card-bg); border: 1.5px solid var(--border); border-radius: var(--radius);
+      padding: 20px 22px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
+      justify-content: space-between; gap: 16px; transition: all 0.2s ease;
+    }
+    .voice-card:hover { border-color: var(--primary); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .voice-card.recommended { border-color: #A7F3D0; background: linear-gradient(180deg, #FFFFFF 0%, #F4FAF6 100%); }
+    .voice-card.standard { border-color: #C7D2FE; background: linear-gradient(180deg, #FFFFFF 0%, #F5F7FF 100%); }
+    
+    .voice-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .voice-info h3 { font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+    .voice-info p { font-size: 13.5px; color: var(--text-muted); line-height: 1.4; }
+    .gender-pill { font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 99px; background: #F1F5F9; color: #475569; white-space: nowrap; }
+    
+    .play-btn {
+      width: 100%; background: var(--primary); color: #FFF; border: none; border-radius: 12px;
+      padding: 13px 16px; font-size: 14px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease;
+    }
+    .play-btn:hover { background: var(--primary-dark); }
+    .play-btn.playing { background: #DC2626; }
+    .play-btn.standard-btn { background: #4F46E5; }
+    .play-btn.standard-btn:hover { background: #4338CA; }
+    .play-btn.device-btn { background: #0F172A; }
+    .play-btn.device-btn:hover { background: #1E293B; }
+    
+    .native-audio-wrapper { margin-top: -4px; }
+    audio { width: 100%; height: 36px; border-radius: 8px; }
+    
+    .status-tag { font-size: 11.5px; font-weight: 700; color: #059669; display: flex; align-items: center; gap: 4px; margin-top: 6px; }
+    .status-tag.blue { color: #4F46E5; }
+
+    /* Live Device Tester Box */
+    .device-tester-box {
+      background: #FFF; border: 1.5px solid var(--border); border-radius: var(--radius);
+      padding: 24px 26px; margin-bottom: 36px; box-shadow: var(--shadow-sm);
+    }
+    .device-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 18px 0; }
+    .control-item label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
+    .control-item select, .control-item input[type="range"] { width: 100%; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 14px; }
+    
+    .footer-summary { background: #FFF; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 24px; text-align: center; }
+    .footer-summary h3 { font-size: 16.5px; font-weight: 800; margin-bottom: 8px; }
+    .footer-summary p { font-size: 14px; color: var(--text-muted); max-width: 680px; margin: 0 auto; line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <div class="badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+        Voice Calibration Studio
+      </div>
+      <h1>Compare Free vs Premium Voices</h1>
+      <p class="subtitle">Listen to the calibrated natural speaking speeds for both Free Standard Voices (on-screen practice) and Premium Human-Grade Voices (WhatsApp voice notes).</p>
+    </div>
+
+    <!-- Scenario Tabs -->
+    <div class="scenario-tabs">
+      <button class="scenario-tab active" onclick="selectScenario('boat', this)">
+        🚤 Boat Taxi Scenario
+      </button>
+      <button class="scenario-tab" onclick="selectScenario('ac', this)">
+        ❄️ A/C Repair Scenario
+      </button>
+      <button class="scenario-tab" onclick="selectScenario('restaurant', this)">
+        🍽️ Dinner & Catch of Day
+      </button>
+    </div>
+
+    <!-- Current Phrase Display -->
+    <div class="phrase-box">
+      <div class="phrase-label">Current Scenario Phrase</div>
+      <div id="phrase-spanish" class="phrase-spanish">¿Buenas capitán? ¿Tendrá disponibilidad para llevarnos a Bastimentos hoy y cuánto nos saldría?</div>
+      <div id="phrase-english" class="phrase-english">"Hi Captain! Are you available to take us to Bastimentos today, and how much would it be?"</div>
+    </div>
+
+    <!-- SECTION 1: PREMIUM VOICES (WhatsApp Voice Notes) -->
+    <div class="section-title">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Premium Voices (WhatsApp Voice Notes)
+      </h2>
+      <span class="tier-badge premium">Paid Plans • Human-Grade MP3 Audio</span>
+    </div>
+
+    <div class="voices-grid">
+      <!-- 1. Premium Male Warm -->
+      <div class="voice-card recommended">
+        <div class="voice-header">
+          <div class="voice-info">
+            <h3>Premium Male (Warm & Conversational)</h3>
+            <p>Warm, natural conversational cadence with human breathing. Ideal for boat captains, landlords, and repairs.</p>
+            <div class="status-tag">✓ Active Premium Male Voice</div>
+          </div>
+          <span class="gender-pill" style="background: #ECFDF5; color: #047857;">Male Voice</span>
+        </div>
+        <button class="play-btn" data-voice="premium_male_warm" onclick="playAudio('premium_male_warm', this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Listen Premium Male</span>
+        </button>
+        <div class="native-audio-wrapper">
+          <audio id="audio-premium_male_warm" controls preload="auto" src="audio/voice_sampler/premium_male_warm_boat.mp3"></audio>
+        </div>
+      </div>
+
+      <!-- 2. Premium Female Clear -->
+      <div class="voice-card recommended">
+        <div class="voice-header">
+          <div class="voice-info">
+            <h3>Premium Female (Warm & Clear)</h3>
+            <p>Polite, articulate cadence. Ideal for restaurant reservations, clinic visits, groceries, and pharmacy.</p>
+            <div class="status-tag">✓ Active Premium Female Voice</div>
+          </div>
+          <span class="gender-pill" style="background: #ECFDF5; color: #047857;">Female Voice</span>
+        </div>
+        <button class="play-btn" data-voice="premium_female_clear" onclick="playAudio('premium_female_clear', this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Listen Premium Female</span>
+        </button>
+        <div class="native-audio-wrapper">
+          <audio id="audio-premium_female_clear" controls preload="auto" src="audio/voice_sampler/premium_female_clear_boat.mp3"></audio>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: STANDARD VOICES (Free & On-Screen Practice) -->
+    <div class="section-title">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        Standard Free Voices (Calibrated Natural Pace)
+      </h2>
+      <span class="tier-badge free">Free Tier • $0 Cost</span>
+    </div>
+
+    <div class="voices-grid">
+      <!-- 1. Standard Male -->
+      <div class="voice-card standard">
+        <div class="voice-header">
+          <div class="voice-info">
+            <h3>Standard Male (Panamanian Roberto)</h3>
+            <p>Calibrated calm cadence (0.85x speed). Clear and easy to follow for phrase pronunciation practice.</p>
+            <div class="status-tag blue">✓ Calibrated Natural Cadence</div>
+          </div>
+          <span class="gender-pill" style="background: #EEF2FF; color: #3730A3;">Standard Male</span>
+        </div>
+        <button class="play-btn standard-btn" data-voice="standard_male_latam" onclick="playAudio('standard_male_latam', this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Listen Standard Male (Natural Pace)</span>
+        </button>
+        <div class="native-audio-wrapper">
+          <audio id="audio-standard_male_latam" controls preload="auto" src="audio/voice_sampler/standard_male_latam_boat.mp3"></audio>
+        </div>
+      </div>
+
+      <!-- 2. Standard Female -->
+      <div class="voice-card standard">
+        <div class="voice-header">
+          <div class="voice-info">
+            <h3>Standard Female (Panamanian Margarita)</h3>
+            <p>Calibrated gentle cadence (0.85x speed). Articulate syllable pacing designed for Spanish learners.</p>
+            <div class="status-tag blue">✓ Calibrated Natural Cadence</div>
+          </div>
+          <span class="gender-pill" style="background: #EEF2FF; color: #3730A3;">Standard Female</span>
+        </div>
+        <button class="play-btn standard-btn" data-voice="standard_female_latam" onclick="playAudio('standard_female_latam', this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Listen Standard Female (Natural Pace)</span>
+        </button>
+        <div class="native-audio-wrapper">
+          <audio id="audio-standard_female_latam" controls preload="auto" src="audio/voice_sampler/standard_female_latam_boat.mp3"></audio>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: LIVE DEVICE SPEECH TEST (Your Device's Native Built-in Engine) -->
+    <div class="section-title">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        Live Device Engine Test (Your Phone / Mac Native Voice)
+      </h2>
+      <span class="tier-badge device">Direct Device TTS</span>
+    </div>
+
+    <div class="device-tester-box">
+      <p style="font-size: 14.5px; color: var(--text-muted); margin-bottom: 14px;">
+        This test uses your <strong>exact device's built-in text-to-speech synthesizer</strong> (Apple Siri/Monica on iOS & Mac, Google TTS on Android) — the same engine that powers the free "Listen" button in the app.
+      </p>
+      
+      <div class="device-controls">
+        <div class="control-item">
+          <label>Select Device Voice</label>
+          <select id="device-voice-select"></select>
+        </div>
+        <div class="control-item">
+          <label>Speaking Speed: <span id="speed-label" style="color: var(--primary-dark); font-weight: 800;">0.82x (Calm & Natural)</span></label>
+          <input type="range" id="speed-slider" min="0.65" max="1.0" step="0.02" value="0.82" oninput="updateSpeedLabel(this.value)">
+        </div>
+      </div>
+
+      <button class="play-btn device-btn" onclick="speakWithDeviceTTS()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>Test Device Voice at Selected Speed</span>
+      </button>
+    </div>
+
+    <!-- Summary Box -->
+    <div class="footer-summary">
+      <h3>How the Two Voice Engines Work</h3>
+      <p>
+        <strong>1. Free Tier (Standard Voices):</strong> Unlimited on-screen listening powered by your phone's built-in operating system synthesizer at $0 cost.<br>
+        <strong>2. Paid Tiers (Premium Voices):</strong> Generates actual high-definition human-grade <code>.mp3</code> voice clips with natural breathing and emotional cadence sent straight to WhatsApp.
+      </p>
+    </div>
+
+  </div>
+
+  <script>
+    var phrases = {
+      boat: {
+        es: "¿Buenas capitán? ¿Tendrá disponibilidad para llevarnos a Bastimentos hoy y cuánto nos saldría?",
+        en: '"Hi Captain! Are you available to take us to Bastimentos today, and how much would it be?"'
+      },
+      ac: {
+        es: "¡Buenas! El aire acondicionado está botando agua dentro del cuarto. ¿Podría venir un técnico a revisarlo hoy?",
+        en: '"Hello! The air conditioner is leaking water inside the room. Could a technician inspect it today?"'
+      },
+      restaurant: {
+        es: "¡Buenas noches! ¿Tienen mesa disponible para dos personas y cuál es el pescado del día?",
+        en: '"Good evening! Do you have a table available for two people, and what is the catch of the day?"'
+      }
+    };
+
+    var currentScenario = 'boat';
+
+    function getAllAudios() {
+      return document.querySelectorAll('audio');
+    }
+
+    function stopAllAudio() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      getAllAudios().forEach(function(a) {
+        try {
+          a.pause();
+          a.currentTime = 0;
+        } catch (e) {}
+      });
+      document.querySelectorAll('.play-btn').forEach(function(b) {
+        b.classList.remove('playing');
+        var span = b.querySelector('span');
+        var orig = b.getAttribute('data-orig');
+        if (orig && span) {
+          span.innerText = orig;
+        }
+      });
+    }
+
+    function selectScenario(scenarioKey, tabEl) {
+      stopAllAudio();
+      currentScenario = scenarioKey;
+      
+      document.querySelectorAll('.scenario-tab').forEach(function(tab) {
+        tab.classList.remove('active');
+      });
+      if (tabEl) {
+        tabEl.classList.add('active');
+      }
+
+      var spanishEl = document.getElementById('phrase-spanish');
+      var englishEl = document.getElementById('phrase-english');
+      if (spanishEl && phrases[scenarioKey]) spanishEl.innerText = phrases[scenarioKey].es;
+      if (englishEl && phrases[scenarioKey]) englishEl.innerText = phrases[scenarioKey].en;
+
+      // Update all native audio elements src
+      getAllAudios().forEach(function(audioEl) {
+        var id = audioEl.id.replace('audio-', '');
+        var newSrc = 'audio/voice_sampler/' + id + '_' + currentScenario + '.mp3';
+        audioEl.src = newSrc;
+        audioEl.load();
+      });
+    }
+
+    function playAudio(voiceKey, btnEl) {
+      var audioEl = document.getElementById('audio-' + voiceKey);
+      if (!audioEl) {
+        console.error('Audio element not found for ' + voiceKey);
+        return;
+      }
+
+      if (!audioEl.paused && audioEl.currentTime > 0) {
+        audioEl.pause();
+        audioEl.currentTime = 0;
+        stopAllAudio();
+        return;
+      }
+
+      stopAllAudio();
+
+      var span = btnEl.querySelector('span');
+      if (!btnEl.getAttribute('data-orig') && span) {
+        btnEl.setAttribute('data-orig', span.innerText);
+      }
+
+      btnEl.classList.add('playing');
+      if (span) span.innerText = 'Playing...';
+
+      var playPromise = audioEl.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(function(err) {
+          console.warn('Playback error:', err);
+          btnEl.classList.remove('playing');
+          var orig = btnEl.getAttribute('data-orig');
+          if (orig && span) span.innerText = orig;
+        });
+      }
+
+      audioEl.onended = function() {
+        stopAllAudio();
+      };
+    }
+
+    function updateSpeedLabel(val) {
+      var label = document.getElementById('speed-label');
+      if (label) {
+        var desc = "Normal";
+        if (val <= 0.75) desc = "Very Slow & Deliberate";
+        else if (val <= 0.85) desc = "Calm & Natural";
+        else if (val < 0.95) desc = "Brisk";
+        else desc = "Fast";
+        label.innerText = val + "x (" + desc + ")";
+      }
+    }
+
+    // Populate Device Voices for Section 3
+    var deviceVoices = [];
+    function loadDeviceVoices() {
+      if (!('speechSynthesis' in window)) return;
+      var voices = window.speechSynthesis.getVoices();
+      deviceVoices = voices.filter(function(v) {
+        return v.lang.startsWith('es') || v.lang.startsWith('es-') || v.name.toLowerCase().includes('spanish');
+      });
+      if (deviceVoices.length === 0) {
+        deviceVoices = voices; // Fallback to all
+      }
+      var select = document.getElementById('device-voice-select');
+      if (select) {
+        select.innerHTML = '';
+        deviceVoices.forEach(function(v, i) {
+          var opt = document.createElement('option');
+          opt.value = i;
+          opt.innerText = v.name + ' (' + v.lang + ')';
+          select.appendChild(opt);
+        });
+      }
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = loadDeviceVoices;
+      loadDeviceVoices();
+    }
+
+    function speakWithDeviceTTS() {
+      if (!('speechSynthesis' in window)) {
+        alert('Web Speech Synthesis not supported in this browser.');
+        return;
+      }
+      stopAllAudio();
+
+      var text = phrases[currentScenario].es;
+      var utterance = new SpeechSynthesisUtterance(text);
+      var slider = document.getElementById('speed-slider');
+      var rate = slider ? parseFloat(slider.value) : 0.82;
+      utterance.rate = rate;
+      utterance.lang = 'es-419';
+
+      var select = document.getElementById('device-voice-select');
+      if (select && deviceVoices[select.value]) {
+        utterance.voice = deviceVoices[select.value];
+        utterance.lang = deviceVoices[select.value].lang;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.play-btn').forEach(function(btn) {
+        var span = btn.querySelector('span');
+        if (span) {
+          btn.setAttribute('data-orig', span.innerText);
+        }
+      });
+      loadDeviceVoices();
+    });
+  </script>
+  <script src="tracker.js?v=1.0.0" defer></script>
+</body>
+</html>

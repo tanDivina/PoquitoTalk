@@ -8,12 +8,12 @@ import { StatusBar } from 'expo-status-bar';
 import { Colors } from './src/theme/colors';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { PresetsScreen } from './src/screens/PresetsScreen';
-import { SavedScreen } from './src/screens/SavedScreen';
-import { SettingsScreen } from './src/screens/SettingsScreen';
-import { OnboardingScreen } from './src/screens/OnboardingScreen';
 import { ConversationsScreen } from './src/screens/ConversationsScreen';
 import { DirectoryScreen } from './src/screens/DirectoryScreen';
+import { OnboardingScreen } from './src/screens/OnboardingScreen';
 import { PaywallModal } from './src/components/PaywallModal';
+import { SavedTranslationsModal } from './src/components/SavedTranslationsModal';
+import { SettingsModal } from './src/components/SettingsModal';
 import { TranslationItem } from './src/types';
 import { GOOGLE_SPANISH_VOICES, VoiceOption } from './src/services/googleVoice';
 import { revenueCat } from './src/services/revenuecat';
@@ -37,11 +37,20 @@ function MainAppTabs({
   const insets = useSafeAreaInsets();
   const dynamicBottom = Math.max(insets.bottom + 12, Platform.OS === 'android' ? 24 : 20);
 
+  const [savedModalVisible, setSavedModalVisible] = useState(false);
+  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
+
+  const initialTab =
+    Platform.OS === 'web' && typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search).get('tab') || 'Translate'
+      : 'Translate';
+
   return (
     <View style={styles.mainContainer}>
       <NavigationContainer>
         <Tab.Navigator
           id="main_tabs"
+          initialRouteName={initialTab}
           screenOptions={{
             headerShown: false,
             tabBarActiveTintColor: Colors.secondary,
@@ -55,7 +64,7 @@ function MainAppTabs({
             name="Translate"
             options={{
               tabBarIcon: ({ color, size }) => (
-                <MaterialCommunityIcons name="chat-processing-outline" size={22} color={color} />
+                <MaterialCommunityIcons name="chat-processing-outline" size={24} color={color} />
               ),
             }}
           >
@@ -64,6 +73,8 @@ function MainAppTabs({
                 {...props}
                 isPro={isPro}
                 onOpenPaywall={() => setPaywallVisible(true)}
+                onOpenSaved={() => setSavedModalVisible(true)}
+                onOpenSettings={() => setSettingsModalVisible(true)}
                 savedTranslations={savedTranslations}
                 onToggleSave={handleToggleSave}
                 activePresetPrompt={activePresetPrompt}
@@ -79,28 +90,11 @@ function MainAppTabs({
           </Tab.Screen>
 
           <Tab.Screen
-            name="Threads"
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="chatbubbles-outline" size={22} color={color} />
-              ),
-            }}
-          >
-            {(props) => (
-              <ConversationsScreen
-                {...props}
-                isPro={isPro}
-                onOpenPaywall={() => setPaywallVisible(true)}
-                onResetOnboarding={() => setShowOnboarding(true)}
-              />
-            )}
-          </Tab.Screen>
-
-          <Tab.Screen
             name="Presets"
             options={{
+              tabBarLabel: 'Templates',
               tabBarIcon: ({ color, size }) => (
-                <MaterialCommunityIcons name="toolbox-outline" size={22} color={color} />
+                <MaterialCommunityIcons name="cards-outline" size={24} color={color} />
               ),
             }}
           >
@@ -109,6 +103,9 @@ function MainAppTabs({
                 {...props}
                 isPro={isPro}
                 onOpenPaywall={() => setPaywallVisible(true)}
+                onOpenSaved={() => setSavedModalVisible(true)}
+                onOpenSettings={() => setSettingsModalVisible(true)}
+                savedCount={savedTranslations.length}
                 onSelectPhrasePrompt={(promptText, categoryTitle) => {
                   setActivePresetPrompt(promptText);
                   setActivePresetCategory(categoryTitle);
@@ -123,7 +120,7 @@ function MainAppTabs({
             options={{
               tabBarLabel: 'Providers',
               tabBarIcon: ({ color, size }) => (
-                <Ionicons name="people-outline" size={22} color={color} />
+                <Ionicons name="people-outline" size={24} color={color} />
               ),
             }}
           >
@@ -132,48 +129,36 @@ function MainAppTabs({
                 {...props}
                 isPro={isPro}
                 onOpenPaywall={() => setPaywallVisible(true)}
-              />
-            )}
-          </Tab.Screen>
-
-          <Tab.Screen
-            name="Saved"
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="bookmark-outline" size={22} color={color} />
-              ),
-            }}
-          >
-            {(props) => (
-              <SavedScreen
-                {...props}
-                isPro={isPro}
-                onOpenPaywall={() => setPaywallVisible(true)}
-                savedTranslations={savedTranslations}
-                onToggleSave={handleToggleSave}
-              />
-            )}
-          </Tab.Screen>
-
-          <Tab.Screen
-            name="Settings"
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="settings-outline" size={22} color={color} />
-              ),
-            }}
-          >
-            {(props) => (
-              <SettingsScreen
-                {...props}
-                isPro={isPro}
-                onOpenPaywall={() => setPaywallVisible(true)}
-                onResetOnboarding={() => setShowOnboarding(true)}
+                onOpenSaved={() => setSavedModalVisible(true)}
+                onOpenSettings={() => setSettingsModalVisible(true)}
+                savedCount={savedTranslations.length}
               />
             )}
           </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
+
+      {/* Header-Triggered Modals */}
+      <SavedTranslationsModal
+        visible={savedModalVisible}
+        onClose={() => setSavedModalVisible(false)}
+        savedTranslations={savedTranslations}
+        onToggleSave={handleToggleSave}
+      />
+
+      <SettingsModal
+        visible={settingsModalVisible}
+        onClose={() => setSettingsModalVisible(false)}
+        isPro={isPro}
+        onOpenPaywall={() => {
+          setSettingsModalVisible(false);
+          setPaywallVisible(true);
+        }}
+        onResetOnboarding={() => {
+          setSettingsModalVisible(false);
+          setShowOnboarding(true);
+        }}
+      />
 
       {/* RevenueCat Paywall Modal */}
       <PaywallModal
@@ -187,7 +172,15 @@ function MainAppTabs({
 
 export default function App() {
   const [isPro, setIsPro] = useState(false);
-  const [showOnboarding, setShowOnboarding] = useState(true); // First-time Intake Flow
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      const param = new URLSearchParams(window.location.search).get('onboarding');
+      if (param === 'false' || new URLSearchParams(window.location.search).has('tab')) {
+        return false;
+      }
+    }
+    return true;
+  }); // First-time Intake Flow
   const [paywallVisible, setPaywallVisible] = useState(false);
   const [savedTranslations, setSavedTranslations] = useState<TranslationItem[]>([]);
   const [activePresetPrompt, setActivePresetPrompt] = useState<string | undefined>(undefined);
@@ -255,13 +248,13 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     position: 'absolute',
-    bottom: Platform.OS === 'ios' ? 28 : 20,
-    left: 16,
-    right: 16,
+    bottom: Platform.OS === 'ios' ? 28 : 22,
+    left: 10,
+    right: 10,
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',
     borderRadius: 32,
-    height: 64,
-    paddingBottom: Platform.OS === 'ios' ? 10 : 6,
+    height: Platform.OS === 'ios' ? 72 : 68,
+    paddingBottom: Platform.OS === 'ios' ? 12 : 8,
     paddingTop: 6,
     borderWidth: 1,
     borderColor: Colors.cardBorder,
@@ -272,10 +265,13 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
   },
   tabBarItem: {
-    paddingVertical: 2,
+    paddingVertical: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   tabBarLabel: {
-    fontSize: 10,
+    fontSize: 9.5,
     fontWeight: '700',
+    marginTop: 2,
   },
 });

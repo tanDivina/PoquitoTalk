@@ -1,6 +1,6 @@
 {
   "name": "poquito-talk",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "main": "index.ts",
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
@@ -28,13 +28,20 @@
   "devDependencies": {
     "@expo/ngrok": "^4.1.3",
     "@types/react": "~19.1.10",
+    "puppeteer-core": "^25.7.0",
     "typescript": "^5.9.3"
   },
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "snap": "node scripts/snapshot.js",
+    "snap:all": "node scripts/snapshot.js all --rebuild",
+    "snap:before": "node scripts/snapshot.js before",
+    "snap:after": "node scripts/snapshot.js after",
+    "snap:compare": "node scripts/snapshot.js compare",
+    "record:demo": "node scripts/record_walkthrough.js"
   },
   "private": true
 }

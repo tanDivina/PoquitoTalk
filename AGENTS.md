@@ -16,6 +16,14 @@ If Expo Go outputs *"The installed version of Expo Go is for SDK XX. The project
   - **Automated Web Funnel Deployment**: Deploy static `web-funnel/` updates using:
     `rsync -avz -e "ssh -p 21098 -i ~/.ssh/id_rsa_cpanel -o StrictHostKeyChecking=no" ./web-funnel/ finclazc@premium225-5.web-hosting.com:/home/finclazc/public_html/poquitotalk/`
 
+## 4. STRICT BAN ON TACKY AI BADGES & HYPE BUZZWORDS
+- **NEVER** use ridiculous buzzwords or badges like *"Expert AI Super-Tool"*, *"Super-Tool"*, *"Revolutionary AI"*, or *"AI Super-App"* anywhere on headers, cards, promotional graphics, showcases, or copy.
+- Keep copywriting, badges, and headers clean, grounded, direct, and human.
+
+## 5. CRISP VECTOR SVGS ONLY — NO CARTOONISH EMOJIS/ICONS
+- **ALWAYS** use clean, monoline/duotone inline vector SVGs (`stroke-linecap="round"`, `stroke-linejoin="round"`) for UI icons, cards, feature highlights, and showcase graphics.
+- **NEVER** use cartoonish emojis or decorative clipart icons across UI or marketing graphics. The only standard exception is official country flag emojis (e.g. 🇵🇦).
+
 <!-- stripe-projects-cli managed:agents-md:start -->
 ## Stripe Projects CLI
 

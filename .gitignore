@@ -39,3 +39,24 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+.projects/cache
+.projects/vault
+.projects/state.test.json
+.projects/state.local.test.json
+.env
+.env.*
+!.env.example
+
+# Temporary video render caches & intermediate frame dumps
+temp_*
+vox_build/
+vox_natural_build/
+vox_v2_build/
+vox_omni_clips/
+vox_keyframes/
+vox_keyframes_v2/
+vox_natural_audio/
+vox_v2_audio/
+vox_aoede_audio/
+

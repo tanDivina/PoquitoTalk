@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PoquitoTalk — 32s Vox Explainer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@600;700;800;900&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      background: #FDFBF7;
+      font-family: 'Lexend', -apple-system, sans-serif;
+      position: relative;
+    }
+
+    /* Paper texture overlay */
+    #paper-texture {
+      position: absolute;
+      top: 0; left: 0; width: 1080px; height: 1920px;
+      background-image: radial-gradient(#E5DFD3 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* Botanical vine border */
+    .vine-border {
+      position: absolute;
+      top: 0; left: 0; width: 1080px; height: 1920px;
+      border: 24px solid #1B3B2B;
+      border-radius: 48px;
+      pointer-events: none;
+      z-index: 90;
+      box-shadow: inset 0 0 0 6px #FDFBF7, inset 0 0 0 12px #2D5A3F;
+    }
+
+    /* Scene Containers */
+    .scene {
+      position: absolute;
+      top: 0; left: 0; width: 1080px; height: 1920px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 90px 70px;
+      opacity: 0;
+      transform: scale(0.96);
+      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .scene.active {
+      opacity: 1;
+      transform: scale(1.0);
+      pointer-events: auto;
+    }
+
+    /* ════════════════════════════════════════════════
+       BEAT 1: DUOLINGO ZEN (0.0s - 5.5s)
+       ════════════════════════════════════════════════ */
+    #scene-1 {
+      background: linear-gradient(180deg, #FEF08A 0%, #FEF9C3 60%, #E2E8F0 100%);
+    }
+
+    /* Stamp badges */
+    .stamp-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 28px;
+      border-radius: 100px;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      border: 3px solid rgba(0,0,0,0.08);
+    }
+    .badge-green { background: #22C55E; color: #FFFFFF; }
+    .badge-red { background: #EF4444; color: #FFFFFF; }
+    .badge-gold { background: #EAB308; color: #1B1C1A; }
+    .badge-blue { background: #0284C7; color: #FFFFFF; }
+
+    .headline-title {
+      font-size: 68px;
+      font-weight: 900;
+      color: #1A1A1A;
+      text-align: center;
+      line-height: 1.12;
+      margin-top: 32px;
+      letter-spacing: -1.5px;
+      text-shadow: 0 2px 0 rgba(255,255,255,0.8);
+    }
+
+    .artwork-frame {
+      width: 820px;
+      height: 980px;
+      margin-top: 48px;
+      border-radius: 36px;
+      overflow: hidden;
+      position: relative;
+      background: #FFFFFF;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+      border: 6px solid #1B1C1A;
+    }
+
+    .artwork-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Deadpan cloud */
+    .deadpan-cloud {
+      position: absolute;
+      top: 60px;
+      right: 50px;
+      background: #FFFFFF;
+      padding: 18px 36px;
+      border-radius: 100px;
+      font-size: 32px;
+      font-weight: 900;
+      color: #1B1C1A;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      border: 4px solid #1B1C1A;
+      animation: cloudDrift 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes cloudDrift {
+      0% { transform: translateX(0px) translateY(0px); }
+      100% { transform: translateX(-24px) translateY(8px); }
+    }
+
+    /* Subtitle Banner */
+    .subtitle-banner {
+      position: absolute;
+      bottom: 75px;
+      left: 70px;
+      right: 70px;
+      background: #1B1C1A;
+      color: #FFFFFF;
+      padding: 32px 40px;
+      border-radius: 28px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+      border: 4px solid #FEF08A;
+      text-align: center;
+    }
+
+    .subtitle-banner p {
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .subtitle-banner .highlight {
+      color: #FEF08A;
+      font-weight: 900;
+    }
+
+    /* ════════════════════════════════════════════════
+       BEAT 2: PANAMA SMOKING AC (5.5s - 12.2s)
+       ════════════════════════════════════════════════ */
+    #scene-2 {
+      background: linear-gradient(180deg, #BAE6FD 0%, #E0F2FE 50%, #FED7AA 100%);
+    }
+
+    .wa-bubble {
+      position: absolute;
+      bottom: 50px;
+      left: 40px;
+      right: 40px;
+      background: #DCF8C6;
+      border: 4px solid #075E54;
+      border-radius: 24px;
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+      animation: popInBubble 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes popInBubble {
+      0% { transform: scale(0.7) translateY(40px); opacity: 0; }
+      100% { transform: scale(1.0) translateY(0); opacity: 1; }
+    }
+
+    /* ════════════════════════════════════════════════
+       BEAT 3: TOTAL BRAIN FREEZE (12.2s - 18.6s)
+       ════════════════════════════════════════════════ */
+    #scene-3 {
+      background: linear-gradient(180deg, #FECACA 0%, #FEE2E2 50%, #FDE047 100%);
+    }
+
+    .vibrating-panic {
+      animation: eyeVibrate 0.12s infinite alternate;
+    }
+
+    @keyframes eyeVibrate {
+      0% { transform: translate(-3px, -2px) rotate(-1deg); }
+      100% { transform: translate(3px, 2px) rotate(1deg); }
+    }
+
+    .question-mark-pop {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 140px;
+      font-weight: 900;
+      color: #EF4444;
+      text-shadow: 4px 4px 0 #1B1C1A, -4px -4px 0 #1B1C1A, 4px -4px 0 #1B1C1A, -4px 4px 0 #1B1C1A;
+      animation: bounceQ 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite alternate;
+    }
+
+    @keyframes bounceQ {
+      0% { transform: translateX(-50%) scale(0.9); }
+      100% { transform: translateX(-50%) scale(1.15) rotate(5deg); }
+    }
+
+    /* ════════════════════════════════════════════════
+       BEAT 4: 2-WAY WALKIE-TALKIE (18.6s - 25.7s)
+       ════════════════════════════════════════════════ */
+    #scene-4 {
+      background: linear-gradient(180deg, #FEF08A 0%, #FDE047 50%, #F59E0B 100%);
+    }
+
+    .walkie-talkie-card {
+      width: 820px;
+      height: 980px;
+      margin-top: 48px;
+      border-radius: 40px;
+      background: #1B1C1A;
+      border: 8px solid #FDE047;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 48px;
+      color: #FFFFFF;
+      position: relative;
+    }
+
+    .pulse-btn {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #EF4444 0%, #B91C1C 100%);
+      border: 8px solid #FFFFFF;
+      box-shadow: 0 0 0 16px rgba(239, 68, 68, 0.4), 0 20px 50px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 32px 0;
+      animation: pulseRed 1.2s infinite;
+    }
+
+    @keyframes pulseRed {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { box-shadow: 0 0 0 36px rgba(239, 68, 68, 0.0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.0); }
+    }
+
+    .flow-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 20px 24px;
+      margin: 10px 0;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    /* ════════════════════════════════════════════════
+       BEAT 5: PROBLEM SOLVED (25.7s - 31.6s)
+       ════════════════════════════════════════════════ */
+    #scene-5 {
+      background: linear-gradient(180deg, #BAE6FD 0%, #D1FAE5 50%, #A7F3D0 100%);
+    }
+
+    /* ════════════════════════════════════════════════
+       BEAT 6: EVERGREEN OUTRO (31.6s - 37.5s)
+       ════════════════════════════════════════════════ */
+    #scene-6 {
+      background: linear-gradient(180deg, #1B3B2B 0%, #0F2319 100%);
+      color: #FFFFFF;
+    }
+
+    #scene-6 .headline-title {
+      color: #FDE047;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    .outro-card {
+      width: 820px;
+      height: 940px;
+      margin-top: 40px;
+      border-radius: 40px;
+      background: #FFFFFF;
+      border: 8px solid #FDE047;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+      color: #1B1C1A;
+      text-align: center;
+    }
+
+    .brand-url {
+      font-size: 56px;
+      font-weight: 900;
+      color: #059669;
+      background: #ECFDF5;
+      padding: 16px 40px;
+      border-radius: 100px;
+      border: 4px solid #10B981;
+      margin: 24px 0;
+      letter-spacing: -1px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background paper texture -->
+  <div id="paper-texture"></div>
+
+  <!-- Vine border framing -->
+  <div class="vine-border"></div>
+
+  <!-- ════════════════════════════════════════════════
+       SCENE 1: DUOLINGO ZEN (0.0s - 5.52s)
+       ════════════════════════════════════════════════ -->
+  <div id="scene-1" class="scene active">
+    <div class="stamp-badge badge-green">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>DUOLINGO: 180-DAY STREAK</span>
+    </div>
+    <h1 class="headline-title">DUOLINGO VS<br/>REAL LIFE</h1>
+    <div class="artwork-frame">
+      <img class="artwork-img" src="poquito_7s_duolingo_reel.jpg" style="object-position: center top;" />
+      <div class="deadpan-cloud">._.</div>
+    </div>
+    <div class="subtitle-banner">
+      <p>You studied Duolingo for 6 months...<br/><span class="highlight">You know the cat is in the kitchen.</span></p>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       SCENE 2: PANAMA REALITY (5.52s - 12.19s)
+       ════════════════════════════════════════════════ -->
+  <div id="scene-2" class="scene">
+    <div class="stamp-badge badge-red">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>DAY 2 IN PANAMA</span>
+    </div>
+    <h1 class="headline-title">A/C STARTS SMOKING<br/>IN PANAMA</h1>
+    <div class="artwork-frame">
+      <img class="artwork-img" src="poquito_7s_duolingo_reel.jpg" style="object-position: center bottom;" />
+      <div class="wa-bubble">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#075E54" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-8.66 15l-1.34 5 5-1.34A10 10 0 1 0 12 2z"/></svg>
+        <div>
+          <div style="font-size: 20px; font-weight: 800; color: #075E54;">Local Technician (0:42)</div>
+          <div style="font-size: 28px; font-weight: 900; color: #1B1C1A;">▶ ılı·ll·ll·lı·ll 0:42</div>
+        </div>
+      </div>
+    </div>
+    <div class="subtitle-banner">
+      <p>Then your A/C starts smoking...<br/>and the tech sends a <span class="highlight">42-second rapid Spanish audio note.</span></p>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       SCENE 3: TOTAL BRAIN FREEZE (12.19s - 18.57s)
+       ════════════════════════════════════════════════ -->
+  <div id="scene-3" class="scene">
+    <div class="stamp-badge badge-red">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+      <span>2-WAY COMMUNICATION BREAKDOWN</span>
+    </div>
+    <h1 class="headline-title">TOTAL BRAIN FREEZE</h1>
+    <div class="artwork-frame vibrating-panic">
+      <img class="artwork-img" src="duolingo_vs_reallife_popart.jpg" style="object-position: center bottom;" />
+      <div class="question-mark-pop">?</div>
+    </div>
+    <div class="subtitle-banner">
+      <p>Your brain freezes.<br/><span class="highlight">You can't understand him, and can't reply.</span></p>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       SCENE 4: 2-WAY WALKIE-TALKIE (18.57s - 25.70s)
+       ════════════════════════════════════════════════ -->
+  <div id="scene-4" class="scene">
+    <div class="stamp-badge badge-gold">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      <span>THE 2-WAY WALKIE-TALKIE</span>
+    </div>
+    <h1 class="headline-title">POQUITOTALK<br/>BRIDGES BOTH SIDES</h1>
+    <div class="walkie-talkie-card">
+      <div class="flow-row">
+        <span>📩 Rapid Spanish Audio</span>
+        <span style="color: #10B981;">➔ Instant English</span>
+      </div>
+      <div class="pulse-btn">
+        <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </div>
+      <div class="flow-row">
+        <span>🎙️ Speak Natural English</span>
+        <span style="color: #FDE047;">➔ Local Spanish Voice</span>
+      </div>
+    </div>
+    <div class="subtitle-banner">
+      <p>Translates his voice note instantly...<br/><span class="highlight">and you reply in clean, localized Spanish audio!</span></p>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       SCENE 5: THE REAL-WORLD WIN (25.70s - 31.60s)
+       ════════════════════════════════════════════════ -->
+  <div id="scene-5" class="scene">
+    <div class="stamp-badge badge-green">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>PROBLEM SOLVED IN MINUTES</span>
+    </div>
+    <h1 class="headline-title">A/C FIXED TODAY<br/>ZERO BARRIER</h1>
+    <div class="artwork-frame">
+      <img class="artwork-img" src="poquito_solution_popart.jpg" style="object-position: center;" />
+    </div>
+    <div class="subtitle-banner">
+      <p>Your A/C gets fixed today.<br/><span class="highlight">No stress, no fails, and zero language barrier.</span></p>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       SCENE 6: EVERGREEN OUTRO (31.60s - 37.50s)
+       ════════════════════════════════════════════════ -->
+  <div id="scene-6" class="scene">
+    <div class="stamp-badge badge-gold">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span>TRY THE FREE DEMO</span>
+    </div>
+    <h1 class="headline-title">EFFORTLESS 2-WAY<br/>VOICE SPANISH</h1>
+    <div class="outro-card">
+      <img src="poquito_solution_popart.jpg" style="width: 240px; height: 240px; border-radius: 50%; object-fit: cover; border: 6px solid #1B3B2B; box-shadow: 0 12px 30px rgba(0,0,0,0.15);" />
+      <div class="brand-url">PoquitoTalk.com</div>
+      <div style="font-size: 30px; font-weight: 800; color: #4B5563; margin-bottom: 12px;">1-Tap Spanish Walkie-Talkie</div>
+      <div style="font-size: 24px; font-weight: 700; color: #9CA3AF;">Created by @DorienVibecodes</div>
+    </div>
+    <div class="subtitle-banner">
+      <p>Effortless two-way voice translation.<br/><span class="highlight">Try the free web demo at PoquitoTalk.com 🦜</span></p>
+    </div>
+  </div>
+
+  <script>
+    // Exact timeline choreography matching master audio track
+    const timeline = [
+      { time: 0.0, scene: 1 },
+      { time: 5.52, scene: 2 },
+      { time: 12.19, scene: 3 },
+      { time: 18.57, scene: 4 },
+      { time: 25.70, scene: 5 },
+      { time: 31.60, scene: 6 }
+    ];
+
+    window.seekToTime = function(t) {
+      let activeScene = 1;
+      for (const item of timeline) {
+        if (t >= item.time) {
+          activeScene = item.scene;
+        }
+      }
+      for (let i = 1; i <= 6; i++) {
+        const el = document.getElementById('scene-' + i);
+        if (el) {
+          if (i === activeScene) {
+            el.classList.add('active');
+          } else {
+            el.classList.remove('active');
+          }
+        }
+      }
+    };
+  </script>
+  <script src="tracker.js?v=1.0.0" defer></script>
+</body>
+</html>

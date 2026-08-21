@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" fill="none" id="poquito-talkie-mascot">
+  <!-- 1. Wooden Perch Branch -->
+  <g id="talkie-perch">
+    <path d="M 30 152 Q 80 148 135 152" stroke="#B45309" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <!-- 2. Golden Parrot Claws (Matching original feet) -->
+  <g id="talkie-claws">
+    <path
+      d="M 52 142 C 50 149 52 156 56 156 M 60 142 C 58 149 60 156 64 156 M 74 142 C 72 149 74 156 78 156 M 82 142 C 80 149 82 156 86 156"
+      stroke="#F59E0B"
+      stroke-width="4.5"
+      stroke-linecap="round"
+    />
+  </g>
+
+  <!-- 3. Body & Crown Group (Permanently anchored) -->
+  <g id="talkie-body-group">
+    <!-- Green Body -->
+    <path
+      d="M 40 142 C 30 124 28 104 32 82 C 36 54 54 30 78 30 C 98 30 108 48 106 68 C 103 90 104 118 98 134 C 88 150 62 154 40 142 Z"
+      fill="#10B981"
+      stroke="#047857"
+      stroke-width="4.5"
+      stroke-linejoin="round"
+    />
+
+    <!-- Expressive Crown Feathers (Seamless root contact, zero gap, naturally curved, non-touching) -->
+    <g id="talkie-crest">
+      <!-- Left / Back Hair (Anchored flush on skull slope at y:31.4) -->
+      <path d="M 63 31.4 C 59 24 55 19 49 18" stroke="#047857" stroke-width="3.5" stroke-linecap="round" fill="none" />
+      <!-- Right / Front Hair (Anchored flush on top crown at y:29.8) -->
+      <path d="M 73 29.8 C 69 23 65 19 59 17" stroke="#047857" stroke-width="3" stroke-linecap="round" fill="none" />
+    </g>
+  </g>
+
+  <!-- 4. Head Group -->
+  <g id="talkie-head">
+    <!-- Eye (With ID for Sleepy/Wake-Up Scaling) -->
+    <circle id="talkie-eye-white" cx="82" cy="54" r="9" fill="#FFFFFF" stroke="#047857" stroke-width="2.5" />
+    <circle id="talkie-pupil" cx="80.5" cy="54" r="4.5" fill="#0F172A" />
+    <circle cx="78.5" cy="52" r="1.8" fill="#FFFFFF" />
+
+    <!-- Clean Golden Beak (Completely visible, never covered) -->
+    <g id="talkie-beak-top">
+      <path
+        d="M 96 48 C 112 48 120 62 106 74 C 101 77 94 73 95 67 C 97 61 94 52 96 48 Z"
+        fill="#F59E0B"
+        stroke="#047857"
+        stroke-width="3.5"
+        stroke-linejoin="round"
+      />
+    </g>
+    <g id="talkie-beak-bottom">
+      <path
+        d="M 96 68 C 102 70 104 74 98 75 C 95 75 94 71 96 68 Z"
+        fill="#D97706"
+        stroke="#047857"
+        stroke-width="1.8"
+        stroke-linejoin="round"
+      />
+    </g>
+  </g>
+
+  <!-- 5. Walkie-Talkie Radio Group -->
+  <g id="talkie-radio-group" transform="translate(-4, 0)">
+    <!-- Antenna Unit (Unified group: tip & stem move together from socket) -->
+    <g id="talkie-antenna-group">
+      <path id="talkie-antenna" d="M 129 45 L 129 70" stroke="#1E293B" stroke-width="3.5" stroke-linecap="round" />
+      <circle id="talkie-antenna-tip" cx="129" cy="43" r="3.5" fill="#F59E0B" />
+    </g>
+
+    <!-- Radio Main Chassis (Clear gap from body) -->
+    <rect x="116" y="70" width="28" height="46" rx="6" fill="#1E293B" stroke="#047857" stroke-width="2.5" />
+    
+    <!-- Speaker Grill Slits -->
+    <line x1="122" y1="90" x2="138" y2="90" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+    <line x1="122" y1="96" x2="138" y2="96" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+    <line x1="122" y1="102" x2="138" y2="102" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+
+    <!-- Push-To-Talk (PTT) Button on RIGHT side -->
+    <rect id="talkie-ptt" x="143" y="76" width="4.5" height="14" rx="2.2" fill="#25D366" />
+
+    <!-- Top Radio Control Knob -->
+    <rect x="120" y="65" width="7" height="6" rx="1.5" fill="#475569" />
+
+    <!-- Transmit/Status LED Indicator (Sleek size with dark bezel ring) -->
+    <circle cx="125" cy="78" r="3.8" fill="#0F172A" />
+    <circle id="talkie-led" cx="125" cy="78" r="2.8" fill="#25D366" />
+
+    <!-- Radio Transmission Wave Arcs (Brand Warm Orange) -->
+    <g id="talkie-radio-waves" opacity="0">
+      <path id="talkie-wave-1" d="M 135 38 A 10 10 0 0 1 145 48" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" />
+      <path id="talkie-wave-2" d="M 139 32 A 16 16 0 0 1 153 46" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" />
+      <path id="talkie-wave-3" d="M 143 26 A 22 22 0 0 1 161 44" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" opacity="0.75" />
+    </g>
+  </g>
+
+  <!-- Petite Slender Cyan Wing Gripping the Radio -->
+  <path
+    id="talkie-wing"
+    d="M 44 94 C 48 80 60 76 72 84 C 84 92 98 94 112 96 C 116 98 116 103 110 105 C 97 108 82 124 60 126 C 49 120 42 108 44 94 Z"
+    fill="#06B6D4"
+    stroke="#047857"
+    stroke-width="3.5"
+    stroke-linejoin="round"
+  />
+</svg>
