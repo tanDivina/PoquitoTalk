@@ -167,7 +167,7 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
 
           <View style={styles.headerTitleBox}>
             <Text style={styles.contactName}>{thread.contactName}</Text>
-            <Text style={styles.categoryBadge}>{thread.category} • Panamá 🇵🇦</Text>
+            <Text style={styles.categoryBadge}>{thread.category}</Text>
           </View>
 
           <View style={styles.headerActionsRow}>

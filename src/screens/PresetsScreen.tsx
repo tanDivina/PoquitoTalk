@@ -193,11 +193,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       {/* Permanently Pinned Top Category Bar */}
       <View style={styles.pinnedHeaderSection}>
         <View style={styles.pinnedTopRow}>
-          <Text style={styles.pinnedTitle}>Service Templates 🇵🇦</Text>
-          <View style={styles.templateBadge}>
-            <Ionicons name="sparkles" size={12} color={Colors.tertiary} style={{ marginRight: 4 }} />
-            <Text style={styles.templateBadgeText}>Panama Spanish</Text>
-          </View>
+          <Text style={styles.pinnedTitle}>Service Templates</Text>
         </View>
 
         {/* Permanently Pinned Horizontal Category Jump Bar */}
@@ -372,7 +368,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                           >
                             <View style={styles.spanishBadge}>
                               <Text style={styles.spanishBadgeText}>
-                                PANAMA SPANISH 🇵🇦
+                                SPANISH
                               </Text>
                             </View>
                             <Text style={styles.spanishText}>{currentSpanish}</Text>

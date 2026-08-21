@@ -371,9 +371,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           onPress={handleSwapLanguages}
           activeOpacity={0.8}
         >
-          <Text style={styles.langTagText}>{fromLang === 'en' ? '🇺🇸 EN' : '🇵🇦 ES'}</Text>
+          <Text style={styles.langTagText}>{fromLang === 'en' ? 'EN' : 'ES'}</Text>
           <Ionicons name="swap-horizontal" size={14} color={Colors.secondary} />
-          <Text style={styles.langTagText}>{toLang === 'es' ? '🇵🇦 ES' : '🇺🇸 EN'}</Text>
+          <Text style={styles.langTagText}>{toLang === 'es' ? 'ES' : 'EN'}</Text>
         </TouchableOpacity>
       </View>
 

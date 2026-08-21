@@ -147,7 +147,7 @@ export const AddProviderModal: React.FC<AddProviderModalProps> = ({
           {/* Header */}
           <View style={styles.headerRow}>
             <View style={styles.headerTitleGroup}>
-              <Text style={styles.title}>Recommend a Local Pro 🇵🇦</Text>
+              <Text style={styles.title}>Recommend a Local Pro</Text>
               <Text style={styles.subtitle}>Help your favorite tradesmen and boat captains get more jobs</Text>
             </View>
             <TouchableOpacity onPress={onClose} style={styles.closeBtn} activeOpacity={0.7}>

@@ -209,7 +209,6 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
       <View style={styles.placeholderCard}>
         {/* Local Spanish Voice Notes Badge */}
         <View style={styles.dialectBadge}>
-          <Text style={styles.dialectFlag}>🇵🇦</Text>
           <Text style={styles.dialectText}>Instant Spanish Voice Notes • Bocas del Toro</Text>
         </View>
 
@@ -259,7 +258,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
       <View style={styles.sectionBlock}>
         <View style={styles.outputHeader}>
-          <Text style={styles.outputLabel}>ESPAÑOL PANAMÁ 🇵🇦</Text>
+          <Text style={styles.outputLabel}>SPANISH</Text>
           
           {/* Simple 2-Option Voice Toggle (♂ Male / ♀ Female) */}
           <View style={styles.voiceToggleRow}>
@@ -370,7 +369,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
         {/* Contextual Local Sponsor Ad */}
         {contextualSponsor && (
           <View style={styles.contextualAdSection}>
-            <Text style={styles.contextualAdHeader}>RELEVANT LOCAL SERVICE SPONSOR 🇵🇦</Text>
+            <Text style={styles.contextualAdHeader}>RELEVANT LOCAL SERVICE SPONSOR</Text>
             <DirectoryCard provider={contextualSponsor} translatedMessage={currentDisplayText} />
           </View>
         )}
