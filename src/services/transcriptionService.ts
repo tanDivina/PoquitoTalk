@@ -1,7 +1,7 @@
 // Audio Recording & Voice Transcription Service
 // Handles native microphone capture via expo-av and multi-tier speech-to-text engines
 
-import { Audio } from "expo-av";
+import { Audio } from "./audioCompat";
 import { Platform } from "react-native";
 import { stopAllAudioPlayback } from "./googleVoice";
 

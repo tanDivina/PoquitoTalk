@@ -8,7 +8,7 @@
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/native": "^7.0.0",
     "expo": "~57.0.19",
-    "expo-av": "~16.0.8",
+    "expo-audio": "~57.0.4",
     "expo-clipboard": "~57.0.1",
     "expo-contacts": "~57.0.4",
     "expo-document-picker": "~57.0.1",

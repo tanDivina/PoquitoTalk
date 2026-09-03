@@ -1,5 +1,5 @@
 import * as Speech from 'expo-speech';
-import { Audio } from 'expo-av';
+import { Audio } from './audioCompat';
 import { VoiceOption } from './googleVoice';
 import { generateElevenLabsAudio } from './elevenLabsVoice';
 

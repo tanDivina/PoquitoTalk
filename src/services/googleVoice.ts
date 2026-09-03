@@ -3,7 +3,7 @@
 // Supports ElevenLabs hyper-realistic TTS, Google Cloud TTS, and pitch-modulated stream fallbacks
 
 import * as FileSystem from 'expo-file-system/legacy';
-import { Audio } from 'expo-av';
+import { Audio } from './audioCompat';
 import { generateElevenLabsAudio } from './elevenLabsVoice';
 import { normalizeBocasTerminology } from './transcriptionService';
 

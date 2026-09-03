@@ -17,7 +17,7 @@ import { WalkieTalkieIcon } from '../components/WalkieTalkieIcon';
 import * as Clipboard from 'expo-clipboard';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Speech from 'expo-speech';
-import { Audio } from 'expo-av';
+import { Audio } from '../services/audioCompat';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { TranslationCard } from '../components/TranslationCard';

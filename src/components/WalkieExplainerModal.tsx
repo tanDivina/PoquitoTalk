@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Audio } from 'expo-av';
+import { Audio } from '../services/audioCompat';
 import * as Speech from 'expo-speech';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { WalkieTalkieIcon } from './WalkieTalkieIcon';
