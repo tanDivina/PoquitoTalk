@@ -10,7 +10,7 @@ In Panama, nobody uses email or text messages for home repairs or logistics. **W
 
 If your Spanish is limited to *"Una cerveza por favor"*, trying to explain that your bedroom A/C is leaking water or that your boat motor needs a new spark plug can lead to endless confusion.
 
-That is why we built **PoquitoTalk** — a lightweight, friendly messaging assistant designed specifically for permanent Panama residents and tourists in Bocas del Toro.
+That is why we built **PoquitoTalk**  -  a lightweight, friendly messaging assistant designed specifically for permanent Panama residents and tourists in Bocas del Toro.
 
 ---
 
@@ -22,7 +22,7 @@ That is why we built **PoquitoTalk** — a lightweight, friendly messaging assis
 
 Traditional translation apps (like Google Translate or DeepL) output formal, textbook Spanish. When sent to a local Panamanian contractor, formal phrasing can sound robotic or cold.
 
-Moreover, standard translators give you text strings — forcing you to read aloud awkwardly into WhatsApp. 
+Moreover, standard translators give you text strings  -  forcing you to read aloud awkwardly into WhatsApp. 
 
 **PoquitoTalk changes everything:**
 1. **Polite Panamanian Phrasing**: Translates your request into warm, respectful Panamanian Spanish (*"¡Buenas! ¿Cuándo podría pasar a revisar el aire?"*).
@@ -58,7 +58,7 @@ When you send a Spanish voice note to a local plumber or boat captain, they can 
 - They press **"Mantener para Hablar"** (Hold to Speak).
 - Their Spanish response is automatically transcribed and translated to English in your app!
 
-No app installation required for the contractor — zero friction!
+No app installation required for the contractor  -  zero friction!
 
 ---
 

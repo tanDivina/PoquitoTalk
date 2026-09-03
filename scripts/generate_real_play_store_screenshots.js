@@ -66,9 +66,10 @@ async function captureRealScreens() {
   const screens = [
     {
       tab: 'Translate',
-      badge: '1-TAP VOICE DISPATCH',
-      title: 'Send Natural WhatsApp Voice Notes',
-      subtitle: 'Speak in English. PoquitoTalk formats and translates to authentic Panama Spanish with one tap.',
+      urlParams: 'tab=Translate&prompt=Can%20you%20check%20the%20AC%20freon%20today%3F&output=%C2%A1Buenas!%20%C2%BFPuedes%20revisar%20el%20gas%20del%20aire%20hoy%20mismo%3F',
+      badge: 'LOCALS PREFER VOICE NOTES',
+      title: 'Send 1-Tap WhatsApp Voice Notes',
+      subtitle: 'Speak English naturally. Poquito formats and speaks warm, respectful Panama Spanish.',
       filename: 'play_store_screenshot_1_home.png',
       action: async (page) => {
         await new Promise(r => setTimeout(r, 2000));
@@ -76,9 +77,10 @@ async function captureRealScreens() {
     },
     {
       tab: 'Presets',
-      badge: 'EMERGENCY & OFFLINE PRESETS',
-      title: 'Instant Audio Scenario Presets',
-      subtitle: 'Pre-recorded emergency & logistical audio notes for power cuts, water taxis, and grocery runs.',
+      urlParams: 'tab=Presets',
+      badge: 'GET THINGS DONE STRESS-FREE',
+      title: 'Instant Audio For Island Errands',
+      subtitle: 'Ready-to-go voice notes for boat taxis, power outages, drinking water, and repairs.',
       filename: 'play_store_screenshot_2_presets.png',
       action: async (page) => {
         await new Promise(r => setTimeout(r, 2000));
@@ -86,9 +88,10 @@ async function captureRealScreens() {
     },
     {
       tab: 'Directory',
-      badge: 'ISLAND CONTRACTORS & SERVICES',
-      title: 'Verified Bocas del Toro Directory',
-      subtitle: 'Instant WhatsApp direct contact with trusted local mechanics, A/C techs, rentals, and clinics.',
+      urlParams: 'tab=Directory',
+      badge: 'FAST ISLAND REPAIRS & SERVICES',
+      title: 'Verified Island Directory',
+      subtitle: 'Direct 1-tap WhatsApp to trusted Bocas del Toro mechanics, A/C techs, captains, and clinics.',
       filename: 'play_store_screenshot_3_directory.png',
       action: async (page) => {
         await new Promise(r => setTimeout(r, 2000));
@@ -96,9 +99,10 @@ async function captureRealScreens() {
     },
     {
       tab: 'Translate',
-      badge: 'AUTHENTIC LOCAL DIALECTS',
-      title: 'Choose Poquito or Full Panameño',
-      subtitle: 'Switch between friendly polite Spanish and authentic local slang for island life.',
+      urlParams: 'tab=Translate&walkie=true',
+      badge: 'WARM RESPECT FOR LOCALS',
+      title: 'Understand Rapid Island Spanish',
+      subtitle: 'Real-time 2-way live voice translation and 1-tap WhatsApp voice note decoding.',
       filename: 'play_store_screenshot_4_tones.png',
       action: async (page) => {
         await new Promise(r => setTimeout(r, 2000));
@@ -119,7 +123,8 @@ async function captureRealScreens() {
       hasTouch: true,
     });
 
-    await appPage.goto(`http://localhost:${PORT}/?tab=${s.tab}`, { waitUntil: ['load', 'networkidle2'], timeout: 20000 });
+    const url = `http://localhost:${PORT}/?${s.urlParams || ('tab=' + s.tab)}`;
+    await appPage.goto(url, { waitUntil: ['load', 'networkidle2'], timeout: 20000 });
 
     await appPage.evaluate(() => {
       try {
@@ -297,9 +302,143 @@ async function captureRealScreens() {
     await new Promise(r => setTimeout(r, 600));
     const outputPath = path.join(WORKSPACE_DIR, s.filename);
     await framePage.screenshot({ path: outputPath, type: 'png' });
-    console.log(`✅ Saved Floating Screen: ${outputPath}`);
+    const dynamicAlias = path.join(WORKSPACE_DIR, `play_store_screenshot_${i + 1}_dynamic.png`);
+    fs.copyFileSync(outputPath, dynamicAlias);
+    console.log(`✅ Saved Floating Screen: ${outputPath} & ${dynamicAlias}`);
     await framePage.close();
   }
+
+  // Generate 4-in-1 Marketing Review Composite
+  console.log('🎨 Composing 4-in-1 Review Image...');
+  const pAll = await browser.newPage();
+  await pAll.setViewport({ width: 2400, height: 1350, deviceScaleFactor: 1 });
+
+  const b1 = `data:image/png;base64,${fs.readFileSync(path.join(WORKSPACE_DIR, 'play_store_screenshot_1_dynamic.png')).toString('base64')}`;
+  const b2 = `data:image/png;base64,${fs.readFileSync(path.join(WORKSPACE_DIR, 'play_store_screenshot_2_dynamic.png')).toString('base64')}`;
+  const b3 = `data:image/png;base64,${fs.readFileSync(path.join(WORKSPACE_DIR, 'play_store_screenshot_3_dynamic.png')).toString('base64')}`;
+  const b4 = `data:image/png;base64,${fs.readFileSync(path.join(WORKSPACE_DIR, 'play_store_screenshot_4_dynamic.png')).toString('base64')}`;
+
+  const htmlAll = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&family=Lexend:wght@800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 2400px;
+      height: 1350px;
+      background: radial-gradient(circle at 50% 0%, #FFF8F0 0%, #FAF8F5 50%, #EDE4D8 100%);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #0F172A;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 50px 70px 40px 70px;
+      overflow: hidden;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid rgba(150, 72, 36, 0.12);
+      padding-bottom: 20px;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .brand-title {
+      font-family: 'Lexend', sans-serif;
+      font-size: 36px;
+      font-weight: 900;
+      color: #1E293B;
+      letter-spacing: -0.5px;
+    }
+    .badge-dynamic {
+      background: #FFDBCD;
+      color: #964824;
+      font-size: 15px;
+      font-weight: 800;
+      padding: 6px 16px;
+      border-radius: 100px;
+      border: 1px solid #FD9A6F;
+      margin-left: 12px;
+    }
+    .sub {
+      font-size: 18px;
+      font-weight: 600;
+      color: #786C5E;
+      margin-top: 4px;
+    }
+    .stage {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 32px;
+      flex: 1;
+      margin: 24px 0;
+    }
+    .card-wrap {
+      flex: 1;
+      height: 100%;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(89, 79, 66, 0.18), 0 6px 16px rgba(0, 0, 0, 0.06);
+      border: 2.5px solid rgba(255, 255, 255, 0.9);
+      background: #FFFFFF;
+    }
+    .card-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1.5px solid rgba(150, 72, 36, 0.12);
+      padding-top: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #5C554D;
+    }
+    .footer strong { color: #1E293B; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand-group">
+      <div>
+        <div class="brand-title">PoquitoTalk <span class="badge-dynamic">Outcome-Driven Storefront Suite</span></div>
+        <div class="sub">Locals Prefer Voice Notes • Stress-Free Island Errands • 2-Way Live Talk</div>
+      </div>
+    </div>
+    <div style="font-weight: 700; color: #964824;">Google Play Store & App Store Ready (1080×1920)</div>
+  </div>
+
+  <div class="stage">
+    <div class="card-wrap"><img src="${b1}" /></div>
+    <div class="card-wrap"><img src="${b2}" /></div>
+    <div class="card-wrap"><img src="${b3}" /></div>
+    <div class="card-wrap"><img src="${b4}" /></div>
+  </div>
+
+  <div class="footer">
+    <div>Emotional Relief & Cultural Respect Messaging Framework</div>
+    <div>PoquitoTalk • Created by <strong>@DorienVibecodes</strong> • poquitotalk.hero-apps.com</div>
+  </div>
+</body>
+</html>
+  `;
+
+  await pAll.setContent(htmlAll, { waitUntil: 'domcontentloaded' });
+  await new Promise(r => setTimeout(r, 600));
+  await pAll.screenshot({ path: path.join(WORKSPACE_DIR, 'poquitotalk_dynamic_showcase_4up.png') });
+  await pAll.close();
+  console.log('✅ Generated 4-up Showcase: poquitotalk_dynamic_showcase_4up.png');
 
   await browser.close();
   server.close();

@@ -76,6 +76,16 @@ PoquitoTalk provides **4 distinct Panamanian studio voice personas**:
   - `web-funnel/audio/presets/{persona}_{preset_id}.mp3` (Web Funnel Studio Audio)
 - **Total Library**: 60 high-impact real-world phrases $\times$ 4 personas = **240 pre-rendered studio recordings**.
 
+### 4.1 Asymmetrical Dual-Channel Voice Architecture
+A core design breakthrough in PoquitoTalk is the explicit decoupling of **User Identity** from **Incoming Speaker Identity**:
+1. **Outgoing Channel (User ➔ Local Provider / WhatsApp Voice Notes)**:
+   - Driven by the user's **Chosen Voice** preference (`getPreferredVoiceGender()`).
+   - If the user selects Female, all outbound Spanish voice notes and audio syntheses use an authentic female Panamanian timbre. If Male, male timbre.
+2. **Incoming Channel (Local Provider ➔ User / WhatsApp Audio Decoder & 2-Way Walkie)**:
+   - The user's personal preference is strictly quarantined from overriding the contractor's identity.
+   - Incoming audio from local contractors (e.g. boat captains, plumbers, clinic receptionists, tour operators) is analyzed during transcription to detect the speaker's natural vocal gender.
+   - English translation audio is synthesized matching the **contractor's actual gender** (Female for female providers, Male for male providers), preserving human realism and mutual respect across cultures.
+
 ---
 
 ## 5. Document Scanner & Optical Utility Parser
@@ -255,3 +265,54 @@ For complete architectural specifications, linguistic rules, and failure analysi
 - **Core Priority**: Deliver 100% reliable, polite, and natural Panamanian Spanish that works flawlessly in real-world WhatsApp exchanges with local contractors.
 - **v2.0 LLM Architecture**: Moving to few-shot semantic prompt rewriting conditioned on domain, recipient relationship, and urgency rather than string concatenation.
 
+---
+
+## 11. V2 Technical Roadmap & Intelligence Upgrades (Learnings from Owll Teardown)
+
+### 1. Direct WhatsApp Inbound Share-Target (V2 Decoder)
+- **Problem**: Manually exporting audio files from WhatsApp to the filesystem and uploading into PoquitoTalk introduces high user friction.
+- **Architecture**:
+  - **iOS**: Implement custom `ShareViewController` (`NSExtensionActivationRule` accepting `public.audio` / `com.apple.coreaudio-format` / `.opus` / `.m4a`).
+  - **Android**: Add Intent Filter in `AndroidManifest.xml` (`<action android:name="android.intent.action.SEND" />`, `<data android:mimeType="audio/*" />`).
+- **Processing Pipeline**: Ingested audio $\rightarrow$ Whisper/Gemini audio inference $\rightarrow$ extract structured JSON `{ "summary": "...", "urgency": "high", "reply_options": [...] }` $\rightarrow$ present 1-tap Panamanian Spanish reply buttons.
+
+### 2. "Slow-Down" & Phonetic Learning Mode (0.75x Audio Playback)
+- **Problem**: Fast Panamanian Spanish spoken by native boat captains is difficult for expats to parse on initial listening.
+- **Architecture**:
+  - Integrate `setRateAsync(0.75, shouldCorrectPitch: true)` in `expo-av` and HTML5 Web Audio `playbackRate = 0.75`.
+  - Add synchronized syllable/word highlighting for pre-rendered ElevenLabs and Google Cloud TTS outputs.
+- **Value**: Transforms basic utility transactions into passive, immersive language learning.
+
+### 3. Multimodal Notice Scanner (Community Boards & Outage Alerts)
+- **Problem**: Island alerts (IDAAN water outages, ferry schedules, road repairs) are distributed as handwritten paper flyers or low-res WhatsApp screenshots.
+- **Architecture**:
+  - Extend `src/services/documentScanner.ts` with multimodal Gemini Flash vision endpoints.
+  - Automatically parse dates, affected islands/sectors, and contact numbers, creating 1-tap reminders and directory entries.
+
+---
+
+## 12. Monetization Architecture: Paywall Comparison & Animation Engine
+
+### Paywall Design Matrix & Comparative Strategy
+
+PoquitoTalk implements a dual-paywall architecture calibrated for high conversion across both early discovery and high-intent utility usage:
+
+| Dimension | 🚪 Soft Onboarding Paywall (`SoftOnboardingPaywall.tsx`) | ⚡ Contextual Triggered Paywall (`PaywallModal.tsx`) |
+| :--- | :--- | :--- |
+| **Primary Trigger** | First app launch / completion of onboarding sequence | Exhaustion of 10 free daily translations or tapping locked directory/document features |
+| **User Mindset** | Curious, exploring value, low commitment | High urgency, actively attempting to complete a critical translation or contractor contact |
+| **Hero Highlight** | **7-Day Free Trial** with zero upfront charge reminder | **Instant Unlimited Unlock** badge + feature comparison checklist |
+| **Pricing Tiers** | Multi-tier cards: **Annual** ($19.99/yr - Best Value), **Monthly** ($4.99/mo), **Lifetime** ($49.99) | **Annual Pass** ($19.99/yr) & **50 Credit Booster Pack** ($4.99) |
+| **Mascot Animation** | Animated Mascot (`AnimatedParrotMascot`) with welcome wave | Victory/Pro Mascot (`PoquitoAvatar`) with Pro Crown badge |
+| **Friction Reducer** | Prominent *"Restore Purchases"* + subtle *"Continue with Free Limited Tier"* soft-dismiss | 1-Tap Purchase + Quick Dismissal (`X` top right) to return to draft |
+| **Conversion Focus** | Maximizes free trial opt-ins before user develops usage habits | Captures high-intent conversions at the exact moment of friction |
+
+### Poquito Studio Animation & Asset Pipeline
+
+Pre-rendered WebP animation loops and vector SVG rigs are maintained in `web-funnel/poquito_studio.html` and integrated across mobile & web experiences:
+
+1. **`poquito_victory_jump.webp`**: Rendered upon successful payment verification, token claim (`/success.html`), and Pro activation.
+2. **`poquito_seedance_animated.webp`**: Activated during voice persona previews and rhythmic audio playback (`danceMode`).
+3. **`poquito_thinking_loop.webp`**: Displayed during Gemma AI / Whisper transcription and translation processing.
+4. **`poquito_front_talking_v2_clean.webp`**: Synced with audio playback during translation playback.
+5. **Alpha Matrix Transparency**: All sprites processed with lossless alpha channels and responsive multi-resolution scaling (160px, 256px, and vector SVG fallback).

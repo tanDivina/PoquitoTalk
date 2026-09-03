@@ -73,10 +73,10 @@ All graphic assets are generated and located directly in the project root:
 |---|---|---|---|
 | **High-Res App Icon** | 512 × 512 PNG | [`play_store_icon_512.png`](file:///Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/play_store_icon_512.png) | Google Play Store listing icon |
 | **Feature Graphic Banner** | 1024 × 500 PNG | [`play_store_feature_graphic.png`](file:///Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/play_store_feature_graphic.png) | Top promo banner on Play Store |
-| **Screenshot 1 (Hero)** | 1080 × 1920 PNG | [`play_store_screenshot_1_dynamic.png`](file:///Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/play_store_screenshot_1_dynamic.png) | 1-Tap Voice Dispatch & Mascot Hero |
-| **Screenshot 2 (Presets)** | 1080 × 1920 PNG | [`play_store_screenshot_2_dynamic.png`](file:///Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/play_store_screenshot_2_dynamic.png) | Surprised Mascot + 2x2 Feature Grid |
-| **Screenshot 3 (Directory)** | 1080 × 1920 PNG | [`play_store_screenshot_3_dynamic.png`](file:///Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/play_store_screenshot_3_dynamic.png) | 5-Star Trust Laurel + Verified Directory |
-| **Screenshot 4 (Dialects)** | 1080 × 1920 PNG | [`play_store_screenshot_4_dynamic.png`](file:///Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/play_store_screenshot_4_dynamic.png) | Cool Sunglasses Mascot + 2-Tone Switcher |
+| **Screenshot 1 (Voice Notes)** | 1080 × 1920 PNG | [`play_store_screenshot_1_dynamic.png`](file:///Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/play_store_screenshot_1_dynamic.png) | Locals Prefer Voice Notes • 1-Tap Voice Dispatch |
+| **Screenshot 2 (Errands)** | 1080 × 1920 PNG | [`play_store_screenshot_2_dynamic.png`](file:///Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/play_store_screenshot_2_dynamic.png) | Get Things Done Stress-Free • Island Errands Audio |
+| **Screenshot 3 (Directory)** | 1080 × 1920 PNG | [`play_store_screenshot_3_dynamic.png`](file:///Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/play_store_screenshot_3_dynamic.png) | Fast Island Repairs & Services • Verified Directory |
+| **Screenshot 4 (Talk Live)** | 1080 × 1920 PNG | [`play_store_screenshot_4_dynamic.png`](file:///Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/play_store_screenshot_4_dynamic.png) | Warm Respect For Locals • 2-Way Live Talk & Decoder |
 | **4-in-1 Marketing Review** | 2400 × 1350 PNG | [`poquitotalk_dynamic_showcase_4up.png`](file:///Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/poquitotalk_dynamic_showcase_4up.png) | Social proof, promo cards & launch press |
 
 ---

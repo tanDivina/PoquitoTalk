@@ -8,35 +8,96 @@ import {
   ScrollView,
   Platform,
   StatusBar,
+  Linking,
+  Image,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { WhatsAppIcon } from '../components/WhatsAppIcon';
 import { Colors } from '../theme/colors';
 import { GOOGLE_SPANISH_VOICES, VoiceOption } from '../services/googleVoice';
-import { playVoiceDemoSample, VOICE_DEMO_SAMPLES } from '../services/voiceDemos';
-import { GreenParrotLogo } from '../components/GreenParrotLogo';
 import { AnimatedParrotMascot } from '../components/AnimatedParrotMascot';
+import { SoftOnboardingPaywall } from '../components/SoftOnboardingPaywall';
+import { UserPersona } from '../types';
+
+export interface PersonaOption {
+  id: UserPersona;
+  title: string;
+  subtitle: string;
+  iconName: React.ComponentProps<typeof Ionicons>['name'];
+  bgColor: string;
+  borderColor: string;
+  iconColor: string;
+}
+
+export const PERSONA_OPTIONS: PersonaOption[] = [
+  {
+    id: 'expat',
+    title: 'Expat',
+    subtitle: 'Repairs, utilities & island life',
+    iconName: 'home-outline',
+    bgColor: '#FFF7ED',
+    borderColor: '#FED7AA',
+    iconColor: '#964824',
+  },
+  {
+    id: 'traveler',
+    title: 'Traveler',
+    subtitle: 'Island trips, boats & water taxis',
+    iconName: 'airplane-outline',
+    bgColor: '#F0F9FF',
+    borderColor: '#BAE6FD',
+    iconColor: '#0284C7',
+  },
+  {
+    id: 'local',
+    title: 'Local Resident',
+    subtitle: 'Services, directory & clients',
+    iconName: 'people-outline',
+    bgColor: '#ECFDF5',
+    borderColor: '#A7F3D0',
+    iconColor: '#059669',
+  },
+];
 
 interface OnboardingScreenProps {
-  onComplete: (userName: string, selectedVoice: VoiceOption) => void;
+  onComplete: (userName: string, selectedVoice: VoiceOption, persona: UserPersona) => void;
 }
 
 export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }) => {
-  const [step, setStep] = useState(1);
-  const [userName, setUserName] = useState('');
-  const [selectedVoice, setSelectedVoice] = useState<VoiceOption>(GOOGLE_SPANISH_VOICES[0]);
+  const initialStep =
+    Platform.OS === 'web' && typeof window !== 'undefined'
+      ? parseInt(new URLSearchParams(window.location.search).get('step') || '1', 10)
+      : 1;
+  const initialName =
+    Platform.OS === 'web' && typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search).get('name') || ''
+      : '';
 
-  const handleFinish = () => {
-    onComplete(userName.trim() || 'Expat Friend', selectedVoice);
-  };
+  const [step, setStep] = useState(initialStep);
+  const [userName, setUserName] = useState(initialName);
+  const [selectedVoice, setSelectedVoice] = useState<VoiceOption>(GOOGLE_SPANISH_VOICES[0]);
+  const [persona, setPersona] = useState<UserPersona>('expat');
+  const [showSoftPaywall, setShowSoftPaywall] = useState(() => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('softPaywall') === 'true';
+    }
+    return false;
+  });
 
   const insets = useSafeAreaInsets();
   const topPadding = Math.max(insets.top + 16, Platform.OS === 'android' ? (StatusBar.currentHeight || 24) + 20 : 44);
 
+  const handleFinish = () => {
+    onComplete(userName.trim() || 'Expat Friend', selectedVoice, persona);
+  };
+
+  const selectedPersonaObj = PERSONA_OPTIONS.find((p) => p.id === persona) || PERSONA_OPTIONS[0];
+
   return (
     <View style={[styles.safeArea, { paddingTop: topPadding }]}>
-      <ScrollView contentContainerStyle={styles.container}>
-        {/* Step Indicator Bar */}
+      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+        {/* 100% Uniform Terracotta Step Bar */}
         <View style={styles.stepBar}>
           <View style={[styles.stepDot, step >= 1 && styles.stepDotActive]} />
           <View style={[styles.stepLine, step >= 2 && styles.stepLineActive]} />
@@ -45,65 +106,164 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
           <View style={[styles.stepDot, step >= 3 && styles.stepDotActive]} />
         </View>
 
-        {/* STEP 1: Welcome & Concept Explanation */}
+        {/* STEP 1: Welcome & Concept (Option C.1 Approved) */}
         {step === 1 && (
           <View style={styles.stepCard}>
             <View style={styles.heroBadge}>
-              <AnimatedParrotMascot size={72} isAnimating={true} showSpeechBubble={false} />
+              <Image
+                source={require('../assets/poquito_greet_5_17_160.webp')}
+                style={{ width: 80, height: 80 }}
+                resizeMode="contain"
+              />
             </View>
 
-            <Text style={styles.heroTitle}>Welcome to PoquitoTalk</Text>
-            <Text style={styles.heroSubtitle}>
-              Your friendly local messaging assistant for Bocas del Toro (Panama) 🇵🇦
+            <Text style={styles.heroTitle}>
+              Welcome to <Text style={{ color: Colors.onBackground }}>Poquito</Text><Text style={{ color: Colors.secondary }}>Talk</Text>
             </Text>
 
+            {/* Frameless Location Tag */}
+            <View style={styles.framelessTag}>
+              <Text style={styles.framelessTagText}>BOCAS DEL TORO</Text>
+              <View style={styles.tagDot} />
+              <Text style={styles.framelessTagText}>PANAMÁ 🇵🇦</Text>
+            </View>
+
+            <Text style={styles.heroSubtitle}>
+              Your local voice note assistant for daily island life & services
+            </Text>
+
+            {/* Highlighted Feature Items with Soft Pastel Discs */}
             <View style={styles.featuresBox}>
               <View style={styles.featureItem}>
-                <FontAwesome5 name="whatsapp" size={20} color={Colors.whatsapp} />
-                <View style={styles.featureText}>
-                  <Text style={styles.featureTitle}>1-Tap WhatsApp Voice Notes</Text>
-                  <Text style={styles.featureDesc}>
-                    Translates your requests into natural Panamanian Spanish audio notes sent straight to WhatsApp.
+                <View style={[styles.featIconDisc, { backgroundColor: '#ECFDF5', borderColor: '#A7F3D0' }]}>
+                  <WhatsAppIcon size={18} color="#059669" />
+                </View>
+                <View style={styles.featText}>
+                  <Text style={[styles.featTag, { color: '#059669' }]}>1-TAP WHATSAPP</Text>
+                  <Text style={styles.featTitle}>Voice Notes in Natural Spanish</Text>
+                  <Text style={styles.featDesc}>
+                    Speaks fluid Panamanian Spanish directly into your chats.
                   </Text>
                 </View>
               </View>
 
               <View style={styles.featureItem}>
-                <Ionicons name="construct-outline" size={22} color={Colors.secondary} />
-                <View style={styles.featureText}>
-                  <Text style={styles.featureTitle}>Service & Repair Presets</Text>
-                  <Text style={styles.featureDesc}>
-                    Instant presets for A/C, plumbers, boat repairs, Starlink, doctors, and landlords.
+                <View style={[styles.featIconDisc, { backgroundColor: '#FFF8F4', borderColor: '#FDE4D6' }]}>
+                  <Ionicons name="call-outline" size={18} color="#964824" />
+                </View>
+                <View style={styles.featText}>
+                  <Text style={[styles.featTag, { color: '#964824' }]}>ISLAND HELP</Text>
+                  <Text style={styles.featTitle}>
+                    Trusted Local Services,{' \n'}Boat Captains & Everyday Help
+                  </Text>
+                  <Text style={styles.featDesc}>
+                    Direct WhatsApp contacts for water taxis, mechanics, doctors & island services.
                   </Text>
                 </View>
               </View>
 
               <View style={styles.featureItem}>
-                <Ionicons name="flash-outline" size={22} color={Colors.tertiary} />
-                <View style={styles.featureText}>
-                  <Text style={styles.featureTitle}>Authentic Local Phrasing</Text>
-                  <Text style={styles.featureDesc}>
-                    Polite Panamanian Spanish tailored for local service contacts and businesses.
+                <View style={[styles.featIconDisc, { backgroundColor: '#F0F9FF', borderColor: '#BAE6FD' }]}>
+                  <Ionicons name="volume-medium-outline" size={20} color="#0284C7" />
+                </View>
+                <View style={styles.featText}>
+                  <Text style={[styles.featTag, { color: '#0284C7' }]}>AUTHENTIC DIALECT</Text>
+                  <Text style={styles.featTitle}>Friendly & Polite Bocas Tone</Text>
+                  <Text style={styles.featDesc}>
+                    Natural local vocabulary so you're always understood.
                   </Text>
                 </View>
               </View>
             </View>
 
-            <TouchableOpacity style={styles.primaryBtn} onPress={() => setStep(2)} activeOpacity={0.8}>
+            {/* Terracotta CTA Button */}
+            <TouchableOpacity style={styles.primaryBtn} onPress={() => setStep(2)} activeOpacity={0.85}>
               <Text style={styles.primaryBtnText}>Set Up My Voice</Text>
               <Ionicons name="arrow-forward" size={18} color="#FFF" />
             </TouchableOpacity>
+
+            {/* Standard Compliance Footer */}
+            <View style={styles.legalNoticeContainer}>
+              <Text style={styles.legalNoticeText}>
+                By continuing, you agree to our{' '}
+                <Text
+                  style={styles.legalNoticeLink}
+                  onPress={() => Linking.openURL('https://poquitotalk.hero-apps.com/terms.html')}
+                >
+                  Terms of Service
+                </Text>
+                {' '}and{' '}
+                <Text
+                  style={styles.legalNoticeLink}
+                  onPress={() => Linking.openURL('https://poquitotalk.hero-apps.com/privacy.html')}
+                >
+                  Privacy Policy
+                </Text>
+                .
+              </Text>
+            </View>
           </View>
         )}
 
-        {/* STEP 2: Name & Voice Setup */}
+        {/* STEP 2: Profile & Neutral Voice Selection */}
         {step === 2 && (
           <View style={styles.stepCard}>
-            <Text style={styles.stepTag}>STEP 2 OF 3</Text>
-            <Text style={styles.title}>Personalize Your Voice</Text>
+            <Text style={styles.title}>Personalize Profile</Text>
             <Text style={styles.subtitle}>
-              Choose your preferred voice for sending natural Spanish WhatsApp voice notes.
+              Select how you'll use <Text style={{ color: Colors.onBackground }}>Poquito</Text><Text style={{ color: Colors.secondary }}>Talk</Text> in Bocas.
             </Text>
+
+            {/* Persona Selection */}
+            <View style={styles.fieldBlock}>
+              <Text style={styles.fieldLabel}>HOW WILL YOU USE <Text style={{ color: Colors.onBackground }}>POQUITO</Text><Text style={{ color: Colors.secondary }}>TALK</Text>?</Text>
+              <View style={styles.personaGrid}>
+                {PERSONA_OPTIONS.map((opt) => {
+                  const isSelected = persona === opt.id;
+                  return (
+                    <TouchableOpacity
+                      key={opt.id}
+                      style={[
+                        styles.personaCard,
+                        {
+                          borderColor: isSelected ? opt.iconColor : opt.borderColor,
+                          borderWidth: isSelected ? 2 : 1.5,
+                          backgroundColor: isSelected ? opt.bgColor : '#FFFFFF',
+                        },
+                      ]}
+                      onPress={() => setPersona(opt.id)}
+                      activeOpacity={0.7}
+                    >
+                      <View
+                        style={[
+                          styles.featIconDisc,
+                          {
+                            backgroundColor: opt.bgColor,
+                            borderColor: opt.borderColor,
+                          },
+                        ]}
+                      >
+                        <Ionicons name={opt.iconName} size={18} color={opt.iconColor} />
+                      </View>
+                      <View style={styles.personaContent}>
+                        <Text style={styles.personaTitle}>{opt.title}</Text>
+                        <Text style={styles.personaSubtitle}>{opt.subtitle}</Text>
+                      </View>
+                      <View
+                        style={[
+                          styles.radioCircle,
+                          {
+                            borderColor: isSelected ? opt.iconColor : opt.borderColor,
+                            backgroundColor: isSelected ? opt.iconColor : 'transparent',
+                          },
+                        ]}
+                      >
+                        {isSelected && <View style={styles.radioDot} />}
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </View>
 
             {/* Name Input */}
             <View style={styles.fieldBlock}>
@@ -117,24 +277,21 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
               />
             </View>
 
-            {/* Voice Selection */}
+            {/* Neutral Segmented Voice Toggle */}
             <View style={styles.fieldBlock}>
-              <Text style={styles.fieldLabel}>CHOOSE VOICE</Text>
-              <View style={styles.optionsRow}>
+              <Text style={styles.fieldLabel}>PICK YOUR VOICE</Text>
+              <View style={styles.voiceToggleBox}>
                 {GOOGLE_SPANISH_VOICES.map((v) => {
-                  const isSelected = selectedVoice.id === v.id || selectedVoice.gender === v.gender;
+                  const isSelected = selectedVoice.gender === v.gender;
                   return (
                     <TouchableOpacity
                       key={v.id}
-                      style={[styles.optionChip, isSelected && styles.optionChipSelected]}
+                      style={[styles.voiceTab, isSelected && styles.voiceTabActive]}
                       onPress={() => setSelectedVoice(v)}
                       activeOpacity={0.8}
                     >
-                      <Text style={[styles.optionSymbol, isSelected && styles.optionSymbolSelected]}>
-                        {v.gender === 'MALE' ? '♂' : '♀'}
-                      </Text>
-                      <Text style={[styles.optionText, isSelected && styles.optionTextSelected]}>
-                        {v.gender === 'MALE' ? 'Male' : 'Female'}
+                      <Text style={[styles.voiceTabText, isSelected && styles.voiceTabTextActive]}>
+                        {v.gender === 'MALE' ? '♂ Male Voice' : '♀ Female Voice'}
                       </Text>
                     </TouchableOpacity>
                   );
@@ -142,54 +299,105 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
               </View>
             </View>
 
-            <TouchableOpacity style={styles.primaryBtn} onPress={() => setStep(3)} activeOpacity={0.8}>
-              <Text style={styles.primaryBtnText}>Continue to Final Step</Text>
+            {/* Next Button */}
+            <TouchableOpacity style={styles.primaryBtn} onPress={() => setStep(3)} activeOpacity={0.85}>
+              <Text style={styles.primaryBtnText}>Next</Text>
               <Ionicons name="arrow-forward" size={18} color="#FFF" />
             </TouchableOpacity>
           </View>
         )}
 
-        {/* STEP 3: Ready & Confirmation */}
+        {/* STEP 3: Clean Minimal Summary with Studio Dancing Mascot in Lower Half */}
         {step === 3 && (
           <View style={styles.stepCard}>
-            <View style={styles.heroBadge}>
-              <AnimatedParrotMascot
-                size={84}
-                isAnimating={true}
-                isDancing={true}
-                showSpeechBubble={true}
-                customTip={`¡Wepa! ¡Todo listo, ${userName.trim() || 'amigo'}! 🇵🇦`}
+            <Text style={styles.heroTitle}>
+              You're All Set{userName.trim() ? `, ${userName.trim()}` : ''}!
+            </Text>
+
+            <Text style={styles.heroSubtitle}>
+              <Text style={{ color: Colors.onBackground }}>Poquito</Text><Text style={{ color: Colors.secondary }}>Talk</Text> is ready for your daily island communication.
+            </Text>
+
+            {/* Clean Light Summary Rows */}
+            <View style={styles.summaryBox}>
+              {/* Profile Type Row */}
+              <View style={styles.summaryRow}>
+                <View style={styles.summaryLeft}>
+                  <View
+                    style={[
+                      styles.featIconDisc,
+                      {
+                        backgroundColor: selectedPersonaObj.bgColor,
+                        borderColor: selectedPersonaObj.borderColor,
+                      },
+                    ]}
+                  >
+                    <Ionicons
+                      name={selectedPersonaObj.iconName}
+                      size={18}
+                      color={selectedPersonaObj.iconColor}
+                    />
+                  </View>
+                  <View>
+                    <Text style={styles.summaryLabel}>PROFILE TYPE</Text>
+                    <Text style={styles.summaryValue}>{selectedPersonaObj.title}</Text>
+                  </View>
+                </View>
+                <Ionicons name="checkmark-circle" size={22} color="#059669" />
+              </View>
+
+              {/* Chosen Voice Row */}
+              <View style={styles.summaryRow}>
+                <View style={styles.summaryLeft}>
+                  <View style={[styles.featIconDisc, { backgroundColor: '#F4F1EA', borderColor: '#E5E0D8' }]}>
+                    <Ionicons name="volume-medium-outline" size={18} color="#1B1C1A" />
+                  </View>
+                  <View>
+                    <Text style={styles.summaryLabel}>CHOSEN VOICE</Text>
+                    <Text style={styles.summaryValue}>
+                      {selectedVoice.gender === 'MALE' ? 'Male Voice' : 'Female Voice'}
+                    </Text>
+                  </View>
+                </View>
+                <Ionicons name="checkmark-circle" size={22} color="#059669" />
+              </View>
+            </View>
+
+            {/* Lower Half: Studio Dancing & Celebrating Poquito */}
+            <View style={styles.celebrationStage}>
+              <Image
+                source={require('../assets/poquito_victory_jump_256.webp')}
+                style={styles.dancingMascotImage}
+                resizeMode="contain"
               />
             </View>
 
-            <Text style={styles.heroTitle}>You’re All Set, {userName.trim() || 'Friend'}!</Text>
-            <Text style={styles.heroSubtitle}>
-              Poquito is ready to turn your voice into natural Panamanian Spanish.
-            </Text>
-
-            {/* Cute Selected Voice Pill */}
-            <View style={styles.voiceConfirmedPill}>
-              <View style={styles.voiceGenderCircle}>
-                <Text style={styles.voiceGenderSymbol}>
-                  {selectedVoice.gender === 'MALE' ? '♂' : '♀'}
-                </Text>
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.voiceConfirmedLabel}>VOICE READY</Text>
-                <Text style={styles.voiceConfirmedValue}>
-                  {selectedVoice.gender === 'MALE' ? 'Male Voice' : 'Female Voice'}
-                </Text>
-              </View>
-              <Ionicons name="checkmark-circle" size={22} color={Colors.tertiary} />
-            </View>
-
-            <TouchableOpacity style={styles.primaryBtn} onPress={handleFinish} activeOpacity={0.8}>
+            {/* Start Using PoquitoTalk Button */}
+            <TouchableOpacity
+              style={styles.primaryBtn}
+              onPress={() => setShowSoftPaywall(true)}
+              activeOpacity={0.85}
+            >
               <Text style={styles.primaryBtnText}>Start Using PoquitoTalk</Text>
               <Ionicons name="arrow-forward" size={18} color="#FFF" />
             </TouchableOpacity>
           </View>
         )}
       </ScrollView>
+
+      {/* Soft Onboarding Paywall with 7-Day Free Trial */}
+      <SoftOnboardingPaywall
+        visible={showSoftPaywall}
+        userName={userName.trim() || 'Friend'}
+        onClose={() => {
+          setShowSoftPaywall(false);
+          handleFinish();
+        }}
+        onSuccess={() => {
+          setShowSoftPaywall(false);
+          handleFinish();
+        }}
+      />
     </View>
   );
 };
@@ -207,68 +415,79 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 24,
+    marginBottom: 20,
   },
   stepDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: Colors.surfaceContainerHighest,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#E5E0D8',
   },
   stepDotActive: {
-    backgroundColor: Colors.tertiary,
+    backgroundColor: Colors.secondary,
   },
   stepLine: {
-    width: 32,
+    width: 28,
     height: 3,
-    backgroundColor: Colors.surfaceContainerHighest,
+    borderRadius: 2,
+    backgroundColor: '#E5E0D8',
     marginHorizontal: 4,
   },
   stepLineActive: {
-    backgroundColor: Colors.tertiary,
+    backgroundColor: Colors.secondary,
   },
   stepCard: {
-    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
+    backgroundColor: '#FFFFFF',
     borderRadius: 28,
     padding: 24,
     borderWidth: 1,
-    borderColor: Colors.cardBorder,
+    borderColor: '#EDE8E1',
     shadowColor: Colors.shadow,
     shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.08,
     shadowRadius: 16,
-    elevation: 4,
+    elevation: 3,
   },
   heroBadge: {
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    marginBottom: 16,
+    marginBottom: 8,
     backgroundColor: 'transparent',
   },
-  checkBadge: {
-    alignSelf: 'center',
-    marginBottom: 12,
-  },
   heroTitle: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: '800',
     color: Colors.onBackground,
     textAlign: 'center',
   },
-  heroSubtitle: {
-    fontSize: 14,
-    color: Colors.onSurfaceVariant,
-    textAlign: 'center',
+  framelessTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
     marginTop: 6,
-    lineHeight: 20,
+    marginBottom: 4,
   },
-  stepTag: {
-    fontSize: 10,
+  framelessTagText: {
+    fontSize: 11,
     fontWeight: '800',
-    color: Colors.tertiary,
-    letterSpacing: 1,
-    marginBottom: 6,
+    color: '#4F604E',
+    letterSpacing: 1.4,
+    textTransform: 'uppercase',
+  },
+  tagDot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#F59E0B',
+  },
+  heroSubtitle: {
+    fontSize: 13,
+    color: '#6C6255',
+    textAlign: 'center',
+    marginTop: 4,
+    lineHeight: 18,
   },
   title: {
     fontSize: 22,
@@ -277,193 +496,209 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 13,
-    color: Colors.onSurfaceVariant,
+    color: '#6C6255',
     marginTop: 4,
     lineHeight: 18,
   },
-  highlightText: {
-    fontWeight: '700',
-    color: Colors.secondary,
-  },
   featuresBox: {
-    marginTop: 24,
-    gap: 16,
+    marginTop: 18,
+    gap: 10,
   },
   featureItem: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 14,
-    backgroundColor: Colors.surfaceContainer,
-    padding: 14,
-    borderRadius: 18,
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: '#FFFFFF',
+    padding: 12,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#EBE5DC',
   },
-  featureText: {
+  featIconDisc: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+  },
+  featText: {
     flex: 1,
   },
-  featureTitle: {
-    fontSize: 14,
-    fontWeight: '700',
+  featTag: {
+    fontSize: 9.5,
+    fontWeight: '800',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+    marginBottom: 2,
+  },
+  featTitle: {
+    fontSize: 13,
+    fontWeight: '800',
     color: Colors.onBackground,
   },
-  featureDesc: {
-    fontSize: 12,
-    color: Colors.onSurfaceVariant,
-    marginTop: 2,
-    lineHeight: 16,
+  featDesc: {
+    fontSize: 11.5,
+    color: '#6C6255',
+    marginTop: 1,
+    lineHeight: 15,
   },
   fieldBlock: {
-    marginTop: 18,
+    marginTop: 16,
   },
   fieldLabel: {
     fontSize: 11,
     fontWeight: '800',
-    color: Colors.outline,
+    color: '#8C8276',
     letterSpacing: 0.5,
     marginBottom: 8,
   },
+  personaGrid: {
+    gap: 10,
+  },
+  personaCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1.5,
+    borderColor: '#EDE8E1',
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    borderRadius: 16,
+  },
+  personaContent: {
+    flex: 1,
+  },
+  personaTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: Colors.onBackground,
+  },
+  personaSubtitle: {
+    fontSize: 11.5,
+    color: '#6C6255',
+    marginTop: 2,
+  },
+  radioCircle: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 1.5,
+    borderColor: '#CFC5BB',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  radioDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#FFFFFF',
+  },
   textInput: {
-    backgroundColor: Colors.surfaceContainer,
+    backgroundColor: '#F4F1EA',
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
     color: Colors.onBackground,
     borderWidth: 1,
-    borderColor: Colors.cardBorder,
+    borderColor: '#E5E0D8',
   },
-  optionsRow: {
+  voiceToggleBox: {
     flexDirection: 'row',
-    gap: 10,
+    backgroundColor: '#F4F1EA',
+    borderRadius: 14,
+    padding: 4,
+    borderWidth: 1,
+    borderColor: '#E5E0D8',
+    gap: 4,
   },
-  optionChip: {
+  voiceTab: {
     flex: 1,
-    flexDirection: 'column',
+    paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
-    backgroundColor: Colors.surfaceContainer,
-    paddingVertical: 14,
-    paddingHorizontal: 8,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: Colors.cardBorder,
+    borderRadius: 10,
   },
-  optionChipSelected: {
-    backgroundColor: Colors.secondaryContainer,
-    borderColor: Colors.secondary,
+  voiceTabActive: {
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  optionSymbol: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: Colors.outline,
-    marginBottom: 4,
-  },
-  optionSymbolSelected: {
-    color: Colors.secondary,
-  },
-  optionText: {
+  voiceTabText: {
     fontSize: 13,
     fontWeight: '700',
-    color: Colors.onSurfaceVariant,
-    textAlign: 'center',
+    color: '#6C6255',
   },
-  optionTextSelected: {
-    fontWeight: '700',
-    color: Colors.secondary,
+  voiceTabTextActive: {
+    color: '#1B1C1A',
+    fontWeight: '800',
   },
-  voiceResultCard: {
-    backgroundColor: Colors.surfaceContainer,
-    borderRadius: 16,
-    padding: 10,
-    marginTop: 12,
-    borderWidth: 1,
-    borderColor: Colors.secondaryLight,
+  summaryBox: {
+    marginTop: 18,
+    gap: 12,
   },
-  voiceResultHeader: {
+  summaryRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-  },
-  voiceIconBubble: {
-    width: 36,
-    height: 36,
+    justifyContent: 'space-between',
+    backgroundColor: '#FAFAF8',
+    padding: 13,
+    paddingHorizontal: 16,
     borderRadius: 18,
-    backgroundColor: Colors.secondaryContainer,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#EAE5DE',
   },
-  voiceResultInfo: {
+  summaryLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 13,
     flex: 1,
   },
-  voiceResultName: {
-    fontSize: 14,
+  summaryLabel: {
+    fontSize: 9.5,
     fontWeight: '800',
-    color: Colors.onBackground,
+    color: '#8C8276',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
   },
-  voiceResultDesc: {
-    fontSize: 11,
-    color: Colors.onSurfaceVariant,
+  summaryValue: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#1B1C1A',
+    marginTop: 2,
   },
-  demoScenarioTitle: {
-    fontSize: 11,
-    color: Colors.onSurfaceVariant,
-    marginTop: 1,
-    fontStyle: 'italic',
-  },
-  listenDemoBtn: {
-    flexDirection: 'row',
+  celebrationStage: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4,
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: Colors.secondaryLight,
+    marginTop: 18,
+    marginBottom: 4,
   },
-  listenDemoBtnText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: Colors.secondary,
+  dancingMascotImage: {
+    width: 140,
+    height: 140,
   },
-  voiceConfirmedPill: {
+  celebrationTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    backgroundColor: Colors.surfaceContainer,
-    borderRadius: 18,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginTop: 20,
-    marginBottom: 8,
+    gap: 6,
+    backgroundColor: '#FEF3C7',
+    paddingVertical: 5,
+    paddingHorizontal: 14,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: Colors.cardBorder,
+    borderColor: '#FDE68A',
+    marginTop: -4,
   },
-  voiceGenderCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: Colors.secondaryContainer,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  voiceGenderSymbol: {
-    fontSize: 18,
+  celebrationTagText: {
+    fontSize: 12,
     fontWeight: '800',
-    color: Colors.secondary,
-  },
-  voiceConfirmedLabel: {
-    fontSize: 10,
-    fontWeight: '800',
-    color: Colors.outline,
-    letterSpacing: 0.5,
-  },
-  voiceConfirmedValue: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: Colors.onBackground,
-    marginTop: 1,
+    color: '#92400E',
+    letterSpacing: 0.2,
   },
   primaryBtn: {
     flexDirection: 'row',
@@ -473,7 +708,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondary,
     paddingVertical: 14,
     borderRadius: 22,
-    marginTop: 16,
+    marginTop: 20,
     shadowColor: Colors.secondary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
@@ -484,5 +719,22 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '800',
     color: '#FFF',
+  },
+  legalNoticeContainer: {
+    marginTop: 14,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+  },
+  legalNoticeText: {
+    fontSize: 11.5,
+    fontWeight: '500',
+    color: '#1B1C1A',
+    textAlign: 'center',
+    lineHeight: 16,
+  },
+  legalNoticeLink: {
+    color: '#1B1C1A',
+    fontWeight: '700',
+    textDecorationLine: 'underline',
   },
 });

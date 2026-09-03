@@ -11,7 +11,7 @@ PoquitoTalk provides a zero-loss, multi-tiered monetization strategy. Every sing
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Free Forever** | **$0.00** | Unlimited (Device TTS + 10 Studio Presets) | Preview Mode | $0.00 | **$0.00 (Zero Risk)** |
 | **50 Poquito Credits Pack** | **$4.99** *(one-time)* | 50 Custom Voice Notes (1 Credit/note) | 10 Walkie Sessions (5 Credits/session) | $0.90 max | **+$3.64 Profit (80% Margin)** |
-| **Weekly Tourist Pass** | **$4.99** */ week* | 100 Studio Voice Notes / week (~14/day) | 25 Walkie Sessions / week (~3.5/day) | $3.30 max | **+$1.24 Profit (27% Min Margin)** |
+| **7-Day Travel Pass** | **$4.99** */ week* | 100 Studio Voice Notes / week (~14/day) | 25 Walkie Sessions / week (~3.5/day) | $3.30 max | **+$1.24 Profit (27% Min Margin)** |
 | **Pro Monthly Membership** | **$12.99** */ month* | 300 Studio Voice Notes / month (~10/day) | 65 Walkie Sessions / month (~2/day) | $9.30 max | **+$3.01 Profit (24% Min Margin)** |
 
 ---
@@ -30,7 +30,7 @@ PoquitoTalk provides a zero-loss, multi-tiered monetization strategy. Every sing
    - Max Cost (50 notes): 50 × $0.018 = **$0.90**
    - **Guaranteed Minimum Profit: +$3.64 (80% Net Margin)**
 
-2. **Weekly Tourist Pass ($4.99 / Week)**:
+2. **7-Day Travel Pass ($4.99 / Week)**:
    - Gross: $4.99 | Net Revenue (after Stripe): **$4.54**
    - Max Cost (100 notes + 25 sessions): (100 × $0.018) + (25 × $0.060) = $1.80 + $1.50 = **$3.30**
    - **Guaranteed Minimum Profit: +$1.24 (27% Net Margin)**

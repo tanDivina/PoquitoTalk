@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PoquitoTalk Walkie Button Variants</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-cream: #FBF9F5;
+      --card-bg: #FFFFFF;
+      --text-dark: #1B1C1A;
+      --text-muted: #4D463E;
+      --brand-terracotta: #964824;
+      --sage-deep: #232B22;
+      --sand-border: #E5E1D8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #F4F1EA;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 40px 20px 80px;
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 36px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      max-width: 1160px;
+      width: 100%;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--sand-border);
+      border-radius: 20px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    }
+
+    .card-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--brand-terracotta);
+      margin-bottom: 6px;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      min-height: 38px;
+    }
+
+    .btn-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 160px;
+      width: 100%;
+    }
+
+    /* VARIANT 1: Tactile Matte Radio Disc (Deep Sage/Forest Charcoal) */
+    .v1-collar {
+      width: 148px;
+      height: 148px;
+      border-radius: 50%;
+      background: #ECE8DF;
+      border: 1px solid #DAD5C8;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-v1 {
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      background: #232B22;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #FBF9F5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(35, 43, 34, 0.25), inset 0 1px 1px rgba(255,255,255,0.15);
+      transition: all 0.12s ease;
+      user-select: none;
+    }
+    .btn-v1:hover {
+      background: #2C362B;
+      transform: scale(1.02);
+    }
+    .btn-v1:active {
+      transform: scale(0.96);
+      background: #DC2626;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4), inset 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .btn-v1 svg { width: 34px; height: 34px; stroke: currentColor; stroke-width: 2.2; }
+    .btn-v1 span { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* VARIANT 2: Solid Terracotta Matte with Tactile Grip Ribs */
+    .v2-collar {
+      width: 148px;
+      height: 148px;
+      border-radius: 50%;
+      background: #F4ECE7;
+      border: 1px solid #E8DCD4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-v2 {
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      background: #964824;
+      border: none;
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(150, 72, 36, 0.28), inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: all 0.12s ease;
+      user-select: none;
+    }
+    .btn-v2 .grip-ribs {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 2px;
+    }
+    .btn-v2 .grip-rib {
+      width: 14px;
+      height: 2px;
+      background: rgba(255,255,255,0.35);
+      border-radius: 2px;
+    }
+    .btn-v2:hover {
+      background: #843E1E;
+      transform: scale(1.02);
+    }
+    .btn-v2:active {
+      transform: scale(0.96);
+      background: #DC2626;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4), inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .btn-v2 svg { width: 32px; height: 32px; stroke: currentColor; stroke-width: 2.2; }
+    .btn-v2 span { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* VARIANT 3: Clean Ceramic & Deep Sage Accent */
+    .btn-v3 {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 2px solid #232B22;
+      color: #232B22;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .btn-v3:hover {
+      background: #F7FBF6;
+      border-color: #1E261F;
+      transform: scale(1.02);
+    }
+    .btn-v3:active {
+      transform: scale(0.96);
+      background: #FEF2F2;
+      border-color: #DC2626;
+      color: #DC2626;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+    }
+    .btn-v3 svg { width: 34px; height: 34px; stroke: currentColor; stroke-width: 2.2; }
+    .btn-v3 span { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* VARIANT 4: Radio Thumb Trigger (Oblong/Oval) */
+    .v4-housing {
+      width: 170px;
+      height: 116px;
+      border-radius: 36px;
+      background: #EAE6DC;
+      border: 1px solid #DAD5C8;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-v4 {
+      width: 154px;
+      height: 100px;
+      border-radius: 28px;
+      background: #232B22;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #FBF9F5;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(35, 43, 34, 0.25), inset 0 1px 1px rgba(255,255,255,0.15);
+      transition: all 0.12s ease;
+      user-select: none;
+      padding: 0 16px;
+    }
+    .btn-v4:hover {
+      background: #2C362B;
+      transform: scale(1.02);
+    }
+    .btn-v4:active {
+      transform: scale(0.96);
+      background: #DC2626;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4), inset 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .btn-v4 svg { width: 30px; height: 30px; stroke: currentColor; stroke-width: 2.2; flex-shrink: 0; }
+    .btn-v4 .v4-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+    .btn-v4 .v4-text .main { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+    .btn-v4 .v4-text .sub { font-size: 10px; opacity: 0.7; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <h1 class="title">Walkie-Talkie Button Variants</h1>
+  <p class="subtitle">Replacing the shiny orange gradient with grounded, tactile, matte radio buttons.</p>
+
+  <div class="grid">
+
+    <!-- Card 1 -->
+    <div class="card">
+      <div class="card-label">Option 1 • Recommended</div>
+      <div class="card-title">Matte Radio Disc</div>
+      <div class="card-desc">Deep forest charcoal disc inside an inset sand collar. Tactile, premium, non-shiny audio feel.</div>
+      <div class="btn-wrap">
+        <div class="v1-collar">
+          <button class="btn-v1">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+            <span>PRESIONAR</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card">
+      <div class="card-label">Option 2</div>
+      <div class="card-title">Solid Matte Terracotta</div>
+      <div class="card-desc">Warm brand terracotta without glossy gradients. Includes subtle tactile grip ribs.</div>
+      <div class="btn-wrap">
+        <div class="v2-collar">
+          <button class="btn-v2">
+            <div class="grip-ribs">
+              <div class="grip-rib"></div>
+              <div class="grip-rib"></div>
+              <div class="grip-rib"></div>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+            <span>PRESIONAR</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card">
+      <div class="card-label">Option 3</div>
+      <div class="card-title">Ceramic & Deep Sage</div>
+      <div class="card-desc">Clean white ceramic face with dark sage boundary. Minimalist, high contrast, elegant.</div>
+      <div class="btn-wrap">
+        <button class="btn-v3">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+          <span>PRESIONAR</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="card">
+      <div class="card-label">Option 4</div>
+      <div class="card-title">Radio Thumb Trigger</div>
+      <div class="card-desc">Oblong thumbpad housing inspired by authentic handheld radio transceivers.</div>
+      <div class="btn-wrap">
+        <div class="v4-housing">
+          <button class="btn-v4">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+            <div class="v4-text">
+              <span class="main">PRESIONAR</span>
+              <span class="sub">Transmitir</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

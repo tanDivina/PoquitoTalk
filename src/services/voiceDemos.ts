@@ -40,6 +40,20 @@ export const VOICE_DEMO_SAMPLES: Record<string, VoiceDemoSample> = {
     englishText: 'Hi! If I drop off two bags of laundry this morning, will they be ready by 5:00 PM today?',
     spanishDemoText: '¡Hola! ¿Si les llevo dos bolsas de ropa a lavar esta mañana, estarán listas hoy antes de las 5 de la tarde?',
   },
+  Male: {
+    personaName: 'Male',
+    scenarioTitle: 'Boat Captain to Old Bank (Bastimentos)',
+    categoryIcon: 'sail-boat',
+    englishText: 'Hi Captain! Are you available to take two of us to Old Bank on Bastimentos tonight?',
+    spanishDemoText: '¿Buenas capitán? ¿Tendrá disponibilidad para llevarnos a dos personas a Old Bank en Bastimentos esta noche?',
+  },
+  Female: {
+    personaName: 'Female',
+    scenarioTitle: 'Waterfront Table & Dinner Catch of the Day',
+    categoryIcon: 'silverware-fork-knife',
+    englishText: 'Hi! Do you have a table for two available tonight around 7:00 PM?',
+    spanishDemoText: '¡Buenas! ¿Tienen mesa disponible para dos personas hoy a las 7 de la noche?',
+  },
 };
 
 let currentSoundObject: Audio.Sound | null = null;

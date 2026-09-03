@@ -8,12 +8,12 @@ interface GreenParrotLogoProps {
 export const GreenParrotLogo: React.FC<GreenParrotLogoProps> = ({ size = 42 }) => {
   return (
     <Svg width={size} height={size} viewBox="0 0 200 200" fill="none">
-      {/* Outer Speech Bubble (WhatsApp Green) */}
+      {/* Outer Speech Bubble (WhatsApp Green - Smooth Rounded Organic Arc) */}
       <Path
-        d="M 100 20 C 50 20 20 52 20 95 C 20 120 32 142 50 156 C 42 172 26 182 25 182 C 25 182 52 186 78 174 C 85 177 92 178 100 178 C 150 178 180 146 180 95 C 180 52 150 20 100 20 Z"
+        d="M 100 20 C 142 20 176 54 176 96 C 176 138 142 172 100 172 C 88 172 74 169 62 163 C 48 175 30 182 28 182 C 28 182 34 166 36 150 C 28 135 24 116 24 96 C 24 54 58 20 100 20 Z"
         fill="none"
         stroke="#25D366"
-        strokeWidth={12}
+        strokeWidth={11}
         strokeLinecap="round"
         strokeLinejoin="round"
       />

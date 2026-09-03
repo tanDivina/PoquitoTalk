@@ -77,7 +77,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ visible, onClose }
           <View style={styles.header}>
             <View style={styles.headerTitleBox}>
               <Text style={styles.title}>Send Feedback</Text>
-              <Text style={styles.subtitle}>Help us shape PoquitoTalk for Bocas del Toro!</Text>
+              <Text style={styles.subtitle}>Help us shape <Text style={{ color: Colors.onBackground, fontWeight: '700' }}>Poquito</Text><Text style={{ color: Colors.secondary, fontWeight: '700' }}>Talk</Text> for Bocas del Toro!</Text>
             </View>
             <TouchableOpacity onPress={handleResetAndClose} style={styles.closeBtn}>
               <Ionicons name="close" size={20} color={Colors.onBackground} />

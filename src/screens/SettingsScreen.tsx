@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
@@ -6,8 +6,8 @@ import { Header } from '../components/Header';
 import { FeedbackModal } from '../components/FeedbackModal';
 import { GreenParrotLogo } from '../components/GreenParrotLogo';
 import { AnimatedParrotMascot } from '../components/AnimatedParrotMascot';
-
 import { GoogleSignInButton } from '../components/GoogleSignInButton';
+import { getPlaybackSpeed, setPlaybackSpeed, PlaybackSpeed } from '../services/storage';
 
 interface SettingsScreenProps {
   isPro: boolean;
@@ -17,6 +17,11 @@ interface SettingsScreenProps {
 
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPaywall, onResetOnboarding }) => {
   const [feedbackVisible, setFeedbackVisible] = useState(false);
+  const [speed, setSpeed] = useState<PlaybackSpeed>('0.75x');
+
+  useEffect(() => {
+    getPlaybackSpeed().then(setSpeed);
+  }, []);
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -30,6 +35,59 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
       {/* Google Account Sign-In Card */}
       <View style={styles.card}>
         <GoogleSignInButton />
+      </View>
+
+      {/* Audio Playback Speed Preference */}
+      <View style={styles.card}>
+        <View style={styles.cardRow}>
+          <View style={styles.iconCircle}>
+            <Ionicons name="speedometer-outline" size={20} color={Colors.secondary} />
+          </View>
+          <View style={styles.cardText}>
+            <Text style={styles.cardTitle}>Audio Playback Speed</Text>
+            <Text style={styles.cardSubtitle}>
+              Default pace for phrase pronunciations and voice notes.
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.speedOptionsRow}>
+          <TouchableOpacity
+            style={[styles.speedOptionBtn, speed === '0.75x' && styles.speedOptionBtnActive]}
+            onPress={async () => {
+              setSpeed('0.75x');
+              await setPlaybackSpeed('0.75x');
+            }}
+            activeOpacity={0.8}
+          >
+            <Ionicons
+              name="play-back"
+              size={13}
+              color={speed === '0.75x' ? '#FFFFFF' : Colors.onBackground}
+            />
+            <Text style={[styles.speedOptionText, speed === '0.75x' && styles.speedOptionTextActive]}>
+              0.75x Slow (Recommended)
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.speedOptionBtn, speed === '1.0x' && styles.speedOptionBtnActive]}
+            onPress={async () => {
+              setSpeed('1.0x');
+              await setPlaybackSpeed('1.0x');
+            }}
+            activeOpacity={0.8}
+          >
+            <Ionicons
+              name="play"
+              size={13}
+              color={speed === '1.0x' ? '#FFFFFF' : Colors.onBackground}
+            />
+            <Text style={[styles.speedOptionText, speed === '1.0x' && styles.speedOptionTextActive]}>
+              1.0x Normal Speed
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Studio Credits Card */}
@@ -98,6 +156,17 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
 
         <TouchableOpacity
           style={styles.linkRow}
+          onPress={() => Linking.openURL('https://poquitotalk.hero-apps.com/terms.html')}
+        >
+          <Ionicons name="document-text-outline" size={18} color={Colors.primary} />
+          <Text style={styles.linkLabel}>Terms of Service</Text>
+          <Ionicons name="chevron-forward" size={16} color={Colors.outline} />
+        </TouchableOpacity>
+
+        <View style={styles.divider} />
+
+        <TouchableOpacity
+          style={styles.linkRow}
           onPress={() => Linking.openURL('https://poquitotalk.hero-apps.com/privacy.html')}
         >
           <Ionicons name="shield-checkmark-outline" size={18} color={Colors.primary} />
@@ -106,7 +175,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.versionText}>PoquitoTalk v1.5.0 • Bocas del Toro (Panama) 🇵🇦</Text>
+      <Text style={styles.versionText}>
+        <Text style={{ color: Colors.onBackground, fontWeight: '700' }}>Poquito</Text><Text style={{ color: Colors.secondary, fontWeight: '700' }}>Talk</Text> v1.5.2 • Bocas del Toro 🇵🇦
+      </Text>
 
       {/* In-App Feedback Modal */}
       <FeedbackModal
@@ -228,6 +299,35 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: Colors.cardBorder,
     marginVertical: 12,
+  },
+  speedOptionsRow: {
+    flexDirection: 'column',
+    gap: 8,
+    marginTop: 14,
+  },
+  speedOptionBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    backgroundColor: '#FAF8F5',
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 11,
+  },
+  speedOptionBtnActive: {
+    backgroundColor: Colors.secondary,
+    borderColor: Colors.secondary,
+  },
+  speedOptionText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: Colors.onBackground,
+  },
+  speedOptionTextActive: {
+    color: '#FFFFFF',
+    fontWeight: '800',
   },
   versionText: {
     textAlign: 'center',

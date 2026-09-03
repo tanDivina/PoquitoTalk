@@ -1,40 +1,105 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking, Modal, Alert } from 'react-native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { WhatsAppIcon } from './WhatsAppIcon';
 import { Colors } from '../theme/colors';
 import { LocalServiceProvider } from '../types';
 import { vouchService } from '../services/vouch';
 import { walkieTalkieService } from '../services/walkieTalkie';
 import { shareWalkieTalkieToWhatsApp } from '../services/deepLinks';
+import { getPhoneBookContacts, syncDirectoryFavorite, getPreferredVoiceGender } from '../services/storage';
+import { deductCreditForWalkieTalkie } from '../services/userService';
+import { generateGoogleGeminiAudio, GOOGLE_SPANISH_VOICES } from '../services/googleVoice';
+import * as FileSystem from 'expo-file-system/legacy';
 
 interface DirectoryCardProps {
   provider: LocalServiceProvider;
   translatedMessage?: string;
   onRewardGranted?: (bonusCredits: number) => void;
+  onFavoriteToggled?: (isFavorite: boolean) => void;
 }
 
-export const DirectoryCard: React.FC<DirectoryCardProps> = ({ provider, translatedMessage, onRewardGranted }) => {
+export const DirectoryCard: React.FC<DirectoryCardProps> = React.memo(({ provider, translatedMessage, onRewardGranted, onFavoriteToggled }) => {
   const [showSpotlightModal, setShowSpotlightModal] = useState(false);
   const [showVouchModal, setShowVouchModal] = useState(false);
   const [hasVouched, setHasVouched] = useState(false);
   const [vouchCount, setVouchCount] = useState(provider.vouchCount || 0);
+  const [isFavorite, setIsFavorite] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const [isWatching, setIsWatching] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
     vouchService.hasVouched(provider.id).then((vouched) => {
-      setHasVouched(vouched);
+      if (isMounted) setHasVouched(vouched);
     });
     setVouchCount(provider.vouchCount || 0);
+
+    getPhoneBookContacts().then((contacts) => {
+      if (isMounted) {
+        const isFav = contacts.some(
+          (c) => c.directoryProviderId === provider.id || c.name === provider.name
+        );
+        setIsFavorite(isFav);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
   }, [provider.id, provider.vouchCount]);
 
-  const handleStartPoquitoTalkie = async () => {
-    const session = walkieTalkieService.createSession();
-    const recipientName = provider.name.split(' ')[0] || 'Amigo';
-    await shareWalkieTalkieToWhatsApp(session.shareUrl, recipientName);
+  const handleToggleFavorite = async () => {
+    const nextState = !isFavorite;
+    setIsFavorite(nextState);
+    if (onFavoriteToggled) onFavoriteToggled(nextState);
+
+    await syncDirectoryFavorite(provider, nextState);
+
     Alert.alert(
-      'PoquitoTalkie Channel Sent! 📻',
-      `Sent 2-way live web link to ${provider.name}'s WhatsApp. They can talk with you with zero app installation!`
+      nextState ? 'Saved to Contacts' : 'Removed from Contacts',
+      nextState
+        ? `${provider.name} is now saved in your Phone Book for 1-tap Spanish voice note dispatch.`
+        : `${provider.name} was removed from your Phone Book.`
+    );
+  };
+
+  const handleStartPoquitoTalkie = async () => {
+    const deductRes = await deductCreditForWalkieTalkie(provider.name);
+    if (!deductRes.success) {
+      Alert.alert(
+        'Credits Needed',
+        'You have used your free credits. Get the 50 Credits Pack ($4.99) or upgrade to the Annual Pass for unlimited Walkie-Talkie sessions!',
+        [{ text: 'OK' }]
+      );
+      return;
+    }
+    const inquiryTopic = `Consulta de ${provider.category || 'servicio'} para ${provider.name}`;
+    const inquiryTopicEn = `Service inquiry for ${provider.name} (${provider.category || 'service'})`;
+
+    let initialAudioBase64 = '';
+    try {
+      const savedGender = await getPreferredVoiceGender();
+      const voice = GOOGLE_SPANISH_VOICES.find((v) => v.gender === savedGender) || GOOGLE_SPANISH_VOICES[0];
+      const audioUri = await generateGoogleGeminiAudio(inquiryTopic, voice.id);
+      if (audioUri) {
+        const rawB64 = await FileSystem.readAsStringAsync(audioUri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        if (rawB64) {
+          initialAudioBase64 = `data:audio/mp3;base64,${rawB64}`;
+        }
+      }
+    } catch (audioErr) {
+      console.warn('Initial audio generation fallback in DirectoryCard:', audioErr);
+    }
+
+    const session = walkieTalkieService.createSession(provider.name, inquiryTopicEn, inquiryTopic, inquiryTopicEn, initialAudioBase64);
+    const recipientName = provider.name.split(' ')[0] || 'Amigo';
+    await shareWalkieTalkieToWhatsApp(session.shareUrl, recipientName, inquiryTopic, inquiryTopicEn);
+    Alert.alert(
+      'PoquitoTalkie Channel Sent',
+      `Sent 2-way live web link to ${provider.name}'s WhatsApp with your inquiry subject. They can talk with you with zero app installation!`
     );
   };
 
@@ -156,18 +221,35 @@ export const DirectoryCard: React.FC<DirectoryCardProps> = ({ provider, translat
           </View>
         )}
 
+        {/* 1. Vouch Button with Heart Icon */}
         <TouchableOpacity
           style={[styles.vouchBadge, hasVouched && styles.vouchBadgeActive]}
           onPress={() => setShowVouchModal(true)}
           activeOpacity={0.75}
         >
           <Ionicons
-            name={vouchCount > 0 ? "shield-checkmark" : "shield-outline"}
+            name={hasVouched ? "heart" : "heart-outline"}
             size={11}
-            color={hasVouched ? '#FFF' : '#047857'}
+            color={hasVouched ? '#FFF' : '#E11D48'}
           />
           <Text style={[styles.vouchText, hasVouched && styles.vouchTextActive]}>
-            {vouchCount > 0 ? `${vouchCount} ${vouchCount === 1 ? 'Vouch' : 'Vouches'}` : '+ Vouch'}
+            {vouchCount > 0 ? `${vouchCount} ${vouchCount === 1 ? 'Vouch' : 'Vouches'}` : 'Vouch'}
+          </Text>
+        </TouchableOpacity>
+
+        {/* 2. Phone Book Button with Black Plus */}
+        <TouchableOpacity
+          style={[styles.favoriteBadge, isFavorite && styles.favoriteBadgeActive]}
+          onPress={handleToggleFavorite}
+          activeOpacity={0.75}
+        >
+          <Ionicons
+            name={isFavorite ? "checkmark" : "add"}
+            size={12}
+            color={isFavorite ? '#FFF' : '#0F172A'}
+          />
+          <Text style={[styles.favoriteBadgeText, isFavorite && styles.favoriteBadgeTextActive]}>
+            {isFavorite ? 'In Phone Book' : 'Phone Book'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -264,7 +346,7 @@ export const DirectoryCard: React.FC<DirectoryCardProps> = ({ provider, translat
 
           {provider.whatsappNumber && (
             <TouchableOpacity style={styles.chatBtn} onPress={handleChatWhatsApp} activeOpacity={0.8}>
-              <FontAwesome5 name="whatsapp" size={14} color="#FFF" />
+              <WhatsAppIcon size={15} color="#FFF" />
               <Text style={styles.chatBtnText}>WhatsApp</Text>
             </TouchableOpacity>
           )}
@@ -272,110 +354,114 @@ export const DirectoryCard: React.FC<DirectoryCardProps> = ({ provider, translat
       </View>
 
       {/* 1-TAP POST-WHATSAPP COMMUNITY VOUCH MODAL */}
-      <Modal visible={showVouchModal} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalCard}>
-            <TouchableOpacity style={styles.modalCloseBtn} onPress={() => setShowVouchModal(false)}>
-              <Ionicons name="close" size={20} color={Colors.outline} />
-            </TouchableOpacity>
+      {showVouchModal && (
+        <Modal visible={true} transparent animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalCard}>
+              <TouchableOpacity style={styles.modalCloseBtn} onPress={() => setShowVouchModal(false)}>
+                <Ionicons name="close" size={20} color={Colors.outline} />
+              </TouchableOpacity>
 
-            <View style={styles.modalHeaderIcon}>
-              <Ionicons name="shield-checkmark" size={28} color="#059669" />
+              <View style={styles.modalHeaderIcon}>
+                <Ionicons name="heart" size={28} color="#E11D48" />
+              </View>
+
+              <Text style={styles.modalTitle}>Vouch for {provider.name}</Text>
+              <Text style={styles.modalSubtitle}>
+                Help expats and locals in Bocas del Toro by leaving an authentic 1-tap vouch:
+              </Text>
+
+              <View style={styles.vouchOptionsList}>
+                <TouchableOpacity
+                  style={styles.vouchOptionBtn}
+                  onPress={() => handleDirectVouch('fast_response')}
+                  activeOpacity={0.8}
+                >
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <Ionicons name="flash-outline" size={16} color="#059669" />
+                    <Text style={styles.vouchOptionLabel}>Fast Response & On Time</Text>
+                  </View>
+                  <View style={styles.vouchPlusTag}><Text style={styles.vouchPlusTagText}>+1 Vouch</Text></View>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.vouchOptionBtn}
+                  onPress={() => handleDirectVouch('fair_price')}
+                  activeOpacity={0.8}
+                >
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <Ionicons name="pricetag-outline" size={16} color="#059669" />
+                    <Text style={styles.vouchOptionLabel}>Fair & Transparent Price</Text>
+                  </View>
+                  <View style={styles.vouchPlusTag}><Text style={styles.vouchPlusTagText}>+1 Vouch</Text></View>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.vouchOptionBtn}
+                  onPress={() => handleDirectVouch('great_service')}
+                  activeOpacity={0.8}
+                >
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <Ionicons name="heart" size={16} color="#E11D48" />
+                    <Text style={styles.vouchOptionLabel}>Great Island Service</Text>
+                  </View>
+                  <View style={styles.vouchPlusTag}><Text style={styles.vouchPlusTagText}>+1 Vouch</Text></View>
+                </TouchableOpacity>
+              </View>
+
+              <TouchableOpacity onPress={() => setShowVouchModal(false)} style={styles.skipBtn}>
+                <Text style={styles.skipBtnText}>Skip for now</Text>
+              </TouchableOpacity>
             </View>
-
-            <Text style={styles.modalTitle}>Vouch for {provider.name}</Text>
-            <Text style={styles.modalSubtitle}>
-              Help expats and locals in Bocas del Toro by leaving an authentic 1-tap vouch:
-            </Text>
-
-            <View style={styles.vouchOptionsList}>
-              <TouchableOpacity
-                style={styles.vouchOptionBtn}
-                onPress={() => handleDirectVouch('fast_response')}
-                activeOpacity={0.8}
-              >
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <Ionicons name="flash-outline" size={16} color="#059669" />
-                  <Text style={styles.vouchOptionLabel}>Fast Response & On Time</Text>
-                </View>
-                <View style={styles.vouchPlusTag}><Text style={styles.vouchPlusTagText}>+1 Vouch</Text></View>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.vouchOptionBtn}
-                onPress={() => handleDirectVouch('fair_price')}
-                activeOpacity={0.8}
-              >
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <Ionicons name="pricetag-outline" size={16} color="#059669" />
-                  <Text style={styles.vouchOptionLabel}>Fair & Transparent Price</Text>
-                </View>
-                <View style={styles.vouchPlusTag}><Text style={styles.vouchPlusTagText}>+1 Vouch</Text></View>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.vouchOptionBtn}
-                onPress={() => handleDirectVouch('great_service')}
-                activeOpacity={0.8}
-              >
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <Ionicons name="star-outline" size={16} color="#059669" />
-                  <Text style={styles.vouchOptionLabel}>Great Island Service</Text>
-                </View>
-                <View style={styles.vouchPlusTag}><Text style={styles.vouchPlusTagText}>+1 Vouch</Text></View>
-              </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity onPress={() => setShowVouchModal(false)} style={styles.skipBtn}>
-              <Text style={styles.skipBtnText}>Skip for now</Text>
-            </TouchableOpacity>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      )}
 
       {/* Rewarded Sponsor Spotlight Modal */}
-      <Modal visible={showSpotlightModal} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalCard}>
-            <View style={styles.modalHeader}>
-              <MaterialCommunityIcons name="star-circle" size={24} color={Colors.secondary} />
-              <Text style={styles.modalTitle}>{provider.name}</Text>
-            </View>
+      {showSpotlightModal && (
+        <Modal visible={true} transparent animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalCard}>
+              <View style={styles.modalHeader}>
+                <MaterialCommunityIcons name="star-circle" size={24} color={Colors.secondary} />
+                <Text style={styles.modalTitle}>{provider.name}</Text>
+              </View>
 
-            <Text style={styles.modalSubtitle}>
-              Local Bocas del Toro Featured Sponsor
-            </Text>
-
-            <View style={styles.spotlightBox}>
-              <Ionicons name="megaphone-outline" size={28} color={Colors.secondary} />
-              <Text style={styles.spotlightDesc}>
-                {provider.notes} Contact directly on WhatsApp for prompt island service!
+              <Text style={styles.modalSubtitle}>
+                Local Bocas del Toro Featured Sponsor
               </Text>
-            </View>
 
-            {isWatching ? (
-              <View style={styles.countdownBox}>
-                <Ionicons name="time-outline" size={20} color={Colors.secondary} />
-                <Text style={styles.countdownText}>
-                  Watching Sponsor Spotlight... ({countdown}s)
+              <View style={styles.spotlightBox}>
+                <Ionicons name="megaphone-outline" size={28} color={Colors.secondary} />
+                <Text style={styles.spotlightDesc}>
+                  {provider.notes} Contact directly on WhatsApp for prompt island service!
                 </Text>
               </View>
-            ) : (
-              <TouchableOpacity
-                style={styles.claimRewardBtn}
-                onPress={handleClaimReward}
-                activeOpacity={0.8}
-              >
-                <Ionicons name="gift" size={18} color="#FFF" />
-                <Text style={styles.claimRewardBtnText}>Claim +5 Free Translations!</Text>
-              </TouchableOpacity>
-            )}
+
+              {isWatching ? (
+                <View style={styles.countdownBox}>
+                  <Ionicons name="time-outline" size={20} color={Colors.secondary} />
+                  <Text style={styles.countdownText}>
+                    Watching Sponsor Spotlight... ({countdown}s)
+                  </Text>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  style={styles.claimRewardBtn}
+                  onPress={handleClaimReward}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name="gift" size={18} color="#FFF" />
+                  <Text style={styles.claimRewardBtnText}>Claim +5 Free Translations!</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   card: {
@@ -456,24 +542,49 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#F8FAFC',
     paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 10,
+    paddingVertical: 3.5,
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: '#CBD5E1',
   },
   vouchBadgeActive: {
-    backgroundColor: '#059669',
-    borderColor: '#059669',
+    backgroundColor: '#0F172A',
+    borderColor: '#0F172A',
   },
   vouchText: {
     fontSize: 10.5,
-    fontWeight: '800',
-    color: '#047857',
+    fontWeight: '700',
+    color: '#0F172A',
   },
   vouchTextActive: {
     color: '#FFF',
+    fontWeight: '800',
+  },
+  favoriteBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#F8FAFC',
+    paddingHorizontal: 8,
+    paddingVertical: 3.5,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+  },
+  favoriteBadgeActive: {
+    backgroundColor: '#0F172A',
+    borderColor: '#0F172A',
+  },
+  favoriteBadgeText: {
+    fontSize: 10.5,
+    fontWeight: '700',
+    color: '#0F172A',
+  },
+  favoriteBadgeTextActive: {
+    color: '#FFF',
+    fontWeight: '800',
   },
   notesContainer: {
     width: '100%',
@@ -545,14 +656,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   footer: {
-    marginTop: 12,
-    paddingTop: 12,
+    marginTop: 10,
+    paddingTop: 10,
     borderTopWidth: 1,
     borderTopColor: Colors.cardBorder,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
     gap: 8,
   },
   claimLinkBox: {
@@ -568,7 +676,9 @@ const styles = StyleSheet.create({
   buttonGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'flex-end',
+    gap: 6,
+    width: '100%',
   },
   talkieBtn: {
     flexDirection: 'row',
@@ -619,9 +729,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     backgroundColor: '#25D366',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 7,
     borderRadius: 10,
+    overflow: 'visible',
   },
   chatBtnText: {
     fontSize: 12,

@@ -1,4 +1,4 @@
-# 🎙️ PoquitoTalk — Master Voice & Message Catalog Reference
+# 🎙️ PoquitoTalk  -  Master Voice & Message Catalog Reference
 
 > **Complete Archive of All Preset Categories, Curated Phrases, English Prompts, Authentic Panamanian Spanish Translations, and ElevenLabs Studio Voice Personas.**
 

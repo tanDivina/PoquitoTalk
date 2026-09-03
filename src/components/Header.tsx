@@ -23,16 +23,20 @@ export const Header: React.FC<HeaderProps> = ({
   onResetOnboarding,
 }) => {
   const insets = useSafeAreaInsets();
-  const topPadding = Math.max(insets.top + 6, Platform.OS === 'android' ? (StatusBar.currentHeight || 24) + 6 : 40);
+  const topPadding = Platform.OS === 'web' 
+    ? 24 
+    : Math.max(insets.top + 6, Platform.OS === 'android' ? (StatusBar.currentHeight || 24) + 6 : 40);
 
   return (
     <View style={[styles.container, { paddingTop: topPadding }]}>
       <View style={styles.brandContainer}>
         <AnimatedParrotMascot size={38} isAnimating={true} bubblePlacement="bottom" />
         <View style={styles.titleInfoBox}>
-          <Text style={styles.title} numberOfLines={1}>PoquitoTalk</Text>
+          <Text style={styles.title} numberOfLines={1}>
+            Poquito<Text style={styles.titleTalk}>Talk</Text>
+          </Text>
           <Text style={styles.subtitle} numberOfLines={1}>
-            Bocas del Toro (Panama) 🇵🇦
+            Bocas del Toro 🇵🇦
           </Text>
         </View>
       </View>
@@ -69,43 +73,36 @@ export const Header: React.FC<HeaderProps> = ({
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: Colors.surface,
+    paddingHorizontal: 16,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.cardBorder,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingBottom: 12,
-    backgroundColor: Colors.background,
+    zIndex: 10,
   },
   brandContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 7,
     flex: 1,
-    marginRight: 8,
-  },
-  logoBubble: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: Colors.secondaryContainer,
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginRight: 6,
   },
   titleInfoBox: {
     flex: 1,
-  },
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '800',
     color: Colors.onBackground,
     letterSpacing: -0.2,
     flexShrink: 0,
+  },
+  titleTalk: {
+    color: Colors.secondary,
   },
   subtitle: {
     fontSize: 11,
@@ -143,6 +140,36 @@ const styles = StyleSheet.create({
   },
   badgeCountText: {
     fontSize: 9,
+    fontWeight: '800',
+    color: '#FFFFFF',
+  },
+  proPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: Colors.surfaceContainer,
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 14,
+  },
+  proPillText: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: Colors.onBackground,
+  },
+  unlockBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: Colors.secondary,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    borderRadius: 14,
+  },
+  unlockBtnText: {
+    fontSize: 11,
     fontWeight: '800',
     color: '#FFFFFF',
   },

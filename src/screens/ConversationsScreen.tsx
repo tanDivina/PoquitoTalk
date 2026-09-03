@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,18 +8,20 @@ import {
   Alert,
   Platform,
   LayoutAnimation,
-} from 'react-native';
-import * as Speech from 'expo-speech';
-import * as Clipboard from 'expo-clipboard';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
-import { Colors } from '../theme/colors';
-import { Header } from '../components/Header';
+} from "react-native";
+import * as Speech from "expo-speech";
+import * as Clipboard from "expo-clipboard";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
+import { Colors } from "../theme/colors";
+import { Header } from "../components/Header";
 import {
   ConversationThread,
   loadConversationThreads,
   saveConversationThreads,
-} from '../services/conversations';
-import { ThreadViewModal } from '../components/ThreadViewModal';
+} from "../services/conversations";
+import { getCategoryUnifiedMeta } from "../services/presets";
+import { ThreadViewModal } from "../components/ThreadViewModal";
+import { TranslationItem } from "../types";
 
 interface ConversationsScreenProps {
   isPro: boolean;
@@ -28,82 +30,9 @@ interface ConversationsScreenProps {
   onOpenSettings?: () => void;
   savedCount?: number;
   onResetOnboarding?: () => void;
+  savedTranslations?: TranslationItem[];
+  onToggleSave?: (item: TranslationItem) => void;
 }
-
-const QUICK_RESPONSE_DECKS = [
-  {
-    id: 'price_pay',
-    title: 'Pricing & Yappy Payments',
-    subtitle: 'Ask final price, confirm total & send Yappy',
-    icon: 'cash-outline',
-    color: '#366649',
-    bg: '#F2F7F4',
-    border: '#D2E5D8',
-    badgeBg: '#E2EFE7',
-    phrases: [
-      {
-        es: '¿Cuánto sería lo último por el servicio?',
-        en: 'What is your best/final price for the service?',
-      },
-      {
-        es: '¿Aceptan pago por Yappy o solo efectivo?',
-        en: 'Do you accept payment via Yappy or only cash?',
-      },
-      {
-        es: 'Ya le hice el envío por Yappy y le adjunto el comprobante.',
-        en: 'I already sent the payment via Yappy and attached the receipt.',
-      },
-    ],
-  },
-  {
-    id: 'location_eta',
-    title: 'Location & Dock ETA',
-    subtitle: 'Boat arrival, meeting at dock & directions',
-    icon: 'location-outline',
-    color: '#2F6278',
-    bg: '#F0F7F9',
-    border: '#CFE3EB',
-    badgeBg: '#DEEDF3',
-    phrases: [
-      {
-        es: '¡Buenas! Ya estoy esperándolo en el muelle principal.',
-        en: 'Hi! I am already waiting for you at the main dock.',
-      },
-      {
-        es: '¿A qué hora calcula que estaría llegando a la casa?',
-        en: 'What time do you estimate you will arrive at the house?',
-      },
-      {
-        es: 'Le comparto mi ubicación exacta por aquí para que no se pierda.',
-        en: 'I am sharing my exact live location here so you do not get lost.',
-      },
-    ],
-  },
-  {
-    id: 'followup_avail',
-    title: 'Follow-Up & Availability',
-    subtitle: 'Confirm schedule, delays & availability',
-    icon: 'time-outline',
-    color: '#6B5E51',
-    bg: '#FAF8F5',
-    border: '#E8E2D8',
-    badgeBg: '#F3ECE2',
-    phrases: [
-      {
-        es: 'Disculpe la molestia, ¿sigue disponible para venir hoy?',
-        en: 'Sorry to bother you, are you still available to come today?',
-      },
-      {
-        es: 'Disculpe la demora, voy saliendo para allá ahora mismo.',
-        en: 'Sorry for the delay, I am heading there right now.',
-      },
-      {
-        es: 'Excelente, quedamos así para mañana en la mañana. ¡Muchas gracias!',
-        en: 'Great, confirmed for tomorrow morning. Thank you very much!',
-      },
-    ],
-  },
-];
 
 export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
   isPro,
@@ -112,18 +41,26 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
   onOpenSettings,
   savedCount = 0,
   onResetOnboarding,
+  savedTranslations = [],
+  onToggleSave,
 }) => {
   const [threads, setThreads] = useState<ConversationThread[]>([]);
   const [activeThread, setActiveThread] = useState<ConversationThread | null>(null);
   const [threadModalVisible, setThreadModalVisible] = useState(false);
-  const [activeDeckId, setActiveDeckId] = useState<string>('price_pay');
+  const [activeDeckId, setActiveDeckId] = useState<string>(() => {
+    if (Platform.OS === "web" && typeof window !== "undefined") {
+      const p = new URLSearchParams(window.location.search).get("deck");
+      if (p) return p;
+    }
+    return "bookmarks_deck";
+  });
   const [playingAudioText, setPlayingAudioText] = useState<string | null>(null);
 
   const handleToggleDeck = (deckId: string) => {
-    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+    if (Platform.OS === "ios" || Platform.OS === "android") {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
-    setActiveDeckId((prev) => (prev === deckId ? '' : deckId));
+    setActiveDeckId((prev) => (prev === deckId ? "" : deckId));
   };
 
   const handlePlayAudio = (spanishText: string) => {
@@ -134,7 +71,7 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
     }
     setPlayingAudioText(spanishText);
     Speech.speak(spanishText, {
-      language: 'es-PA',
+      language: "es-PA",
       pitch: 0.95,
       rate: 0.88,
       onDone: () => setPlayingAudioText(null),
@@ -144,11 +81,25 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
 
   const handleCopyPhrase = async (text: string) => {
     await Clipboard.setStringAsync(text);
-    Alert.alert('Copied! 📋', 'Spanish phrase copied to clipboard for WhatsApp.');
+    Alert.alert("Copied! 📋", "Spanish phrase copied to clipboard for WhatsApp.");
   };
 
   useEffect(() => {
-    loadConversationThreads().then((data) => setThreads(data));
+    loadConversationThreads().then((data) => {
+      setThreads(data);
+      if (Platform.OS === "web" && typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const threadModal = params.get("threadModal");
+        const targetThreadId = params.get("threadId");
+        if (threadModal === "true" && data.length > 0) {
+          const matched = targetThreadId ? data.find((t) => t.id === targetThreadId) : data[0];
+          if (matched) {
+            setActiveThread(matched);
+            setThreadModalVisible(true);
+          }
+        }
+      }
+    });
   }, []);
 
   const handleSelectThread = (thread: ConversationThread) => {
@@ -168,16 +119,16 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
       'New Service Contact',
       'Enter contact name (e.g., "Landlord Maria" or "Starlink Tech"):',
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: "Cancel", style: "cancel" },
         {
-          text: 'Create Thread',
+          text: "Create Thread",
           onPress: (contactName) => {
             if (!contactName) return;
             const newThread: ConversationThread = {
               id: `thread_${Date.now()}`,
               contactName: contactName.trim(),
-              category: 'General Service',
-              avatarIcon: 'person-outline',
+              category: "General Service",
+              avatarIcon: "person-outline",
               lastUpdated: Date.now(),
               messages: [],
             };
@@ -219,7 +170,6 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
         </View>
       </View>
 
-      {/* List of Active Conversation Threads */}
       <View style={styles.threadsList}>
         {threads.length === 0 ? (
           <View style={styles.emptyCard}>
@@ -239,10 +189,11 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
           </View>
         ) : (
           threads.map((thread) => {
+            const meta = getCategoryUnifiedMeta(thread.category);
             const lastMsg = thread?.messages?.length ? thread.messages[thread.messages.length - 1] : null;
             const formattedDate = thread?.lastUpdated
-              ? new Date(thread.lastUpdated).toLocaleDateString([], { month: 'short', day: 'numeric' })
-              : '';
+              ? new Date(thread.lastUpdated).toLocaleDateString([], { month: "short", day: "numeric" })
+              : "";
             return (
               <TouchableOpacity
                 key={thread.id}
@@ -250,20 +201,24 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
                 onPress={() => handleSelectThread(thread)}
                 activeOpacity={0.7}
               >
-                <View style={styles.avatarCircle}>
-                  <Ionicons name={(thread?.avatarIcon as any) || 'person-outline'} size={20} color={Colors.secondary} />
+                <View style={[styles.avatarCircle, { backgroundColor: meta.badgeBg, borderColor: meta.border, borderWidth: 1.2 }]}>
+                  <Ionicons name={(meta.ioniconsName as any) || (thread?.avatarIcon as any) || "person-outline"} size={20} color={meta.color} />
                 </View>
 
                 <View style={styles.threadInfo}>
                   <View style={styles.threadHeaderRow}>
-                    <Text style={styles.contactName}>{thread?.contactName || 'Service Contact'}</Text>
+                    <Text style={styles.contactName}>{thread?.contactName || "Service Contact"}</Text>
                     <Text style={styles.timestamp}>{formattedDate}</Text>
                   </View>
 
-                  <Text style={styles.categoryLabel}>{thread.category}</Text>
+                  <View style={{ flexDirection: "row", alignItems: "center", marginTop: 2 }}>
+                    <View style={[styles.categoryPill, { backgroundColor: meta.badgeBg, borderColor: meta.border }]}>
+                      <Text style={[styles.categoryLabel, { color: meta.color }]}>{thread.category}</Text>
+                    </View>
+                  </View>
 
                   <Text style={styles.lastMsgSnippet} numberOfLines={1}>
-                    {lastMsg ? lastMsg.textEnglish : 'Tap to start 2-way conversation in Spanish...'}
+                    {lastMsg ? lastMsg.textEnglish : "Tap to start 2-way conversation in Spanish..."}
                   </Text>
                 </View>
 
@@ -274,104 +229,119 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
         )}
       </View>
 
-      {/* Quick Tactical Response Decks (Stacked Cards) */}
-      <View style={styles.quickDecksSection}>
-        <View style={styles.sectionHeaderRow}>
-          <Ionicons name="chatbubbles-outline" size={14} color={Colors.tertiary} />
-          <Text style={styles.sectionHeaderTitle}>QUICK TACTICAL WHATSAPP REPLIES</Text>
-        </View>
-        <Text style={styles.sectionSubtitle}>
-          Tap any scenario deck to unfold 1-tap Spanish negotiation & arrival responses.
-        </Text>
+      {/* Bookmarked & Saved Templates Section */}
+      {savedTranslations.length > 0 && (
+        <View style={styles.quickDecksSection}>
+          <View style={styles.sectionHeaderRow}>
+            <Ionicons name="bookmark" size={14} color="#D97706" />
+            <Text style={[styles.sectionHeaderTitle, { color: "#B45309" }]}>
+              BOOKMARKED PHRASE TEMPLATES ({savedTranslations.length})
+            </Text>
+          </View>
+          <Text style={styles.sectionSubtitle}>
+            Phrases bookmarked in Templates for fast 1-tap WhatsApp replies and thread selection.
+          </Text>
 
-        <View style={styles.stackedDecksWrapper}>
-          {QUICK_RESPONSE_DECKS.map((deck, index) => {
-            const isExpanded = activeDeckId === deck.id;
-
-            return (
-              <View
-                key={deck.id}
-                style={[
-                  styles.stackedDeckCard,
-                  {
-                    backgroundColor: deck.bg,
-                    borderColor: isExpanded ? deck.color : deck.border,
-                    borderWidth: isExpanded ? 2 : 1.2,
-                    marginTop: index > 0 ? -12 : 0,
-                    zIndex: isExpanded ? 40 : QUICK_RESPONSE_DECKS.length - index,
-                    elevation: isExpanded ? 6 : QUICK_RESPONSE_DECKS.length - index,
-                  },
-                ]}
-              >
-                <TouchableOpacity
-                  style={styles.deckHeaderRow}
-                  onPress={() => handleToggleDeck(deck.id)}
-                  activeOpacity={0.8}
-                >
-                  <View style={[styles.deckIconBubble, { backgroundColor: deck.badgeBg }]}>
-                    <Ionicons name={deck.icon as any} size={18} color={deck.color} />
-                  </View>
-                  <View style={styles.deckInfo}>
-                    <Text style={styles.deckTitle}>{deck.title}</Text>
-                    <Text style={styles.deckSubtitle} numberOfLines={1}>{deck.subtitle}</Text>
-                  </View>
-                  <View style={[styles.deckToggleCircle, { backgroundColor: deck.badgeBg }]}>
-                    <Ionicons
-                      name={isExpanded ? 'chevron-up' : 'chevron-down'}
-                      size={16}
-                      color={deck.color}
-                    />
-                  </View>
-                </TouchableOpacity>
-
-                {/* Fanned Phrases Inside Deck */}
-                {isExpanded && (
-                  <View style={styles.deckContentList}>
-                    {deck.phrases.map((phrase, pIdx) => {
-                      const isPlaying = playingAudioText === phrase.es;
-                      return (
-                        <View key={pIdx} style={styles.phraseCard}>
-                          <Text style={styles.phraseSpanishText}>"{phrase.es}"</Text>
-                          <Text style={styles.phraseEnglishText}>{phrase.en}</Text>
-                          <View style={styles.phraseActionRow}>
-                            <TouchableOpacity
-                              style={styles.phraseActionBtn}
-                              onPress={() => handlePlayAudio(phrase.es)}
-                              activeOpacity={0.7}
-                            >
-                              <Ionicons
-                                name={isPlaying ? 'volume-high' : 'play'}
-                                size={13}
-                                color={Colors.primary}
-                              />
-                              <Text style={styles.phraseActionBtnText}>{isPlaying ? 'Playing' : 'Audio'}</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                              style={[styles.phraseActionBtn, styles.phraseCopyBtn]}
-                              onPress={() => handleCopyPhrase(phrase.es)}
-                              activeOpacity={0.7}
-                            >
-                              <Ionicons name="copy-outline" size={13} color="#FFF" />
-                              <Text style={[styles.phraseActionBtnText, { color: '#FFF' }]}>Copy</Text>
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      );
-                    })}
-                  </View>
-                )}
+          <View
+            style={[
+              styles.stackedDeckCard,
+              {
+                backgroundColor: "#FFFFFF",
+                borderColor: activeDeckId === "bookmarks_deck" ? "#D97706" : "#E8E2D8",
+                borderWidth: activeDeckId === "bookmarks_deck" ? 2 : 1.2,
+              },
+            ]}
+          >
+            <TouchableOpacity
+              style={styles.deckHeaderRow}
+              onPress={() => handleToggleDeck("bookmarks_deck")}
+              activeOpacity={0.8}
+            >
+              <View style={[styles.deckIconBubble, { backgroundColor: "#FEF3C7" }]}>
+                <Ionicons name="bookmark" size={17} color="#D97706" />
               </View>
-            );
-          })}
-        </View>
-      </View>
+              <View style={styles.deckInfo}>
+                <Text style={[styles.deckTitle, { color: "#1A1208" }]}>
+                  Bookmarked Phrase Templates
+                </Text>
+                <Text style={styles.deckSubtitle} numberOfLines={1}>
+                  {savedTranslations.length} bookmarked phrase{savedTranslations.length > 1 ? "s" : ""} organized by service category
+                </Text>
+              </View>
+              <View style={[styles.deckToggleCircle, { backgroundColor: "#FEF3C7" }]}>
+                <Ionicons
+                  name={activeDeckId === "bookmarks_deck" ? "chevron-up" : "chevron-down"}
+                  size={16}
+                  color="#D97706"
+                />
+              </View>
+            </TouchableOpacity>
 
-      {/* 2-Way Thread View Modal */}
+            {activeDeckId === "bookmarks_deck" && (
+              <View style={styles.deckContentList}>
+                {savedTranslations.map((item, bIdx) => {
+                  const meta = getCategoryUnifiedMeta(item.category);
+                  const isPlaying = playingAudioText === item.outputText;
+                  return (
+                    <View
+                      key={item.id || bIdx}
+                      style={[
+                        styles.phraseCard,
+                        {
+                          backgroundColor: "#FFFFFF",
+                          borderColor: meta.border,
+                          borderWidth: 1.2,
+                        },
+                      ]}
+                    >
+                      <View style={[styles.bookmarkCategoryTag, { backgroundColor: meta.badgeBg, borderColor: meta.border, borderWidth: 1 }]}>
+                        <Ionicons name={meta.ioniconsName as any} size={11} color={meta.color} style={{ marginRight: 4 }} />
+                        <Text style={[styles.bookmarkCategoryText, { color: meta.color }]}>
+                          {(item.category || meta.category).toUpperCase()}
+                        </Text>
+                      </View>
+                      <Text style={styles.phraseEnglishText}>"{item.inputText}"</Text>
+                      <Text style={[styles.phraseSpanishText, { color: meta.color }]}>{item.outputText}</Text>
+                      <View style={styles.phraseActionRow}>
+                        <TouchableOpacity
+                          style={[styles.phraseActionBtn, { backgroundColor: meta.badgeBg, borderColor: meta.border }]}
+                          onPress={() => handlePlayAudio(item.outputText)}
+                          activeOpacity={0.7}
+                        >
+                          <Ionicons
+                            name={isPlaying ? "volume-high" : "play"}
+                            size={13}
+                            color={meta.color}
+                          />
+                          <Text style={[styles.phraseActionBtnText, { color: meta.color }]}>
+                            {isPlaying ? "Playing" : "Audio"}
+                          </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={[styles.phraseActionBtn, { backgroundColor: "#059669", borderColor: "#047857" }]}
+                          onPress={() => handleCopyPhrase(item.outputText)}
+                          activeOpacity={0.7}
+                        >
+                          <Ionicons name="copy-outline" size={13} color="#FFF" />
+                          <Text style={[styles.phraseActionBtnText, { color: "#FFF" }]}>Copy</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  );
+                })}
+              </View>
+            )}
+          </View>
+        </View>
+      )}
+
       <ThreadViewModal
         visible={threadModalVisible}
         thread={activeThread}
         onClose={() => setThreadModalVisible(false)}
         onUpdateThread={handleUpdateThread}
+        savedTranslations={savedTranslations}
       />
     </ScrollView>
   );
@@ -383,45 +353,53 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 32,
+    paddingBottom: 40,
   },
   titleSection: {
     paddingHorizontal: 20,
-    marginVertical: 12,
+    paddingTop: 16,
+    paddingBottom: 8,
   },
   titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   title: {
-    fontSize: 22,
-    fontWeight: '800',
+    fontSize: 24,
+    fontWeight: "900",
     color: Colors.onBackground,
+    letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: 12,
+    fontSize: 13,
     color: Colors.onSurfaceVariant,
     marginTop: 2,
   },
   addContactBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: Colors.secondary,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: Colors.secondary,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    elevation: 3,
   },
   threadsList: {
     paddingHorizontal: 20,
-    gap: 12,
+    marginTop: 12,
+    gap: 10,
   },
   threadCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.surfaceContainerLowest || "#FFF",
     borderRadius: 20,
-    padding: 16,
+    padding: 14,
     borderWidth: 1,
     borderColor: Colors.cardBorder,
     shadowColor: Colors.shadow,
@@ -435,8 +413,8 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 22,
     backgroundColor: Colors.secondaryContainer,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: 12,
   },
   threadInfo: {
@@ -444,24 +422,28 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   threadHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   contactName: {
     fontSize: 15,
-    fontWeight: '800',
+    fontWeight: "800",
     color: Colors.onBackground,
   },
   timestamp: {
     fontSize: 10,
     color: Colors.outline,
   },
+  categoryPill: {
+    paddingHorizontal: 6,
+    paddingVertical: 1.5,
+    borderRadius: 6,
+    borderWidth: 1,
+  },
   categoryLabel: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: Colors.secondary,
-    marginTop: 1,
+    fontSize: 10.5,
+    fontWeight: "700",
   },
   lastMsgSnippet: {
     fontSize: 12,
@@ -469,30 +451,30 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   emptyCard: {
-    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
+    backgroundColor: Colors.surfaceContainerLowest || "#FFF",
     borderRadius: 24,
     padding: 28,
-    alignItems: 'center',
+    alignItems: "center",
     borderWidth: 1,
     borderColor: Colors.cardBorder,
     marginTop: 8,
   },
   emptyTitle: {
     fontSize: 17,
-    fontWeight: '800',
+    fontWeight: "800",
     color: Colors.onBackground,
     marginTop: 10,
   },
   emptyDesc: {
     fontSize: 13,
     color: Colors.onSurfaceVariant,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 6,
     lineHeight: 18,
   },
   emptyAddBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 6,
     backgroundColor: Colors.secondary,
     paddingHorizontal: 18,
@@ -502,22 +484,22 @@ const styles = StyleSheet.create({
   },
   emptyAddBtnText: {
     fontSize: 13,
-    fontWeight: '800',
-    color: '#FFF',
+    fontWeight: "800",
+    color: "#FFF",
   },
   quickDecksSection: {
     paddingHorizontal: 20,
     marginTop: 24,
   },
   sectionHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 6,
     marginBottom: 4,
   },
   sectionHeaderTitle: {
     fontSize: 11,
-    fontWeight: '800',
+    fontWeight: "800",
     color: Colors.tertiary,
     letterSpacing: 0.6,
   },
@@ -533,34 +515,34 @@ const styles = StyleSheet.create({
   stackedDeckCard: {
     borderRadius: 20,
     padding: 14,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
   },
   deckHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 10,
   },
   deckIconBubble: {
     width: 36,
     height: 36,
     borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   deckInfo: {
     flex: 1,
   },
   deckTitle: {
     fontSize: 14.5,
-    fontWeight: '800',
+    fontWeight: "800",
     color: Colors.onBackground,
   },
   deckSubtitle: {
     fontSize: 11,
-    fontWeight: '500',
+    fontWeight: "500",
     color: Colors.onSurfaceVariant,
     marginTop: 2,
   },
@@ -568,55 +550,74 @@ const styles = StyleSheet.create({
     width: 26,
     height: 26,
     borderRadius: 13,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   deckContentList: {
     marginTop: 12,
     paddingTop: 10,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(0, 0, 0, 0.06)',
+    borderTopColor: "rgba(0, 0, 0, 0.06)",
     gap: 10,
   },
   phraseCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     borderRadius: 14,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: "#E2E8F0",
     gap: 4,
   },
-  phraseSpanishText: {
-    fontSize: 13.5,
-    fontWeight: '700',
-    color: Colors.onBackground,
-    fontStyle: 'italic',
-  },
   phraseEnglishText: {
-    fontSize: 11.5,
-    color: Colors.onSurfaceVariant,
+    fontSize: 14.5,
+    fontWeight: "800",
+    color: Colors.onBackground || "#1A1208",
+    lineHeight: 20,
+  },
+  phraseSpanishText: {
+    fontSize: 12.5,
+    fontWeight: "500",
+    color: Colors.onSurfaceVariant || "#5C4E3A",
+    fontStyle: "italic",
+    lineHeight: 17,
   },
   phraseActionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
     marginTop: 6,
   },
   phraseActionBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 4,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 8,
-    backgroundColor: '#F0FDF4',
+    backgroundColor: "#F0FDF4",
     borderWidth: 1,
-    borderColor: '#BBF7D0',
+    borderColor: "#BBF7D0",
   },
   phraseActionBtnText: {
     fontSize: 11,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.primary,
+  },
+  bookmarkCategoryTag: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start",
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 6,
+    backgroundColor: "#FEF3C7",
+    marginBottom: 4,
+  },
+  bookmarkCategoryText: {
+    fontSize: 10,
+    fontWeight: "800",
+    color: "#B45309",
+    letterSpacing: 0.4,
   },
   phraseCopyBtn: {
     backgroundColor: Colors.primary,

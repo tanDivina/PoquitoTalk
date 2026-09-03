@@ -66,25 +66,19 @@ export async function generateElevenLabsAudio(
     });
 
     if (response.ok) {
-      const blob = await response.blob();
-      const reader = new FileReader();
-
-      return new Promise((resolve, reject) => {
-        reader.onloadend = async () => {
-          try {
-            const base64data = (reader.result as string).split(',')[1];
-            const fileUri = `${FileSystem.cacheDirectory}poquitotalk_eleven_${personaName.toLowerCase()}_${Date.now()}.mp3`;
-            await FileSystem.writeAsStringAsync(fileUri, base64data, {
-              encoding: FileSystem.EncodingType.Base64,
-            });
-            resolve(fileUri);
-          } catch (err) {
-            reject(err);
-          }
-        };
-        reader.onerror = (e) => reject(e);
-        reader.readAsDataURL(blob);
+      const arrayBuffer = await response.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuffer);
+      let binary = '';
+      const len = bytes.byteLength;
+      for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      const base64data = typeof btoa !== 'undefined' ? btoa(binary) : Buffer.from(arrayBuffer).toString('base64');
+      const fileUri = `${FileSystem.cacheDirectory}poquitotalk_eleven_${personaName.toLowerCase()}_${Date.now()}.mp3`;
+      await FileSystem.writeAsStringAsync(fileUri, base64data, {
+        encoding: FileSystem.EncodingType.Base64,
       });
+      return fileUri;
     } else {
       const errText = await response.text();
       console.warn('ElevenLabs API error response:', errText);

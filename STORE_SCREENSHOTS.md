@@ -1,34 +1,40 @@
 # 📱 PoquitoTalk — App Store & Play Store Screenshots Specification
 
 ## 🎨 Design Theme Guidelines
-- **Background**: Soft Artisanal Cream (`#FBF9F5`)
-- **Accent Colors**: Warm Terracotta (`#964824`), Panama Blue (`#1B4332`), WhatsApp Green (`#25D366`)
-- **Typography**: Inter / Outfit Bold Headlines
+- **Background**: Soft Artisanal Cream (`#FAF8F5`) with warm ambient lighting
+- **Accent Colors**: Warm Terracotta (`#964824`), Panama Sage (`#047857`), WhatsApp Green (`#25D366`)
+- **Typography**: Lexend / Plus Jakarta Sans Bold Headlines
+- **Chassis**: Titanium matte frame with dynamic island camera bar and crisp real DOM captures
 
 ---
 
-## 🖼️ Screenshot 1: Primary Value Proposition
-- **Headline**: *Send 1-Tap WhatsApp Voice Notes in Panamá*
-- **Sub-headline**: *Friendly local Spanish translations tailored for Bocas del Toro.*
-- **UI Focus**: `HomeScreen` displaying English input translated to *“¡Buenas! El aire acondicionado no está enfriando bien...”* with prominent **Send Voice Note** button.
+## 🖼️ Screenshot 1: Locals Prefer Voice Notes (Core Outcome)
+- **Top Badge**: `LOCALS PREFER VOICE NOTES`
+- **Headline**: *Send 1-Tap WhatsApp Voice Notes*
+- **Sub-headline**: *Speak English naturally. Poquito formats and speaks warm, respectful Panama Spanish.*
+- **UI Focus**: `HomeScreen` with English prompt ("Can you check the A/C freon today?") translated into local Spanish with the prominent **Send Voice Note** button.
 
 ---
 
-## 🖼️ Screenshot 2: Voice Persona Customization
-- **Headline**: *Choose Your Local Voice Persona*
-- **Sub-headline**: *Select between Diego, Sofia, Mateo, or Valeria for natural speech.*
-- **UI Focus**: Onboarding Step 2 Voice Persona selector showing vector icons and human tone cards.
+## 🖼️ Screenshot 2: Get Things Done Stress-Free (Island Errands)
+- **Top Badge**: `GET THINGS DONE STRESS-FREE`
+- **Headline**: *Instant Audio For Island Errands*
+- **Sub-headline**: *Ready-to-go voice notes for boat taxis, power outages, drinking water, and repairs.*
+- **UI Focus**: `PresetsScreen` featuring clean, elevated emergency & logistics scenario decks without tacky counters.
 
 ---
 
-## 🖼️ Screenshot 3: Regional Service Directory
-- **Headline**: *Instant Emergency & Service Contacts*
-- **Sub-headline**: *A/C repair, boat mechanics, Starlink techs & medical clinics.*
-- **UI Focus**: `PresetsScreen` displaying verified local Bocas del Toro contacts with 1-tap WhatsApp message triggers.
+## 🖼️ Screenshot 3: Fast Island Repairs & Services (Verified Directory)
+- **Top Badge**: `FAST ISLAND REPAIRS & SERVICES`
+- **Headline**: *Verified Island Directory*
+- **Sub-headline**: *Direct 1-tap WhatsApp to trusted Bocas del Toro mechanics, A/C techs, captains, and clinics.*
+- **UI Focus**: `DirectoryScreen` displaying verified local service providers with 1-tap WhatsApp direct contact triggers.
 
 ---
 
-## 🖼️ Screenshot 4: Hotel & Expat Referral Funnel
-- **Headline**: *Pro Translation Credit Packs*
-- **Sub-headline**: *Unlimited local translations & voice notes with RevenueCat Pro.*
-- **UI Focus**: `PaywallModal` displaying $4.99/100 credits and $19.99/yr Pro Pass.
+## 🖼️ Screenshot 4: Warm Respect For Locals (2-Way Live Talk)
+- **Top Badge**: `WARM RESPECT FOR LOCALS`
+- **Headline**: *Understand Rapid Island Spanish*
+- **Sub-headline**: *Real-time 2-way live voice translation and 1-tap WhatsApp voice note decoding.*
+- **UI Focus**: `HomeScreen` with 2-Way Walkie-Talkie session and Voice Note Decoder sheet.
+

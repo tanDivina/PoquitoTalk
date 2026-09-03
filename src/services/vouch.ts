@@ -16,28 +16,37 @@ export interface VouchSummary {
 class VouchService {
   private localVouchedSet: Set<string> = new Set();
   private isLoaded = false;
+  private loadPromise: Promise<void> | null = null;
 
   private async loadLocalVouches() {
     if (this.isLoaded) return;
-    try {
-      if (typeof localStorage !== 'undefined') {
-        const raw = localStorage.getItem('poquito_local_vouches');
-        if (raw) {
-          const list: string[] = JSON.parse(raw);
-          this.localVouchedSet = new Set(list);
+    if (this.loadPromise) return this.loadPromise;
+
+    this.loadPromise = (async () => {
+      try {
+        if (typeof localStorage !== 'undefined') {
+          const raw = localStorage.getItem('poquito_local_vouches');
+          if (raw) {
+            const list: string[] = JSON.parse(raw);
+            this.localVouchedSet = new Set(list);
+          }
+        } else if (FileSystem.documentDirectory) {
+          const fileInfo = await FileSystem.getInfoAsync(STORAGE_FILE);
+          if (fileInfo.exists) {
+            const content = await FileSystem.readAsStringAsync(STORAGE_FILE);
+            const list: string[] = JSON.parse(content);
+            this.localVouchedSet = new Set(list);
+          }
         }
-      } else if (FileSystem.documentDirectory) {
-        const fileInfo = await FileSystem.getInfoAsync(STORAGE_FILE);
-        if (fileInfo.exists) {
-          const content = await FileSystem.readAsStringAsync(STORAGE_FILE);
-          const list: string[] = JSON.parse(content);
-          this.localVouchedSet = new Set(list);
-        }
+      } catch (e) {
+        console.warn('Could not load local vouches:', e);
+      } finally {
+        this.isLoaded = true;
+        this.loadPromise = null;
       }
-      this.isLoaded = true;
-    } catch (e) {
-      console.warn('Could not load local vouches:', e);
-    }
+    })();
+
+    return this.loadPromise;
   }
 
   public async hasVouched(providerId: string): Promise<boolean> {

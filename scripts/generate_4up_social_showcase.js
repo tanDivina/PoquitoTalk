@@ -51,7 +51,7 @@ async function generate4UpShowcase() {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 60px 80px 50px 80px;
+      padding: 36px 60px 24px 60px;
       overflow: hidden;
       position: relative;
     }
@@ -61,22 +61,22 @@ async function generate4UpShowcase() {
       justify-content: space-between;
       align-items: center;
       border-bottom: 2px solid rgba(150, 72, 36, 0.12);
-      padding-bottom: 24px;
+      padding-bottom: 14px;
       z-index: 10;
     }
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
     }
     .parrot-logo {
-      width: 76px;
-      height: 76px;
+      width: 68px;
+      height: 68px;
       filter: drop-shadow(0 6px 16px rgba(37, 211, 102, 0.25));
     }
     .brand-title {
       font-family: 'Lexend', sans-serif;
-      font-size: 38px;
+      font-size: 36px;
       font-weight: 900;
       color: #1E293B;
       display: flex;
@@ -88,17 +88,17 @@ async function generate4UpShowcase() {
       background: #FFDBCD;
       color: #964824;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
-      padding: 6px 14px;
+      padding: 5px 14px;
       border-radius: 100px;
       border: 1px solid #FD9A6F;
     }
     .brand-subtitle {
-      font-size: 19px;
+      font-size: 17px;
       font-weight: 600;
       color: #594F42;
-      margin-top: 4px;
+      margin-top: 3px;
     }
     .header-right {
       text-align: right;
@@ -109,9 +109,9 @@ async function generate4UpShowcase() {
       gap: 10px;
       background: #18191B;
       color: #FFFFFF;
-      padding: 10px 22px;
+      padding: 8px 20px;
       border-radius: 100px;
-      font-size: 16px;
+      font-size: 14.5px;
       font-weight: 700;
       letter-spacing: 0.5px;
       box-shadow: 0 6px 18px rgba(0,0,0,0.15);
@@ -122,9 +122,9 @@ async function generate4UpShowcase() {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 36px;
+      gap: 28px;
       flex: 1;
-      margin: 30px 0;
+      margin: 14px 0 10px 0;
       z-index: 10;
     }
     .card-col {
@@ -132,7 +132,6 @@ async function generate4UpShowcase() {
       display: flex;
       flex-direction: column;
       align-items: center;
-      height: 100%;
       position: relative;
     }
     .col-label {
@@ -145,14 +144,14 @@ async function generate4UpShowcase() {
       padding: 6px 16px;
       border-radius: 100px;
       letter-spacing: 1.2px;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
       box-shadow: 0 4px 12px rgba(150, 72, 36, 0.08);
       text-transform: uppercase;
     }
     .screenshot-frame {
       width: 100%;
-      height: 940px;
-      border-radius: 28px;
+      aspect-ratio: 9 / 16;
+      border-radius: 26px;
       overflow: hidden;
       box-shadow: 
         0 24px 60px rgba(89, 79, 66, 0.18),
@@ -165,8 +164,8 @@ async function generate4UpShowcase() {
     .screenshot-frame img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      object-position: top center;
+      object-fit: contain;
+      display: block;
     }
 
     .footer {
@@ -174,8 +173,8 @@ async function generate4UpShowcase() {
       justify-content: space-between;
       align-items: center;
       border-top: 1.5px solid rgba(150, 72, 36, 0.12);
-      padding-top: 20px;
-      font-size: 17px;
+      padding-top: 12px;
+      font-size: 16px;
       font-weight: 600;
       color: #5C554D;
       z-index: 10;
@@ -263,7 +262,7 @@ async function generate4UpShowcase() {
         <path d="M 150 60 A 25 25 0 0 1 150 106" fill="none" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round" opacity="0.8" />
       </svg>
       <div>
-        <div class="brand-title">PoquitoTalk <span class="country-badge">Panamá 🇵🇦</span></div>
+        <div class="brand-title"><span class="brand-name">Poquito<span style="color:#964824;">Talk</span></span> <span class="country-badge">Panamá 🇵🇦</span></div>
         <div class="brand-subtitle">Instant Panama Spanish Voice Notes & Verified Bocas del Toro Directory</div>
       </div>
     </div>

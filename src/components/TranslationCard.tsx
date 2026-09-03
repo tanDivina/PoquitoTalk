@@ -4,15 +4,17 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
   Linking,
   Alert,
   ActivityIndicator,
 } from 'react-native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { WhatsAppIcon } from './WhatsAppIcon';
 import * as Speech from 'expo-speech';
 import * as Clipboard from 'expo-clipboard';
 import * as Sharing from 'expo-sharing';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { Colors } from '../theme/colors';
 import {
   generateGoogleGeminiAudio,
@@ -27,6 +29,9 @@ import { getMatchingProviderForCategory } from '../services/directory';
 import { walkieTalkieService } from '../services/walkieTalkie';
 import { shareWalkieTalkieToWhatsApp } from '../services/deepLinks';
 import { shareVoiceNoteToWhatsApp, sendTextToWhatsApp } from '../services/sharing';
+import { RecipientDispatchModal } from './RecipientDispatchModal';
+import { getPlaybackSpeed, getPreferredVoiceGender, setPreferredVoiceGender } from '../services/storage';
+import { deductCreditForWalkieTalkie } from '../services/userService';
 
 interface TranslationCardProps {
   inputText: string;
@@ -37,7 +42,10 @@ interface TranslationCardProps {
   onSave?: () => void;
   isSaved?: boolean;
   initialVoice?: VoiceOption;
-  onSelectQuickPrompt?: (prompt: string, categoryTitle?: string) => void;
+  onSelectQuickPrompt?: (prompt: string, category?: string) => void;
+  onStartWalkie?: (spanishText: string, englishText: string) => void;
+  onPlayingChange?: (isPlaying: boolean) => void;
+  showSponsor?: boolean;
 }
 
 export const TranslationCard: React.FC<TranslationCardProps> = ({
@@ -50,21 +58,43 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
   isSaved = false,
   initialVoice,
   onSelectQuickPrompt,
+  onStartWalkie,
+  onPlayingChange,
+  showSponsor = false,
 }) => {
   const [selectedVoice, setSelectedVoice] = useState<VoiceOption>(initialVoice || GOOGLE_SPANISH_VOICES[0]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSharingVoice, setIsSharingVoice] = useState(false);
   const [copied, setCopied] = useState(false);
-  const contextualSponsor = getMatchingProviderForCategory(category);
+  const [showDispatchModal, setShowDispatchModal] = useState(false);
+  const [dispatchType, setDispatchType] = useState<'voice_note' | 'text'>('voice_note');
+  const [preparedAudioUri, setPreparedAudioUri] = useState<string | null>(null);
+  const contextualSponsor = showSponsor ? getMatchingProviderForCategory(category) : undefined;
 
   // Clean, high-quality translation output text directly
   const currentDisplayText = outputText;
 
   useEffect(() => {
-    if (initialVoice) {
-      setSelectedVoice(initialVoice);
-    }
+    onPlayingChange?.(isPlaying);
+  }, [isPlaying, onPlayingChange]);
+
+  useEffect(() => {
+    (async () => {
+      if (initialVoice) {
+        setSelectedVoice(initialVoice);
+      } else {
+        const savedGender = await getPreferredVoiceGender();
+        const voice = GOOGLE_SPANISH_VOICES.find((v) => v.gender === savedGender) || GOOGLE_SPANISH_VOICES[0];
+        setSelectedVoice(voice);
+      }
+    })();
   }, [initialVoice]);
+
+  const handleSelectVoiceGender = async (gender: 'MALE' | 'FEMALE') => {
+    const voice = GOOGLE_SPANISH_VOICES.find((v) => v.gender === gender) || GOOGLE_SPANISH_VOICES[0];
+    setSelectedVoice(voice);
+    await setPreferredVoiceGender(gender);
+  };
 
   // Play audio using selected Voice Persona or Native TTS
   const handlePlayTTS = async () => {
@@ -80,9 +110,12 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
     await stopAllAudioPlayback();
     setIsPlaying(true);
 
+    const savedSpeed = await getPlaybackSpeed();
+    const isMale = selectedVoice.gender === 'MALE';
+
+    // 1. First Priority: Hyper-Realistic Studio Voice (ElevenLabs / Google)
     try {
-      // 1. Synthesize audio file via Google Speech API with SSML if API key available
-      const fileUri = await generateGoogleGeminiAudio(currentDisplayText, selectedVoice.id);
+      const fileUri = await generateGoogleGeminiAudio(currentDisplayText, isMale ? 'Male' : 'Female');
       if (fileUri) {
         const sound = await playGoogleAudioFile(fileUri, selectedVoice);
         if (sound) {
@@ -96,27 +129,69 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
         }
       }
     } catch (e) {
-      console.warn('Google audio playback:', e);
+      console.warn('High-def voice playback error, falling back to device TTS:', e);
     }
 
-    // 2. Native Expo Speech Fallback
+    // 2. Native Speech with Explicit Male/Female Device Voice Resolution
     let speechText = currentDisplayText;
     const isQuestion = speechText.includes('?') || speechText.includes('¿');
     if (isQuestion && !speechText.startsWith('¿')) {
       speechText = `¿${speechText}`;
     }
 
-    const isMale = selectedVoice.gender === 'MALE';
-    const basePitch = isMale ? 0.92 : 1.04;
+    const basePitch = isMale ? 0.75 : 1.10;
     const finalPitch = isQuestion ? basePitch + 0.04 : basePitch;
+    const rate = savedSpeed === '0.75x' ? 0.70 : 0.85;
 
-    Speech.speak(speechText, {
-      language: 'es-US',
-      pitch: finalPitch,
-      rate: 0.82, // Calm, natural conversational pace (not rushed)
-      onDone: () => setIsPlaying(false),
-      onError: () => setIsPlaying(false),
-    });
+    try {
+      const availableVoices = await Speech.getAvailableVoicesAsync();
+      const spanishVoices = availableVoices.filter((v) => v.language.toLowerCase().includes('es'));
+      let targetVoice = undefined;
+
+      if (isMale) {
+        targetVoice = spanishVoices.find(
+          (v) =>
+            v.name.toLowerCase().includes('jorge') ||
+            v.name.toLowerCase().includes('juan') ||
+            v.name.toLowerCase().includes('diego') ||
+            v.name.toLowerCase().includes('carlos') ||
+            v.name.toLowerCase().includes('miguel') ||
+            v.name.toLowerCase().includes('male') ||
+            v.identifier.toLowerCase().includes('jorge') ||
+            v.identifier.toLowerCase().includes('juan') ||
+            v.identifier.toLowerCase().includes('male')
+        );
+      } else {
+        targetVoice = spanishVoices.find(
+          (v) =>
+            v.name.toLowerCase().includes('monica') ||
+            v.name.toLowerCase().includes('paolina') ||
+            v.name.toLowerCase().includes('sofia') ||
+            v.name.toLowerCase().includes('lucia') ||
+            v.name.toLowerCase().includes('female') ||
+            v.identifier.toLowerCase().includes('female')
+        );
+      }
+
+      Speech.speak(speechText, {
+        language: 'es-419',
+        voice: targetVoice ? targetVoice.identifier : undefined,
+        pitch: finalPitch,
+        rate,
+        onDone: () => setIsPlaying(false),
+        onStopped: () => setIsPlaying(false),
+        onError: () => setIsPlaying(false),
+      });
+    } catch (err) {
+      Speech.speak(speechText, {
+        language: 'es-419',
+        pitch: finalPitch,
+        rate,
+        onDone: () => setIsPlaying(false),
+        onStopped: () => setIsPlaying(false),
+        onError: () => setIsPlaying(false),
+      });
+    }
   };
 
   const handleCopy = async () => {
@@ -125,38 +200,63 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSendWhatsAppText = async () => {
-    await sendTextToWhatsApp(currentDisplayText);
+  const handleSendWhatsAppText = () => {
+    setPreparedAudioUri(null);
+    setDispatchType('text');
+    setShowDispatchModal(true);
   };
 
-  // Send AUDIO VOICE NOTE (.mp3 file) to WhatsApp
+  // Send AUDIO VOICE NOTE (.mp3 file) to WhatsApp with Recipient Selection
   const handleSendWhatsAppVoiceNote = async () => {
     try {
       setIsSharingVoice(true);
-      const isAvailable = await Sharing.isAvailableAsync();
-      if (!isAvailable) {
-        await handleSendWhatsAppText();
-        setIsSharingVoice(false);
-        return;
-      }
-
-      let audioUri = await generateGoogleGeminiAudio(currentDisplayText, selectedVoice.id);
-      if (audioUri) {
-        await shareVoiceNoteToWhatsApp(audioUri, 'Contact', currentDisplayText);
-      } else {
-        await handleSendWhatsAppText();
-      }
+      const audioUri = await generateGoogleGeminiAudio(currentDisplayText, selectedVoice.id);
+      setPreparedAudioUri(audioUri);
+      setDispatchType('voice_note');
+      setShowDispatchModal(true);
     } catch (error) {
-      await handleSendWhatsAppText();
+      console.warn('Voice prep error:', error);
+      setPreparedAudioUri(null);
+      setDispatchType('voice_note');
+      setShowDispatchModal(true);
     } finally {
       setIsSharingVoice(false);
     }
   };
 
   const handleStartWalkieTalkie = async () => {
-    const session = walkieTalkieService.createSession();
-    await shareWalkieTalkieToWhatsApp(session.shareUrl, 'Amigo');
-    Alert.alert('Magic Walkie-Talkie Active!', `Sent link to WhatsApp. The contractor can speak Spanish voice audio without installing an app!`);
+    const deductRes = await deductCreditForWalkieTalkie('Translation Card');
+    if (!deductRes.success) {
+      Alert.alert(
+        'Credits Needed',
+        'You have used your free credits. Get the 50 Credits Pack ($4.99) or upgrade to the Annual Pass for unlimited Walkie-Talkie sessions!',
+        [{ text: 'OK' }]
+      );
+      return;
+    }
+    const topicEs = outputText ? outputText.trim() : 'Consulta general';
+    const topicEn = inputText ? inputText.trim() : 'General service inquiry';
+
+    let initialAudioBase64 = '';
+    if (topicEs) {
+      try {
+        const audioUri = preparedAudioUri || (await generateGoogleGeminiAudio(topicEs, selectedVoice.id));
+        if (audioUri) {
+          const rawB64 = await FileSystem.readAsStringAsync(audioUri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+          if (rawB64) {
+            initialAudioBase64 = `data:audio/mp3;base64,${rawB64}`;
+          }
+        }
+      } catch (audioErr) {
+        console.warn('Initial audio generation fallback in TranslationCard:', audioErr);
+      }
+    }
+
+    const session = walkieTalkieService.createSession(undefined, topicEn, topicEs, topicEn, initialAudioBase64);
+    await shareWalkieTalkieToWhatsApp(session.shareUrl, 'Amigo', topicEs, topicEn);
+    Alert.alert('Magic Walkie-Talkie Active', `Sent link to WhatsApp with your inquiry subject. The contractor can speak Spanish voice audio without installing an app!`);
   };
 
   const QUICK_SCENARIOS = [
@@ -164,7 +264,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
       id: 'water',
       icon: 'water-pump',
       title: 'Water Delivery Refill',
-      prompt: 'Hi! Do you have a water tanker truck available to fill a reserve cistern tank at my property today?',
+      prompt: 'Hi! Do you have a water tanker truck available to fill a 1,500 gallon reserve tank at my property today?',
       category: 'Water Delivery & Cisterns',
     },
     {
@@ -206,44 +306,30 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
   if (!inputText && !outputText) {
     return (
-      <View style={styles.placeholderCard}>
-        {/* Local Spanish Voice Notes Badge */}
-        <View style={styles.dialectBadge}>
-          <Text style={styles.dialectText}>Instant Spanish Voice Notes • Bocas del Toro</Text>
+      <View style={styles.compactPresetsContainer}>
+        <View style={styles.compactHeaderRow}>
+          <Text style={styles.compactHeading}>QUICK ISLAND SCENARIOS</Text>
+          <Text style={styles.compactSwipeHint}>Swipe for more ➔</Text>
         </View>
 
-        <Text style={styles.placeholderTitle}>Quick 1-Tap Island Scenarios</Text>
-        <Text style={styles.placeholderDesc}>
-          Tap any scenario below for instant Panamanian Spanish translations & voice notes:
-        </Text>
-
-        {/* Quick Island Scenario Chips Grid */}
-        <View style={styles.quickGrid}>
+        {/* Horizontal Scrolling Chips Row */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.compactScrollContent}
+        >
           {QUICK_SCENARIOS.map((item) => (
             <TouchableOpacity
               key={item.id}
-              style={styles.quickChip}
+              style={styles.compactChip}
               onPress={() => onSelectQuickPrompt && onSelectQuickPrompt(item.prompt, item.category)}
               activeOpacity={0.75}
             >
-              <MaterialCommunityIcons name={item.icon as any} size={16} color="#0F172A" />
-              <Text style={styles.quickChipText}>{item.title}</Text>
+              <MaterialCommunityIcons name={item.icon as any} size={15} color={Colors.secondary} />
+              <Text style={styles.compactChipText}>{item.title}</Text>
             </TouchableOpacity>
           ))}
-        </View>
-
-        {/* 2-Way Magic Walkie-Talkie CTA */}
-        <TouchableOpacity
-          style={styles.walkieBtn}
-          onPress={handleStartWalkieTalkie}
-          activeOpacity={0.8}
-        >
-          <Ionicons name="radio-outline" size={18} color="#FFF" />
-          <Text style={styles.walkieBtnText}>Start 2-Way Walkie-Talkie Channel</Text>
-        </TouchableOpacity>
-        <Text style={styles.walkieSubtext}>
-          Contractors speak Spanish via WhatsApp — audio translates into English automatically.
-        </Text>
+        </ScrollView>
       </View>
     );
   }
@@ -258,26 +344,9 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
       <View style={styles.sectionBlock}>
         <View style={styles.outputHeader}>
-          <Text style={styles.outputLabel}>SPANISH</Text>
-          
-          {/* Simple 2-Option Voice Toggle (♂ Male / ♀ Female) */}
-          <View style={styles.voiceToggleRow}>
-            {GOOGLE_SPANISH_VOICES.map((v) => {
-              const isSelected = selectedVoice.id === v.id || selectedVoice.gender === v.gender;
-              return (
-                <TouchableOpacity
-                  key={v.id}
-                  style={[styles.voiceToggleBtn, isSelected && styles.voiceToggleBtnActive]}
-                  onPress={() => setSelectedVoice(v)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={[styles.voiceToggleBtnText, isSelected && styles.voiceToggleBtnTextActive]}>
-                    {v.gender === 'MALE' ? '♂ Male' : '♀ Female'}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
+          <Text style={styles.outputLabel}>PANAMANIAN SPANISH</Text>
+
+
         </View>
 
         <Text style={styles.outputText}>{currentDisplayText}</Text>
@@ -335,7 +404,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
             onPress={handleSendWhatsAppText}
             activeOpacity={0.85}
           >
-            <FontAwesome5 name="whatsapp" size={15} color="#059669" />
+            <WhatsAppIcon size={15} color="#059669" />
             <Text style={styles.dispatchTextBtnLabel}>Text</Text>
           </TouchableOpacity>
 
@@ -349,22 +418,25 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
               <ActivityIndicator color="#FFF" size="small" />
             ) : (
               <>
-                <FontAwesome5 name="whatsapp" size={15} color="#FFF" />
+                <WhatsAppIcon size={15} color="#FFF" />
                 <Text style={styles.dispatchVoiceBtnLabel}>Voice Note</Text>
               </>
             )}
           </TouchableOpacity>
         </View>
 
-        {/* Row 3: 2-Way Magic Walkie-Talkie Channel Trigger */}
-        <TouchableOpacity
-          style={styles.walkieInlineBtn}
-          onPress={handleStartWalkieTalkie}
-          activeOpacity={0.8}
-        >
-          <Ionicons name="radio" size={15} color="#2563EB" />
-          <Text style={styles.walkieInlineBtnText}>Start 2-Way PoquitoTalkie Live Channel</Text>
-        </TouchableOpacity>
+        {/* Walkie-Talkie 2-Way Live Channel Option */}
+        {onStartWalkie && (
+          <TouchableOpacity
+            style={styles.walkieInlineBtn}
+            onPress={() => onStartWalkie(currentDisplayText, inputText)}
+            activeOpacity={0.85}
+          >
+            <Ionicons name="radio" size={15} color="#C2410C" />
+            <Text style={styles.walkieInlineBtnText}>Talk 2-Way Live (Walkie Channel)</Text>
+            <Ionicons name="arrow-forward" size={13} color="#C2410C" style={{ marginLeft: 2 }} />
+          </TouchableOpacity>
+        )}
 
         {/* Contextual Local Sponsor Ad */}
         {contextualSponsor && (
@@ -374,32 +446,67 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
           </View>
         )}
       </View>
+
+      {/* Recipient Dispatcher Modal */}
+      <RecipientDispatchModal
+        visible={showDispatchModal}
+        onClose={() => setShowDispatchModal(false)}
+        audioUri={preparedAudioUri}
+        spanishText={currentDisplayText}
+        dispatchType={dispatchType}
+        presetCategory={category}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  placeholderCard: {
-    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
-    borderRadius: 24,
-    padding: 24,
+  compactPresetsContainer: {
+    marginTop: 12,
+    marginBottom: 4,
+  },
+  compactHeaderRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 12,
+    justifyContent: 'space-between',
+    marginBottom: 8,
+    paddingHorizontal: 4,
+  },
+  compactHeading: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#7E766D',
+    letterSpacing: 0.8,
+  },
+  compactSwipeHint: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: Colors.secondary,
+  },
+  compactScrollContent: {
+    gap: 8,
+    paddingRight: 12,
+  },
+  compactChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 9,
+    paddingHorizontal: 13,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: Colors.cardBorder,
+    borderColor: '#E8E4DE',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 3,
+    elevation: 1,
   },
-  placeholderTitle: {
-    fontSize: 16,
+  compactChipText: {
+    fontSize: 12.5,
     fontWeight: '700',
-    color: Colors.onBackground,
-    marginTop: 8,
-  },
-  placeholderDesc: {
-    fontSize: 12,
-    color: Colors.onSurfaceVariant,
-    textAlign: 'center',
-    marginTop: 4,
-    lineHeight: 18,
+    color: '#1B1C1A',
   },
   card: {
     backgroundColor: Colors.surfaceContainerLowest || '#FFF',
@@ -451,13 +558,69 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   outputLabel: {
     fontSize: 10,
     fontWeight: '800',
     color: Colors.secondary,
     letterSpacing: 0.5,
+  },
+  voiceGenderPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F1F5F9',
+    borderRadius: 12,
+    padding: 2,
+    gap: 2,
+  },
+  voiceGenderBtn: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+  },
+  voiceGenderBtnActive: {
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.12,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  voiceGenderBtnText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#64748B',
+  },
+  voiceGenderBtnTextActive: {
+    color: Colors.secondary,
+    fontWeight: '800',
+  },
+  voiceAndSpeedGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  rateToggleBtn: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 11,
+    backgroundColor: '#F1F5F9',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  rateToggleBtnActive: {
+    backgroundColor: '#ECFDF5',
+    borderColor: '#A7F3D0',
+  },
+  rateToggleBtnText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#64748B',
+  },
+  rateToggleBtnTextActive: {
+    color: '#047857',
+    fontWeight: '800',
   },
   voiceToggleRow: {
     flexDirection: 'row',
@@ -595,12 +758,67 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     fontSize: 13.5,
   },
-  walkieSubtext: {
+  walkieFlowIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginTop: 10,
+    flexWrap: 'wrap',
+  },
+  walkieFlowPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.08)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  walkieFlowPillText: {
     fontSize: 11,
-    color: Colors.outline,
-    textAlign: 'center',
-    marginTop: 8,
-    lineHeight: 16,
+    fontWeight: '600',
+    color: '#334155',
+  },
+  howItWorksGuide: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.06)',
+    borderRadius: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    marginTop: 6,
+    marginBottom: 10,
+    width: '100%',
+  },
+  guideStep: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  guideStepNumberCircle: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#0F172A',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  guideStepNumber: {
+    fontSize: 9.5,
+    fontWeight: '800',
+    color: '#FFFFFF',
+  },
+  guideStepText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#1E293B',
   },
   dialectBadge: {
     flexDirection: 'row',
@@ -726,7 +944,9 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: '#A7F3D0',
     paddingVertical: 12,
+    paddingHorizontal: 10,
     borderRadius: 14,
+    overflow: 'visible',
   },
   dispatchTextBtnLabel: {
     color: '#047857',
@@ -741,12 +961,14 @@ const styles = StyleSheet.create({
     gap: 6,
     backgroundColor: '#059669',
     paddingVertical: 12,
+    paddingHorizontal: 10,
     borderRadius: 14,
     shadowColor: '#059669',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 6,
     elevation: 3,
+    overflow: 'visible',
   },
   dispatchVoiceBtnLabel: {
     color: '#FFFFFF',
@@ -758,16 +980,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#EFF6FF',
-    borderWidth: 1,
-    borderColor: '#BFDBFE',
-    paddingVertical: 10,
-    borderRadius: 12,
+    backgroundColor: '#FFF7ED',
+    borderWidth: 1.5,
+    borderColor: '#FFDBCD',
+    paddingVertical: 11,
+    paddingHorizontal: 12,
+    borderRadius: 14,
     marginTop: 8,
   },
   walkieInlineBtnText: {
-    color: '#1D4ED8',
-    fontSize: 12,
-    fontWeight: '700',
+    color: '#C2410C',
+    fontSize: 12.5,
+    fontWeight: '800',
   },
 });

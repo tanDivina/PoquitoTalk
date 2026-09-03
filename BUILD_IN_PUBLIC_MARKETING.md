@@ -9,6 +9,7 @@
 
 ### Initial Validation Wave (Bocas Expat Community Groups)
 - **Community Interest**: 7 explicit local expats raised their hands stating *"This would be super useful for me!"* plus widespread likes and positive comments across local Facebook groups and WhatsApp chats.
+- **Organic In-App 5-Star Feedback**: *"good work! for starting the app. hope it goes well!!!!! I would need a gardener. with some experience...Someone who knows how to use a grass cutter machine."* (Direct proof that users immediately treat PoquitoTalk as both a voice translator and their local trusted services gateway).
 - **Key Insight**: Expats in Bocas del Toro struggle daily when contacting local service providers (A/C repair, boat captains/water taxis, Starlink installers, plumbers, medical clinics) because local providers communicate almost exclusively via **WhatsApp Spanish voice notes**.
 - **Iteration Focus**: Moving from general interest to deep 1-on-1 interviews and VIP Beta testing to refine user experience.
 
@@ -75,3 +76,35 @@ When conducting 10-minute coffee chats or WhatsApp voice exchanges with early te
 - **Support Desk**: `support@hero-apps.com`.
 - **Live Demo Site**: [https://poquitotalk.hero-apps.com](https://poquitotalk.hero-apps.com).
 - **Public GitHub**: [https://github.com/tanDivina/PoquitoTalk](https://github.com/tanDivina/PoquitoTalk).
+
+---
+
+## 8. Build-in-Public Social Posts (X / Twitter @DorienVibecodes)
+
+### Draft 1: "Not all great ideas belong in your MVP" (Solo Post)
+```text
+Hard founder pill to swallow during a Shipathon:
+
+Not all great ideas you have belong in your MVP. 💡❌
+
+While building PoquitoTalk for Bocas del Toro, my brain kept adding:
+• OCR scanner for waterfront seafood menus
+• Water taxi & ferry dock timetable decoder
+• IDAAN emergency water shutoff noticeboard reader
+• Pharmacy prescription instructions parser
+• Dynamic persona switches (Tourist vs Expat)
+
+Are these great features? Absolutely.
+Do they belong in a V1 launch aiming to get out the door? Nope.
+
+Instead of trying to prove "how brilliant my mind is" with 20 half-finished features, I’m ruthlessly focusing on the 1 painful problem that started this whole project:
+
+👉 Letting expats send and decode Spanish WhatsApp voice notes to local island tradesmen without panic.
+
+The rest? Safely parked in the V2 roadmap.
+
+Ship first. Expand second. 🚢🇵🇦
+
+#buildinpublic #shipathon #indiedev #reactnative
+```
+

@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1080, height=1920, initial-scale=1.0" />
+  <title>PoquitoTalk • Dual-Screen Walkie Reel 9:16</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-dark: #07090A;
+      --panel-bg: #0F1315;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --accent-green: #25D366;
+      --accent-sage: #2E402D;
+      --accent-terracotta: #C85A32;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      width: 1080px;
+      height: 1920px;
+      background: var(--bg-dark);
+      color: #FFFFFF;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 50px 40px 60px;
+      position: relative;
+    }
+
+    /* Ambient Lighting */
+    .glow-top {
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(37, 211, 102, 0.15) 0%, transparent 70%);
+      filter: blur(90px);
+      pointer-events: none;
+    }
+
+    .glow-bottom {
+      position: absolute;
+      bottom: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(200, 90, 50, 0.14) 0%, transparent 70%);
+      filter: blur(90px);
+      pointer-events: none;
+    }
+
+    /* Header */
+    .reel-header {
+      z-index: 10;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 8px 24px;
+      border-radius: 9999px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #A3E635;
+    }
+
+    .brand-pill .live-pulse {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #A3E635;
+      box-shadow: 0 0 12px #A3E635;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    .reel-title {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: #FFFFFF;
+      max-width: 900px;
+    }
+
+    .reel-title span { color: #A3E635; }
+
+    /* Main Stage */
+    .reel-stage {
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      width: 100%;
+      flex: 1;
+      justify-content: center;
+    }
+
+    /* Phone Mini Chassis */
+    .mini-chassis {
+      width: 820px;
+      height: 480px;
+      border-radius: 36px;
+      background: #0F1315;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      padding: 16px 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .chassis-label-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+
+    .chassis-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .chassis-badge {
+      font-size: 13px;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      background: rgba(56, 189, 248, 0.15);
+      color: #38BDF8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .chassis-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .bubble-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .feed-bubble {
+      padding: 16px 20px;
+      border-radius: 20px;
+      font-size: 18px;
+      line-height: 1.45;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.4s ease;
+    }
+
+    .feed-bubble.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .bubble-outgoing {
+      background: #1E293B;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #F8FAFC;
+    }
+
+    .bubble-incoming {
+      background: rgba(37, 211, 102, 0.12);
+      border: 1px solid rgba(37, 211, 102, 0.3);
+      color: #FFFFFF;
+    }
+
+    .bubble-tag {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .bubble-outgoing .bubble-tag { color: #94A3B8; }
+    .bubble-incoming .bubble-tag { color: #4ADE80; }
+
+    .action-side {
+      width: 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .ptt-visual-btn {
+      width: 100%;
+      height: 80px;
+      border-radius: 20px;
+      background: #1E293B;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      color: #FFFFFF;
+      font-size: 16px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      transition: all 0.2s ease;
+    }
+
+    .ptt-visual-btn.active {
+      background: #DC2626;
+      border-color: #EF4444;
+      box-shadow: 0 0 30px rgba(220, 38, 38, 0.6);
+      transform: scale(0.97);
+    }
+
+    /* Mascot Box in Contractor Card */
+    .mascot-area {
+      width: 160px;
+      height: 160px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mascot-halo {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(37, 211, 102, 0.25) 0%, transparent 70%);
+      filter: blur(14px);
+    }
+
+    .mascot-img {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      z-index: 2;
+    }
+
+    /* Central Sync Bridge */
+    .reel-bridge {
+      width: 820px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .bridge-node {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 8px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .bridge-node.active {
+      background: rgba(37, 211, 102, 0.2);
+      border-color: #25D366;
+      color: #A3E635;
+      box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
+    }
+
+    .wave-center {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 40px;
+    }
+
+    .wave-bar {
+      width: 5px;
+      height: 8px;
+      background: #334155;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .wave-center.active .wave-bar {
+      background: #25D366;
+      animation: barPulse 0.5s infinite alternate ease-in-out;
+    }
+
+    .wave-center.active .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+    .wave-center.active .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+    .wave-center.active .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+    .wave-center.active .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+
+    @keyframes barPulse {
+      0% { height: 8px; }
+      100% { height: 36px; }
+    }
+
+    .latency-pill {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: #A3E635;
+      background: rgba(163, 230, 53, 0.1);
+      border: 1px solid rgba(163, 230, 53, 0.2);
+      padding: 8px 18px;
+      border-radius: 9999px;
+    }
+
+    /* Subtitle Area */
+    .reel-subtitle-box {
+      z-index: 20;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      padding: 20px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .subtitle-speaker {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #38BDF8;
+    }
+
+    .subtitle-text {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #FFFFFF;
+    }
+
+    /* Touch Finger */
+    #virtual-touch-finger {
+      position: fixed;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45);
+      border: 3px solid #FFFFFF;
+      pointer-events: none;
+      z-index: 999999;
+      transform: translate(-50%, -50%);
+      transition: left 0.4s cubic-bezier(0.22, 1, 0.36, 1), top 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.15s ease, background 0.15s ease;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+      left: 540px;
+      top: 960px;
+      opacity: 0;
+    }
+
+    #virtual-touch-finger.visible { opacity: 1; }
+    #virtual-touch-finger.pressing {
+      transform: translate(-50%, -50%) scale(0.85);
+      background: rgba(220, 38, 38, 0.7);
+      border-color: #EF4444;
+      box-shadow: 0 0 30px rgba(220, 38, 38, 0.9);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-top"></div>
+  <div class="glow-bottom"></div>
+  <div id="virtual-touch-finger"></div>
+
+  <!-- Header -->
+  <header class="reel-header">
+    <div class="brand-pill">
+      <div class="live-pulse"></div>
+      <span>PoquitoTalk • Radio Walkie Bidireccional</span>
+    </div>
+    <h1 class="reel-title">Conversación Simultánea en Dos Idiomas <span>Sin Cambiar de Botones</span></h1>
+  </header>
+
+  <!-- Stage (Top Phone + Center Bridge + Bottom Phone) -->
+  <div class="reel-stage">
+
+    <!-- UPPER PHONE: EXPAT APP -->
+    <div class="mini-chassis" id="expat-chassis">
+      <div class="chassis-label-bar">
+        <div class="chassis-user">
+          <span style="font-size:24px;">🇺🇸</span>
+          <span>Captain Jim (App PoquitoTalk)</span>
+        </div>
+        <div class="chassis-badge">Slip #4 • Bocas Marina</div>
+      </div>
+
+      <div class="chassis-content">
+        <div class="bubble-container">
+          <div class="feed-bubble bubble-outgoing" id="expat-bubble-1">
+            <div class="bubble-tag">🎙️ Tu voz en inglés:</div>
+            "Hey buenas tardes! Tomorrow morning around 9:00 AM works great at slip #4 Bocas Marina."
+          </div>
+          <div class="feed-bubble bubble-incoming" id="expat-bubble-2">
+            <div class="bubble-tag">🔊 Carlos (Traducido al inglés):</div>
+            "All set boss! Tomorrow at nine sharp I will be there at slip four with the tools to check the engine. Wepa!"
+          </div>
+        </div>
+
+        <div class="action-side">
+          <button class="ptt-visual-btn" id="expat-ptt-btn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            <span id="expat-btn-label">HABLAR</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTER BRIDGE -->
+    <div class="reel-bridge">
+      <div class="bridge-node" id="node-en">
+        <span>🇺🇸</span>
+        <span>English</span>
+      </div>
+
+      <div class="wave-center" id="wave-center">
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+      </div>
+
+      <div class="latency-pill">⚡ 380ms IA Instantánea</div>
+
+      <div class="bridge-node" id="node-es">
+        <span>🇵🇦</span>
+        <span>Español</span>
+      </div>
+    </div>
+
+    <!-- LOWER PHONE: CONTRACTOR WEB WALKIE -->
+    <div class="mini-chassis" id="contractor-chassis" style="background:#131A1D;">
+      <div class="chassis-label-bar">
+        <div class="chassis-user">
+          <span style="font-size:24px;">🇵🇦</span>
+          <span>Carlos Mecánico (Web Walkie-Talkie)</span>
+        </div>
+        <div class="chassis-badge" style="background:rgba(37,211,102,0.15); color:#25D366; border-color:rgba(37,211,102,0.3);">
+          Sin Instalar Apps • Web Directa
+        </div>
+      </div>
+
+      <div class="chassis-content">
+        <div class="mascot-area" id="mascotBox">
+          <div class="mascot-halo"></div>
+          <img src="poquito_tilt_34_51_160.webp" class="mascot-img" id="mascotImg" alt="Poquito Mascot" />
+        </div>
+
+        <div class="bubble-container">
+          <div class="feed-bubble bubble-incoming" id="contractor-card-1">
+            <div class="bubble-tag">🔊 Mensaje de Capt. Jim (Traducido):</div>
+            "¡Buenas tardes! Mañana a las 9:00 am está perfecto en el muelle #4 de Bocas Marina."
+          </div>
+          <div class="feed-bubble bubble-outgoing" id="contractor-card-2" style="border-left: 3px solid #16A34A;">
+            <div class="bubble-tag" style="color:#4ADE80;">🎙️ Tu voz en español:</div>
+            "¡Listo patrón! Mañana a las nueve en punto estoy allá con las herramientas. ¡Wepa!"
+          </div>
+        </div>
+
+        <div class="action-side">
+          <button class="ptt-visual-btn" id="contractor-ptt-btn" style="background:#2E402D; border-color:#3E5A3C;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            <span id="contractor-btn-label">HABLAR</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Subtitle Bar -->
+  <div class="reel-subtitle-box">
+    <div class="subtitle-speaker" id="sub-badge">CAPTAIN JIM (ENGLISH)</div>
+    <div class="subtitle-text" id="sub-text">"Hey buenas tardes! Tomorrow morning around 9:00 AM works great at slip #4 Bocas Marina."</div>
+  </div>
+
+  <script>
+    const mascotImg = document.getElementById("mascotImg");
+    const touchFinger = document.getElementById("virtual-touch-finger");
+
+    const mascotAssets = {
+      resting: "poquito_tilt_34_51_160.webp",
+      recording: "poquito_talk_58_73_160.webp",
+      listening: "poquito_listening_49_60_160.webp"
+    };
+
+    window.setMascot = (state) => {
+      mascotImg.src = mascotAssets[state] || mascotAssets.resting;
+    };
+
+    window.setVirtualFinger = (x, y, isPressing = false, isVisible = true) => {
+      touchFinger.style.left = x + "px";
+      touchFinger.style.top = y + "px";
+      if (isVisible) touchFinger.classList.add("visible");
+      else touchFinger.classList.remove("visible");
+      if (isPressing) touchFinger.classList.add("pressing");
+      else touchFinger.classList.remove("pressing");
+    };
+
+    window.setSubtitles = (speaker, text) => {
+      const badge = document.getElementById("sub-badge");
+      const textEl = document.getElementById("sub-text");
+      if (speaker === "expat") {
+        badge.style.color = "#38BDF8";
+        badge.innerText = "CAPTAIN JIM (ENGLISH)";
+      } else if (speaker === "contractor") {
+        badge.style.color = "#4ADE80";
+        badge.innerText = "CARLOS MECÁNICO (ESPAÑOL)";
+      } else if (speaker === "translation_to_contractor") {
+        badge.style.color = "#4ADE80";
+        badge.innerText = "TRADUCCIÓN IA EN VIVO ➔ ESPAÑOL";
+      } else if (speaker === "translation_to_expat") {
+        badge.style.color = "#38BDF8";
+        badge.innerText = "LIVE AI TRANSLATION ➔ ENGLISH";
+      }
+      textEl.innerText = text;
+    };
+
+    window.setExpatRecording = (active) => {
+      const btn = document.getElementById("expat-ptt-btn");
+      const label = document.getElementById("expat-btn-label");
+      const nodeEn = document.getElementById("node-en");
+      const wave = document.getElementById("wave-center");
+
+      if (active) {
+        btn.classList.add("active");
+        label.innerText = "TRANSMITIENDO...";
+        nodeEn.classList.add("active");
+        wave.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+        label.innerText = "HABLAR";
+        nodeEn.classList.remove("active");
+        wave.classList.remove("active");
+      }
+    };
+
+    window.setContractorRecording = (active) => {
+      const btn = document.getElementById("contractor-ptt-btn");
+      const label = document.getElementById("contractor-btn-label");
+      const nodeEs = document.getElementById("node-es");
+      const wave = document.getElementById("wave-center");
+
+      if (active) {
+        btn.classList.add("active");
+        label.innerText = "TRANSMITIENDO...";
+        nodeEs.classList.add("active");
+        wave.classList.add("active");
+        setMascot("recording");
+      } else {
+        btn.classList.remove("active");
+        label.innerText = "HABLAR";
+        nodeEs.classList.remove("active");
+        wave.classList.remove("active");
+        setMascot("resting");
+      }
+    };
+
+    window.showExpatBubble1 = () => document.getElementById("expat-bubble-1").classList.add("visible");
+    window.showExpatBubble2 = () => document.getElementById("expat-bubble-2").classList.add("visible");
+    window.showContractorCard1 = () => document.getElementById("contractor-card-1").classList.add("visible");
+    window.showContractorCard2 = () => document.getElementById("contractor-card-2").classList.add("visible");
+  </script>
+</body>
+</html>

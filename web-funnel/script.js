@@ -6,6 +6,9 @@ const POQUITO_PRESETS = {
     title: 'A/C Leaking Water',
     input: 'Hi! My air conditioning is leaking water inside the bedroom.',
     levels: {
+      1: 'Buenas, el aire acondicionado está botando agua en el cuarto. ¿Puede revisarlo?',
+      2: '¡Buenas! El aire acondicionado está botando agua dentro del cuarto. ¿Podría venir a revisarlo?',
+      3: '¡Qué xopa maestro! El split está botando buco agua en la recámara. ¿A qué hora puede pasar a chequearlo?',
       poquito: '¡Buenas! El aire acondicionado está botando agua dentro del cuarto. ¿Podría venir a revisarlo?',
       full_panameno: '¡Qué xopa maestro! El split está botando buco agua en la recámara. ¿A qué hora puede pasar a chequearlo?'
     },
@@ -16,6 +19,9 @@ const POQUITO_PRESETS = {
     title: 'Boat Engine',
     input: "Hi! The outboard motor on my boat won't start at the dock.",
     levels: {
+      1: 'Buenas, el motor de la lancha no arranca en el muelle. ¿Hace mecánica marina?',
+      2: '¡Buenas Capitán! El motor fuera de borda no quiere arrancar en el muelle. ¿Hace trabajos de mecánica marina?',
+      3: '¡Qué xopa Capitán! La panga se me quedó en el muelle y el motor no quiere prender. ¿Tiene chance de pasar hoy?',
       poquito: '¡Buenas Capitán! El motor fuera de borda no quiere arrancar en el muelle. ¿Hace trabajos de mecánica marina?',
       full_panameno: '¡Qué xopa Capitán! La panga se me quedó en el muelle y el motor no quiere prender. ¿Tiene chance de pasar hoy?'
     },
@@ -26,6 +32,9 @@ const POQUITO_PRESETS = {
     title: 'Water Delivery Truck',
     input: 'Hello, we need an emergency water truck delivery for our 1,500-gallon cistern.',
     levels: {
+      1: 'Buenas, necesitamos agua en camión para tanque de mil quinientos galones.',
+      2: '¡Buenas! Necesitamos un viaje de agua en camión cisterna para un tanque de reserva de mil quinientos galones.',
+      3: '¡Buenas compa! Estamos secos acá, necesitamos un viaje de agua de camión cisterna urgente para el tanque de 1,500 galones.',
       poquito: '¡Buenas! Necesitamos un viaje de agua en camión cisterna para un tanque de reserva de mil quinientos galones.',
       full_panameno: '¡Buenas compa! Estamos secos acá, necesitamos un viaje de agua de camión cisterna urgente para el tanque de 1,500 galones.'
     },
@@ -36,6 +45,9 @@ const POQUITO_PRESETS = {
     title: 'Banco Nacional ATM',
     input: 'Hi! Does anyone know if the Banco Nacional ATM has cash today?',
     levels: {
+      1: 'Buenas, ¿el cajero del Banco Nacional tiene dinero hoy?',
+      2: '¡Buenas! ¿Alguien sabe si el cajero del Banco Nacional tiene plata disponible ahora mismo?',
+      3: '¡Qué xopa gente! ¿Alguien sabe si el cajero de Banconal tiene plata o está sin efectivo hoy?',
       poquito: '¡Buenas! ¿Alguien sabe si el cajero del Banco Nacional tiene plata disponible ahora mismo?',
       full_panameno: '¡Qué xopa gente! ¿Alguien sabe si el cajero de Banconal tiene plata o está sin efectivo hoy?'
     },
@@ -46,6 +58,9 @@ const POQUITO_PRESETS = {
     title: 'Power Outage',
     input: 'Hi! Did the power go out in the whole area, or does anyone know when it comes back?',
     levels: {
+      1: 'Buenas, ¿alguien sabe si hay luz por su sector?',
+      2: '¡Buenas! ¿Se fue la luz en todo el sector o se sabe a qué hora regresará el servicio eléctrico?',
+      3: '¡Qué xopa vecinos! ¿Se fue la luz en toda la isla o solo por acá? ¿Se sabe a qué hora regresa?',
       poquito: '¡Buenas! ¿Se fue la luz en todo el sector o se sabe a qué hora regresará el servicio eléctrico?',
       full_panameno: '¡Qué xopa vecinos! ¿Se fue la luz en toda la isla o solo por acá? ¿Se sabe a qué hora regresa?'
     },
@@ -56,6 +71,9 @@ const POQUITO_PRESETS = {
     title: 'Starlink Tech Support',
     input: 'Hello! My Starlink dish lost signal connection and shows offline.',
     levels: {
+      1: 'Hola, la antena de Starlink no tiene señal. ¿Tiene servicio técnico?',
+      2: '¡Hola! La antena de Starlink se quedó sin señal y no conecta. ¿Tiene servicio técnico disponible?',
+      3: '¡Buenas amigo! El plato de Starlink se cayó y está offline total. ¿Hace instalaciones y chequeo de señal?',
       poquito: '¡Hola! La antena de Starlink se quedó sin señal y no conecta. ¿Tiene servicio técnico disponible?',
       full_panameno: '¡Buenas amigo! El plato de Starlink se cayó y está offline total. ¿Hace instalaciones y chequeo de señal?'
     },
@@ -64,88 +82,114 @@ const POQUITO_PRESETS = {
 };
 
 let currentPresetKey = 'ac_leaking_water';
-let currentPoquitoTone = 'poquito'; // 'poquito' | 'full_panameno'
+let currentDemoLevel = 1;
+let currentPoquitoTone = 'poquito'; // legacy fallback: 'poquito' | 'full_panameno'
 let currentDemoVoice = 'Diego';
 let activeDemoAudio = null;
 
 const POQUITO_LABELS_EN = {
+  1: 'Level 1: Casual & Friendly',
+  2: 'Level 2: Direct & Clear',
+  3: 'Level 3: Urgent / Panameño',
   poquito: 'Poquito: Friendly & Natural',
   full_panameno: 'Full Panameño: Local Dialect'
 };
 
 const POQUITO_LABELS_ES = {
+  1: 'Nivel 1: Casual y Amable',
+  2: 'Nivel 2: Directo y Claro',
+  3: 'Nivel 3: Urgente / Panameño',
   poquito: 'Poquito: Amable y Natural',
   full_panameno: 'Full Panameño: Dialecto Local'
 };
 
 const MASCOT_DIALECT_TIPS_EN = {
-  poquito: "<strong>Poquito:</strong> Natural Panamanian warmth — friendly, polite, and respectful.",
+  1: "<strong>Level 1 (Casual):</strong> Relaxed, polite, and friendly for routine island inquiries.",
+  2: "<strong>Level 2 (Direct):</strong> Clear, respectful, and focused for scheduled services and bookings.",
+  3: "<strong>Level 3 (Urgent):</strong> High priority Panamanian street dialect (¡Qué xopa!) for time-sensitive situations.",
+  poquito: "<strong>Poquito:</strong> Natural Panamanian warmth - friendly, polite, and respectful.",
   full_panameno: "<strong>Poquito:</strong> ¡Qué xopa! Full Panameño with authentic local Panama phrasing."
 };
 
 const MASCOT_DIALECT_TIPS_ES = {
-  poquito: "<strong>Poquito:</strong> Calidez panameña natural — amable, educado y respetuoso.",
+  1: "<strong>Nivel 1 (Casual):</strong> Relajado, educado y amable para consultas cotidianas en la isla.",
+  2: "<strong>Nivel 2 (Directo):</strong> Claro, respetuoso y enfocado para contrataciones y citas.",
+  3: "<strong>Nivel 3 (Urgente):</strong> Prioridad alta en dialecto panameño (¡Qué xopa!) para emergencias.",
+  poquito: "<strong>Poquito:</strong> Calidez panameña natural - amable, educado y respetuoso.",
   full_panameno: "<strong>Poquito:</strong> ¡Qué xopa! Full Panameño con modismos y dialecto local de Panamá."
 };
 
-function getDisplayTranslation(presetKey, tone) {
+function getDisplayTranslation(presetKey, levelOrTone) {
   const preset = POQUITO_PRESETS[presetKey];
-  if (preset && preset.levels && preset.levels[tone]) {
-    return preset.levels[tone];
+  if (!preset) return '';
+  
+  if (preset.levels) {
+    if (levelOrTone === 1 || levelOrTone === '1' || levelOrTone === 'lvl1') {
+      return preset.levels[1] || preset.levels.poquito;
+    }
+    if (levelOrTone === 2 || levelOrTone === '2' || levelOrTone === 'lvl2' || levelOrTone === 'poquito') {
+      return preset.levels[2] || preset.levels.poquito;
+    }
+    if (levelOrTone === 3 || levelOrTone === '3' || levelOrTone === 'lvl3' || levelOrTone === 'full_panameno') {
+      return preset.levels[3] || preset.levels.full_panameno;
+    }
+    if (preset.levels[levelOrTone]) {
+      return preset.levels[levelOrTone];
+    }
   }
   
   // Custom typed input fallback
   const customInput = document.getElementById('demo-input')?.value.trim() || '';
-  return applyCustomPoquitoTone(customInput, tone);
+  return applyCustomPoquitoTone(customInput, levelOrTone);
 }
 
-function applyCustomPoquitoTone(rawText, tone) {
+function applyCustomPoquitoTone(rawText, levelOrTone) {
   if (!rawText) return '¡Buenas! ¿Cómo está?';
   const clean = rawText.replace(/^(¡Buenas!|Hola,|Buenas,|¡Buenas Capitán!|Buenas tardes,)/i, '').trim();
   const rest = clean.length > 0 ? (clean.charAt(0).toLowerCase() + clean.slice(1)) : '';
   
-  if (tone === 'poquito') {
+  if (levelOrTone === 1 || levelOrTone === '1') {
+    return 'Buenas, ' + rest + '. ¿Tiene disponibilidad?';
+  }
+  if (levelOrTone === 2 || levelOrTone === '2' || levelOrTone === 'poquito') {
     return '¡Buenas! ' + rest + '. ¿Podría apoyarme con esto?';
   }
-  if (tone === 'full_panameno') {
-    return '¡Qué xopa compa! ' + rest + ', quedo al pendiente.';
+  if (levelOrTone === 3 || levelOrTone === '3' || levelOrTone === 'full_panameno') {
+    return '¡Qué xopa compa! ' + rest + ', es urgente, quedo al pendiente.';
   }
   return rawText;
 }
 
-function setPoquitoTone(tone) {
-  currentPoquitoTone = tone;
+function setDemoLevel(level, btnElement) {
+  currentDemoLevel = parseInt(level) || 1;
+  currentPoquitoTone = currentDemoLevel === 3 ? 'full_panameno' : 'poquito';
   
-  // 1. Sync Buttons
-  document.querySelectorAll('.segmented-btn, .poquito-step-btn').forEach(btn => {
+  // 1. Sync Urgency buttons
+  document.querySelectorAll('.urgency-btn, .urgency-level-btn, .segmented-btn').forEach(btn => {
+    const btnLvl = btn.getAttribute('data-level');
     const btnTone = btn.getAttribute('data-tone');
-    if (btnTone === currentPoquitoTone) {
+    if ((btnLvl && parseInt(btnLvl) === currentDemoLevel) || (btnTone && btnTone === currentPoquitoTone)) {
       btn.classList.add('active');
     } else {
       btn.classList.remove('active');
     }
   });
 
-  // Track tone change event
+  // Track event
   if (window.PoquitoTracker) {
-    window.PoquitoTracker.track('toggle_tone', {
-      tone: tone,
+    window.PoquitoTracker.track('toggle_urgency_level', {
+      level: currentDemoLevel,
       preset: typeof currentPresetKey !== 'undefined' ? currentPresetKey : 'custom'
     });
   }
 
-  // 2. Trigger corner mascot reaction animation
-  const cornerMascot = document.getElementById('poquito-corner-mascot-wrapper') || document.querySelector('.poquito-corner-mascot-wrapper');
-  if (cornerMascot) {
-    cornerMascot.classList.remove('cheer-active');
-    void cornerMascot.offsetWidth; // trigger reflow
-    cornerMascot.classList.add('cheer-active');
-  }
+  // 2. Corner mascot reaction animation
+  cheerPoquito();
 
-  // 3. Update Result Text with immediate text update
+  // 3. Update Result Text with animation
   const resultEl = document.getElementById('result-text');
   if (resultEl) {
-    const updatedText = getDisplayTranslation(currentPresetKey, currentPoquitoTone);
+    const updatedText = getDisplayTranslation(currentPresetKey, currentDemoLevel);
     resultEl.style.opacity = '0.4';
     setTimeout(() => {
       resultEl.innerText = updatedText;
@@ -162,9 +206,28 @@ function setPoquitoTone(tone) {
   }
 }
 
+function setPoquitoTone(tone) {
+  const lvl = (tone === 'full_panameno') ? 3 : 2;
+  setDemoLevel(lvl);
+}
+
 // Backward compatibility alias
 function setPoquitoSlider(val) {
-  setPoquitoTone(val === 1 || val === '1' ? 'poquito' : (val === 3 || val === '3' ? 'full_panameno' : 'poquito'));
+  setDemoLevel(parseInt(val) || 1);
+}
+
+function scrollToPlayStoreWaitlist(e) {
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+  const target = document.getElementById('playstore');
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => {
+      const emailInput = document.getElementById('playstore-email-en') || document.querySelector('.playstore-input');
+      if (emailInput) {
+        emailInput.focus();
+      }
+    }, 550);
+  }
 }
 
 function cheerPoquito() {
@@ -190,7 +253,7 @@ function setDemoPreset(presetKey, btnElement) {
   if (inputEl) inputEl.value = preset.input;
 
   const resultEl = document.getElementById('result-text');
-  if (resultEl) resultEl.innerText = getDisplayTranslation(presetKey, currentPoquitoTone);
+  if (resultEl) resultEl.innerText = getDisplayTranslation(presetKey, currentDemoLevel);
 
   const resultBox = document.getElementById('result-box');
   if (resultBox) resultBox.style.display = 'block';
@@ -232,7 +295,7 @@ function handleDemoInput(val) {
       });
     }
 
-    const resultText = getDisplayTranslation(currentPresetKey, currentPoquitoTone);
+    const resultText = getDisplayTranslation(currentPresetKey, currentDemoLevel);
     const resultEl = document.getElementById('result-text');
     if (resultEl) resultEl.innerText = resultText;
     
@@ -245,10 +308,11 @@ function handleDemoInput(val) {
   }, 180);
 }
 
-function selectDemoVoice(name) {
+function selectDemoVoice(name, btnElement) {
   currentDemoVoice = name;
-  document.querySelectorAll('.voice-chip-btn').forEach(btn => {
-    if (btn.getAttribute('data-voice') === name) {
+  document.querySelectorAll('.voice-chip-btn, .voice-pill-btn').forEach(btn => {
+    const v = btn.getAttribute('data-voice') || '';
+    if (v.toLowerCase() === name.toLowerCase()) {
       btn.classList.add('active');
     } else {
       btn.classList.remove('active');
@@ -261,6 +325,10 @@ function selectDemoVoice(name) {
     activeDemoAudio = null;
   }
   updatePlayButtonState(false);
+
+  if (window.PoquitoTracker) {
+    window.PoquitoTracker.track('select_demo_voice', { voice: name });
+  }
 }
 
 function runDemoTranslation() {
@@ -278,7 +346,7 @@ function runDemoTranslation() {
   }
 
   currentPresetKey = matchedKey;
-  const resultText = getDisplayTranslation(matchedKey, currentPoquitoTone);
+  const resultText = getDisplayTranslation(matchedKey, currentDemoLevel);
 
   const resultEl = document.getElementById('result-text');
   if (resultEl) resultEl.innerText = resultText;
@@ -295,13 +363,13 @@ function runDemoTranslation() {
 
 function playDemoAudio() {
   const isSpanish = window.location.pathname.includes('/es/');
-  const voice = currentDemoVoice.toLowerCase();
+  const voice = (currentDemoVoice || 'Diego').toLowerCase();
   
   // Resolve relative audio path for web-funnel or es/ subfolder
   const basePath = isSpanish ? '../audio/presets/' : 'audio/presets/';
   
-  // Explicitly map dialect level: poquito -> _lvl2, full_panameno -> _lvl3
-  const levelSuffix = currentPoquitoTone === 'full_panameno' ? '_lvl3' : '_lvl2';
+  // Exact level suffix: _lvl1, _lvl2, or _lvl3
+  const levelSuffix = `_lvl${currentDemoLevel || 1}`;
   const cacheBust = Date.now();
   const audioSrc = `${basePath}${voice}_${currentPresetKey}${levelSuffix}.mp3?v=${cacheBust}`;
   const fallbackSrc = `${basePath}${voice}_${currentPresetKey}.mp3?v=${cacheBust}`;
@@ -321,7 +389,7 @@ function playDemoAudio() {
     window.PoquitoTracker.track('play_voice_demo', {
       voice: currentDemoVoice,
       preset: currentPresetKey,
-      tone: currentPoquitoTone,
+      level: currentDemoLevel,
       src: audioSrc
     });
   }
@@ -389,67 +457,37 @@ function sendDemoWhatsApp() {
 
 function initiateStripeCheckout(plan) {
   const planNames = {
-    'credits_50': { 
-      name: '50 Poquito Credits Pack (Never Expires)', 
-      price: '$3.74 (Reg. $4.99)', 
-      stripeUrl: 'https://buy.stripe.com/8x214n3nngsS6dw8Bz4sE0b',
-      isDirectPay: true 
+    'annual_pass': {
+      name: 'PoquitoTalk Annual Explorer Pass',
+      price: '$39.99/year ($3.33/mo)',
+      stripeUrl: 'https://buy.stripe.com/test_3cIaEXcXX4Ka31k0534sE01',
+      isDirectPay: true
+    },
+    'monthly_pass': {
+      name: 'PoquitoTalk Monthly Resident Pass',
+      price: '$9.99/month',
+      stripeUrl: 'https://buy.stripe.com/test_28EaEX5vv7WmcBUdVT4sE02',
+      isDirectPay: true
     },
     'tourist_weekly': { 
-      name: 'Weekly Tourist Pass (7 Days)', 
-      price: '$4.99/wk (Starts on launch day)', 
-      isDirectPay: false 
+      name: '7-Day Travel Pass', 
+      price: '$4.99 (7 Days Access • 100 Notes / 20 Live Sessions)', 
+      stripeUrl: 'https://buy.stripe.com/test_8x24gz3nn7WmgSa8Bz4sE03',
+      isDirectPay: true 
     },
-    'pro_monthly': { 
-      name: 'Pro Monthly Membership', 
-      price: '$12.99/mo (Starts on launch day)', 
-      isDirectPay: false 
+    'credits_50': { 
+      name: '50 Poquito Credits Pack (Never Expires)', 
+      price: '$3.74 (Reg. $4.99 • 25% Off Web Promo)', 
+      stripeUrl: 'https://buy.stripe.com/8x214n3nngsS6dw8Bz4sE0b',
+      isDirectPay: true 
     }
   };
   const selected = planNames[plan] || planNames['credits_50'];
-  const isSpanish = window.location.pathname.includes('/es/');
 
-  // 1. Direct Pay for 50 Credits Pack (Zero friction — goes straight to Stripe Checkout)
+  // Direct Pay for all plans (Zero friction - goes straight to Stripe Checkout)
   if (selected.isDirectPay && selected.stripeUrl) {
     window.location.href = selected.stripeUrl;
     return;
-  }
-
-  // 2. Pre-Launch Reservation for Weekly / Monthly Passes
-  const promptText = isSpanish
-    ? `🚀 RESERVA DE LANZAMIENTO\n\nHas seleccionado: ${selected.name}\nPrecio: ${selected.price}\n\nTu periodo de pase comenzará el día del lanzamiento oficial en Google Play.\n\nIngresa tu correo para reservar tu acceso:`
-    : `🚀 LAUNCH DAY RESERVATION\n\nYou selected: ${selected.name}\nPrice: ${selected.price}\n\nYour pass period will start counting on official launch day on Google Play.\n\nEnter your email to reserve your spot:`;
-
-  const userEmail = prompt(promptText, '');
-
-  if (userEmail && userEmail.includes('@')) {
-    const payload = {
-      _subject: `[PoquitoTalk Launch Order] Pass Reservation (${selected.name})`,
-      Email: userEmail,
-      PlanSelected: selected.name,
-      PromoPrice: selected.price,
-      SubmittedAt: new Date().toLocaleString('en-US', { timeZone: 'America/Panama' }),
-      _captcha: 'false'
-    };
-
-    fetch('https://formsubmit.co/ajax/support@hero-apps.com', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    const apiPath = isSpanish ? '../api/waitlist.php' : 'api/waitlist.php';
-    fetch(apiPath, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...payload, Type: 'prelaunch_order' })
-    });
-
-    alert(
-      isSpanish 
-        ? `¡Reserva Confirmada!\n\nHemos registrado tu solicitud para ${selected.name} a ${selected.price}. Te enviaremos tu enlace de acceso y pago a ${userEmail}!`
-        : `Reservation Confirmed!\n\nWe've locked in your request for ${selected.name} at ${selected.price}. We will email your checkout and access link to ${userEmail}!`
-    );
   }
 }
 
@@ -767,7 +805,16 @@ async function loadCommunityVouches() {
   }
 }
 
+function formatVouchBadgeContent(count, isSpanish) {
+  const num = parseInt(count, 10) || 0;
+  const label = isSpanish
+    ? (num === 1 ? 'Recomendación' : 'Recomendaciones')
+    : (num === 1 ? 'Vouch' : 'Vouches');
+  return `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">${num}</span> ${label}`;
+}
+
 function applyVouchesToDOM() {
+  const isSpanish = window.location.pathname.includes('/es/') || document.documentElement.lang === 'es';
   document.querySelectorAll('.vouch-badge').forEach(badge => {
     const pid = badge.getAttribute('data-provider-id');
     if (!pid) return;
@@ -778,9 +825,9 @@ function applyVouchesToDOM() {
       badge.classList.add('vouched');
     }
 
-    const countEl = badge.querySelector('.vouch-count');
-    if (countEl && communityVouchesCache[pid]) {
-      countEl.innerText = communityVouchesCache[pid].count;
+    if (communityVouchesCache[pid] && typeof communityVouchesCache[pid].count === 'number') {
+      const count = communityVouchesCache[pid].count;
+      badge.innerHTML = formatVouchBadgeContent(count, isSpanish);
     }
   });
 }
@@ -836,6 +883,7 @@ function closePostContactModal() {
 async function submitCommunityVouch(reason) {
   if (!activeContactProvider || !activeContactProvider.id) return;
   const pid = activeContactProvider.id;
+  const isSpanish = window.location.pathname.includes('/es/') || document.documentElement.lang === 'es';
 
   // Mark local storage immediately
   localStorage.setItem('poquito_vouched_' + pid, 'true');
@@ -845,19 +893,15 @@ async function submitCommunityVouch(reason) {
   if (badge) {
     badge.classList.add('vouched');
     const countEl = badge.querySelector('.vouch-count');
-    if (countEl) {
-      const current = parseInt(countEl.innerText, 10) || 0;
-      countEl.innerText = current + 1;
-    } else {
-      badge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">1</span> Vouches`;
-    }
+    const current = countEl ? (parseInt(countEl.innerText, 10) || 0) : 0;
+    const newCount = current + 1;
+    badge.innerHTML = formatVouchBadgeContent(newCount, isSpanish);
   }
 
   closePostContactModal();
 
   // Send to server
   try {
-    const isSpanish = window.location.pathname.includes('/es/');
     const apiPath = isSpanish ? '../api/vouch.php' : 'api/vouch.php';
     await fetch(apiPath, {
       method: 'POST',
@@ -1205,7 +1249,19 @@ async function loadDynamicContractorsToDirectory() {
                           (c.name && /jard[ií]n|planta|vivero|garden|plant/i.test(c.name)) ||
                           (c.description && /jard[ií]n|planta|vivero|garden|plant|chapeo/i.test(c.description));
 
-      card.setAttribute('data-cat', isGardening ? 'GARDENING' : 'CONTRACTORS');
+      const isTaxiLand = (c.category && (c.category.includes('TAXI') || c.category.includes('RENTAL') || c.category.includes('CAR'))) ||
+                         (tradeLabel && /car|taxi|rental|auto|utv|4x4|transport/i.test(tradeLabel)) ||
+                         (c.name && /car|rental|taxi|utv/i.test(c.name)) ||
+                         (c.description && /car|rental|taxi|utv|4x4/i.test(c.description));
+
+      let cardCat = 'CONTRACTORS';
+      if (isGardening) {
+        cardCat = 'GARDENING';
+      } else if (isTaxiLand) {
+        cardCat = 'TAXI_LAND';
+      }
+
+      card.setAttribute('data-cat', cardCat);
       card.setAttribute('data-zone', locMeta.zone);
       card.setAttribute('data-subloc', locMeta.subLocs);
       card.id = c.id;
@@ -1222,8 +1278,8 @@ async function loadDynamicContractorsToDirectory() {
               <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ${verifiedTag}
               </span>
-              <button class="vouch-badge" data-provider-id="${c.id}" onclick="openPostContactModal('${c.id}', '${escapeHTML(c.name)}')">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">0</span> ${isSpanish ? 'Votos' : 'Vouches'}
+              <button class="vouch-badge" data-provider-id="${c.id}" onclick="openPostContactModal('${c.id}', '${escapeHTML(c.name)}')" title="${isSpanish ? 'Recomendado por la comunidad' : 'Vouched by Bocas community'}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">0</span> ${isSpanish ? 'Recomendaciones' : 'Vouches'}
               </button>
             </div>
           </div>
@@ -1399,9 +1455,21 @@ function filterDirectory() {
     // 1. Category Filter Match
     let matchesCat = (activeCat === 'ALL' || cat === activeCat);
     if (activeCat === 'CONTRACTORS') {
-      matchesCat = (cat === 'CONTRACTORS' || cat === 'GARDENING' || (cat !== 'WATER_TAXI' && cat !== 'BANKING'));
+      matchesCat = (cat === 'CONTRACTORS' || (!['WATER_TAXI', 'BANKING', 'GARDENING', 'COMMUNITY', 'TAXI_LAND', 'MECHANIC', 'MEDICAL', 'HARDWARE', 'SHUTTLE'].includes(cat) && /electric|aire|ac|refrig|plumb|plomer|construc|carpint/i.test(text)));
+    } else if (activeCat === 'TAXI_LAND') {
+      matchesCat = (cat === 'TAXI_LAND' || /taxi|colectivo|driver|chofer|chófer|piquera/i.test(text));
+    } else if (activeCat === 'MECHANIC') {
+      matchesCat = (cat === 'MECHANIC' || /mecanic|mecánic|outboard|fuera de borda|taller|motor|golf cart/i.test(text));
+    } else if (activeCat === 'MEDICAL') {
+      matchesCat = (cat === 'MEDICAL' || /hospital|clinic|clínica|doctor|medic|médic|farmacia|pharmacy/i.test(text));
+    } else if (activeCat === 'HARDWARE') {
+      matchesCat = (cat === 'HARDWARE' || /ferreter|hardware|materiales/i.test(text));
+    } else if (activeCat === 'SHUTTLE') {
+      matchesCat = (cat === 'SHUTTLE' || /shuttle|frontera|border|costa rica|guabito/i.test(text));
     } else if (activeCat === 'GARDENING') {
       matchesCat = (cat === 'GARDENING' || cat.includes('GARDEN') || cat.includes('PLANT') || cat.includes('JARDIN') || /jard[ií]n|planta|vivero|garden|plant|landscap|chapeo/i.test(text));
+    } else if (activeCat === 'COMMUNITY') {
+      matchesCat = (cat === 'COMMUNITY' || /book|libro|exchange|intercambio|cultura|community/i.test(text));
     }
 
     // 2. Location Option Match
@@ -1477,10 +1545,58 @@ function resetDirectoryFilters() {
   filterDirectory();
 }
 
+// URL Parameter Initialization for Directory Deep-Linking
+function initDirectoryFromURL() {
+  if (typeof window === 'undefined' || !window.location.search) return;
+  const params = new URLSearchParams(window.location.search);
+  const q = params.get('q');
+  const cat = params.get('cat');
+  const loc = params.get('loc');
+
+  let shouldFilter = false;
+
+  if (q) {
+    const searchInput = document.getElementById('dirSearchInput');
+    if (searchInput) {
+      searchInput.value = q;
+      shouldFilter = true;
+    }
+  }
+
+  if (loc) {
+    const locSelect = document.getElementById('locFilterSelect');
+    if (locSelect) {
+      locSelect.value = loc;
+      activeLocOption = loc;
+      shouldFilter = true;
+    }
+  }
+
+  if (cat) {
+    const targetCat = cat.toUpperCase();
+    activeCat = targetCat;
+    document.querySelectorAll('.cat-pill').forEach(btn => {
+      const onclickAttr = btn.getAttribute('onclick') || '';
+      if (onclickAttr.includes(targetCat)) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+    shouldFilter = true;
+  }
+
+  if (shouldFilter && typeof filterDirectory === 'function') {
+    filterDirectory();
+  }
+}
+
 // Auto-run on DOM ready
 if (typeof window !== 'undefined') {
   window.addEventListener('DOMContentLoaded', () => {
     loadCommunityVouches();
     loadDynamicContractorsToDirectory();
+    initDirectoryFromURL();
   });
 }
+

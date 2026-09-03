@@ -1,504 +1,1736 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="alternate icon" type="image/png" href="favicon.png" />
-  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <link rel="alternate icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PoquitoTalk Walkie-Talkie en Vivo</title>
+  <title>Canal Walkie-Talkie en Vivo • PoquitoTalk</title>
   
-  <meta name="description" content="Walkie-Talkie en vivo con traducción instantánea de español e inglés para WhatsApp." />
+  <meta name="description" content="Walkie-Talkie en vivo con traducción instantánea de voz entre español e inglés para WhatsApp y residentes de Bocas del Toro." />
   <meta name="theme-color" content="#FBF9F5" />
 
-  <!-- WhatsApp & Social Open Graph Meta Tags for 1-Tap Clickable Previews -->
+  <!-- WhatsApp & Social Open Graph Meta Tags -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="PoquitoTalk" />
-  <meta property="og:title" content="Walkie-Talkie en Vivo - PoquitoTalk" />
-  <meta property="og:description" content="Toca aquí para hablar por voz en español. Traduce tu voz a inglés automáticamente." />
+  <meta property="og:title" content="Canal Walkie-Talkie en Vivo • PoquitoTalk" />
+  <meta property="og:description" content="Habla por voz con traducción instantánea de español a inglés." />
   <meta property="og:image" content="https://poquitotalk.hero-apps.com/logo_v6_og.png?v=1.0.4" />
-  <meta property="og:image:width" content="800" />
-  <meta property="og:image:height" content="800" />
   <meta property="og:url" content="https://poquitotalk.hero-apps.com/talk" />
   
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Walkie-Talkie en Vivo - PoquitoTalk" />
-  <meta name="twitter:description" content="Toca aquí para hablar por voz en español sin instalar nada." />
+  <meta name="twitter:title" content="Canal Walkie-Talkie en Vivo • PoquitoTalk" />
+  <meta name="twitter:description" content="Walkie-talkie en vivo con traducción automática por IA." />
   <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/logo_v6_og.png?v=1.0.4" />
 
-  <link rel="stylesheet" href="style.css?v=5.0.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="preload" as="image" href="/poquito_tilt_34_51_256.webp" />
+  <link rel="preload" as="image" href="/poquito_talk_34_51_seamless_256.webp" />
+  <link rel="stylesheet" href="/style.css?v=6.2.0" />
 
   <style>
     :root {
       --bg-cream: #FBF9F5;
-      --surface-card: #FFFFFF;
-      --surface-container: #F5F3EF;
-      --surface-container-high: #EFEEEA;
-      --text-charcoal: #1B1C1A;
-      --text-muted: #4D463E;
-      --text-outline: #5C554D;
+      --card-bg: #FFFFFF;
+      --card-border: rgba(150, 72, 36, 0.12);
+      --text-charcoal: #1A1208;
+      --text-muted: #5C4E3A;
+      --text-subtle: #78716C;
       --action-terracotta: #964824;
-      --action-terracotta-light: #FD9A6F;
-      --action-terracotta-bg: #FFDBCD;
-      --sage-green: #2E402D;
-      --sage-green-bg: #D5E8D1;
-      --whatsapp-green: #25D366;
-      --card-border: #E4E2DE;
-      --shadow-soft: rgba(142, 128, 113, 0.12);
+      --primary-green: #10B981;
+      --green-dark: #047857;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background-color: var(--bg-cream);
-      color: var(--text-charcoal);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #FBF9F5;
+      color: #1A1208;
+      margin: 0;
+      padding: 0;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 16px 24px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Header Bar with Back Button */
-    .header-bar {
+    /* Navbar & Brand Styles (100% Self-Contained) */
+    .navbar {
+      border-bottom: 1px solid rgba(150, 72, 36, 0.12);
+      background: rgba(251, 249, 245, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 14px 0;
       width: 100%;
-      max-width: 520px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
-      background: var(--surface-card);
-      border: 1px solid var(--card-border);
+    }
+
+    .nav-container {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 20px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .brand {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 10px !important;
+      text-decoration: none !important;
+    }
+
+    .brand-link {
+      display: inline-flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 10px !important;
+      text-decoration: none !important;
+      color: #1A1208 !important;
+      cursor: pointer;
+    }
+
+    .brand-link:hover,
+    .brand-link:visited,
+    .brand-link:active,
+    .brand-link:focus {
+      text-decoration: none !important;
+      color: #1A1208 !important;
+    }
+
+    .brand-link img,
+    .brand img {
+      width: 38px !important;
+      height: 38px !important;
+      min-width: 38px !important;
+      object-fit: contain !important;
+      display: block !important;
+      filter: drop-shadow(0 2px 8px rgba(37, 211, 102, 0.35));
+      transition: transform 0.2s ease;
+    }
+
+    .brand-link:hover img {
+      transform: scale(1.05);
+    }
+
+    .brand-text-group {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      justify-content: center !important;
+      line-height: 1.15 !important;
+      text-decoration: none !important;
+    }
+
+    .brand-name {
+      font-family: 'Lexend', 'Plus Jakarta Sans', sans-serif !important;
+      font-size: 19px !important;
+      font-weight: 800 !important;
+      color: #1A1208 !important;
+      letter-spacing: -0.4px !important;
+      text-decoration: none !important;
+      display: flex !important;
+      align-items: baseline !important;
+      line-height: 1.15 !important;
+    }
+
+    .brand-wordmark {
+      letter-spacing: -0.4px !important;
+      display: inline-flex !important;
+      align-items: baseline !important;
+      text-decoration: none !important;
+      color: #1A1208 !important;
+    }
+
+    .brand-name .brand-talk,
+    .brand-wordmark .brand-talk,
+    .brand-talk {
+      color: #964824 !important;
+      text-decoration: none !important;
+    }
+
+    .brand-subtext {
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      color: #78716C !important;
+      letter-spacing: 0.2px !important;
+      margin-top: 2px !important;
+      white-space: nowrap !important;
+      text-decoration: none !important;
+      display: block !important;
+    }
+
+    /* Body & Crown Feathers visibility toggles */
+    .talkie-body-smooth {
+      display: block;
+    }
+    .talkie-body-ruffle {
+      display: none;
+    }
+    .talkie-crown-smooth {
+      display: block;
+    }
+    .talkie-ruffle-crest {
+      display: none;
+    }
+
+    /* Mascot State: Standby (Calm resting on perch with walkie) */
+    .state-standby .talkie-body-smooth {
+      display: block;
+    }
+    .state-standby .talkie-body-ruffle {
+      display: none;
+    }
+    .state-standby .talkie-crown-smooth {
+      display: block;
+    }
+    .state-standby .talkie-ruffle-crest {
+      display: none;
+    }
+    .state-standby .mascot-body-breathe {
+      animation: bodyGentleBreathe 3s ease-in-out infinite;
+      transform-origin: 80px 140px;
+    }
+    .state-standby .talkie-pupil-group {
+      animation: talkiePupilScan 5.5s ease-in-out infinite;
+    }
+    .state-standby .talkie-radio-waves {
+      display: none;
+    }
+    .state-standby .walkie-led-dot {
+      fill: #25D366;
+    }
+
+    /* Mascot State: Listening (Audio Playing / Walkie RX / Ruffled Feathers Active) */
+    .state-listening .talkie-body-smooth {
+      display: none;
+    }
+    .state-listening .talkie-body-ruffle {
+      display: block;
+    }
+    .state-listening .talkie-crown-smooth {
+      display: none;
+    }
+    .state-listening .talkie-ruffle-crest {
+      display: block;
+      transform-origin: 65px 30px;
+      animation: crestDanceWiggle 0.75s ease-in-out infinite;
+    }
+    .state-listening .mascot-body-breathe {
+      animation: bodyGentleBreathe 1.5s ease-in-out infinite;
+      transform-origin: 80px 140px;
+    }
+    .state-listening .talkie-ruffle-wing {
+      transform-origin: 45px 95px;
+      animation: wingFlutterSide 0.38s ease-in-out infinite;
+    }
+    .state-listening .talkie-radio-waves {
+      display: block;
+      transform-origin: 129px 45px;
+      animation: radioWavePulse 0.9s ease-in-out infinite;
+    }
+    .state-listening .talkie-radio-waves path {
+      stroke: #25D366;
+    }
+    .state-listening .walkie-led-dot {
+      fill: #25D366;
+      filter: drop-shadow(0 0 6px #25D366);
+    }
+    .state-listening .talkie-pupil-group {
+      animation: talkiePupilScan 2.5s ease-in-out infinite;
+    }
+
+    /* Mascot State: Recording / Speaking (Walkie TX, Red LED & Moving Beak) */
+    .state-recording .talkie-body-smooth {
+      display: block;
+    }
+    .state-recording .talkie-body-ruffle {
+      display: none;
+    }
+    .state-recording .talkie-crown-smooth {
+      display: block;
+    }
+    .state-recording .talkie-ruffle-crest {
+      display: none;
+    }
+    .state-recording .talkie-lower-beak {
+      transform-origin: 96px 68px;
+      animation: beakTalkMotion 0.22s ease-in-out infinite;
+    }
+    .state-recording .talkie-radio-waves {
+      display: block;
+      transform-origin: 129px 45px;
+      animation: radioWavePulse 0.6s ease-in-out infinite;
+    }
+    .state-recording .talkie-radio-waves path {
+      stroke: #EF4444;
+    }
+    .state-recording .walkie-led-dot {
+      fill: #EF4444;
+      filter: drop-shadow(0 0 8px #EF4444);
+    }
+
+    /* Action Pill Badge (Underneath Mascot) */
+    .ptt-action-pill {
+      margin-top: 6px;
+      background: #964824;
+      color: #FFFFFF;
+      padding: 7px 18px;
       border-radius: 20px;
-      box-shadow: 0 4px 16px var(--shadow-soft);
-    }
-
-    .btn-back-nav {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--action-terracotta);
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 6px 10px;
-      border-radius: 12px;
-      background: var(--surface-container);
-      transition: background 0.2s ease;
-    }
-
-    .btn-back-nav:hover {
-      background: var(--action-terracotta-bg);
-    }
-
-    .brand-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'Lexend', sans-serif;
+      font-size: 11.5px;
       font-weight: 800;
-      font-size: 16px;
-      color: var(--text-charcoal);
-    }
-
-    .badge-live {
+      letter-spacing: 0.05em;
       display: flex;
       align-items: center;
-      gap: 6px;
-      background: var(--sage-green-bg);
-      border: 1px solid var(--sage-green);
-      color: var(--sage-green);
-      padding: 4px 10px;
-      border-radius: 14px;
-      font-size: 11px;
+      gap: 7px;
+      box-shadow: 0 4px 14px rgba(150, 72, 36, 0.28);
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .mascot-interactive-btn.recording .ptt-action-pill {
+      background: #DC2626;
+      box-shadow: 0 4px 18px rgba(220, 38, 38, 0.45);
+    }
+
+    .mascot-interactive-btn.listening .ptt-action-pill {
+      background: #16A34A;
+      box-shadow: 0 4px 18px rgba(22, 163, 74, 0.35);
+    }
+
+    .status-badge {
+      font-size: 13.5px;
       font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .live-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--whatsapp-green);
-      border-radius: 50%;
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0% { opacity: 0.4; transform: scale(0.9); }
-      50% { opacity: 1; transform: scale(1.2); }
-      100% { opacity: 0.4; transform: scale(0.9); }
-    }
-
-    /* Main Walkie Card */
-    .main-card {
-      width: 100%;
-      max-width: 520px;
-      background: var(--surface-card);
-      border: 1px solid var(--card-border);
-      border-radius: 28px;
-      padding: 28px 24px;
+      color: #2E402D;
+      min-height: 26px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 20px;
-      box-shadow: 0 8px 30px var(--shadow-soft);
-      margin: auto 0;
-    }
-
-    .room-info {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .room-title {
-      font-family: 'Lexend', sans-serif;
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--text-charcoal);
-    }
-
-    .room-subtitle {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    /* Hold to Speak Mic Button */
-    .talk-btn-container {
-      position: relative;
-      margin: 10px 0;
-    }
-
-    .talk-btn {
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--action-terracotta-light), var(--action-terracotta));
-      border: none;
-      outline: none;
-      display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      color: #FFFFFF;
-      box-shadow: 0 10px 30px rgba(150, 72, 36, 0.35), inset 0 2px 4px rgba(255, 255, 255, 0.3);
-      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-      user-select: none;
-      -webkit-user-select: none;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 12px;
+      background: #F4F1EA;
+      border: 1px solid #E5E0D8;
     }
 
-    .talk-btn:active, .talk-btn.recording {
-      transform: scale(1.08);
-      background: linear-gradient(135deg, #EF4444, #DC2626);
-      box-shadow: 0 0 35px rgba(239, 68, 68, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.4);
-    }
-
-    .mic-svg-icon {
-      width: 44px;
-      height: 44px;
-      margin-bottom: 4px;
-    }
-
-    .btn-label {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .status-text {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--action-terracotta);
-      min-height: 22px;
-    }
-
-    /* Message History / Incoming Audio Player */
-    .incoming-section {
+    /* Topic / Inquiry Card & Opening Voice Message */
+    .opening-message-card {
       width: 100%;
-      background: var(--surface-container);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 16px;
+      background: #FFFDF9;
+      border: 1.5px solid #FDBA74;
+      border-radius: 20px;
+      padding: 16px 18px;
       text-align: left;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      box-shadow: 0 4px 16px rgba(150, 72, 36, 0.08);
+      margin-bottom: 8px;
     }
 
-    .incoming-header {
+    .opening-card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-muted);
     }
 
-    .audio-player-btn {
-      width: 100%;
-      background: var(--sage-green);
-      color: #FFFFFF;
-      border: none;
-      padding: 12px 16px;
-      border-radius: 14px;
-      font-weight: 700;
-      font-size: 14px;
+    .opening-badge-row {
       display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .opening-tag {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #9A3412;
+      background: #FFEDD5;
+      padding: 3px 9px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .soundwave-bars {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 18px;
+    }
+
+    .soundwave-bar {
+      width: 3px;
+      height: 100%;
+      background: #EA580C;
+      border-radius: 2px;
+      animation: soundwaveBounce 0.8s ease-in-out infinite alternate;
+    }
+
+    .soundwave-bar:nth-child(1) { animation-delay: 0.1s; height: 35%; }
+    .soundwave-bar:nth-child(2) { animation-delay: 0.3s; height: 85%; }
+    .soundwave-bar:nth-child(3) { animation-delay: 0.2s; height: 100%; }
+    .soundwave-bar:nth-child(4) { animation-delay: 0.4s; height: 60%; }
+    .soundwave-bar:nth-child(5) { animation-delay: 0.15s; height: 40%; }
+
+    .soundwave-bars.paused .soundwave-bar {
+      animation-play-state: paused;
+      height: 25% !important;
+      opacity: 0.5;
+    }
+
+    @keyframes soundwaveBounce {
+      0% { height: 25%; }
+      100% { height: 100%; }
+    }
+
+    .opening-spanish-text {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #1B1C1A;
+      line-height: 1.45;
+    }
+
+    .opening-english-subtext {
+      font-size: 13.5px;
+      color: #78716C;
+      line-height: 1.4;
+      border-left: 2.5px solid #FDBA74;
+      padding-left: 10px;
+      font-style: italic;
+    }
+
+    .listen-action-btn {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      background: #964824;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 14px;
+      padding: 10px 18px;
+      font-size: 13.5px;
+      font-weight: 800;
       cursor: pointer;
-      transition: opacity 0.2s ease;
+      box-shadow: 0 4px 12px rgba(150, 72, 36, 0.25);
+      transition: all 0.2s ease;
+      align-self: flex-start;
+      margin-top: 2px;
     }
 
-    .audio-player-btn:hover {
-      opacity: 0.9;
+    .listen-action-btn:hover {
+      background: #7A3719;
+      transform: translateY(-1px);
     }
 
-    .footer-note {
-      font-size: 12px;
-      color: var(--text-muted);
-      text-align: center;
+    .listen-action-btn:active {
+      transform: translateY(0);
     }
 
-    .footer-note span {
-      color: var(--whatsapp-green);
+    .listen-action-btn.playing {
+      background: #EA580C;
+      box-shadow: 0 4px 14px rgba(234, 88, 12, 0.35);
+    }
+
+    /* Conversation Feed */
+    .conversation-section {
+      width: 100%;
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .conversation-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px;
+    }
+
+    .conversation-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .conversation-title {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #2E402D;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .conv-count-badge {
+      font-size: 11px;
       font-weight: 700;
+      background: #EBF3EB;
+      color: #166534;
+      border: 1px solid #BBF7D0;
+      padding: 3px 10px;
+      border-radius: 100px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .conv-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #16A34A;
+      box-shadow: 0 0 6px rgba(22, 163, 74, 0.6);
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .conversation-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding: 4px 2px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .conv-empty-state {
+      background: #FAF8F5;
+      border: 1px solid #EAE6DF;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      color: #5C554D;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .conv-empty-state svg {
+      color: #964824;
+      opacity: 0.85;
+    }
+
+    .conv-bubble {
+      padding: 14px 16px;
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      animation: fadeInBubble 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInBubble {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .conv-bubble.outgoing {
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      align-self: flex-end;
+      width: 92%;
+    }
+
+    .conv-bubble.incoming {
+      background: #FFF7ED;
+      border: 1px solid #FED7AA;
+      align-self: flex-start;
+      width: 92%;
+    }
+
+    .conv-bubble-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+      font-weight: 800;
+    }
+
+    .conv-bubble.outgoing .conv-bubble-header { color: #166534; }
+    .conv-bubble.incoming .conv-bubble-header { color: #9A3412; }
+
+    .conv-bubble-spanish {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #1B1C1A;
+      line-height: 1.4;
+    }
+
+    .conv-bubble-english {
+      font-size: 13px;
+      color: #4D463E;
+      line-height: 1.4;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      padding-top: 6px;
+      margin-top: 2px;
+      font-style: italic;
+    }
+
+    .conv-audio-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FFFFFF;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #1B1C1A;
+      cursor: pointer;
+      align-self: flex-start;
+      margin-top: 4px;
+      transition: background 0.15s ease;
+    }
+
+    .conv-audio-btn:hover {
+      background: #F4F1EA;
+    }
+
+    .channel-instructions {
+      font-size: 12px;
+      color: #7E766D;
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+
+    /* Header & Navigation Badge */
+    .channel-badge {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      background: #EAF4E8 !important;
+      border: 1px solid #A8D5A2 !important;
+      color: #1E6426 !important;
+      padding: 5px 11px !important;
+      border-radius: 100px !important;
+      font-size: 11.5px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.02em !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
+
+    .channel-badge .live-dot {
+      width: 7px;
+      height: 7px;
+      background: #16A34A;
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(22, 163, 74, 0.8);
+      animation: liveDotPulse 1.8s infinite ease-in-out;
+    }
+
+    @keyframes liveDotPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Main Talk Card Container */
+    .talk-hero {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px 16px 40px;
+      width: 100%;
+      min-height: calc(100vh - 80px);
+    }
+
+    .talk-card {
+      width: 100%;
+      max-width: 480px;
+      background: #FFFFFF;
+      border: 2px solid rgba(150, 72, 36, 0.12);
+      border-radius: 24px;
+      padding: 22px 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+      margin: 0 auto;
+    }
+
+    .room-header {
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .room-title {
+      font-family: 'Lexend', 'Plus Jakarta Sans', sans-serif;
+      font-size: 21px;
+      font-weight: 900;
+      color: #1A1208;
+      letter-spacing: -0.4px;
+      line-height: 1.2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .room-client-name {
+      color: #964824;
+      font-weight: 800;
+    }
+
+    .room-subtitle {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #5C4E3A;
+      line-height: 1.42;
+      max-width: 380px;
+      margin: 0 auto;
+    }
+
+    /* Mascot Push-To-Talk Button (Zero Outlines, Centered) */
+    .mascot-interactive-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 6px 0 4px;
+    }
+
+    .mascot-interactive-btn {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      margin: 0 auto !important;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .mascot-interactive-btn:focus,
+    .mascot-interactive-btn:focus-visible {
+      outline: none !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .mascot-interactive-btn:hover {
+      transform: scale(1.03);
+    }
+
+    .mascot-interactive-btn:active,
+    .mascot-interactive-btn.recording {
+      transform: scale(0.97);
+    }
+
+    .mascot-svg-rig {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 154px;
+      height: 154px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .mascot-svg-el {
+      width: 146px;
+      height: 146px;
+      display: block;
+      margin: 0 auto;
+      filter: drop-shadow(0 6px 14px rgba(4, 120, 87, 0.16));
+      transition: filter 0.2s ease;
+    }
+
+    .mascot-interactive-btn.recording .mascot-svg-el {
+      filter: drop-shadow(0 8px 20px rgba(239, 68, 68, 0.35));
+    }
+
+    .mascot-interactive-btn.listening .mascot-svg-el {
+      filter: drop-shadow(0 8px 20px rgba(37, 211, 102, 0.35));
     }
   </style>
 </head>
 <body>
 
-  <!-- Header Bar with Back Button & Brand Logo -->
-  <header class="header-bar">
-    <a href="index.html" class="btn-back-nav">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12"></line>
-        <polyline points="12 19 5 12 12 5"></polyline>
-      </svg>
-      Volver
-    </a>
+  <!-- Top Header Navigation -->
+  <header class="navbar" role="banner">
+    <div class="nav-container">
+      <div class="brand">
+        <a href="/" class="brand-link" aria-label="PoquitoTalk Home">
+          <img src="/logo.svg?v=1.3.1" width="38" height="38" alt="PoquitoTalk Logo" />
+          <div class="brand-text-group">
+            <span class="brand-name"><span class="brand-wordmark">Poquito<span class="brand-talk">Talk</span></span></span>
+            <span class="brand-subtext">Bocas del Toro, Panamá</span>
+          </div>
+        </a>
+      </div>
 
-    <div class="brand-title">
-      <!-- Green Parrot Vector SVG Logo -->
-      <img src="logo.svg?v=1.3.0" width="32" height="32" alt="PoquitoTalk Logo" style="filter: drop-shadow(0 2px 8px rgba(37, 211, 102, 0.4));" />
-      PoquitoTalk
-    </div>
-
-    <!-- Google Sign-In Header Widget -->
-    <button type="button" class="btn-google-sign-in" onclick="handleWebGoogleSignIn()" style="display:inline-flex; align-items:center; gap:8px; background:#FFFFFF; border:1px solid #E2E8F0; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:700; color:#3C4043; cursor:pointer; font-family:inherit; margin-left:auto;">
-      <svg width="16" height="16" viewBox="0 0 24 24">
-        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
-        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
-      </svg>
-      <span id="googleBtnText">Continuar con Google</span>
-    </button>
-
-    <div class="badge-live">
-      <div class="live-dot"></div>
-      En Vivo
+      <div class="channel-badge">
+        <div class="live-dot"></div>
+        <span>Canal Walkie-Talkie</span>
+      </div>
     </div>
   </header>
 
-  <!-- Main Walkie Card Landmark -->
-  <main id="main-content" class="main-card">
-    <div class="room-info">
-      <h1 class="room-title" id="room-title">Canal Walkie-Talkie</h1>
-      <p class="room-subtitle">Habla en español. Tu cliente escuchará tu mensaje traducido en inglés claro con IA.</p>
-    </div>
+  <!-- Main Hero Card -->
+  <main class="talk-hero">
+    <div class="talk-card">
 
-    <!-- Hold to Speak Button with Vector SVG Microphone Icon -->
-    <div class="talk-btn-container">
-      <button class="talk-btn" id="talk-btn" onmousedown="startRecording()" onmouseup="stopRecording()" ontouchstart="startRecording()" ontouchend="stopRecording()">
-        <svg class="mic-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-          <line x1="12" y1="19" x2="12" y2="23"></line>
-          <line x1="8" y1="23" x2="16" y2="23"></line>
-        </svg>
-        <span class="btn-label">PRESIONAR</span>
-      </button>
-    </div>
-
-    <div class="status-text" id="status-text">Mantén presionado para hablar</div>
-
-    <!-- Incoming Message Audio Player -->
-    <div class="incoming-section" id="incoming-section">
-      <div class="incoming-header">
-        <span>ÚLTIMO MENSAJE RECIBIDO</span>
-        <span id="incoming-time">--:--</span>
+      <div class="room-header">
+        <h1 class="room-title" id="room-title">Canal Walkie-Talkie <span id="room-client-name" class="room-client-name"></span></h1>
+        <p class="room-subtitle">
+          Escucha el mensaje de tu cliente y responde con tu voz en español. Se traducirá automáticamente a inglés claro.
+        </p>
       </div>
-      <button class="audio-player-btn" id="play-incoming-btn" onclick="playIncomingAudio()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-        </svg>
-        <span>Reproducir Respuesta en Español</span>
-      </button>
+
+      <!-- Opening Voice Message / Inquiry Player Card -->
+      <div class="opening-message-card" id="openingAudioCard" style="display: none;">
+        <div class="opening-card-header">
+          <div class="opening-badge-row">
+            <span class="opening-tag">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              </svg>
+              <span id="openingCardSenderTitle">Mensaje del Cliente</span>
+            </span>
+          </div>
+          <div class="soundwave-bars paused" id="openingSoundwaves">
+            <span class="soundwave-bar"></span>
+            <span class="soundwave-bar"></span>
+            <span class="soundwave-bar"></span>
+            <span class="soundwave-bar"></span>
+            <span class="soundwave-bar"></span>
+          </div>
+        </div>
+
+        <div class="opening-spanish-text" id="openingSpanishText"></div>
+        <div class="opening-english-subtext" id="openingEnglishSubtext" style="display: none;"></div>
+
+        <button class="listen-action-btn" id="openingListenBtn" type="button" onclick="toggleOpeningAudio()">
+          <svg id="openingPlayIcon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span id="openingListenBtnText">Escuchar Mensaje de Audio</span>
+        </button>
+      </div>
+
+      <!-- Interactive Poquito Mascot Push-To-Talk (No Solid Circle Border) -->
+      <div class="mascot-interactive-container">
+        <button 
+          class="mascot-interactive-btn" 
+          id="talk-btn" 
+          type="button" 
+          aria-label="Toca o mantén presionado a Poquito para hablar por el walkie-talkie"
+        >
+          <!-- Animated Vector SVG of Poquito Walkie-Talkie Rig -->
+          <div id="mascotSvgRig" class="mascot-svg-rig state-standby">
+            <svg viewBox="0 0 180 180" width="146" height="146" fill="none" class="mascot-svg-el">
+              <!-- Wooden Perch -->
+              <path d="M 30 152 Q 80 148 135 152" stroke="#B45309" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+              <!-- Claws -->
+              <path d="M 52 142 C 50 149 52 156 56 156 M 60 142 C 58 149 60 156 64 156 M 74 142 C 72 149 74 156 78 156 M 82 142 C 80 149 82 156 86 156" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round" />
+              
+              <!-- Body & Crown Group -->
+              <g id="talkie-body-group" class="mascot-body-breathe">
+                <!-- Smooth Body (Standby & Recording) -->
+                <path class="talkie-body-smooth" d="M 40 142 C 30 124 28 104 32 82 C 36 54 54 30 78 30 C 98 30 108 48 106 68 C 103 90 104 118 98 134 C 88 150 62 154 40 142 Z" fill="#10B981" stroke="#047857" stroke-width="4.5" stroke-linejoin="round" />
+                
+                <!-- Ruffled Feathers Body (Listening / Audio State) -->
+                <path class="talkie-body-ruffle" d="M 40 142 L 31 136 L 39 129 L 26 122 L 36 113 L 21 103 L 33 93 L 20 82 L 33 72 L 24 60 L 37 50 L 31 40 L 46 34 L 58 31 L 78 30 C 98 30 108 48 106 68 C 103 90 104 118 98 134 C 88 150 62 154 40 142 Z" fill="#10B981" stroke="#047857" stroke-width="4.5" stroke-linejoin="round" />
+
+                <!-- Smooth Crown Feathers -->
+                <g class="talkie-crown-smooth">
+                  <path d="M 63 31.4 C 59 24 55 19 49 18" stroke="#047857" stroke-width="3.5" stroke-linecap="round" fill="none" />
+                  <path d="M 73 29.8 C 69 23 65 19 59 17" stroke="#047857" stroke-width="3" stroke-linecap="round" fill="none" />
+                </g>
+
+                <!-- Ruffled Dancing Crest Feathers (Active in Listening State) -->
+                <g class="talkie-ruffle-crest">
+                  <path d="M 63 31.4 C 57 20 51 14 43 13" stroke="#047857" stroke-width="3.8" stroke-linecap="round" fill="none" />
+                  <path d="M 73 29.8 C 68 19 63 13 54 12" stroke="#047857" stroke-width="3.4" stroke-linecap="round" fill="none" />
+                  <path d="M 82 30.5 C 79 22 76 17 69 14" stroke="#047857" stroke-width="3.0" stroke-linecap="round" fill="none" />
+                </g>
+              </g>
+
+              <!-- Eye White Base -->
+              <circle cx="82" cy="54" r="9" fill="#FFF" stroke="#047857" stroke-width="2.5" />
+              <!-- Animated Scanning Pupil -->
+              <g class="talkie-pupil-group">
+                <circle cx="80.5" cy="54" r="4.5" fill="#0F172A" />
+                <circle cx="78.5" cy="52" r="1.8" fill="#FFF" />
+              </g>
+
+              <!-- Dynamic Beak (Opens/Closes when speaking) -->
+              <g id="mascotBeak" class="talkie-beak-group">
+                <path d="M 96 48 C 112 48 120 62 106 74 C 101 77 94 73 95 67 C 97 61 94 52 96 48 Z" fill="#F59E0B" stroke="#047857" stroke-width="3.5" stroke-linejoin="round" />
+                <path class="talkie-lower-beak" d="M 96 68 C 102 70 104 74 98 75 C 95 75 94 71 96 68 Z" fill="#D97706" stroke="#047857" stroke-width="1.8" stroke-linejoin="round" />
+              </g>
+
+              <!-- Walkie-Talkie Rig -->
+              <g id="talkie-radio-group" transform="translate(-4, 0)">
+                <path d="M 129 45 L 129 70" stroke="#1E293B" stroke-width="3.5" stroke-linecap="round" />
+                <circle cx="129" cy="43" r="3.5" fill="#1E293B" />
+                <rect x="116" y="70" width="28" height="46" rx="6" fill="#1E293B" stroke="#047857" stroke-width="2.5" />
+                <line x1="122" y1="90" x2="138" y2="90" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+                <line x1="122" y1="96" x2="138" y2="96" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+                <line x1="122" y1="102" x2="138" y2="102" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+                <rect x="143" y="76" width="4.5" height="14" rx="2.2" fill="#1E293B" />
+                <circle cx="125" cy="78" r="3.8" fill="#0F172A" />
+                <circle id="walkieLed" class="walkie-led-dot" cx="125" cy="78" r="2.8" fill="#25D366" />
+                <rect x="120" y="65" width="7" height="6" rx="1.5" fill="#1E293B" />
+                <g id="walkieWaves" class="talkie-radio-waves">
+                  <path class="wave-1" d="M 135 38 A 10 10 0 0 1 145 48" fill="none" stroke="#25D366" stroke-width="3" stroke-linecap="round" />
+                  <path class="wave-2" d="M 139 32 A 16 16 0 0 1 153 46" fill="none" stroke="#25D366" stroke-width="3" stroke-linecap="round" />
+                  <path class="wave-3" d="M 143 26 A 22 22 0 0 1 161 44" fill="none" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" opacity="0.75" />
+                </g>
+              </g>
+
+              <!-- Wing Holding Walkie-Talkie -->
+              <g class="talkie-ruffle-wing">
+                <path
+                  d="M 44 94 C 48 80 60 76 72 84 C 84 92 98 94 112 96 C 116 98 116 103 110 105 C 97 108 82 124 60 126 C 49 120 42 108 44 94 Z"
+                  fill="#06B6D4"
+                  stroke="#047857"
+                  stroke-width="3.5"
+                  stroke-linejoin="round"
+                />
+              </g>
+            </svg>
+          </div>
+
+          <!-- PTT Action Pill -->
+          <div class="ptt-action-pill" id="pttPill">
+            <svg id="pttPillIcon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+            <span id="pttBadgeText">TOCA PARA HABLAR</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Live Two-Way Conversation Feed -->
+      <div class="conversation-section" id="conversation-section">
+        <div class="conversation-header">
+          <div class="conversation-header-left">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2E402D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span class="conversation-title">Historial de Conversación</span>
+          </div>
+          <span class="conv-count-badge" id="conv-count"><span class="conv-dot"></span>Canal Listo</span>
+        </div>
+
+        <div class="conversation-feed" id="conversation-feed">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <p class="channel-instructions">
+        Conectado directamente a WhatsApp y la app PoquitoTalk • No requiere descargas adicionales.
+      </p>
+
     </div>
   </main>
 
-  <!-- Footer Note -->
-  <p class="footer-note">Conectado a <span>WhatsApp Walkie-Talkie</span> • Sin instalar aplicaciones</p>
+  <!-- Standard Website Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>© 2026 PoquitoTalk. Conectando a residentes, contratistas y visitantes en Bocas del Toro.</p>
+      <div class="footer-links">
+        <a href="/">Inicio</a>
+        <a href="/es/directorio.html">Directorio</a>
+        <a href="/es/privacidad.html">Privacidad</a>
+        <a href="/terms.html">Términos</a>
+        <a href="mailto:support@hero-apps.com">Soporte</a>
+      </div>
+    </div>
+  </footer>
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const roomId = urlParams.get('room') || 'demo';
-    const clientName = urlParams.get('name');
+    const roomId = urlParams.get('r') || urlParams.get('room') || 'session';
+    const clientName = urlParams.get('n') || urlParams.get('client') || urlParams.get('name') || 'Cliente';
+    const topicParam = urlParams.get('topic') || urlParams.get('topicEs') || urlParams.get('subject') || '';
+    const topicEnParam = urlParams.get('topicEn') || '';
 
-    if (clientName && clientName.trim().length > 0) {
-      document.getElementById('room-title').innerText = `Walkie-Talkie con ${clientName}`;
+    const roomClient = document.getElementById('room-client-name');
+    if (clientName && clientName !== 'Cliente') {
+      if (roomClient) {
+        roomClient.innerText = `con ${clientName}`;
+        roomClient.style.display = 'inline';
+      }
+      const senderTitle = document.getElementById('openingCardSenderTitle');
+      if (senderTitle) senderTitle.innerText = `Mensaje de ${clientName}`;
     } else {
-      document.getElementById('room-title').innerText = `Canal Walkie-Talkie en Vivo`;
+      if (roomClient) roomClient.style.display = 'none';
     }
 
-    let mediaRecorder;
+    let openingAudioData = '';
+    let openingSpanish = topicParam ? topicParam.trim() : '';
+    let openingEnglish = topicEnParam ? topicEnParam.trim() : '';
+    let currentOpeningAudio = null;
+    let isOpeningAudioPlaying = false;
+
+    // Mascot State Manager (standby | listening | recording)
+    function setMascotState(state) {
+      const rig = document.getElementById('mascotSvgRig');
+      const btn = document.getElementById('talk-btn');
+      const badgeText = document.getElementById('pttBadgeText');
+      const led = document.getElementById('walkieLed');
+
+      if (!rig || !btn) return;
+
+      rig.classList.remove('state-standby', 'state-listening', 'state-recording');
+      btn.classList.remove('listening', 'recording');
+
+      if (state === 'recording') {
+        rig.classList.add('state-recording');
+        btn.classList.add('recording');
+        if (badgeText) badgeText.innerText = 'GRABANDO... TOCA PARA ENVIAR';
+        if (led) led.setAttribute('fill', '#EF4444');
+      } else if (state === 'listening') {
+        rig.classList.add('state-listening');
+        btn.classList.add('listening');
+        if (badgeText) badgeText.innerText = 'ESCUCHANDO AUDIO...';
+        if (led) led.setAttribute('fill', '#25D366');
+      } else {
+        // standby
+        rig.classList.add('state-standby');
+        if (badgeText) badgeText.innerText = 'TOCA PARA HABLAR';
+        if (led) led.setAttribute('fill', '#25D366');
+      }
+    }
+
+    // Resilient Web Speech Utterance matching for iOS Safari & Android Chrome
+    function speakSpanishUtterance(text, onStart, onEnd) {
+      if (!('speechSynthesis' in window) || !text) {
+        if (onEnd) onEnd();
+        return;
+      }
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        const voices = window.speechSynthesis.getVoices() || [];
+        const spanishVoice = voices.find(v => v.lang === 'es-MX' || v.lang === 'es-US' || v.lang === 'es-419' || v.lang === 'es_MX' || v.lang === 'es_US') ||
+                             voices.find(v => v.lang.toLowerCase().startsWith('es')) ||
+                             null;
+        if (spanishVoice) {
+          utter.voice = spanishVoice;
+          utter.lang = spanishVoice.lang;
+        } else {
+          utter.lang = 'es-ES';
+        }
+        utter.rate = 0.95;
+
+        utter.onstart = () => {
+          if (onStart) onStart();
+        };
+        utter.onend = () => {
+          if (onEnd) onEnd();
+        };
+        utter.onerror = (e) => {
+          console.warn('Speech synthesis error:', e);
+          if (onEnd) onEnd();
+        };
+
+        window.speechSynthesis.speak(utter);
+      } catch (err) {
+        console.warn('Speech synthesis call failed:', err);
+        if (onEnd) onEnd();
+      }
+    }
+
+    // Preload speech synthesis voices
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
+
+    // Initial setup if URL topic params are provided
+    if (openingSpanish.length > 0) {
+      const card = document.getElementById('openingAudioCard');
+      const spText = document.getElementById('openingSpanishText');
+      const enText = document.getElementById('openingEnglishSubtext');
+      if (card && spText) {
+        spText.innerText = openingSpanish;
+        if (openingEnglish.length > 0 && openingEnglish !== openingSpanish && enText) {
+          enText.innerText = `"${openingEnglish}"`;
+          enText.style.display = 'block';
+        }
+        card.style.display = 'flex';
+      }
+    }
+
+    let mediaRecorder = null;
     let audioChunks = [];
     let isRecording = false;
+    let cachedAudioStream = null;
+    let speechRecognizer = null;
+    let liveCapturedText = '';
+    let pressStartTime = 0;
+    let lastPollTimestamp = 0;
+    let conversation = [];
+    let activeFeedAudio = null;
 
-    async function startRecording() {
-      if (isRecording) return;
-      isRecording = true;
-      audioChunks = [];
+    // Supported mimeType detection
+    function getSupportedMimeType() {
+      if (typeof MediaRecorder === 'undefined') return '';
+      const types = [
+        'audio/webm;codecs=opus',
+        'audio/webm',
+        'audio/mp4',
+        'audio/aac',
+        'audio/ogg'
+      ];
+      for (const t of types) {
+        if (MediaRecorder.isTypeSupported(t)) return t;
+      }
+      return '';
+    }
 
-      const btn = document.getElementById('talk-btn');
-      const statusText = document.getElementById('status-text');
-      btn.classList.add('recording');
-      statusText.innerText = 'Grabando mensaje audio...';
-
+    /* -------------------------------------------------------------
+       Microphone Access
+    ------------------------------------------------------------- */
+    async function getMicStream() {
+      if (cachedAudioStream && cachedAudioStream.active) {
+        return cachedAudioStream;
+      }
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(stream);
-        
-        mediaRecorder.ondataavailable = (event) => {
-          if (event.data.size > 0) {
-            audioChunks.push(event.data);
+        cachedAudioStream = stream;
+        return stream;
+      } catch (err) {
+        console.error('Mic permission error:', err);
+        const statusMsg = document.getElementById('status-msg');
+        if (statusMsg) {
+          statusMsg.innerHTML = '<span style="color:#DC2626;">Permite acceso al micrófono para hablar</span>';
+        }
+        throw err;
+      }
+    }
+
+    /* -------------------------------------------------------------
+       Start & Stop Recording Engine
+    ------------------------------------------------------------- */
+    async function startRecording() {
+      if (isRecording) return;
+
+      // Pause opening audio if running
+      if (isOpeningAudioPlaying && currentOpeningAudio) {
+        currentOpeningAudio.pause();
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      try {
+        const stream = await getMicStream();
+        isRecording = true;
+        audioChunks = [];
+        liveCapturedText = '';
+
+        setMascotState('recording');
+        const statusMsg = document.getElementById('status-msg');
+
+        if (statusMsg) {
+          statusMsg.innerHTML = '<span style="color:#DC2626; font-weight:800;">Grabando audio en español... Habla ahora</span>';
+        }
+
+        // Initialize SpeechRecognition if available (Chrome / Safari / Edge)
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRec) {
+          try {
+            speechRecognizer = new SpeechRec();
+            speechRecognizer.lang = 'es-PA';
+            speechRecognizer.continuous = true;
+            speechRecognizer.interimResults = true;
+            speechRecognizer.onresult = (evt) => {
+              let interim = '';
+              for (let i = evt.resultIndex; i < evt.results.length; ++i) {
+                if (evt.results[i].isFinal) {
+                  liveCapturedText += evt.results[i][0].transcript + ' ';
+                } else {
+                  interim += evt.results[i][0].transcript;
+                }
+              }
+              const words = (liveCapturedText + interim).trim();
+              if (words && statusMsg) {
+                statusMsg.innerHTML = `<span style="color:#DC2626;">"${words}"</span>`;
+              }
+            };
+            speechRecognizer.start();
+          } catch (e) {
+            console.warn('SpeechRecognition init error:', e);
           }
+        }
+
+        const mimeType = getSupportedMimeType();
+        const options = mimeType ? { mimeType } : undefined;
+        mediaRecorder = new MediaRecorder(stream, options);
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) audioChunks.push(e.data);
         };
 
         mediaRecorder.start();
       } catch (err) {
-        console.error('Audio permission error:', err);
-        statusText.innerText = 'Por favor permite acceso al micrófono';
         isRecording = false;
-        btn.classList.remove('recording');
+        setMascotState('standby');
       }
+    }
+
+    function normalizeBocasTerminology(text) {
+      if (!text || typeof text !== "string") return "";
+      let result = text;
+      // Bastimentos variations (including split pauses like "Basti mentos", "Busti mentos", "Basty mentos", "Busti mentus")
+      result = result.replace(/\b[bBvV][aAuUoO][sS][tT][iIeEyY]?[\s-]*[mM][eEaAiI][nN][tT][oOuUaAeE][sS]?\b/g, (m) => m[0] === m[0].toUpperCase() ? 'Bastimentos' : 'bastimentos');
+      result = result.replace(/\b[bBvV][aAuUoO][sS][tT][iIeEyY]?[\s-]*[mM][eEaAiI][nN][dD][oOuUaAeE][sS]?\b/g, (m) => m[0] === m[0].toUpperCase() ? 'Bastimentos' : 'bastimentos');
+      result = result.replace(/\b[bBvV][aAuUoO][sS][tT][aA][\s-]*[mM][eE][nN][tT][oOuUaAeE][sS]?\b/g, (m) => m[0] === m[0].toUpperCase() ? 'Bastimentos' : 'bastimentos');
+      // Carenero (including "Care nero")
+      result = result.replace(/\b[cC][aA][rR][aAeEiI][\s-]*[nNñÑ][eEaAoO][rR][oOaA][sS]?\b/g, (m) => m[0] === m[0].toUpperCase() ? 'Carenero' : 'carenero');
+      // Solarte (including "So larte")
+      result = result.replace(/\b[sSzZ][oOaA][\s-]*[lL][aA][rR][tT][eEiIyY][sS]?\b/g, (m) => m[0] === m[0].toUpperCase() ? 'Solarte' : 'solarte');
+      return result;
+    }
+
+    function cleanSpeechRepetitions(text) {
+      if (!text || typeof text !== "string") return "";
+      let prev = "";
+      let str = normalizeBocasTerminology(text.trim());
+      str = str.replace(/\b([a-zA-Z0-9'\u00C0-\u017F]+),\s+(\1)\b/gi, "$1 $2");
+      str = str.replace(/([^.?!,;\n]+[.?!,;\n]+)\s*\1+/gi, "$1");
+      let passes = 0;
+      while (str !== prev && passes < 5) {
+        prev = str;
+        passes++;
+        const tokens = str.split(/\s+/);
+        for (let n = 5; n >= 1; n--) {
+          let i = 0;
+          const newTokens = [];
+          while (i < tokens.length) {
+            if (i + 2 * n <= tokens.length) {
+              const chunk1 = tokens.slice(i, i + n).map(w => w.replace(/[.,?!;:"]/g, "").toLowerCase()).join(" ");
+              const chunk2 = tokens.slice(i + n, i + 2 * n).map(w => w.replace(/[.,?!;:"]/g, "").toLowerCase()).join(" ");
+              if (chunk1 && chunk1 === chunk2) {
+                for (let k = 0; k < n; k++) {
+                  newTokens.push(tokens[i + k].replace(/,$/, ""));
+                }
+                i += 2 * n;
+                continue;
+              }
+            }
+            newTokens.push(tokens[i]);
+            i++;
+          }
+          tokens.length = 0;
+          tokens.push(...newTokens);
+        }
+        str = tokens.join(" ").replace(/,\s*,+/g, ",").replace(/\s+/g, " ").trim();
+      }
+      if (text.length > 0 && text[0] === text[0].toUpperCase() && str.length > 0) {
+        str = str.charAt(0).toUpperCase() + str.slice(1);
+      }
+      return str;
     }
 
     async function stopRecording() {
       if (!isRecording) return;
       isRecording = false;
 
-      const btn = document.getElementById('talk-btn');
-      const statusText = document.getElementById('status-text');
-      btn.classList.remove('recording');
-      statusText.innerText = 'Traduciendo a inglés...';
+      setMascotState('standby');
+      const statusMsg = document.getElementById('status-msg');
+
+      if (speechRecognizer) {
+        try { speechRecognizer.stop(); } catch (e) {}
+      }
+
+      if (statusMsg) {
+        statusMsg.innerHTML = '<span style="color:#2563EB; font-weight:700;">Traduciendo respuesta al inglés...</span>';
+      }
 
       if (mediaRecorder && mediaRecorder.state !== 'inactive') {
         mediaRecorder.stop();
         mediaRecorder.onstop = async () => {
-          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-          await sendAudioToExpatApp(audioBlob);
+          const mimeType = getSupportedMimeType() || 'audio/webm';
+          const audioBlob = new Blob(audioChunks, { type: mimeType });
+          const blobUrl = URL.createObjectURL(audioBlob);
+
+          const now = new Date();
+          const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          let spanishSpoken = cleanSpeechRepetitions((liveCapturedText || '').trim());
+
+          // If Web Speech didn't capture text, send to server Whisper STT
+          if (!spanishSpoken || spanishSpoken.length === 0) {
+            try {
+              const formData = new FormData();
+              formData.append('audio', audioBlob, 'voice.' + (mimeType.includes('mp4') ? 'm4a' : 'webm'));
+              formData.append('lang', 'es');
+              const transcribeRes = await fetch('/api/transcribe.php', {
+                method: 'POST',
+                body: formData
+              });
+              if (transcribeRes.ok) {
+                const transData = await transcribeRes.json();
+                if (transData && transData.success && transData.text) {
+                  spanishSpoken = cleanSpeechRepetitions(transData.text.trim());
+                }
+              }
+            } catch (err) {
+              console.warn('Server transcription error:', err);
+            }
+          }
+
+          if (!spanishSpoken) {
+            spanishSpoken = 'Nota de voz en español';
+          }
+
+          // Translate Spanish into English for the client
+          let englishTranslated = '';
+          try {
+            const transRes = await fetch('/api/translate.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                text: spanishSpoken,
+                from: 'es',
+                to: 'en'
+              })
+            });
+            if (transRes.ok) {
+              const transJson = await transRes.json();
+              if (transJson && transJson.success && transJson.translated) {
+                englishTranslated = transJson.translated.trim();
+              }
+            }
+          } catch (tErr) {
+            console.warn('Translation error:', tErr);
+          }
+
+          if (!englishTranslated) {
+            englishTranslated = spanishSpoken;
+          }
+
+          const newMsg = {
+            id: 'msg_' + Date.now(),
+            sender: 'outgoing',
+            senderName: 'Tú',
+            time: timeStr,
+            esText: spanishSpoken,
+            enText: englishTranslated,
+            audioSrc: blobUrl
+          };
+
+          conversation.push(newMsg);
+          renderConversation();
+          await broadcastOutgoingMessage(newMsg, audioBlob);
+
+          if (statusMsg) {
+            statusMsg.innerHTML = '<span style="color:#16A34A; font-weight:700;">Mensaje enviado al cliente</span>';
+            setTimeout(() => {
+              statusMsg.innerHTML = '<span>Toca a Poquito para hablar</span>';
+            }, 3000);
+          }
         };
       }
     }
 
-    async function sendAudioToExpatApp(blob) {
-      const statusText = document.getElementById('status-text');
-      
+    /* -------------------------------------------------------------
+       Opening Audio Player & Autoplay Engine
+    ------------------------------------------------------------- */
+    function toggleOpeningAudio() {
+      if (isOpeningAudioPlaying) {
+        if (currentOpeningAudio) {
+          currentOpeningAudio.pause();
+        }
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+        isOpeningAudioPlaying = false;
+        const btn = document.getElementById('openingListenBtn');
+        const btnText = document.getElementById('openingListenBtnText');
+        const icon = document.getElementById('openingPlayIcon');
+        const soundwaves = document.getElementById('openingSoundwaves');
+        if (btn) btn.classList.remove('playing');
+        if (btnText) btnText.innerText = 'Escuchar Mensaje de Audio';
+        if (icon) icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+        return;
+      }
+      playOpeningAudio(false);
+    }
+
+    async function playOpeningAudio(isAutoPlay = false) {
+      const btn = document.getElementById('openingListenBtn');
+      const btnText = document.getElementById('openingListenBtnText');
+      const icon = document.getElementById('openingPlayIcon');
+      const soundwaves = document.getElementById('openingSoundwaves');
+
+      if (currentOpeningAudio) {
+        currentOpeningAudio.pause();
+        currentOpeningAudio = null;
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      // If opening audio is not yet available, try a fast poll to retrieve the HD studio MP3 from server
+      if (!openingAudioData && roomId && roomId !== 'demo') {
+        try {
+          await pollServerMessages();
+        } catch (e) {}
+      }
+
+      const handleStart = () => {
+        isOpeningAudioPlaying = true;
+        if (btn) btn.classList.add('playing');
+        if (btnText) btnText.innerText = 'Pausar Audio';
+        if (icon) {
+          icon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+        }
+        if (soundwaves) soundwaves.classList.remove('paused');
+        setMascotState('listening');
+      };
+
+      const handleEnd = () => {
+        isOpeningAudioPlaying = false;
+        if (btn) btn.classList.remove('playing');
+        if (btnText) btnText.innerText = 'Volver a Escuchar';
+        if (icon) {
+          icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+        }
+        if (soundwaves) soundwaves.classList.add('paused');
+        setMascotState('standby');
+      };
+
+      if (openingAudioData && openingAudioData.length > 0) {
+        const audio = new Audio(openingAudioData);
+        currentOpeningAudio = audio;
+
+        audio.onplay = handleStart;
+        audio.onpause = handleEnd;
+        audio.onended = handleEnd;
+        audio.onerror = () => {
+          console.warn('Opening audio element failed, falling back to speech synthesis');
+          if (openingSpanish) {
+            speakSpanishUtterance(openingSpanish, handleStart, handleEnd);
+          } else {
+            handleEnd();
+          }
+        };
+
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.warn('Autoplay prevented or playback error:', err);
+            if (!isAutoPlay && openingSpanish) {
+              speakSpanishUtterance(openingSpanish, handleStart, handleEnd);
+            } else {
+              handleEnd();
+            }
+          });
+        }
+      } else if (openingSpanish) {
+        speakSpanishUtterance(openingSpanish, handleStart, handleEnd);
+      }
+    }
+
+    /* -------------------------------------------------------------
+       Broadcasting & Server Synchronization
+    ------------------------------------------------------------- */
+    async function broadcastOutgoingMessage(msg, blob) {
       const reader = new FileReader();
-      reader.readAsDataURL(blob);
       reader.onloadend = async () => {
         const base64Audio = reader.result;
-
         const payload = {
+          id: msg.id,
           roomId: roomId,
           sender: 'contractor',
-          audioBase64: base64Audio,
+          senderName: 'Contractor',
+          esText: msg.esText,
+          enText: msg.enText,
+          audioData: base64Audio,
           timestamp: Date.now()
         };
 
         try {
-          localStorage.setItem(`walkie_last_msg_${roomId}`, JSON.stringify(payload));
-
-          if (!navigator.onLine) {
-            localStorage.setItem(`walkie_pending_offline_${roomId}`, JSON.stringify(payload));
-            statusText.innerText = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg> Mensaje guardado localmente (Sin internet)';
-          } else {
-            statusText.innerText = '¡Enviado al cliente!';
-          }
-
-          setTimeout(() => {
-            statusText.innerText = 'Mantén presionado para hablar';
-          }, 3000);
+          await fetch('/api/walkie.php?action=send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
         } catch (e) {
-          statusText.innerText = 'Mensaje grabado en memoria local';
+          console.warn('Failed to sync to walkie server:', e);
         }
       };
+      reader.readAsDataURL(blob);
     }
 
-    function syncPendingOfflineAudio() {
-      const pending = localStorage.getItem(`walkie_pending_offline_${roomId}`);
-      if (pending) {
-        try {
-          const payload = JSON.parse(pending);
-          localStorage.setItem(`walkie_last_msg_${roomId}`, JSON.stringify(payload));
-          localStorage.removeItem(`walkie_pending_offline_${roomId}`);
-          document.getElementById('status-text').innerText = '¡Mensaje enviado con éxito!';
-        } catch (e) {}
+    // Poll server for client responses every 2.5s
+    async function pollServerMessages() {
+      if (!roomId || roomId === 'demo') return;
+      try {
+        const res = await fetch(`/api/walkie.php?action=poll&room=${encodeURIComponent(roomId)}&since=${lastPollTimestamp}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.success && Array.isArray(data.messages)) {
+            data.messages.forEach(msg => {
+              if (msg.sender !== 'contractor') {
+                handleIncomingSyncMessage(msg);
+              }
+              if (msg.timestamp > lastPollTimestamp) {
+                lastPollTimestamp = msg.timestamp;
+              }
+            });
+            if (data.serverTime) {
+              lastPollTimestamp = Math.max(lastPollTimestamp, data.serverTime - 5000);
+            }
+          }
+        }
+      } catch (err) {}
+    }
+
+    function handleIncomingSyncMessage(data) {
+      // If this is the initial message from the expat, populate the top player card
+      const es = data.esText || data.spanishText || '';
+      const en = data.enText || data.englishText || '';
+      const audio = data.audioData || data.audioUrl || '';
+
+      if (es && (!openingSpanish || openingSpanish.length === 0 || conversation.length === 0)) {
+        openingSpanish = es;
+        openingEnglish = en;
+        openingAudioData = audio;
+
+        const card = document.getElementById('openingAudioCard');
+        const spText = document.getElementById('openingSpanishText');
+        const enText = document.getElementById('openingEnglishSubtext');
+        if (card && spText) {
+          spText.innerText = es;
+          if (en && en.length > 0 && en !== es && enText) {
+            enText.innerText = `"${en}"`;
+            enText.style.display = 'block';
+          }
+          card.style.display = 'flex';
+        }
+
+        // Try playing audio if not yet heard
+        if (audio && conversation.length === 0) {
+          playOpeningAudio(true);
+        }
+      }
+
+      const isAlreadyAdded = conversation.some(m => m.id === data.id);
+      if (isAlreadyAdded) return;
+
+      const newMsg = {
+        id: data.id || ('msg_' + Date.now()),
+        sender: 'incoming',
+        senderName: `${clientName} (Cliente)`,
+        time: data.time || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        esText: es || 'Mensaje recibido.',
+        enText: en || '',
+        audioSrc: audio || ''
+      };
+
+      conversation.push(newMsg);
+      renderConversation();
+
+      // If audio exists and it's a new incoming message (not initial), play it
+      if (conversation.length > 1 && newMsg.audioSrc) {
+        const audioEl = new Audio(newMsg.audioSrc);
+        audioEl.onplay = () => setMascotState('listening');
+        audioEl.onended = () => setMascotState('standby');
+        audioEl.play().catch(() => {});
       }
     }
 
-    function handleWebGoogleSignIn() {
-      const btn = document.getElementById('googleBtnText');
-      if (btn.innerText.includes('Conectado')) {
-        localStorage.removeItem('poquito_google_user');
-        btn.innerText = 'Continuar con Google';
-        alert('Sesión de Google cerrada.');
-      } else {
-        const fakeUser = { name: 'Residente Panamá', email: 'usuario@gmail.com' };
-        localStorage.setItem('poquito_google_user', JSON.stringify(fakeUser));
-        btn.innerText = 'Conectado ✓';
-        alert('¡Sesión iniciada con Google exitosamente!');
+    /* -------------------------------------------------------------
+       Render Conversation Feed
+    ------------------------------------------------------------- */
+    function renderConversation() {
+      const feed = document.getElementById('conversation-feed');
+      const countBadge = document.getElementById('conv-count');
+      if (!feed) return;
+
+      if (conversation.length === 0) {
+        if (countBadge) countBadge.innerText = 'Canal Listo';
+        feed.innerHTML = `
+          <div class="conv-empty-state">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <div><strong>Sin mensajes previos en esta sesión</strong></div>
+            <div style="font-size:12px; color:#7E766D;">Toca a Poquito para responder con tu voz.</div>
+          </div>
+        `;
+        return;
       }
+
+      if (countBadge) {
+        countBadge.innerText = `${conversation.length} ${conversation.length === 1 ? 'Mensaje' : 'Mensajes'}`;
+      }
+
+      feed.innerHTML = conversation.map((msg) => `
+        <div class="conv-bubble ${msg.sender}">
+          <div class="conv-bubble-header">
+            <span>${msg.senderName}</span>
+            <span>${msg.time}</span>
+          </div>
+          <div class="conv-bubble-spanish">${msg.esText}</div>
+          ${msg.enText ? `<div class="conv-bubble-english">${msg.enText}</div>` : ''}
+          ${msg.audioSrc || msg.esText ? `
+            <button class="conv-audio-btn" onclick="playFeedAudio('${msg.id}')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span>Escuchar Audio</span>
+            </button>
+          ` : ''}
+        </div>
+      `).join('');
+
+      feed.scrollTop = feed.scrollHeight;
     }
 
-    // Check Google Auth state on load
-    const savedGUser = localStorage.getItem('poquito_google_user');
-    if (savedGUser) {
-      document.getElementById('googleBtnText').innerText = 'Conectado ✓';
-    }
+    function playFeedAudio(msgId) {
+      const msg = conversation.find(m => m.id === msgId);
+      if (!msg) return;
 
-    window.addEventListener('offline', () => {
-      document.getElementById('status-text').innerText = '⚠️ Sin internet — Mensajes guardados localmente';
-    });
-
-    function playIncomingAudio() {
-      const text = `¡Buenas! El cliente ha recibido tu audio y está revisando la consulta.`;
+      if (activeFeedAudio) {
+        activeFeedAudio.pause();
+        activeFeedAudio = null;
+      }
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'es-PA';
-        window.speechSynthesis.speak(utterance);
+      }
+
+      if (msg.audioSrc) {
+        activeFeedAudio = new Audio(msg.audioSrc);
+        activeFeedAudio.onplay = () => setMascotState('listening');
+        activeFeedAudio.onended = () => setMascotState('standby');
+        activeFeedAudio.onerror = () => {
+          if (msg.esText) {
+            speakSpanishUtterance(msg.esText, () => setMascotState('listening'), () => setMascotState('standby'));
+          } else {
+            setMascotState('standby');
+          }
+        };
+        activeFeedAudio.play().catch(() => {
+          if (msg.esText) {
+            speakSpanishUtterance(msg.esText, () => setMascotState('listening'), () => setMascotState('standby'));
+          }
+        });
+      } else if (msg.esText) {
+        speakSpanishUtterance(msg.esText, () => setMascotState('listening'), () => setMascotState('standby'));
       }
     }
+
+    /* -------------------------------------------------------------
+       Unified Touch & Click Event Handlers
+       Supports BOTH 1-Tap Toggle AND Press-and-Hold
+    ------------------------------------------------------------- */
+    document.addEventListener('DOMContentLoaded', () => {
+      setMascotState('standby');
+      renderConversation();
+      pollServerMessages();
+      setInterval(pollServerMessages, 2500);
+
+      const talkBtn = document.getElementById('talk-btn');
+      if (!talkBtn) return;
+
+      let isHoldMode = false;
+
+      // Mouse (Desktop)
+      talkBtn.addEventListener('mousedown', async (e) => {
+        e.preventDefault();
+        pressStartTime = Date.now();
+        if (isRecording) {
+          await stopRecording();
+          return;
+        }
+        await startRecording();
+        isHoldMode = true;
+      });
+
+      window.addEventListener('mouseup', async () => {
+        if (isRecording && isHoldMode) {
+          const duration = Date.now() - pressStartTime;
+          if (duration > 350) {
+            await stopRecording();
+          }
+          isHoldMode = false;
+        }
+      });
+
+      // Touch (Mobile iOS Safari & Android Chrome)
+      talkBtn.addEventListener('touchstart', async (e) => {
+        e.preventDefault();
+        pressStartTime = Date.now();
+
+        if (isRecording) {
+          await stopRecording();
+          isHoldMode = false;
+          return;
+        }
+
+        await startRecording();
+        isHoldMode = true;
+      }, { passive: false });
+
+      talkBtn.addEventListener('touchend', async (e) => {
+        e.preventDefault();
+        if (isRecording && isHoldMode) {
+          const duration = Date.now() - pressStartTime;
+          if (duration > 350) {
+            await stopRecording();
+          }
+          isHoldMode = false;
+        }
+      }, { passive: false });
+    });
   </script>
+
   <script src="tracker.js?v=1.0.0" defer></script>
 </body>
 </html>

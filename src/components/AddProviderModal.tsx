@@ -81,7 +81,7 @@ export const AddProviderModal: React.FC<AddProviderModalProps> = ({
         ...existingMatch,
         communityNotes: [
           ...(existingMatch.communityNotes || []),
-          ...(notes.trim() ? [`"${notes.trim()}" — recommended by ${nominatedBy.trim() || 'Client'}`] : []),
+          ...(notes.trim() ? [`"${notes.trim()}" - recommended by ${nominatedBy.trim() || 'Client'}`] : []),
         ],
       };
 

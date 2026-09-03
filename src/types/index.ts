@@ -1,4 +1,5 @@
 export type PanamaTone = 'poquito' | 'full_panameno';
+export type UserPersona = 'expat' | 'traveler' | 'local';
 
 export interface Language {
   code: string;
@@ -7,14 +8,22 @@ export interface Language {
   flag: string;
 }
 
+export interface PresetSubCategory {
+  id: string;
+  label: string;
+  icon?: string;
+}
+
 export interface PresetPhrase {
   id?: string;
   title: string;
   input: string;
-  output: string;
+  output?: string;
   spanishText?: string;
   audioKey?: string;
   fullPanamenoOutput?: string;
+  subCategory?: string;
+  subCategoryLabel?: string;
 }
 
 export interface ServicePreset {
@@ -24,6 +33,7 @@ export interface ServicePreset {
   icon: string;
   description: string;
   defaultInputPrompt: string;
+  subCategories?: PresetSubCategory[];
   phrases: PresetPhrase[];
 }
 
@@ -56,7 +66,7 @@ export interface LocalServiceProvider {
   isSponsored?: boolean;
   adSpotlightText?: string;
   googleMapsQuery?: string;
-  serviceType?: 'service' | 'atm' | 'bank' | 'western_union' | 'punto_pago' | 'utility';
+  serviceType?: 'service' | 'atm' | 'bank' | 'western_union' | 'punto_pago' | 'utility' | 'doctor_clinic' | 'pharmacy_prescriptions' | 'vet_pet' | 'taxi_land' | 'dining_groceries';
   customTone?: PanamaTone;
   nominatedBy?: string;
   communityNotes?: string[];
@@ -67,4 +77,19 @@ export interface UserSubscription {
   isPro: boolean;
   translationsCountToday: number;
   maxFreeTranslations: number;
+}
+
+export interface PhoneBookContact {
+  id: string;
+  name: string;
+  whatsappNumber: string;
+  phoneNumber?: string;
+  normalizedPhone?: string;
+  category: string; // e.g. 'Water Taxi', 'A/C & Electric', 'Plumbing', 'Landlord', 'Personal', 'General'
+  isFavorite: boolean;
+  notes?: string;
+  isVerifiedDirectory?: boolean;
+  directoryProviderId?: string;
+  lastContactedAt?: number;
+  createdAt: number;
 }

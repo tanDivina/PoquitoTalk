@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmed & Access Ready • PoquitoTalk</title>
+  <meta name="description" content="Your PoquitoTalk purchase is confirmed. Claim your Travel Pass or credits directly in the PoquitoTalk app." />
+  <link rel="icon" type="image/png" href="favicon.png?v=4.4.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=6.2.0" />
+
+  <style>
+    .success-hero {
+      min-height: calc(100vh - 160px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px;
+      background: radial-gradient(circle at 50% 30%, rgba(37, 211, 102, 0.08) 0%, rgba(213, 232, 209, 0.18) 35%, rgba(251, 249, 245, 1) 75%);
+    }
+    .success-card {
+      background: linear-gradient(180deg, #FFFFFF 0%, #FAFCF9 100%);
+      border: 1px solid rgba(46, 64, 45, 0.12);
+      border-radius: 24px;
+      box-shadow: 0 24px 48px rgba(46, 64, 45, 0.08), 0 4px 12px rgba(46, 64, 45, 0.04);
+      max-width: 640px;
+      width: 100%;
+      padding: 36px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .success-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #2E402D, #25D366, #F59E0B);
+    }
+    .mascot-celebration-container {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mascot-celebration-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 20px rgba(46, 64, 45, 0.14));
+      position: relative;
+      z-index: 1;
+    }
+    .green-glow-halo {
+      position: absolute;
+      inset: -20px;
+      background: radial-gradient(circle, rgba(37, 211, 102, 0.25) 0%, rgba(37, 211, 102, 0.08) 50%, rgba(255, 255, 255, 0) 75%);
+      border-radius: 50%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .order-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+      background: #D5E8D1;
+      color: #1B5E20;
+      border: 1px solid #B7D9B1;
+      margin-bottom: 14px;
+    }
+    .success-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: #1B1C1A;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .success-subtitle {
+      font-size: 15px;
+      color: #4D463E;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .package-summary-box {
+      background: #F4F8F4;
+      border: 1px solid rgba(46, 64, 45, 0.12);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .package-summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .package-summary-row:last-child {
+      margin-bottom: 0;
+      padding-top: 10px;
+      border-top: 1px dashed #D5DDD5;
+    }
+    .package-name {
+      font-weight: 700;
+      color: #1B1C1A;
+    }
+    .token-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: #FFFFFF;
+      padding: 4px 10px;
+      border-radius: 8px;
+      color: #1B5E20;
+      font-weight: 700;
+      border: 1px solid #B7D9B1;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      word-break: break-all;
+    }
+    .claim-action-area {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (min-width: 540px) {
+      .claim-action-area {
+        grid-template-columns: 1.2fr 1fr;
+        align-items: stretch;
+      }
+    }
+    .mobile-action-column {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+    }
+    .mobile-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 15px 20px;
+      background: #2E402D;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 6px 16px rgba(46, 64, 45, 0.2);
+    }
+    .mobile-cta-btn:hover {
+      background: #243323;
+      transform: translateY(-2px);
+    }
+    .btn-arrow {
+      transition: transform 0.3s ease;
+    }
+    .mobile-cta-btn:hover .btn-arrow {
+      transform: translateX(4px);
+    }
+    .secondary-claim-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 16px;
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      color: #334155;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s;
+    }
+    .secondary-claim-btn:hover {
+      background: #F1F5F9;
+      color: #0F172A;
+    }
+    .qr-container {
+      background: #FFFFFF;
+      border: 1px solid rgba(46, 64, 45, 0.12);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .qr-image-frame {
+      width: 140px;
+      height: 140px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .qr-image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .qr-hint {
+      font-size: 12px;
+      color: #5C6B5E;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .receipt-note {
+      font-size: 13px;
+      color: #64748B;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+    .site-footer-mini {
+      border-top: 1px solid #E4E2DE;
+      padding: 24px 0;
+      text-align: center;
+      font-size: 13px;
+      color: #7A7268;
+      background: #FBF9F5;
+    }
+    .site-footer-mini a {
+      color: #4D463E;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    .site-footer-mini a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/" class="brand-link" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
+        <img src="logo.svg" alt="PoquitoTalk Logo" width="36" height="36" />
+        <div style="display: flex; flex-direction: column; line-height: 1.15;">
+          <span style="font-weight: 800; font-size: 19px; color: #1B1C1A; letter-spacing: -0.02em;">Poquito<span style="color: #964824;">Talk</span></span>
+          <span style="font-size: 11px; font-weight: 600; color: #78716C;">Bocas del Toro, Panamá</span>
+        </div>
+      </a>
+      <a href="/" class="btn-secondary" style="font-size: 14px; padding: 8px 16px; text-decoration: none; border: 1px solid #E4E2DE; border-radius: 10px; color: #1B1C1A;">← Back to Home</a>
+    </div>
+  </header>
+
+  <main class="success-hero">
+    <div class="success-card">
+      
+      <!-- Studio Dancing / Victory Jump Mascot Animation with Green Glow Halo -->
+      <div class="mascot-celebration-container">
+        <div class="green-glow-halo"></div>
+        <img src="poquito_victory_jump_256.webp" alt="Poquito Celebrating Victory" />
+      </div>
+
+      <!-- Verified Order Badge -->
+      <div class="order-badge">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>Payment Verified • 1-Tap Activation</span>
+      </div>
+
+      <h1 class="success-title">¡Wepa! Your PoquitoTalk Access is Ready!</h1>
+      <p class="success-subtitle">
+        Your payment has been confirmed. Tap the button below on your mobile device or scan the QR code to activate your pass and voice credits.
+      </p>
+
+      <!-- Package & Claim Details -->
+      <div class="package-summary-box">
+        <div class="package-summary-row">
+          <span style="color: #5C6B5E;">Plan / Package:</span>
+          <span class="package-name" id="packageName">7-Day Travel Pass</span>
+        </div>
+        <div class="package-summary-row">
+          <span style="color: #5C6B5E;">Status:</span>
+          <span style="color: #166534; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#22C55E">
+              <circle cx="12" cy="12" r="10" />
+            </svg>
+            Active & Ready
+          </span>
+        </div>
+        <div class="package-summary-row">
+          <span style="color: #5C6B5E;">Claim Code:</span>
+          <span class="token-chip" id="tokenDisplay">Loading claim code...</span>
+        </div>
+      </div>
+
+      <!-- Claim Action Grid -->
+      <div class="claim-action-area">
+        <!-- Mobile Deep Link CTA -->
+        <div class="mobile-action-column">
+          <a href="#" id="claimDeepLinkBtn" class="mobile-cta-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span>Open in PoquitoTalk App</span>
+            <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <button id="copyTokenBtn" class="secondary-claim-btn" onclick="copyClaimToken()">
+            <svg id="copyIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span id="copyBtnText">Copy Claim Code</span>
+          </button>
+        </div>
+
+        <!-- Desktop QR Code Frame (Guaranteed Instant Image + Dynamic QR Fallback) -->
+        <div class="qr-container">
+          <div class="qr-image-frame">
+            <img id="qrImg" alt="Scan QR Code to Open in App" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fpoquitotalk.hero-apps.com" />
+          </div>
+          <span class="qr-hint">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+            Scan with phone camera
+          </span>
+        </div>
+      </div>
+
+      <p class="receipt-note">
+        Your activation receipt has been sent to your Stripe email. Questions or need assistance? Reach our team anytime at <a href="mailto:support@hero-apps.com" style="color: #2E402D; font-weight: 600;">support@hero-apps.com</a>.
+      </p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer-mini">
+    <div class="container">
+      <p>© 2026 PoquitoTalk. Built for Bocas del Toro expats, digital nomads, and island travelers.</p>
+      <p style="margin-top: 8px;">
+        <a href="/">Home</a> •
+        <a href="/directory.html">Bocas Directory</a> •
+        <a href="/privacy">Privacy Policy</a> •
+        <a href="mailto:support@hero-apps.com">Support</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    let currentToken = '';
+
+    function getQueryParam(key) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(key) || '';
+    }
+
+    async function initClaim() {
+      const tokenParam = getQueryParam('token');
+      const sessionParam = getQueryParam('session_id') || getQueryParam('sid') || getQueryParam('cs');
+
+      // Default claim token if landed directly or in test
+      let activeToken = tokenParam;
+      if (!activeToken && sessionParam) {
+        activeToken = 'pt_claim_' + sessionParam.replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
+      } else if (!activeToken) {
+        // Deterministic live format token
+        activeToken = 'pt_claim_' + Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 8);
+      }
+
+      currentToken = activeToken;
+      updateUI(currentToken, '7-Day Travel Pass');
+
+      // Query server if online
+      if (tokenParam || sessionParam) {
+        try {
+          const query = tokenParam ? `token=${encodeURIComponent(tokenParam)}` : `sid=${encodeURIComponent(sessionParam)}`;
+          const res = await fetch(`api/claim.php?${query}`);
+          const data = await res.json();
+          if (data && data.success) {
+            currentToken = data.token || currentToken;
+            const packageName = data.package_name || '7-Day Travel Pass';
+            updateUI(currentToken, packageName);
+          }
+        } catch (e) {
+          console.log('Claim endpoint query:', e);
+        }
+      }
+    }
+
+    function updateUI(token, packageName) {
+      document.getElementById('tokenDisplay').textContent = token;
+      if (packageName) {
+        document.getElementById('packageName').textContent = packageName;
+      }
+
+      const deepLink = `poquitotalk://claim?token=${encodeURIComponent(token)}`;
+      document.getElementById('claimDeepLinkBtn').href = deepLink;
+
+      // Encode Universal Web Claim URL in QR code for universal phone camera compatibility
+      const qrTargetUrl = `https://poquitotalk.hero-apps.com/success.html?token=${encodeURIComponent(token)}`;
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=0&data=${encodeURIComponent(qrTargetUrl)}`;
+      
+      const qrImg = document.getElementById('qrImg');
+      if (qrImg) {
+        qrImg.src = qrApiUrl;
+      }
+
+      // If user opened this on mobile with ?autolaunch=1 or from a direct scan, trigger deep link
+      if (getQueryParam('autolaunch') === '1' || getQueryParam('action') === 'claim') {
+        window.location.href = deepLink;
+      }
+    }
+
+    function copyClaimToken() {
+      if (!currentToken) return;
+      const copyBtnText = document.getElementById('copyBtnText');
+      navigator.clipboard.writeText(currentToken).then(() => {
+        copyBtnText.textContent = 'Copied to Clipboard!';
+        setTimeout(() => {
+          copyBtnText.textContent = 'Copy Claim Code';
+        }, 2200);
+      }).catch(() => {
+        prompt('Your Claim Code:', currentToken);
+      });
+    }
+
+    // Initialize immediately
+    initClaim();
+  </script>
+</body>
+</html>

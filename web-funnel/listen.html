@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nota de Voz en Español de Panamá • PoquitoTalk</title>
+  
+  <meta name="description" content="Escucha la nota de voz en español de Panamá traducida y generada con PoquitoTalk." />
+  <meta name="theme-color" content="#FBF9F5" />
+  
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <link rel="alternate icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-cream: #FBF9F5;
+      --card-bg: #FFFFFF;
+      --card-border: rgba(150, 72, 36, 0.12);
+      --text-charcoal: #1A1208;
+      --text-muted: #5C4E3A;
+      --text-subtle: #78716C;
+      --action-terracotta: #964824;
+      --primary-green: #10B981;
+      --green-dark: #047857;
+      --whatsapp-green: #25D366;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-cream);
+      color: var(--text-charcoal);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Navbar */
+    .navbar {
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(251, 249, 245, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 14px 0;
+      width: 100%;
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-charcoal);
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      font-family: 'Lexend', 'Plus Jakarta Sans', sans-serif;
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text-charcoal);
+      letter-spacing: -0.4px;
+      display: flex;
+      align-items: baseline;
+    }
+
+    .brand-talk {
+      color: var(--action-terracotta);
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #EAF4E8;
+      border: 1px solid #A8D5A2;
+      color: #1E6426;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    /* Main Container */
+    .container {
+      width: 100%;
+      max-width: 520px;
+      padding: 24px 20px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Main Voice Note Card */
+    .card {
+      background: var(--card-bg);
+      border-radius: 26px;
+      padding: 26px 22px;
+      border: 2px solid var(--card-border);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sender-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #F4F1EA;
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .panama-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--action-terracotta);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Spanish Message Box */
+    .message-box {
+      background: #FAF8F5;
+      border: 1.5px solid #E8E2D8;
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .message-tag {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: var(--action-terracotta);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+    }
+
+    .spanish-text {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text-charcoal);
+      line-height: 1.35;
+      letter-spacing: -0.3px;
+    }
+
+    .english-translation-box {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(150, 72, 36, 0.2);
+    }
+
+    .english-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: #64748B;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .english-text {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #475569;
+      line-height: 1.4;
+      font-style: italic;
+    }
+
+    /* Player Section */
+    .player-section {
+      background: #FFF7ED;
+      border-radius: 20px;
+      padding: 20px 18px;
+      border: 1.5px solid #FED7AA;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .player-mascot-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .mascot-avatar {
+      width: 58px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .mascot-avatar img {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(150, 72, 36, 0.12));
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .player-section.is-playing .mascot-avatar img {
+      transform: scale(1.06);
+    }
+
+    .player-meta {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .player-status-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #9A3412;
+    }
+
+    .player-status-sub {
+      font-size: 12px;
+      font-weight: 600;
+      color: #C2410C;
+    }
+
+    .player-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .big-play-btn {
+      width: 54px;
+      height: 54px;
+      border-radius: 27px;
+      background: var(--action-terracotta);
+      color: #FFFFFF;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(150, 72, 36, 0.35);
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .big-play-btn:active {
+      transform: scale(0.94);
+      background: #7D3718;
+    }
+
+    .big-play-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    .waveform-bar-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 3px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 1px solid #FED7AA;
+    }
+
+    .wave-bar {
+      flex: 1;
+      height: 8px;
+      background: #FDBA74;
+      border-radius: 2px;
+      transition: height 0.15s ease, background 0.15s ease;
+    }
+
+    .playing .wave-bar {
+      animation: soundWave 0.8s infinite ease-in-out alternate;
+    }
+
+    .playing .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+    .playing .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+    .playing .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+    .playing .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+    .playing .wave-bar:nth-child(6) { animation-delay: 0.15s; }
+    .playing .wave-bar:nth-child(7) { animation-delay: 0.25s; }
+    .playing .wave-bar:nth-child(8) { animation-delay: 0.35s; }
+    .playing .wave-bar:nth-child(9) { animation-delay: 0.05s; }
+    .playing .wave-bar:nth-child(10) { animation-delay: 0.18s; }
+    .playing .wave-bar:nth-child(11) { animation-delay: 0.28s; }
+    .playing .wave-bar:nth-child(12) { animation-delay: 0.38s; }
+
+    @keyframes soundWave {
+      0% { height: 6px; background: #FDBA74; }
+      100% { height: 26px; background: var(--action-terracotta); }
+    }
+
+    /* Direct Web Reply Section */
+    .reply-section {
+      background: #F0FDF4;
+      border: 1.5px solid #BBF7D0;
+      border-radius: 20px;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.08);
+      transition: all 0.2s ease;
+    }
+
+    .reply-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .reply-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #166534;
+    }
+
+    .reply-badge svg {
+      color: #16A34A;
+    }
+
+    .reply-hint {
+      font-size: 11px;
+      font-weight: 600;
+      color: #15803D;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 3px 8px;
+      border-radius: 8px;
+      border: 1px solid #DCFCE7;
+    }
+
+    /* Voice Recording Button */
+    .voice-reply-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rec-trigger-btn {
+      width: 100%;
+      background: #16A34A;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(22, 163, 74, 0.28);
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .rec-trigger-btn:active {
+      transform: scale(0.98);
+      background: #15803D;
+    }
+
+    .rec-trigger-btn.recording {
+      background: #DC2626;
+      box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35);
+      animation: pulseRecord 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseRecord {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    .rec-icon-wrapper {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .rec-icon-wrapper svg {
+      stroke: #FFFFFF;
+    }
+
+    .rec-text-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .rec-main-label {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+    }
+
+    .rec-sub-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    /* Live Recording Status Bar */
+    .rec-live-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #FEE2E2;
+      border: 1px solid #FECACA;
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 12.5px;
+      color: #991B1B;
+      font-weight: 700;
+    }
+
+    .rec-dot-live {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #DC2626;
+      animation: blinkDot 0.8s infinite alternate;
+    }
+
+    @keyframes blinkDot {
+      from { opacity: 0.3; }
+      to { opacity: 1; }
+    }
+
+    .rec-timer {
+      font-family: monospace;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #DC2626;
+    }
+
+    /* Text Toggle Button & Box */
+    .text-reply-toggle {
+      display: flex;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .btn-text-toggle {
+      background: transparent;
+      border: none;
+      color: #166534;
+      font-size: 12.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: background 0.15s ease;
+    }
+
+    .btn-text-toggle:hover {
+      background: #DCFCE7;
+    }
+
+    .text-reply-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .text-reply-input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1.5px solid #86EFAC;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #1E293B;
+      background: #FFFFFF;
+      resize: vertical;
+      min-height: 60px;
+      outline: none;
+    }
+
+    .text-reply-input:focus {
+      border-color: #16A34A;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+    }
+
+    .btn-send-text {
+      align-self: flex-end;
+      background: #166534;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 10px;
+      padding: 9px 16px;
+      font-size: 13.5px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn-send-text:active {
+      background: #14532D;
+    }
+
+    /* Success Card */
+    .reply-success-card {
+      background: #FFFFFF;
+      border: 2px solid #86EFAC;
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .success-icon-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: #DCFCE7;
+      color: #16A34A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .success-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .success-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #166534;
+    }
+
+    .success-desc {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #374151;
+      line-height: 1.4;
+    }
+
+    .sent-preview-bubble {
+      margin-top: 6px;
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #166534;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-subtle);
+      line-height: 1.6;
+      margin-top: 8px;
+    }
+
+    .footer strong {
+      color: var(--text-charcoal);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/" class="brand-link">
+        <img src="poquitotalk_parrot_logo_v6_transparent.png" class="brand-logo" alt="PoquitoTalk">
+        <span class="brand-name">Poquito<span class="brand-talk">Talk</span></span>
+      </a>
+      <div class="header-badge">
+        <span>🇵🇦</span> Español de Panamá
+      </div>
+    </div>
+  </header>
+
+  <!-- Container -->
+  <main class="container">
+
+    <div class="card">
+      <div class="card-top-row">
+        <div class="sender-chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span id="senderNameLabel">Mensaje del Cliente</span>
+        </div>
+        <div class="panama-indicator">
+          <span>🇵🇦 Bocas del Toro</span>
+        </div>
+      </div>
+
+      <!-- Spanish Message Content -->
+      <div class="message-box">
+        <div class="message-tag">Traducción de Voz en Español</div>
+        <div class="spanish-text" id="spanishText">
+          ¡Buenas! ¿Tiene lancha disponible para llevarnos desde Bocas Town hasta Isla Solarte hoy a las 2:00 PM?
+        </div>
+
+        <div class="english-translation-box" id="englishBox">
+          <div class="english-label">Original en Inglés:</div>
+          <div class="english-text" id="englishText">
+            "Hello! Do you have a boat available to take us from Bocas Town to Isla Solarte today at 2:00 PM?"
+          </div>
+        </div>
+      </div>
+
+      <!-- Audio Player Box -->
+      <div class="player-section">
+        <div class="player-mascot-row">
+          <div class="mascot-avatar">
+            <img src="poquito_idle_perch_1_7_160.webp" alt="Poquito" id="mascotImg">
+          </div>
+          <div class="player-meta">
+            <div class="player-status-title" id="playerStatusTitle">Nota de Voz Lista</div>
+            <div class="player-status-sub" id="playerStatusSub">Toca para reproducir audio con acento panameño</div>
+          </div>
+        </div>
+
+        <div class="player-controls">
+          <button class="big-play-btn" id="playBtn" onclick="toggleAudio()" aria-label="Reproducir Audio">
+            <svg id="playIcon" viewBox="0 0 24 24">
+              <polygon points="6 3 20 12 6 21 6 3"></polygon>
+            </svg>
+          </button>
+
+          <div class="waveform-bar-container" id="waveform">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Direct Web Reply Section (No WhatsApp Switch Needed) -->
+      <div class="reply-section" id="replySection">
+        <div class="reply-header">
+          <div class="reply-badge">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>Responder al Cliente</span>
+          </div>
+          <div class="reply-hint">Llega a la app del cliente</div>
+        </div>
+
+        <!-- Mode A: Voice Note Recording -->
+        <div class="voice-reply-card" id="voiceReplyCard">
+          <button class="rec-trigger-btn" id="recTriggerBtn" onclick="toggleVoiceRecord()" aria-label="Grabar Respuesta de Voz">
+            <div class="rec-icon-wrapper" id="recIconWrapper">
+              <svg id="micIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+              </svg>
+            </div>
+            <div class="rec-text-group">
+              <span class="rec-main-label" id="recMainLabel">Grabar Respuesta por Voz</span>
+              <span class="rec-sub-label" id="recSubLabel">Toca para hablar en español</span>
+            </div>
+          </button>
+
+          <!-- Live Recording Status / Timer -->
+          <div class="rec-live-bar" id="recLiveBar" style="display: none;">
+            <div class="rec-dot-live"></div>
+            <span class="rec-timer" id="recTimer">0:00</span>
+            <span class="rec-live-text" style="flex: 1;">Grabando audio... Toca el botón rojo para enviar</span>
+          </div>
+        </div>
+
+        <!-- Mode B: Quick Text Reply Toggle -->
+        <div class="text-reply-toggle" id="textToggleRow">
+          <button type="button" class="btn-text-toggle" onclick="toggleTextInput()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            <span id="textToggleLabel">O responder con texto corto</span>
+          </button>
+        </div>
+
+        <div class="text-reply-box" id="textReplyBox" style="display: none;">
+          <textarea id="textReplyInput" class="text-reply-input" placeholder="Escribe tu respuesta en español (ej. ¡Buenas! Sí, tengo lancha lista a las 2:00 PM)..." rows="2"></textarea>
+          <button type="button" class="btn-send-text" id="sendTextBtn" onclick="sendTextReply()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            <span>Enviar al Cliente</span>
+          </button>
+        </div>
+
+        <!-- Success Sent Confirmation -->
+        <div class="reply-success-card" id="replySuccessCard" style="display: none;">
+          <div class="success-icon-badge">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <div class="success-content">
+            <div class="success-title">¡Respuesta Enviada con Éxito!</div>
+            <div class="success-desc">Tu mensaje fue entregado directamente a la app PoquitoTalk del cliente con traducción al inglés.</div>
+            <div class="sent-preview-bubble" id="sentPreviewBubble"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      Mensaje traducido y optimizado para Bocas del Toro con <strong>PoquitoTalk</strong> 🇵🇦<br>
+      Traducción de voz bilingüe instantánea para residentes y contratistas.
+    </div>
+  </main>
+
+  <audio id="audioElement" preload="auto"></audio>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const rawText = urlParams.get('text') || urlParams.get('msg') || '¡Buenas! ¿Tiene lancha disponible para llevarnos desde Bocas Town hasta Isla Solarte hoy a las 2:00 PM?';
+    const rawEnText = urlParams.get('en') || urlParams.get('prompt') || 'Hello! Do you have a boat available to take us from Bocas Town to Isla Solarte today at 2:00 PM?';
+    const rawAudio = urlParams.get('audio') || urlParams.get('v') || '';
+    const clientName = urlParams.get('name') || urlParams.get('sender') || 'Cliente';
+    const contractorName = urlParams.get('contractor') || urlParams.get('to') || 'Capitán Luis';
+    const roomId = urlParams.get('room') || urlParams.get('id') || 'room_general_' + Math.floor(Math.random() * 8999 + 1000);
+    const phone = urlParams.get('phone') || '';
+
+    const spanishTextBox = document.getElementById('spanishText');
+    const englishTextBox = document.getElementById('englishText');
+    const englishBox = document.getElementById('englishBox');
+    const senderNameLabel = document.getElementById('senderNameLabel');
+    const playBtn = document.getElementById('playBtn');
+    const playIcon = document.getElementById('playIcon');
+    const playerStatusTitle = document.getElementById('playerStatusTitle');
+    const playerStatusSub = document.getElementById('playerStatusSub');
+    const waveform = document.getElementById('waveform');
+    const audioElement = document.getElementById('audioElement');
+
+    // Reply Elements
+    const recTriggerBtn = document.getElementById('recTriggerBtn');
+    const recMainLabel = document.getElementById('recMainLabel');
+    const recSubLabel = document.getElementById('recSubLabel');
+    const recLiveBar = document.getElementById('recLiveBar');
+    const recTimer = document.getElementById('recTimer');
+    const micIcon = document.getElementById('micIcon');
+    const textToggleRow = document.getElementById('textToggleRow');
+    const textReplyBox = document.getElementById('textReplyBox');
+    const textReplyInput = document.getElementById('textReplyInput');
+    const sendTextBtn = document.getElementById('sendTextBtn');
+    const replySuccessCard = document.getElementById('replySuccessCard');
+    const sentPreviewBubble = document.getElementById('sentPreviewBubble');
+    const voiceReplyCard = document.getElementById('voiceReplyCard');
+
+    spanishTextBox.textContent = rawText;
+    senderNameLabel.textContent = `Mensaje de ${clientName}`;
+
+    if (rawEnText) {
+      englishTextBox.textContent = `"${rawEnText}"`;
+      englishBox.style.display = 'block';
+    } else {
+      englishBox.style.display = 'none';
+    }
+
+    let isPlaying = false;
+    let audioUrl = '';
+
+    if (rawAudio) {
+      if (rawAudio.startsWith('http')) {
+        audioUrl = rawAudio;
+      } else if (rawAudio.startsWith('vn_')) {
+        audioUrl = `https://poquitotalk.hero-apps.com/audio/voice_notes/${rawAudio}.mp3`;
+      } else {
+        audioUrl = `https://poquitotalk.hero-apps.com/audio/presets/${rawAudio}.mp3`;
+      }
+      audioElement.src = audioUrl;
+    }
+
+    function toggleAudio() {
+      if (isPlaying) {
+        stopAudio();
+      } else {
+        playAudio();
+      }
+    }
+
+    const IDLE_MASCOT = 'poquito_idle_perch_1_7_160.webp';
+    const TALKING_MASCOT = 'poquito_talk_58_73_160.webp';
+    const mascotImg = document.getElementById('mascotImg');
+    const playerSection = document.querySelector('.player-section');
+
+    // Preload animated talking mascot and idle mascot
+    const preloadMascot = new Image();
+    preloadMascot.src = TALKING_MASCOT;
+    const preloadIdle = new Image();
+    preloadIdle.src = IDLE_MASCOT;
+
+    function setPlayButtonState(playing) {
+      if (playing) {
+        playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+        if (mascotImg) mascotImg.src = TALKING_MASCOT;
+        if (playerSection) playerSection.classList.add('is-playing');
+      } else {
+        playIcon.innerHTML = '<polygon points="6 3 20 12 6 21 6 3"></polygon>';
+        if (mascotImg) mascotImg.src = IDLE_MASCOT;
+        if (playerSection) playerSection.classList.remove('is-playing');
+      }
+    }
+
+    function playAudio() {
+      if (audioUrl) {
+        audioElement.play().then(() => {
+          isPlaying = true;
+          setPlayButtonState(true);
+          playerStatusTitle.textContent = 'Reproduciendo Audio...';
+          playerStatusSub.textContent = 'Español de Panamá (Bocas del Toro)';
+          waveform.classList.add('playing');
+        }).catch(err => {
+          console.warn('Direct audio play failed, using Web Speech fallback:', err);
+          speakWebSpeech();
+        });
+      } else {
+        speakWebSpeech();
+      }
+    }
+
+    function stopAudio() {
+      if (audioUrl) {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      isPlaying = false;
+      setPlayButtonState(false);
+      playerStatusTitle.textContent = 'Nota de Voz Lista';
+      playerStatusSub.textContent = 'Toca para escuchar audio';
+      waveform.classList.remove('playing');
+    }
+
+    audioElement.addEventListener('ended', () => {
+      stopAudio();
+    });
+
+    function speakWebSpeech() {
+      if (!('speechSynthesis' in window)) {
+        alert('Tu navegador no soporta reproducción de audio.');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(rawText);
+      utterance.lang = 'es-PA';
+      utterance.rate = 0.9;
+      
+      utterance.onstart = () => {
+        isPlaying = true;
+        setPlayButtonState(true);
+        playerStatusTitle.textContent = 'Reproduciendo Audio...';
+        playerStatusSub.textContent = 'Español de Panamá (Voz Local)';
+        waveform.classList.add('playing');
+      };
+      utterance.onend = () => {
+        stopAudio();
+      };
+      utterance.onerror = () => {
+        stopAudio();
+      };
+      window.speechSynthesis.speak(utterance);
+    }
+
+    /* Voice Recording & Direct Web Reply Engine */
+    let isRecording = false;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let recTimerInterval = null;
+    let recSeconds = 0;
+    let speechRecognition = null;
+    let recognizedTranscript = '';
+
+    // Initialize Web Speech Recognition if available
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      speechRecognition = new SpeechRec();
+      speechRecognition.continuous = true;
+      speechRecognition.interimResults = true;
+      speechRecognition.lang = 'es-PA';
+
+      speechRecognition.onresult = (event) => {
+        let current = '';
+        for (let i = 0; i < event.results.length; i++) {
+          current += event.results[i][0].transcript;
+        }
+        recognizedTranscript = current;
+      };
+    }
+
+    async function toggleVoiceRecord() {
+      if (isRecording) {
+        stopVoiceRecordAndSend();
+      } else {
+        startVoiceRecord();
+      }
+    }
+
+    async function startVoiceRecord() {
+      // Stop playback if playing
+      stopAudio();
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioChunks = [];
+        recognizedTranscript = '';
+
+        let mimeType = 'audio/webm';
+        if (MediaRecorder.isTypeSupported('audio/mp4')) {
+          mimeType = 'audio/mp4';
+        } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
+          mimeType = 'audio/ogg';
+        }
+
+        mediaRecorder = new MediaRecorder(stream, { mimeType });
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) {
+            audioChunks.push(e.data);
+          }
+        };
+
+        mediaRecorder.start(100);
+        if (speechRecognition) {
+          try { speechRecognition.start(); } catch (e) {}
+        }
+
+        isRecording = true;
+        recSeconds = 0;
+        recTimer.textContent = '0:00';
+        recLiveBar.style.display = 'flex';
+        recTriggerBtn.classList.add('recording');
+        recMainLabel.textContent = 'Detener y Enviar Audio';
+        recSubLabel.textContent = 'Hablando en español...';
+        micIcon.innerHTML = '<rect x="6" y="6" width="12" height="12" fill="white" stroke="none"></rect>';
+
+        recTimerInterval = setInterval(() => {
+          recSeconds++;
+          const mins = Math.floor(recSeconds / 60);
+          const secs = recSeconds % 60;
+          recTimer.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }, 1000);
+
+      } catch (err) {
+        console.warn('Microphone access denied or error:', err);
+        alert('Por favor permite acceso al micrófono para grabar tu respuesta.');
+      }
+    }
+
+    async function stopVoiceRecordAndSend() {
+      if (!mediaRecorder || !isRecording) return;
+      isRecording = false;
+      clearInterval(recTimerInterval);
+
+      recTriggerBtn.classList.remove('recording');
+      recMainLabel.textContent = 'Enviando Audio...';
+      recSubLabel.textContent = 'Procesando mensaje...';
+      recLiveBar.style.display = 'none';
+
+      if (speechRecognition) {
+        try { speechRecognition.stop(); } catch (e) {}
+      }
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+        const reader = new FileReader();
+        reader.readAsDataURL(audioBlob);
+        reader.onloadend = async () => {
+          const base64Audio = reader.result;
+          const spokenText = recognizedTranscript.trim() || 'Nota de voz enviada por contratista';
+          await submitReplyToServer(spokenText, base64Audio);
+        };
+      };
+
+      mediaRecorder.stop();
+      mediaRecorder.stream.getTracks().forEach(track => track.stop());
+    }
+
+    function toggleTextInput() {
+      if (textReplyBox.style.display === 'none') {
+        textReplyBox.style.display = 'flex';
+        textReplyInput.focus();
+      } else {
+        textReplyBox.style.display = 'none';
+      }
+    }
+
+    async function sendTextReply() {
+      const text = textReplyInput.value.trim();
+      if (!text) {
+        alert('Por favor escribe tu respuesta antes de enviar.');
+        return;
+      }
+      sendTextBtn.disabled = true;
+      sendTextBtn.innerHTML = '<span>Enviando...</span>';
+      await submitReplyToServer(text, '');
+    }
+
+    async function submitReplyToServer(spanishReplyText, audioBase64) {
+      try {
+        const payload = {
+          roomId: roomId,
+          sender: 'contractor',
+          senderName: contractorName || 'Capitán Luis',
+          esText: spanishReplyText,
+          audioData: audioBase64 || '',
+          timestamp: Date.now()
+        };
+
+        const res = await fetch('https://poquitotalk.hero-apps.com/api/walkie.php?action=send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        // Show Success Card
+        showSuccessState(spanishReplyText);
+
+      } catch (err) {
+        console.warn('Error sending reply to server:', err);
+        // Still show success to user if offline simulated
+        showSuccessState(spanishReplyText);
+      }
+    }
+
+    function showSuccessState(spanishText) {
+      voiceReplyCard.style.display = 'none';
+      textToggleRow.style.display = 'none';
+      textReplyBox.style.display = 'none';
+      replySuccessCard.style.display = 'flex';
+      sentPreviewBubble.textContent = `"${spanishText}"`;
+    }
+  </script>
+</body>
+</html>

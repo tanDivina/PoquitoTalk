@@ -155,6 +155,25 @@ $permanentEntities = [
         'map_url' => 'https://www.google.com/maps/search/?api=1&query=Isla+Solarte+Bocas+del+Toro',
         'description' => 'Finca orgánica y proyecto de suelo vivo en Isla Solarte. Producción de tierra negra rica en microorganismos autóctonos (IMO), abono orgánico, compost, acolchado (mulch) y plantas tropicales.',
         'description_en' => 'Organic living soil farm and permaculture nursery on Isla Solarte. Specializing in indigenous microorganisms (IMO), bio-complete garden soil, nutrient compost, mulching, and tropical plants.'
+    ],
+    [
+        'id' => 'bocas-book-exchange',
+        'name' => 'Bocas Free Book Exchange',
+        'name_es' => 'Intercambio Gratuito de Libros de Bocas',
+        'category' => 'COMMUNITY',
+        'category_label' => 'Cultura y Comunidad',
+        'category_label_en' => 'Community & Culture',
+        'rating' => 5.0,
+        'verified' => true,
+        'status' => 'approved',
+        'location' => 'Calle Segunda (al lado de Mono Loco), Bocas Town, Isla Colón',
+        'hours' => 'Abierto 24/7 • Siempre abierto (Autoservicio • Todo Clima)',
+        'phone' => '',
+        'phone_raw' => '',
+        'website' => '',
+        'map_url' => 'https://www.google.com/maps/search/?api=1&query=Mono+Loco+Calle+2da+Bocas+del+Toro+Isla+Colon',
+        'description' => 'Intercambio comunitario de libros autoservicio abierto 24/7 bajo cualquier clima. Sin personal ni trámites: pasa cuando quieras a explorar, llevarte un libro y dejar otro si puedes. Títulos en múltiples idiomas. ¡Se reciben donaciones con gusto (se necesitan especialmente libros en español)!',
+        'description_en' => 'Self-service community book exchange open 24/7 in all weather. No staff or checkout required—stop by anytime to browse, take a book, and bring one to exchange if possible. Multi-language titles available. Book donations warmly welcomed (Spanish language books especially needed!).'
     ]
 ];
 
@@ -194,11 +213,61 @@ if (file_exists($contractorsFile)) {
                 $phoneClean = '507' . $phoneClean;
             }
             
+            $rawCatUpper = strtoupper($tradeCategory);
+            $combined = strtoupper($businessName . ' ' . $tradeCategory . ' ' . $summary);
+            $cleanedCombined = preg_replace('/\bSOLARTE\b/i', '', $combined);
+            $canonicalCategory = 'CONTRACTORS';
+
+            // 1. Check explicit trade first
+            if (preg_match('/\b(ELECTRIC|SOLAR|A\/C|AIR COND|REFRIGER|VOLTAGE|SURGE)\b/i', $rawCatUpper)) {
+                $canonicalCategory = 'AC_REPAIR';
+            } elseif (preg_match('/\b(CONTRACTOR|HANDYMAN|CARPINT|CONSTRUCTION|MASONRY|BUILDER)\b/i', $rawCatUpper)) {
+                $canonicalCategory = 'CONTRACTORS';
+            } elseif (preg_match('/\b(GARDEN|PLANT|JARDIN|VIVERO|SOIL|LANDSCAP)\b/i', $rawCatUpper)) {
+                $canonicalCategory = 'GARDENING';
+            } elseif (preg_match('/\b(TAXI|SHUTTLE|TRANSPORT|RENTAL|CAR RENTAL)\b/i', $rawCatUpper)) {
+                $canonicalCategory = 'LAND_TAXI';
+            } elseif (preg_match('/\b(BOAT|LANCHA|CAPITAN|CAPTAIN|WATER TAXI)\b/i', $rawCatUpper)) {
+                $canonicalCategory = 'WATER_TAXI';
+            } elseif (preg_match('/\b(PLUMB|AGUA|WATER TANK|CISTERN)\b/i', $rawCatUpper)) {
+                $canonicalCategory = 'PLUMBING';
+            } elseif (preg_match('/\b(STARLINK|INTERNET|WIFI)\b/i', $rawCatUpper)) {
+                $canonicalCategory = 'STARLINK';
+            } elseif (preg_match('/\b(MEDIC|DOCTOR|PHARM|CLINIC|FARMACIA)\b/i', $rawCatUpper)) {
+                $canonicalCategory = 'MEDICAL';
+            } elseif (preg_match('/\b(VET|ANIMAL|PET|VETERINAR)\b/i', $rawCatUpper)) {
+                $canonicalCategory = 'VET';
+            } elseif (preg_match('/\b(BANK|ATM|BANCO|WESTERN UNION)\b/i', $rawCatUpper)) {
+                $canonicalCategory = 'BANKING';
+            } else {
+                // 2. Fallback to semantic inspection of name and summary (ignoring SOLARTE)
+                if (preg_match('/\b(CAR RENTAL|RENTAL CAR|UTV|4X4|RENTAL|TAXI|SHUTTLE|VEHICLE RENTAL)\b/i', $cleanedCombined)) {
+                    $canonicalCategory = 'LAND_TAXI';
+                } elseif (preg_match('/\b(SOIL|GARDEN|PLANT|JARDIN|VIVERO|MICROBIOLOGY|COMPOST|MULCH|PODA|FRUIT TREE)\b/i', $cleanedCombined)) {
+                    $canonicalCategory = 'GARDENING';
+                } elseif (preg_match('/\b(WELD|SOLDAD|FABRICATION|CONTRACTOR|HANDYMAN|CARPINT|CONSTRUCTION|REPAIR|REMODEL|ESTRUCTUR)\b/i', $cleanedCombined)) {
+                    $canonicalCategory = 'CONTRACTORS';
+                } elseif (preg_match('/\b(ELECTRIC|SOLAR|A\/C|AIR COND|REFRIGER|VOLTAGE|SURGE|INVERTER)\b/i', $cleanedCombined)) {
+                    $canonicalCategory = 'AC_REPAIR';
+                } elseif (preg_match('/\b(PLUMB|PLUMBER|AGUA|WATER TANK|CISTERN|BOMBA DE AGUA)\b/i', $cleanedCombined)) {
+                    $canonicalCategory = 'PLUMBING';
+                } elseif (preg_match('/\b(STARLINK|INTERNET|WIFI|ROUTER)\b/i', $cleanedCombined)) {
+                    $canonicalCategory = 'STARLINK';
+                } elseif (preg_match('/\b(MEDIC|DOCTOR|PHARM|CLINIC|FARMACIA|DENTIST)\b/i', $cleanedCombined)) {
+                    $canonicalCategory = 'MEDICAL';
+                } elseif (preg_match('/\b(VET|ANIMAL|PET|VETERINAR)\b/i', $cleanedCombined)) {
+                    $canonicalCategory = 'VET';
+                } elseif (preg_match('/\b(BOAT|LANCHA|CAPITAN|CAPTAIN|WATER TAXI)\b/i', $cleanedCombined)) {
+                    $canonicalCategory = 'WATER_TAXI';
+                }
+            }
+            
             $dynamicContractors[] = [
                 'id' => $rec['id'] ?? ('contractor-' . substr(md5($businessName . rand()), 0, 8)),
                 'name' => $businessName,
                 'name_es' => $businessName,
-                'category' => strtoupper($tradeCategory),
+                'category' => $canonicalCategory,
+                'trade_category' => $tradeCategory,
                 'category_label' => $tradeCategory,
                 'category_label_en' => $tradeCategory,
                 'rating' => $rec['rating'] ?? 5.0,
@@ -229,6 +298,12 @@ if ($catFilter !== 'ALL') {
             $name = strtoupper($item['name'] ?? '');
             $desc = strtoupper($item['description'] ?? '');
             return strpos($cat, 'GARDEN') !== false || strpos($cat, 'PLANT') !== false || strpos($name, 'JARDIN') !== false || strpos($desc, 'JARDIN') !== false;
+        }
+        if ($catFilter === 'COMMUNITY') {
+            $cat = strtoupper($item['category'] ?? '');
+            $name = strtoupper($item['name'] ?? '');
+            $desc = strtoupper($item['description'] ?? '');
+            return strpos($cat, 'COMMUNITY') !== false || strpos($name, 'BOOK') !== false || strpos($desc, 'BOOK') !== false || strpos($name, 'LIBRO') !== false;
         }
         return isset($item['category']) && $item['category'] === $catFilter;
     }));

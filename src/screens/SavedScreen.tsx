@@ -4,7 +4,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { TranslationCard } from '../components/TranslationCard';
-import { AnimatedParrotMascot } from '../components/AnimatedParrotMascot';
 import { TranslationItem } from '../types';
 
 interface SavedScreenProps {
@@ -33,15 +32,10 @@ export const SavedScreen: React.FC<SavedScreenProps> = ({
 
       {savedTranslations.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <AnimatedParrotMascot
-            size={68}
-            isAnimating={true}
-            showSpeechBubble={true}
-            customTip="No saved phrases yet! Star any translation on the Home screen to save it here for quick 1-tap reuse."
-          />
-          <Text style={styles.emptyTitle}>Keep Your Go-To Phrases Handy</Text>
+          <Ionicons name="star-outline" size={48} color={Colors.outline} />
+          <Text style={styles.emptyTitle}>No saved phrases yet</Text>
           <Text style={styles.emptyDesc}>
-            Tap the star on any translation to quickly copy and send it in WhatsApp without re-translating.
+            Star any translated message on the Home screen to save it here for quick reuse.
           </Text>
         </View>
       ) : (

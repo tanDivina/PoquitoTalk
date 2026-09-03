@@ -1,0 +1,84 @@
+================================================================================
+POQUITOTALK — GOOGLE PLAY STORE METADATA & ASSET CHEAT-SHEET
+================================================================================
+
+1. APP DETAILS
+--------------
+App Name / Title (27 / 30 chars):
+PoquitoTalk: Panama Spanish
+
+Short Description (77 / 80 chars):
+Panamanian Spanish WhatsApp voice notes & verified island service directory.
+
+Full Description (Copy-paste between the dashed lines):
+--------------------------------------------------------------------------------
+Need to call a water taxi, check on a power outage, or message an island contractor in Bocas del Toro without sounding like a robotic textbook?
+
+PoquitoTalk is the local-first Panamanian Spanish companion designed specifically for expats, travelers, and island residents in Panamá. 
+
+Speak or type naturally in English, and PoquitoTalk instantly translates and generates authentic Panamanian Spanish voice notes ready to send directly into WhatsApp in a single tap.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌴 WHY EXPATS & LOCALS LOVE POQUITOTALK
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎙️ 1-TAP WHATSAPP VOICE DISPATCH
+• Speak English into the mic, and get crisp, localized Panamanian Spanish audio.
+• 1-tap dispatch directly opens your WhatsApp chats with the audio prepped.
+• Zero robotic translation errors—uses natural local phrasing and regional cadence.
+
+🌿 2 REGIONAL TONAL SWITCHERS
+• 🌿 Poquito (Polite & Respectful): Ideal for ordering food, pharmacy visits, and formal island interactions.
+• ⚡️ Full Panameño (Local Street & Island Dialect): Authentic phrasing with local slang (lancha, refil, luz, fren) that contractors and captains immediately respect.
+
+🚤 VERIFIED ISLAND CONTRACTOR & SERVICE DIRECTORY
+• Instant access to verified Bocas del Toro professionals:
+  - Boat Captains & Water Taxis (Carenero, Bastimentos, Starfish, Almirante)
+  - Land Taxis & Transport (Island shuttles, airport transfers)
+  - Plumbing & 5-Gallon Drinking Water Tank Refills
+  - A/C Techs, Electricians & Solar Trades (Freon gas refills, breaker panels)
+  - Gardening & Property Maintenance
+  - Contractors & Handymen
+  - Starlink & High-Speed Internet Techs
+  - ATMs & Western Union Cash Services
+  - Supermarkets & Island Dining
+  - Doctor Clinics & Pharmacies
+  - Island Vets & Animal Care
+  - Community & Island Culture
+• 1-tap direct WhatsApp contact with pre-filled context messages.
+
+🌴 100% OFFLINE EMERGENCY AUDIO PRESETS
+• Power outage? Cellular tower down? No problem.
+• Essential island emergency presets work completely offline without WiFi or data.
+• Broadcast emergency audio directly from your phone speaker or send via WhatsApp when connection returns.
+
+🔒 PRIVACY-FIRST & CLEAN
+• No invasive tracking, no third-party ads, and no data harvesting.
+• Microphone audio is processed solely for translation and never stored or shared with advertisers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+🇵🇦 BUILT FOR BOCAS DEL TORO & PANAMÁ
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+Whether you are living off-grid on Isla Colón or vacationing in Bastimentos, PoquitoTalk bridges the communication gap effortlessly.
+
+Download PoquitoTalk today and speak like a true local from your very first day on the island!
+--------------------------------------------------------------------------------
+
+2. STORE CATEGORIZATION & CONTACT
+---------------------------------
+Category: Travel & Local (Alternative: Communication)
+Tags: Translation, Travel Companion, Language Learning, Voice Notes, Panama
+Developer Email: support@hero-apps.com
+Alternative Email: Dorien.vda@gmail.com
+Official Website: https://poquitotalk.hero-apps.com
+Privacy Policy URL: https://poquitotalk.hero-apps.com/privacy
+Terms of Service URL: https://poquitotalk.hero-apps.com/terms.html
+
+3. GRAPHIC ASSETS PREPARED IN THIS FOLDER
+-----------------------------------------
+- 01_app_icon_512x512.png            (512x512, 32-bit PNG, Google Play Store Icon)
+- 02_feature_graphic_1024x500.png    (1024x500, 24-bit PNG, Top Promo Banner)
+- 03_screenshot_1_voice_dispatch.png (1080x1920, Phone Screenshot 1)
+- 04_screenshot_2_errands_presets.png(1080x1920, Phone Screenshot 2)
+- 05_screenshot_3_verified_directory.png (1080x1920, Phone Screenshot 3)
+- 06_screenshot_4_talk_live_decoder.png  (1080x1920, Phone Screenshot 4)

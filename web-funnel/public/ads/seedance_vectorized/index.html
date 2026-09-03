@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poquito Mascot: Seedance 2.5 AI Video & Vectorization Showcase</title>
+  <style>
+    :root {
+      --bg: #090A0F;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+      --accent: #25D366;
+      --accent-alt: #06B6D4;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding: 2.5rem 1.5rem;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    header {
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(37, 211, 102, 0.12);
+      border: 1px solid rgba(37, 211, 102, 0.3);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    p.subtitle {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 750px;
+      line-height: 1.5;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-header {
+      padding: 1.25rem 1.25rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-title .tag {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+    }
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .media-container {
+      flex: 1;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.4);
+      min-height: 360px;
+    }
+    video, img, object {
+      max-width: 100%;
+      max-height: 320px;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+    .stats-footer {
+      padding: 1rem 1.25rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-top: 1px solid var(--border);
+      font-size: 0.82rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+    .stats-footer span strong {
+      color: var(--text);
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .comparison-table th, .comparison-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .comparison-table th {
+      background: rgba(255, 255, 255, 0.02);
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">Pipeline Complete</div>
+      <h1>Poquito Mascot: Seedance 2.5 Video & Vectorization</h1>
+      <p class="subtitle">
+        We passed <code>poquito_talkie.svg</code> into Bytedance <strong>Seedance 2.5 Image-to-Video</strong> on FAL AI, extracted frames at 12 fps, vectorized each frame with <strong>vtracer</strong>, and generated an Animated SVG and WebP.
+      </p>
+    </header>
+
+    <div class="grid">
+      <!-- Card 1: Seedance 2.5 Raw AI Video -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>1. Seedance 2.5 AI Video</span>
+            <span class="tag">MP4 (H.264)</span>
+          </div>
+          <div class="card-desc">Generated via <code>bytedance/seedance-2.5/image-to-video</code></div>
+        </div>
+        <div class="media-container">
+          <video src="./poquito_seedance_2.5_raw.mp4" autoplay loop muted playsinline controls></video>
+        </div>
+        <div class="stats-footer">
+          <span>Resolution: <strong>960x960</strong></span>
+          <span>Size: <strong>728 KB</strong></span>
+          <span>Duration: <strong>6.0s</strong></span>
+        </div>
+      </div>
+
+      <!-- Card 2: Vectorized Animated SVG -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>2. Vectorized Animated SVG</span>
+            <span class="tag">SVG (73 Vector Frames)</span>
+          </div>
+          <div class="card-desc">Converted via <code>vtracer</code> + CSS frame keyframes</div>
+        </div>
+        <div class="media-container">
+          <img src="./poquito_seedance_animated.svg" alt="Vectorized Animated SVG" />
+        </div>
+        <div class="stats-footer">
+          <span>Format: <strong>Vector Paths</strong></span>
+          <span>Size: <strong>3.3 MB</strong></span>
+          <span>Framerate: <strong>12 fps</strong></span>
+        </div>
+      </div>
+
+      <!-- Card 3: Animated WebP -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>3. High-Efficiency WebP</span>
+            <span class="tag">WebP (Alpha / Palette)</span>
+          </div>
+          <div class="card-desc">Quantized 32-color animated raster format</div>
+        </div>
+        <div class="media-container">
+          <img src="./poquito_seedance_animated.webp" alt="Animated WebP" />
+        </div>
+        <div class="stats-footer">
+          <span>Format: <strong>Animated WebP</strong></span>
+          <span>Size: <strong>941 KB</strong></span>
+          <span>Framerate: <strong>15 fps</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <h2 style="font-size: 1.3rem; margin-bottom: 0.75rem;">Technical Evaluation & Comparison</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Format</th>
+          <th>File Size</th>
+          <th>Scalability</th>
+          <th>DOM / CPU Performance</th>
+          <th>Best App Use Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Raw Seedance MP4</strong></td>
+          <td>~720 KB</td>
+          <td>Pixel-locked (960x960)</td>
+          <td>Hardware accelerated (GPU video decoder)</td>
+          <td>Video ads, hero reels, social posts</td>
+        </tr>
+        <tr>
+          <td><strong>Vectorized Animated SVG (vtracer)</strong></td>
+          <td>~3.3 MB</td>
+          <td>Infinite (Resolution Independent)</td>
+          <td>High DOM overhead (73 complex path groups)</td>
+          <td>Artistic hand-drawn animations, landing page features</td>
+        </tr>
+        <tr>
+          <td><strong>Animated WebP / APNG</strong></td>
+          <td>~940 KB</td>
+          <td>Retina crisp at 512x512</td>
+          <td>Extremely lightweight, zero DOM overhead</td>
+          <td>In-app sticker reactions, chat animations, badges</td>
+        </tr>
+        <tr>
+          <td><strong>Direct SVG Vector Rig (`logo.svg`)</strong></td>
+          <td><strong>~4 KB</strong></td>
+          <td>Infinite</td>
+          <td>Instant 60fps (CSS / GSAP / Lottie)</td>
+          <td><strong>In-App Mascot States</strong> (mic pulsing, talking beak, idle)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

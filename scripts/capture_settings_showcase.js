@@ -1,0 +1,264 @@
+const fs = require('fs');
+const path = require('path');
+const puppeteer = require('puppeteer-core');
+
+const WORKSPACE_DIR = process.cwd();
+const OUTPUT_SHOWCASE = path.join(WORKSPACE_DIR, 'settings_and_account_showcase.png');
+
+(async () => {
+  console.log('1. Launching browser...');
+  const browser = await puppeteer.launch({
+    executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
+
+  const page = await browser.newPage();
+  await page.setViewport({ width: 393, height: 852, deviceScaleFactor: 3 });
+  await page.goto('http://localhost:8081/?settings=true&splash=false&onboarding=false', { waitUntil: 'networkidle2' });
+  await new Promise(r => setTimeout(r, 2000));
+
+  // Scroll the modal body down slightly to show Membership & Subscription card
+  await page.evaluate(() => {
+    const scrollContainers = Array.from(document.querySelectorAll('div'));
+    const scrollable = scrollContainers.find(el => el.scrollHeight > el.clientHeight && el.clientHeight > 300);
+    if (scrollable) {
+      scrollable.scrollTop = 220;
+    }
+  });
+  await new Promise(r => setTimeout(r, 800));
+
+  const settingsImgPath = path.join(WORKSPACE_DIR, 'settings_modal_raw.png');
+  await page.screenshot({ path: settingsImgPath });
+  console.log('2. Captured scrolled settings modal');
+
+  // 3. Render side-by-side or clean device frame showcase
+  console.log('3. Rendering Android device showcase for Settings...');
+  const imgSettingsBase64 = `data:image/png;base64,${fs.readFileSync(settingsImgPath).toString('base64')}`;
+
+  const showcaseHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Google Sans", "Segoe UI", Roboto, sans-serif; }
+    body {
+      background-color: #FAF8F5;
+      padding: 50px 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .header-block {
+      text-align: center;
+      margin-bottom: 30px;
+      max-width: 800px;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      border-radius: 9999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #059669;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 30px;
+      font-weight: 900;
+      color: #1A130E;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      font-size: 14.5px;
+      font-weight: 500;
+      color: #6B5E51;
+      line-height: 1.5;
+    }
+    .devices-grid {
+      display: flex;
+      flex-direction: row;
+      gap: 40px;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 800px;
+    }
+    .device-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 385px;
+    }
+    .android-chassis {
+      position: relative;
+      width: 375px;
+      height: 812px;
+      background: #1E2022;
+      border-radius: 46px;
+      padding: 10px;
+      box-shadow: 
+        0 0 0 2px #3D4043,
+        0 0 0 4px #121314,
+        0 25px 50px -12px rgba(26, 19, 14, 0.25),
+        0 12px 24px -8px rgba(26, 19, 14, 0.15);
+    }
+    .screen-viewport {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #FAF8F5;
+      border-radius: 38px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .android-status-bar {
+      height: 36px;
+      width: 100%;
+      background: #FAF8F5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 50;
+      position: relative;
+    }
+    .status-time {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1A130E;
+    }
+    .android-pinhole {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #0B0F14;
+      border: 1.5px solid #1E293B;
+    }
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #1A130E;
+    }
+    .screen-content {
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    .screen-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+    .highlights-box {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 820px;
+      width: 100%;
+    }
+    .highlight-card {
+      background: #FFFFFF;
+      border: 1px solid #E8E1D7;
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .highlight-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #1A130E;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .highlight-desc {
+      font-size: 12px;
+      color: #6B5E51;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-block">
+    <div class="badge-pill">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+      Settings & Account Preferences
+    </div>
+    <h1>Clear "Cancel Anytime" & Membership Controls</h1>
+    <p class="subtitle">Direct Google Play / App Store cancellation access, clear guarantees, and transparent billing status</p>
+  </div>
+
+  <div class="devices-grid">
+    <div class="device-card">
+      <div class="android-chassis">
+        <div class="screen-viewport">
+          <div class="android-status-bar">
+            <span class="status-time">9:41</span>
+            <div class="android-pinhole"></div>
+            <div class="status-icons">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </div>
+          </div>
+          <div class="screen-content">
+            <img src="${imgSettingsBase64}" class="screen-img" alt="Settings & Account Modal Scrolled" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlights-box">
+    <div class="highlight-card">
+      <div class="highlight-title">Cancel Anytime Badge</div>
+      <div class="highlight-desc">Prominently positioned in the Membership & Credits card header to reassure users before and after subscribing.</div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-title">Direct Store Cancellation</div>
+      <div class="highlight-desc">1-tap "Manage or Cancel Subscription" opens Google Play / Apple ID subscriptions directly.</div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-title">Transparent Guarantee</div>
+      <div class="highlight-desc">Users never get trapped or confused about how or where to cancel their membership.</div>
+    </div>
+  </div>
+
+</body>
+</html>
+`;
+
+  const showcasePage = await browser.newPage();
+  await showcasePage.setViewport({ width: 950, height: 1100, deviceScaleFactor: 2 });
+  await showcasePage.setContent(showcaseHtml, { waitUntil: 'domcontentloaded' });
+  await new Promise(r => setTimeout(r, 1000));
+  await showcasePage.screenshot({ path: OUTPUT_SHOWCASE, fullPage: true });
+
+  console.log('✅ Settings showcase saved:', OUTPUT_SHOWCASE);
+  await browser.close();
+})();

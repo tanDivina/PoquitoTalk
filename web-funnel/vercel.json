@@ -7,8 +7,11 @@
     { "source": "/es/directorio", "destination": "/es/directorio.html" },
     { "source": "/contractors", "destination": "/contractors.html" },
     { "source": "/es/contratistas", "destination": "/es/contratistas.html" },
+    { "source": "/terms", "destination": "/terms.html" },
     { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/talk", "destination": "/talk.html" }
+    { "source": "/talk", "destination": "/talk.html" },
+    { "source": "/success", "destination": "/success.html" },
+    { "source": "/claim", "destination": "/success.html" }
   ],
   "headers": [
     {

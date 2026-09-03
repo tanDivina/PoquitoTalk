@@ -6,7 +6,7 @@
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bocas del Toro Verified Service & Emergency Directory 🇵🇦 — PoquitoTalk</title>
+  <title>Bocas del Toro Verified Service & Emergency Directory 🇵🇦 • PoquitoTalk</title>
   <meta name="description" content="Official verified directory for Bocas del Toro & Changuinola, Panama. Find ATMs, Hope Spot certified boat captains, water trucks, Western Union, and repair technicians." />
   
   <!-- Canonical & Multilingual Hreflang Tags per multilingual-url-seo skill -->
@@ -18,7 +18,7 @@
   <!-- Open Graph & Social Cards -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="PoquitoTalk" />
-  <meta property="og:title" content="Bocas del Toro Verified Service & Emergency Directory 🇵🇦 — PoquitoTalk" />
+  <meta property="og:title" content="Bocas del Toro Verified Service & Emergency Directory 🇵🇦 • PoquitoTalk" />
   <meta property="og:description" content="Official verified directory for Bocas del Toro & Changuinola, Panama. Find ATMs, Hope Spot certified boat captains, water trucks, Western Union, and repair technicians." />
   <meta property="og:url" content="https://poquitotalk.hero-apps.com/directory.html" />
   <meta property="og:image" content="https://poquitotalk.hero-apps.com/twitter_card.png?v=1.2.0" />
@@ -30,11 +30,11 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@DorienVibecodes" />
   <meta name="twitter:creator" content="@DorienVibecodes" />
-  <meta name="twitter:title" content="Bocas del Toro Verified Service & Emergency Directory 🇵🇦 — PoquitoTalk" />
+  <meta name="twitter:title" content="Bocas del Toro Verified Service & Emergency Directory 🇵🇦 • PoquitoTalk" />
   <meta name="twitter:description" content="Official verified directory for Bocas del Toro & Changuinola, Panama. Find ATMs, Hope Spot certified boat captains, water trucks, Western Union, and repair technicians." />
   <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/twitter_card.png?v=1.2.0" />
 
-  <link rel="stylesheet" href="style.css?v=5.7.0" />
+  <link rel="stylesheet" href="style.css?v=6.2.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
 
@@ -133,6 +133,9 @@
       margin-bottom: 8px;
     }
     .cat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       background: #FFFFFF;
       border: 1px solid #D5C3B5;
       color: #4D463E;
@@ -143,15 +146,28 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
+    .cat-pill svg {
+      flex-shrink: 0;
+      opacity: 0.85;
+      transition: transform 0.2s ease;
+    }
     .cat-pill:hover {
       border-color: #964824;
       color: #964824;
       background: #FDFBFA;
     }
+    .cat-pill:hover svg {
+      opacity: 1;
+      transform: scale(1.08);
+    }
     .cat-pill.active {
       background: #964824;
       color: #FFFFFF;
       border-color: #964824;
+    }
+    .cat-pill.active svg {
+      opacity: 1;
+      stroke: #FFFFFF;
     }
     .directory-utility-bar {
       display: flex;
@@ -277,6 +293,9 @@
       gap: 6px;
     }
     .dir-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       font-size: 11px;
       font-weight: 800;
       padding: 4px 10px;
@@ -284,8 +303,17 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
+    .dir-badge svg {
+      flex-shrink: 0;
+    }
     .badge-bank { background: #E6F4EA; color: #137333; }
     .badge-atm { background: #E8F0FE; color: #1A73E8; }
+    .badge-taxi { background: #FEF3C7; color: #92400E; }
+    .badge-mechanic { background: #E0E7FF; color: #3730A3; }
+    .badge-medical { background: #FEE2E2; color: #991B1B; }
+    .badge-hardware { background: #F3E8FF; color: #6B21A8; }
+    .badge-shuttle { background: #CCFBF1; color: #115E59; }
+    .badge-trades { background: #FFDBCD; color: #964824; }
     .dir-title {
       font-size: 17.5px;
       font-weight: 800;
@@ -451,15 +479,18 @@
   <header class="navbar" role="banner">
     <div class="nav-container">
       <div class="brand">
-        <a href="index.html" style="text-decoration: none; display: flex; align-items: center;">
-          <img src="logo.svg?v=1.3.0" width="40" height="40" alt="PoquitoTalk Logo" style="margin-right: 8px; filter: drop-shadow(0 2px 10px rgba(37, 211, 102, 0.4));" />
-          <span class="brand-name">PoquitoTalk <span class="badge-tag">Directory 🇵🇦</span></span>
+        <a href="index.html" class="brand-link" aria-label="PoquitoTalk Home">
+          <img src="logo.svg?v=1.3.1" width="40" height="40" alt="PoquitoTalk Logo" style="filter: drop-shadow(0 2px 8px rgba(37, 211, 102, 0.35));" />
+          <div class="brand-text-group">
+            <span class="brand-name"><span class="brand-wordmark">Poquito<span class="brand-talk">Talk</span></span></span>
+            <span class="brand-subtext">Bocas del Toro, Panamá</span>
+          </div>
         </a>
       </div>
       <div class="nav-links">
-        <div class="lang-toggle">
-          <a href="/directory.html" class="lang-btn active">🇺🇸 EN</a>
-          <a href="/es/directorio.html" class="lang-btn">🇵🇦 ES</a>
+        <div class="lang-toggle" aria-label="Language Selector">
+          <a href="/directory.html" class="lang-btn active">EN</a>
+          <a href="/es/directorio.html" class="lang-btn">ES</a>
         </div>
         <a href="index.html" class="nav-link">Home</a>
         <a href="index.html#demo" class="nav-link">Live Demo</a>
@@ -510,11 +541,50 @@
 
         <!-- Pure Category Filters -->
         <div class="category-pills-row">
-          <button class="cat-pill active" onclick="setCategoryFilter('ALL', this)">All Services (<span id="total-count">83</span>)</button>
-          <button class="cat-pill" onclick="setCategoryFilter('CONTRACTORS', this)" id="contractors-pill">Electricians, A/C & Trades (<span id="contractors-count">3</span>)</button>
-          <button class="cat-pill" onclick="setCategoryFilter('GARDENING', this)">Gardening & Plants (<span id="gardening-count">1</span>)</button>
-          <button class="cat-pill" onclick="setCategoryFilter('WATER_TAXI', this)">Boat Captains (75)</button>
-          <button class="cat-pill" onclick="setCategoryFilter('BANKING', this)">ATMs & Financial (5)</button>
+          <button class="cat-pill active" onclick="setCategoryFilter('ALL', this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>All Services (<span id="total-count">98</span>)</span>
+          </button>
+          <button class="cat-pill" onclick="setCategoryFilter('WATER_TAXI', this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg>
+            <span>Boat Captains (75)</span>
+          </button>
+          <button class="cat-pill" onclick="setCategoryFilter('TAXI_LAND', this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11.2 2 11.8 2 12.4V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+            <span>Land Taxis & Drivers (4)</span>
+          </button>
+          <button class="cat-pill" onclick="setCategoryFilter('CONTRACTORS', this)" id="contractors-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>A/C, Electricians & Trades (<span id="contractors-count">3</span>)</span>
+          </button>
+          <button class="cat-pill" onclick="setCategoryFilter('MECHANIC', this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <span>Car & Boat Mechanics (3)</span>
+          </button>
+          <button class="cat-pill" onclick="setCategoryFilter('MEDICAL', this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <span>Doctors & Pharmacies (3)</span>
+          </button>
+          <button class="cat-pill" onclick="setCategoryFilter('HARDWARE', this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 12l-8.5 8.5a2.12 2.12 0 0 1-3-3L12 9"/><path d="M17.64 4.36a9 9 0 0 0-4.64-2.36l-1 2 2 2-2 2 2 2 2-2 2 2 2-1a9 9 0 0 0-2.36-4.64z"/></svg>
+            <span>Hardware & Ferretería (2)</span>
+          </button>
+          <button class="cat-pill" onclick="setCategoryFilter('BANKING', this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            <span>ATMs & Cash (5)</span>
+          </button>
+          <button class="cat-pill" onclick="setCategoryFilter('SHUTTLE', this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+            <span>Border Runs & Shuttles (2)</span>
+          </button>
+          <button class="cat-pill" onclick="setCategoryFilter('GARDENING', this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+            <span>Gardening & Plants (<span id="gardening-count">1</span>)</span>
+          </button>
+          <button class="cat-pill" onclick="setCategoryFilter('COMMUNITY', this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span>Community & Culture (1)</span>
+          </button>
         </div>
       </div>
     </div>
@@ -524,7 +594,7 @@
   <div class="container">
     <div class="directory-utility-bar">
       <div class="directory-results-meta">
-        <span id="showing-count-text">Showing <strong>83 verified providers</strong> in Bocas del Toro</span>
+        <span id="showing-count-text">Showing <strong>98 verified providers & community spots</strong> in Bocas del Toro</span>
       </div>
       <div class="directory-actions-group">
         <button class="btn-util-recommend" onclick="openRecommendModal()">
@@ -543,12 +613,130 @@
   <main class="container">
     <div class="directory-grid" id="directoryGrid">
       
+      <!-- ========================================================
+           LAND TAXIS & AIRPORT DRIVERS
+           ======================================================== -->
+      <!-- Taxi 1: Piquera de Taxis Isla Colón -->
+      <div class="dir-card" data-cat="TAXI_LAND" data-zone="islands" data-subloc="colon" id="taxi-piquera-colon">
+        <div>
+          <div class="dir-card-header">
+            <span class="dir-badge badge-taxi"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11.2 2 11.8 2 12.4V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg> Land Taxi Stand</span>
+            <button class="vouch-badge" data-provider-id="taxi-piquera-colon" onclick="openPostContactModal('taxi-piquera-colon', 'Piquera de Taxis Isla Colón')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">0</span> Vouches</button>
+          </div>
+          <h2 class="dir-title">Piquera de Taxis Isla Colón (Radio Taxi)</h2>
+          <p class="dir-notes">Official yellow taxi stand by Parque Simón Bolívar in Bocas Town. 24/7 dispatched rides across Isla Colón, airport pickups, Big Creek, and town transfers.</p>
+          
+          <div class="dir-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Calle 3ra (Av. Central), Parque Simón Bolívar, Bocas Town, Isla Colón</span>
+          </div>
+          <div class="dir-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>24/7 Island Dispatch • Standard Local Fares</span>
+          </div>
+          <div class="dir-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>+507 757-9260</span>
+          </div>
+          <a class="claim-listing-link" onclick="openClaimModal('taxi-piquera-colon', 'Piquera de Taxis Isla Colón', '+507 757-9260')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Are you the coordinator? Claim or update</a>
+        </div>
+
+        <div class="dir-actions">
+          <button type="button" class="dir-action-pill btn-action-call" onclick="initiateProviderContact('taxi-piquera-colon', 'Piquera de Taxis Isla Colón', 'tel:+5077579260', 'call')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>Call Taxi Stand</span>
+          </button>
+          <a href="https://www.google.com/maps/search/?api=1&query=Parque+Simon+Bolivar+Bocas+Town+Taxi+Stand" target="_blank" rel="noopener" class="dir-action-pill btn-action-map">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>View on Map</span>
+          </a>
+        </div>
+      </div>
+
+
+      <!-- ========================================================
+           MEDICAL CLINICS, DOCTORS & PHARMACIES
+           ======================================================== -->
+      <!-- Medical 1: Hospital Guillermo Sánchez Borbón -->
+      <div class="dir-card" data-cat="MEDICAL" data-zone="islands" data-subloc="colon" id="medical-hospital-bocas">
+        <div>
+          <div class="dir-card-header">
+            <span class="dir-badge badge-medical"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> Hospital 24/7</span>
+            <button class="vouch-badge" data-provider-id="medical-hospital-bocas" onclick="openPostContactModal('medical-hospital-bocas', 'Hospital Guillermo Sánchez Borbón')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">0</span> Vouches</button>
+          </div>
+          <h2 class="dir-title">Hospital Guillermo Sánchez Borbón</h2>
+          <p class="dir-notes">Primary public hospital on Isla Colón. 24-hour emergency room, doctor consultations, basic laboratory testing, triage, and pharmacy services.</p>
+          
+          <div class="dir-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Calle 1ra / Vía Aeropuerto, Bocas Town, Isla Colón</span>
+          </div>
+          <div class="dir-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Emergency Room: 24/7 • General Outpatient Consultations</span>
+          </div>
+          <div class="dir-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>+507 757-9201</span>
+          </div>
+          <a class="claim-listing-link" onclick="openClaimModal('medical-hospital-bocas', 'Hospital Guillermo Sánchez Borbón', '+507 757-9201')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Claim or update</a>
+        </div>
+
+        <div class="dir-actions">
+          <button type="button" class="dir-action-pill btn-action-call" onclick="initiateProviderContact('medical-hospital-bocas', 'Hospital Guillermo Sánchez Borbón', 'tel:+5077579201', 'call')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>Call Hospital</span>
+          </button>
+          <a href="https://www.google.com/maps/search/?api=1&query=Hospital+Guillermo+Sanchez+Borbon+Bocas+del+Toro" target="_blank" rel="noopener" class="dir-action-pill btn-action-map">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>View on Map</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Medical 2: Farmacia Isla Colón -->
+      <div class="dir-card" data-cat="MEDICAL" data-zone="islands" data-subloc="colon" id="medical-farmacia-colon">
+        <div>
+          <div class="dir-card-header">
+            <span class="dir-badge badge-medical"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg> Pharmacy</span>
+            <button class="vouch-badge" data-provider-id="medical-farmacia-colon" onclick="openPostContactModal('medical-farmacia-colon', 'Farmacia Isla Colón')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">0</span> Vouches</button>
+          </div>
+          <h2 class="dir-title">Farmacia Isla Colón</h2>
+          <p class="dir-notes">Well-stocked island pharmacy on main street. Prescriptions, antibiotics, painkillers, rehydration salts, tropical burn relief, and first aid supplies.</p>
+          
+          <div class="dir-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Calle 3ra (Av. Principal), Bocas Town, Isla Colón</span>
+          </div>
+          <div class="dir-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Mon–Sat: 8:00 AM – 9:00 PM • Sun: 9:00 AM – 7:00 PM</span>
+          </div>
+          <div class="dir-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>+507 757-9430</span>
+          </div>
+          <a class="claim-listing-link" onclick="openClaimModal('medical-farmacia-colon', 'Farmacia Isla Colón', '+507 757-9430')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Claim or update</a>
+        </div>
+
+        <div class="dir-actions">
+          <button type="button" class="dir-action-pill btn-action-call" onclick="initiateProviderContact('medical-farmacia-colon', 'Farmacia Isla Colón', 'tel:+5077579430', 'call')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>Call Pharmacy</span>
+          </button>
+        </div>
+      </div>
+
+
+      <!-- ========================================================
+           BANKS, ATMS & FINANCIAL
+           ======================================================== -->
       <!-- 1. Banco Nacional -->
       <div class="dir-card" data-cat="BANKING" data-zone="islands" data-subloc="colon" id="banconal-bocas">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge badge-bank">Bank & 3 ATMs</span>
-            <button class="vouch-badge" data-provider-id="banconal-bocas"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> + Vouch Vouches</button>
+            <span class="dir-badge badge-bank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Bank & 3 ATMs</span>
+            <button class="vouch-badge" data-provider-id="banconal-bocas" onclick="openPostContactModal('banconal-bocas', 'Banco Nacional de Panamá')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">0</span> Vouches</button>
           </div>
           <h2 class="dir-title">Banco Nacional de Panamá</h2>
           <p class="dir-notes">Primary official brick-and-mortar bank in Bocas Town with 3 ATMs. Tellers for bank drafts, cash exchange, and account transactions.</p>
@@ -584,8 +772,8 @@
       <div class="dir-card" data-cat="BANKING" data-zone="islands" data-subloc="colon" id="atm-police-station">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge badge-atm">ATM • Telered</span>
-            <button class="vouch-badge" data-provider-id="atm-police-station"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> + Vouch Vouches</button>
+            <span class="dir-badge badge-atm"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> ATM • Telered</span>
+            <button class="vouch-badge" data-provider-id="atm-police-station" onclick="openPostContactModal('atm-police-station', 'Duo2 Market ATM')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">0</span> Vouches</button>
           </div>
           <h2 class="dir-title">Duo2 Market ATM (Near Police Station)</h2>
           <p class="dir-notes">Reliable Telered ATM located in front of Duo2 Market by the National Police station and Simón Bolívar central park.</p>
@@ -612,8 +800,8 @@
       <div class="dir-card" data-cat="BANKING" data-zone="islands" data-subloc="colon" id="atm-super-gourmet">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge badge-atm">ATM • Telered</span>
-            <button class="vouch-badge" data-provider-id="atm-super-gourmet"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> + Vouch Vouches</button>
+            <span class="dir-badge badge-atm"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> ATM • Telered</span>
+            <button class="vouch-badge" data-provider-id="atm-super-gourmet" onclick="openPostContactModal('atm-super-gourmet', 'Supermercado Alba ATM')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">0</span> Vouches</button>
           </div>
           <h2 class="dir-title">Supermarket Alba ATM (Calle 3ra)</h2>
           <p class="dir-notes">Independent Telered ATM located in front of Supermarket Alba on the main street. Max withdrawal $500/day.</p>
@@ -640,8 +828,8 @@
       <div class="dir-card" data-cat="BANKING" data-zone="mainland" data-subloc="changuinola" id="wu-changuinola">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge badge-atm">Money Transfers • Remesas</span>
-            <button class="vouch-badge" data-provider-id="wu-changuinola"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> + Vouch</button>
+            <span class="dir-badge badge-atm"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Money Transfers • Remesas</span>
+            <button class="vouch-badge" data-provider-id="wu-changuinola" onclick="openPostContactModal('wu-changuinola', 'Western Union Changuinola')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">0</span> Vouches</button>
           </div>
           <h2 class="dir-title">Western Union (Changuinola Main Branch)</h2>
           <p class="dir-notes">Main Western Union agency in Bocas del Toro province for international money transfers, remittances, and quick cash pickups.</p>
@@ -676,8 +864,8 @@
       <div class="dir-card" data-cat="BANKING" data-zone="mainland" data-subloc="guabito" id="wu-guabito">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge badge-atm">Money Transfers • Remesas</span>
-            <button class="vouch-badge" data-provider-id="wu-guabito"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> + Vouch</button>
+            <span class="dir-badge badge-atm"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Money Transfers • Remesas</span>
+            <button class="vouch-badge" data-provider-id="wu-guabito" onclick="openPostContactModal('wu-guabito', 'Western Union Guabito')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">0</span> Vouches</button>
           </div>
           <h2 class="dir-title">Western Union (Guabito Costa Rica Border)</h2>
           <p class="dir-notes">Money transfer and currency agency located inside Agroveterinaria right before the international border bridge to Sixaola / Costa Rica.</p>
@@ -712,7 +900,7 @@
       <div class="dir-card" data-cat="GARDENING" data-zone="islands" data-subloc="solarte" id="solarte-soil-works">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: #DCFCE7; color: #15803D; font-weight: 700;">Gardening & Living Soil</span>
+            <span class="dir-badge" style="background: #DCFCE7; color: #15803D; font-weight: 700;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg> Gardening & Living Soil</span>
             <div style="display: flex; align-items: center; gap: 8px;">
               <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified Pro</span>
               <button class="vouch-badge" data-provider-id="solarte-soil-works" onclick="openPostContactModal('solarte-soil-works', 'Solarte Soil Works')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">1</span> Vouch</button>
@@ -748,14 +936,49 @@
         </div>
       </div>
 
+      <!-- Bocas Free Book Exchange -->
+      <div class="dir-card" data-cat="COMMUNITY" data-zone="islands" data-subloc="colon" id="bocas-book-exchange">
+        <div>
+          <div class="dir-card-header">
+            <span class="dir-badge" style="background: #FEF3C7; color: #B45309; font-weight: 700;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Community Book Exchange</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Community Landmark</span>
+              <button class="vouch-badge" data-provider-id="bocas-book-exchange" onclick="openPostContactModal('bocas-book-exchange', 'Bocas Free Book Exchange')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">1</span> Vouch</button>
+            </div>
+          </div>
+          <h2 class="dir-title">Bocas Free Book Exchange</h2>
+          <p class="dir-notes">Open 24/7 self-service community book exchange. No staff or checkout required—stop by anytime in any weather to browse, take a book, and bring one to exchange if possible. Multi-language titles available. Book donations warmly welcomed (Spanish language books especially needed!).</p>
+          
+          <div class="dir-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Calle Segunda (Next to Mono Loco), Bocas Town, Isla Colón</span>
+          </div>
+          <div class="dir-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Open 24/7 (Always Open • Rain or Shine • Self-Service)</span>
+          </div>
+          <div class="dir-info-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span style="color: #4D463E;">Take a book, leave a book • Spanish donations appreciated</span>
+          </div>
+        </div>
+
+        <div class="dir-actions">
+          <a href="https://www.google.com/maps/search/?api=1&query=Mono+Loco+Calle+2da+Bocas+del+Toro+Isla+Colon" target="_blank" rel="noopener" class="dir-action-pill btn-action-map">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>View on Map</span>
+          </a>
+        </div>
+      </div>
+
       
       <!-- 1. Capt. Justo Raul Pineda -->
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50767450876">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50767450876" onclick="openPostContactModal('captain-50767450876', 'Capt. Justo Raul Pineda – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">36</span> Vouches</button>
             </div>
           </div>
@@ -793,9 +1016,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50768968680">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50768968680" onclick="openPostContactModal('captain-50768968680', 'Capt. Hipólito Baker – Ngabe Tours')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">32</span> Vouches</button>
             </div>
           </div>
@@ -833,9 +1056,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50769014186">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50769014186" onclick="openPostContactModal('captain-50769014186', 'Capt. Junnior Ortiz – Bocas Island Adventours')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">32</span> Vouches</button>
             </div>
           </div>
@@ -873,9 +1096,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50768754839">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50768754839" onclick="openPostContactModal('captain-50768754839', 'Capt. Camilo Georget – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">20</span> Vouches</button>
             </div>
           </div>
@@ -913,9 +1136,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50767631520">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50767631520" onclick="openPostContactModal('captain-50767631520', 'Capt. Melquiades Stonstreet – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">29</span> Vouches</button>
             </div>
           </div>
@@ -953,9 +1176,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50768096370">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50768096370" onclick="openPostContactModal('captain-50768096370', 'Capt. Gustavo Powell – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">29</span> Vouches</button>
             </div>
           </div>
@@ -993,9 +1216,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765019283">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765019283" onclick="openPostContactModal('captain-50765019283', 'Capt. Emanuel Montenegro – Kawi Voyage')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">30</span> Vouches</button>
             </div>
           </div>
@@ -1033,9 +1256,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765034391">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765034391" onclick="openPostContactModal('captain-50765034391', 'Capt. Rodney Smith – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">30</span> Vouches</button>
             </div>
           </div>
@@ -1073,9 +1296,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50769111253">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50769111253" onclick="openPostContactModal('captain-50769111253', 'Capt. Monases Montenegro – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">31</span> Vouches</button>
             </div>
           </div>
@@ -1113,9 +1336,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50769315125">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50769315125" onclick="openPostContactModal('captain-50769315125', 'Capt. Angelino Palacio – VIP Tours')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">20</span> Vouches</button>
             </div>
           </div>
@@ -1153,9 +1376,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50766156881">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50766156881" onclick="openPostContactModal('captain-50766156881', 'Capt. José Torres Chiritorres – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">18</span> Vouches</button>
             </div>
           </div>
@@ -1193,9 +1416,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50766954123">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50766954123" onclick="openPostContactModal('captain-50766954123', 'Capt. Ceferino Palacio – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">21</span> Vouches</button>
             </div>
           </div>
@@ -1233,9 +1456,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50761881871">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50761881871" onclick="openPostContactModal('captain-50761881871', 'Capt. Omar Abrego – Ngabe Tours')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">25</span> Vouches</button>
             </div>
           </div>
@@ -1273,9 +1496,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765167785">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765167785" onclick="openPostContactModal('captain-50765167785', 'Capt. Cesar Porta – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">26</span> Vouches</button>
             </div>
           </div>
@@ -1313,9 +1536,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765058568">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765058568" onclick="openPostContactModal('captain-50765058568', 'Capt. Sebastián Castillo – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">26</span> Vouches</button>
             </div>
           </div>
@@ -1353,9 +1576,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50764821122">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50764821122" onclick="openPostContactModal('captain-50764821122', 'Capt. Miguel Montenegro – Kawi Voyage')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">26</span> Vouches</button>
             </div>
           </div>
@@ -1393,9 +1616,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50767692550">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50767692550" onclick="openPostContactModal('captain-50767692550', 'Capt. Josias Bryan – Bocas Water Excursion')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">26</span> Vouches</button>
             </div>
           </div>
@@ -1433,9 +1656,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765106878">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765106878" onclick="openPostContactModal('captain-50765106878', 'Capt. Neftaly Montenegro – Kawi Voyage')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">31</span> Vouches</button>
             </div>
           </div>
@@ -1473,9 +1696,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50763735079">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50763735079" onclick="openPostContactModal('captain-50763735079', 'Capt. Edilberto Peñaloza – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">32</span> Vouches</button>
             </div>
           </div>
@@ -1513,9 +1736,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50768888811">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50768888811" onclick="openPostContactModal('captain-50768888811', 'Capt. Joanes Montenegro – Kawi Voyage')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">30</span> Vouches</button>
             </div>
           </div>
@@ -1553,9 +1776,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50762482550">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50762482550" onclick="openPostContactModal('captain-50762482550', 'Capt. Steve Eduardo – Ortiz Bocas Island Adventours')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">29</span> Vouches</button>
             </div>
           </div>
@@ -1593,9 +1816,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50767342535">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50767342535" onclick="openPostContactModal('captain-50767342535', 'Capt. Celindo Martinez – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">26</span> Vouches</button>
             </div>
           </div>
@@ -1633,9 +1856,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50766431752">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50766431752" onclick="openPostContactModal('captain-50766431752', 'Capt. Demetrio Georget – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">32</span> Vouches</button>
             </div>
           </div>
@@ -1673,9 +1896,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50766087142">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50766087142" onclick="openPostContactModal('captain-50766087142', 'Capt. Gregorio Castillo – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">26</span> Vouches</button>
             </div>
           </div>
@@ -1713,9 +1936,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50766158881">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50766158881" onclick="openPostContactModal('captain-50766158881', 'Capt. Josiel Torres Chiritorres – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">29</span> Vouches</button>
             </div>
           </div>
@@ -1753,9 +1976,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50767207638">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50767207638" onclick="openPostContactModal('captain-50767207638', 'Capt. Roberto Forbes Cametur – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">25</span> Vouches</button>
             </div>
           </div>
@@ -1793,9 +2016,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50767395919">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50767395919" onclick="openPostContactModal('captain-50767395919', 'Capt. Alex Hansell – Gambit Tours')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">24</span> Vouches</button>
             </div>
           </div>
@@ -1833,9 +2056,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50767569314">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50767569314" onclick="openPostContactModal('captain-50767569314', 'Capt. Eyner Smith Chiritorres – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">30</span> Vouches</button>
             </div>
           </div>
@@ -1873,9 +2096,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50768508629">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50768508629" onclick="openPostContactModal('captain-50768508629', 'Capt. Irwin Smith Pangea – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">28</span> Vouches</button>
             </div>
           </div>
@@ -1913,9 +2136,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50764515559">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50764515559" onclick="openPostContactModal('captain-50764515559', 'Capt. Brijilio Trotman – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">25</span> Vouches</button>
             </div>
           </div>
@@ -1953,9 +2176,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50768208611">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50768208611" onclick="openPostContactModal('captain-50768208611', 'Capt. Demetrio Baker – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">20</span> Vouches</button>
             </div>
           </div>
@@ -1993,9 +2216,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765908752">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765908752" onclick="openPostContactModal('captain-50765908752', 'Capt. Freddy Santamaria – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">22</span> Vouches</button>
             </div>
           </div>
@@ -2033,9 +2256,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50768493006">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50768493006" onclick="openPostContactModal('captain-50768493006', 'Capt. Rafael Zurdo – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">18</span> Vouches</button>
             </div>
           </div>
@@ -2073,9 +2296,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50764856091">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50764856091" onclick="openPostContactModal('captain-50764856091', 'Capt. Faustino Downer – Jr Dlujo Tours')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">28</span> Vouches</button>
             </div>
           </div>
@@ -2113,9 +2336,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50768858607">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50768858607" onclick="openPostContactModal('captain-50768858607', 'Capt. Carlos Samudio – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">29</span> Vouches</button>
             </div>
           </div>
@@ -2153,9 +2376,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765559954">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765559954" onclick="openPostContactModal('captain-50765559954', 'Capt. Miguel Montenegro – Kawi Voyage')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">21</span> Vouches</button>
             </div>
           </div>
@@ -2193,9 +2416,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50769553631">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50769553631" onclick="openPostContactModal('captain-50769553631', 'Capt. Rodrigo Georgette Copeli Tour – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">25</span> Vouches</button>
             </div>
           </div>
@@ -2233,9 +2456,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50761998528">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50761998528" onclick="openPostContactModal('captain-50761998528', 'Capt. Rolando Gomez Copeli Tour – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">25</span> Vouches</button>
             </div>
           </div>
@@ -2273,9 +2496,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50763392388">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50763392388" onclick="openPostContactModal('captain-50763392388', 'Capt. Victor Migar – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">25</span> Vouches</button>
             </div>
           </div>
@@ -2313,9 +2536,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50763541153">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50763541153" onclick="openPostContactModal('captain-50763541153', 'Capt. Gabriel Georget – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">31</span> Vouches</button>
             </div>
           </div>
@@ -2353,9 +2576,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765863102">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765863102" onclick="openPostContactModal('captain-50765863102', 'Capt. Ricardo Ayarza – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">26</span> Vouches</button>
             </div>
           </div>
@@ -2393,9 +2616,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50763730552">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50763730552" onclick="openPostContactModal('captain-50763730552', 'Capt. Roger Milton Ellington – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">24</span> Vouches</button>
             </div>
           </div>
@@ -2433,9 +2656,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50768644554">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50768644554" onclick="openPostContactModal('captain-50768644554', 'Capt. José Morales – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">30</span> Vouches</button>
             </div>
           </div>
@@ -2473,9 +2696,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50766572484">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50766572484" onclick="openPostContactModal('captain-50766572484', 'Capt. Dámaso Banard – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">23</span> Vouches</button>
             </div>
           </div>
@@ -2513,9 +2736,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50769089773">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50769089773" onclick="openPostContactModal('captain-50769089773', 'Capt. JoséBriceño – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">28</span> Vouches</button>
             </div>
           </div>
@@ -2553,9 +2776,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50766496764">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50766496764" onclick="openPostContactModal('captain-50766496764', 'Capt. Alfonso Santos – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">32</span> Vouches</button>
             </div>
           </div>
@@ -2593,9 +2816,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50768433614">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50768433614" onclick="openPostContactModal('captain-50768433614', 'Capt. Alberto Maihucas – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">18</span> Vouches</button>
             </div>
           </div>
@@ -2633,9 +2856,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50768829312">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50768829312" onclick="openPostContactModal('captain-50768829312', 'Capt. Napoleon Arnaldo – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">31</span> Vouches</button>
             </div>
           </div>
@@ -2673,9 +2896,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50769453634">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50769453634" onclick="openPostContactModal('captain-50769453634', 'Capt. Mario Ayarza – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">23</span> Vouches</button>
             </div>
           </div>
@@ -2713,9 +2936,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50769164635">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50769164635" onclick="openPostContactModal('captain-50769164635', 'Capt. Erasmo Sam – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">26</span> Vouches</button>
             </div>
           </div>
@@ -2753,9 +2976,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765064123">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765064123" onclick="openPostContactModal('captain-50765064123', 'Capt. Hendry Migar – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">23</span> Vouches</button>
             </div>
           </div>
@@ -2793,9 +3016,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50764879348">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50764879348" onclick="openPostContactModal('captain-50764879348', 'Capt. Christian Muñoz – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">24</span> Vouches</button>
             </div>
           </div>
@@ -2833,9 +3056,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50766479258">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50766479258" onclick="openPostContactModal('captain-50766479258', 'Capt. Felicito Caito – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">32</span> Vouches</button>
             </div>
           </div>
@@ -2873,9 +3096,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765553093">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765553093" onclick="openPostContactModal('captain-50765553093', 'Capt. Pinzon Castillo – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">22</span> Vouches</button>
             </div>
           </div>
@@ -2913,9 +3136,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50768934499">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50768934499" onclick="openPostContactModal('captain-50768934499', 'Capt. Eduardo Artola – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">19</span> Vouches</button>
             </div>
           </div>
@@ -2953,9 +3176,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50767826149">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50767826149" onclick="openPostContactModal('captain-50767826149', 'Capt. Santiago Giron – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">26</span> Vouches</button>
             </div>
           </div>
@@ -2993,9 +3216,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50762122892">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50762122892" onclick="openPostContactModal('captain-50762122892', 'Capt. Franklin Norths – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">31</span> Vouches</button>
             </div>
           </div>
@@ -3033,9 +3256,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50764938611">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50764938611" onclick="openPostContactModal('captain-50764938611', 'Capt. Abelio Raylan – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">23</span> Vouches</button>
             </div>
           </div>
@@ -3073,9 +3296,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50766922342">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50766922342" onclick="openPostContactModal('captain-50766922342', 'Capt. Enrique Forbes – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">26</span> Vouches</button>
             </div>
           </div>
@@ -3113,9 +3336,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50766919548">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50766919548" onclick="openPostContactModal('captain-50766919548', 'Capt. José Gaveret – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">31</span> Vouches</button>
             </div>
           </div>
@@ -3153,9 +3376,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765792626">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765792626" onclick="openPostContactModal('captain-50765792626', 'Capt. Giovanni Quintero – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">30</span> Vouches</button>
             </div>
           </div>
@@ -3193,9 +3416,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50769523084">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50769523084" onclick="openPostContactModal('captain-50769523084', 'Capt. Angel Brown – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">23</span> Vouches</button>
             </div>
           </div>
@@ -3233,9 +3456,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50763354553">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50763354553" onclick="openPostContactModal('captain-50763354553', 'Capt. Eury Aguilar – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">19</span> Vouches</button>
             </div>
           </div>
@@ -3273,9 +3496,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50766974451">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50766974451" onclick="openPostContactModal('captain-50766974451', 'Capt. Bernardo Miranda – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">32</span> Vouches</button>
             </div>
           </div>
@@ -3313,9 +3536,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50768412322">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50768412322" onclick="openPostContactModal('captain-50768412322', 'Capt. Rigoberto Jole – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">25</span> Vouches</button>
             </div>
           </div>
@@ -3353,9 +3576,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50767356750">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50767356750" onclick="openPostContactModal('captain-50767356750', 'Capt. Timoteo Julian – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">21</span> Vouches</button>
             </div>
           </div>
@@ -3393,9 +3616,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765005440">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765005440" onclick="openPostContactModal('captain-50765005440', 'Capt. Alexis Morales – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">28</span> Vouches</button>
             </div>
           </div>
@@ -3433,9 +3656,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50767785127">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50767785127" onclick="openPostContactModal('captain-50767785127', 'Capt. Nicolás Fuñez – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">19</span> Vouches</button>
             </div>
           </div>
@@ -3473,9 +3696,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765473939">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765473939" onclick="openPostContactModal('captain-50765473939', 'Capt. Marcos Muñoz – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">19</span> Vouches</button>
             </div>
           </div>
@@ -3513,9 +3736,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50766301396">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50766301396" onclick="openPostContactModal('captain-50766301396', 'Capt. Victor Rivera – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">25</span> Vouches</button>
             </div>
           </div>
@@ -3553,9 +3776,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50766686849">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50766686849" onclick="openPostContactModal('captain-50766686849', 'Capt. Daniel Ayora – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">26</span> Vouches</button>
             </div>
           </div>
@@ -3593,9 +3816,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50769587389">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50769587389" onclick="openPostContactModal('captain-50769587389', 'Capt. Jorge Thomas – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">26</span> Vouches</button>
             </div>
           </div>
@@ -3633,9 +3856,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50763909586">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50763909586" onclick="openPostContactModal('captain-50763909586', 'Capt. Alexis Chacon – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">28</span> Vouches</button>
             </div>
           </div>
@@ -3673,9 +3896,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50765855634">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50765855634" onclick="openPostContactModal('captain-50765855634', 'Capt. Javier Aguilar – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">32</span> Vouches</button>
             </div>
           </div>
@@ -3713,9 +3936,9 @@
       <div class="dir-card" data-cat="WATER_TAXI" id="captain-50763746174">
         <div>
           <div class="dir-card-header">
-            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;">Boat Captain & Water Taxi</span>
+            <span class="dir-badge" style="background: rgba(47, 98, 120, 0.15); color: #2F6278;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg> Boat Captain & Water Taxi</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spots Certified</span>
+              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Hope Spot Certified</span>
               <button class="vouch-badge" data-provider-id="captain-50763746174" onclick="openPostContactModal('captain-50763746174', 'Capt. José Tenacio – Independent Captain')" title="Vouched by Bocas community"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">32</span> Vouches</button>
             </div>
           </div>
@@ -3992,6 +4215,6 @@
   </footer>
 
   <script src="tracker.js?v=1.0.0" defer></script>
-  <script src="script.js?v=5.8.0"></script>
+  <script src="script.js?v=5.9.0"></script>
 </body>
 </html>

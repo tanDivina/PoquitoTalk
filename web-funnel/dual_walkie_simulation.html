@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0" />
+  <title>PoquitoTalk • Dual-Screen Walkie-Talkie Live Simulation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-dark: #07090A;
+      --panel-bg: #0F1315;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --accent-green: #25D366;
+      --accent-sage: #2E402D;
+      --accent-terracotta: #C85A32;
+      --phone-expat-bg: #131719;
+      --phone-contractor-bg: #FBF9F5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      width: 1920px;
+      height: 1080px;
+      background: var(--bg-dark);
+      color: #FFFFFF;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px 30px;
+      position: relative;
+    }
+
+    /* Ambient studio lighting */
+    .studio-glow-1 {
+      position: absolute;
+      top: -150px;
+      left: 15%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(37, 211, 102, 0.12) 0%, transparent 70%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .studio-glow-2 {
+      position: absolute;
+      bottom: -150px;
+      right: 15%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(200, 90, 50, 0.12) 0%, transparent 70%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top Showcase Header */
+    .showcase-header {
+      z-index: 10;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 5px 16px;
+      border-radius: 9999px;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #A3E635;
+    }
+
+    .brand-pill .live-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #A3E635;
+      box-shadow: 0 0 10px #A3E635;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    .showcase-title {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+    }
+
+    .showcase-title span {
+      color: #A3E635;
+    }
+
+    .showcase-subtitle {
+      font-size: 14.5px;
+      color: #94A3B8;
+      font-weight: 500;
+    }
+
+    /* Stage Container (Dual Phones + Center Bridge) */
+    .stage-container {
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      width: 100%;
+      flex: 1;
+      margin: 8px 0;
+    }
+
+    /* Device Card Wrapper */
+    .device-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .device-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #E2E8F0;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 6px 18px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .device-label .flag {
+      font-size: 18px;
+    }
+
+    /* Phone Chassis Mockup */
+    .phone-chassis {
+      width: 380px;
+      height: 750px;
+      border-radius: 46px;
+      background: #0D1113;
+      padding: 10px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 30px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 38px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* LEFT PHONE: EXPAT APP */
+    .expat-screen {
+      background: #111618;
+      color: #FFFFFF;
+    }
+
+    .phone-status-bar {
+      height: 38px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: #94A3B8;
+      z-index: 20;
+    }
+
+    .dynamic-island {
+      width: 100px;
+      height: 24px;
+      background: #000000;
+      border-radius: 9999px;
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      font-size: 10px;
+      color: #25D366;
+    }
+
+    .dynamic-island .wave-bars {
+      display: flex;
+      gap: 2px;
+      align-items: center;
+    }
+
+    .dynamic-island .wave-bar {
+      width: 2px;
+      height: 8px;
+      background: #25D366;
+      border-radius: 2px;
+      animation: eqBar 0.8s infinite ease-in-out;
+    }
+
+    .dynamic-island .wave-bar:nth-child(2) { animation-delay: 0.2s; height: 14px; }
+    .dynamic-island .wave-bar:nth-child(3) { animation-delay: 0.4s; height: 10px; }
+
+    @keyframes eqBar {
+      0%, 100% { transform: scaleY(0.4); }
+      50% { transform: scaleY(1.2); }
+    }
+
+    .expat-app-header {
+      padding: 10px 18px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .expat-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .expat-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #1E293B;
+      border: 2px solid #334155;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .expat-info h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #F8FAFC;
+    }
+
+    .expat-info p {
+      font-size: 11px;
+      color: #38BDF8;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .expat-info p::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #38BDF8;
+      border-radius: 50%;
+    }
+
+    .expat-feed {
+      flex: 1;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    .feed-bubble {
+      padding: 12px 14px;
+      border-radius: 16px;
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 90%;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .feed-bubble.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .bubble-outgoing {
+      align-self: flex-end;
+      background: #1E293B;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #F8FAFC;
+    }
+
+    .bubble-incoming {
+      align-self: flex-start;
+      background: rgba(37, 211, 102, 0.12);
+      border: 1px solid rgba(37, 211, 102, 0.3);
+      color: #FFFFFF;
+    }
+
+    .bubble-tag {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .bubble-outgoing .bubble-tag { color: #94A3B8; }
+    .bubble-incoming .bubble-tag { color: #4ADE80; }
+
+    .expat-bottom-control {
+      padding: 16px;
+      background: #0B0E10;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .expat-ptt-btn {
+      width: 100%;
+      height: 56px;
+      border-radius: 16px;
+      background: #1E293B;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #FFFFFF;
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .expat-ptt-btn.active {
+      background: #DC2626;
+      border-color: #EF4444;
+      box-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+    }
+
+    /* RIGHT PHONE: CONTRACTOR WEB WALKIE */
+    .contractor-screen {
+      background: var(--phone-contractor-bg);
+      color: #1B1C1A;
+    }
+
+    .contractor-header {
+      padding: 12px 18px;
+      background: #FFFFFF;
+      border-bottom: 1px solid #EAE7E1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .contractor-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 15px;
+      color: #1B1C1A;
+    }
+
+    .contractor-brand span { color: #964824; }
+
+    .contractor-badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: #E8F5E9;
+      color: #16A34A;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .contractor-body {
+      flex: 1;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mascot-box {
+      position: relative;
+      width: 130px;
+      height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .mascot-halo {
+      position: absolute;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(37, 211, 102, 0.25) 0%, transparent 70%);
+      filter: blur(12px);
+      transition: all 0.3s ease;
+    }
+
+    .mascot-box.listening .mascot-halo {
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.4) 0%, transparent 70%);
+      transform: scale(1.2);
+    }
+
+    .mascot-box.recording .mascot-halo {
+      background: radial-gradient(circle, rgba(220, 38, 38, 0.4) 0%, transparent 70%);
+      transform: scale(1.3);
+    }
+
+    .mascot-img {
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+      z-index: 2;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.1));
+      transition: transform 0.2s ease;
+    }
+
+    .contractor-transcript-card {
+      width: 100%;
+      background: #FFFFFF;
+      border: 1px solid #EAE7E1;
+      border-radius: 16px;
+      padding: 12px 14px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.3s ease;
+    }
+
+    .contractor-transcript-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #16A34A;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .card-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1F2937;
+      line-height: 1.45;
+    }
+
+    .contractor-ptt-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .contractor-ptt-btn {
+      width: 100%;
+      height: 72px;
+      background: #2E402D;
+      border: 3px solid #1C2B1B;
+      border-radius: 20px;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      box-shadow: 0 8px 20px rgba(46, 64, 45, 0.3);
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .contractor-ptt-btn.active {
+      background: #DC2626;
+      border-color: #991B1B;
+      box-shadow: 0 0 25px rgba(220, 38, 38, 0.6);
+      transform: scale(0.97);
+    }
+
+    .contractor-footer-links {
+      display: flex;
+      gap: 8px;
+      font-size: 11px;
+      color: #78716C;
+    }
+
+    /* CENTER BRIDGE */
+    .center-bridge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      width: 270px;
+    }
+
+    .bridge-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 16px 18px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .bridge-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .lang-node {
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .lang-node.active {
+      background: rgba(37, 211, 102, 0.2);
+      border-color: #25D366;
+      color: #A3E635;
+      box-shadow: 0 0 15px rgba(37, 211, 102, 0.3);
+    }
+
+    .arrow-flow {
+      display: flex;
+      align-items: center;
+      color: #64748B;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .arrow-flow.forward {
+      color: #38BDF8;
+      transform: translateX(4px);
+    }
+
+    .arrow-flow.backward {
+      color: #A3E635;
+      transform: translateX(-4px);
+    }
+
+    .latency-tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #A3E635;
+      background: rgba(163, 230, 53, 0.1);
+      border: 1px solid rgba(163, 230, 53, 0.2);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .center-waveform {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      height: 32px;
+      width: 100%;
+    }
+
+    .center-bar {
+      width: 4px;
+      height: 6px;
+      background: #334155;
+      border-radius: 4px;
+      transition: height 0.15s ease, background 0.15s ease;
+    }
+
+    .center-waveform.active .center-bar {
+      background: #25D366;
+      animation: centerWave 0.6s infinite ease-in-out alternate;
+    }
+
+    .center-waveform.active .center-bar:nth-child(2) { animation-delay: 0.1s; }
+    .center-waveform.active .center-bar:nth-child(3) { animation-delay: 0.2s; }
+    .center-waveform.active .center-bar:nth-child(4) { animation-delay: 0.3s; }
+    .center-waveform.active .center-bar:nth-child(5) { animation-delay: 0.4s; }
+    .center-waveform.active .center-bar:nth-child(6) { animation-delay: 0.25s; }
+    .center-waveform.active .center-bar:nth-child(7) { animation-delay: 0.15s; }
+
+    @keyframes centerWave {
+      0% { height: 6px; }
+      100% { height: 28px; }
+    }
+
+    .status-text-banner {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #94A3B8;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    /* Subtitle Bar */
+    .subtitle-overlay {
+      z-index: 20;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      max-width: 1100px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    .subtitle-speaker-badge {
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-expat {
+      background: #0284C7;
+      color: #FFFFFF;
+    }
+
+    .badge-contractor {
+      background: #16A34A;
+      color: #FFFFFF;
+    }
+
+    .subtitle-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #F8FAFC;
+    }
+
+    /* Virtual Touch Finger */
+    #virtual-touch-finger {
+      position: fixed;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45);
+      border: 2.5px solid #FFFFFF;
+      pointer-events: none;
+      z-index: 999999;
+      transform: translate(-50%, -50%);
+      transition: left 0.5s cubic-bezier(0.22, 1, 0.36, 1), top 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.15s ease, background 0.15s ease;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      left: 300px;
+      top: 800px;
+      opacity: 0;
+    }
+
+    #virtual-touch-finger.visible { opacity: 1; }
+    #virtual-touch-finger.pressing {
+      transform: translate(-50%, -50%) scale(0.85);
+      background: rgba(220, 38, 38, 0.7);
+      border-color: #EF4444;
+      box-shadow: 0 0 25px rgba(220, 38, 38, 0.9);
+    }
+
+    #fps-tick {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 2px;
+      height: 2px;
+      opacity: 0.01;
+      animation: fpsPulse 0.033s infinite linear;
+    }
+
+    @keyframes fpsPulse {
+      0% { opacity: 0.01; }
+      50% { opacity: 0.02; }
+      100% { opacity: 0.01; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="studio-glow-1"></div>
+  <div class="studio-glow-2"></div>
+  <div id="fps-tick"></div>
+  <div id="virtual-touch-finger"></div>
+
+  <!-- Showcase Top Header -->
+  <header class="showcase-header">
+    <div class="brand-pill">
+      <div class="live-pulse"></div>
+      <span>PoquitoTalk • Radio Walkie Bidireccional</span>
+    </div>
+    <h1 class="showcase-title">Conversación Simultánea en Dos Idiomas <span>Sin Cambiar de Botones</span></h1>
+    <p class="showcase-subtitle">El residente habla en inglés en su app • El contratista responde en español desde la web sin instalar nada</p>
+  </header>
+
+  <!-- Dual Phone Stage -->
+  <div class="stage-container">
+
+    <!-- LEFT PHONE: EXPAT APP (English) -->
+    <div class="device-column">
+      <div class="device-label">
+        <span class="flag">🇺🇸</span>
+        <span>Expatriado: Captain Jim (App PoquitoTalk)</span>
+      </div>
+
+      <div class="phone-chassis">
+        <div class="phone-screen expat-screen">
+          
+          <!-- Dynamic Island -->
+          <div class="dynamic-island">
+            <span>LIVE</span>
+            <div class="wave-bars">
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+            </div>
+          </div>
+
+          <div class="phone-status-bar">
+            <span>9:41</span>
+            <span>5G 100%</span>
+          </div>
+
+          <!-- Expat Header -->
+          <div class="expat-app-header">
+            <div class="expat-profile">
+              <div class="expat-avatar">⚓</div>
+              <div class="expat-info">
+                <h3>Radio: Carlos (Mecánico)</h3>
+                <p>Bocas Marina • Slip #4</p>
+              </div>
+            </div>
+            <div style="font-size: 11px; font-weight: 700; color: #38BDF8; background: rgba(56, 189, 248, 0.12); padding: 4px 8px; border-radius: 6px;">
+              Canal Activo
+            </div>
+          </div>
+
+          <!-- Chat / Voice Feed -->
+          <div class="expat-feed">
+            <div class="feed-bubble bubble-outgoing" id="expat-bubble-1">
+              <div class="bubble-tag">🎙️ Tu voz en inglés:</div>
+              "Hey buenas tardes! Tomorrow morning around 9:00 AM works great at slip #4 Bocas Marina."
+            </div>
+
+            <div class="feed-bubble bubble-incoming" id="expat-bubble-2">
+              <div class="bubble-tag">🔊 Carlos (Traducido al inglés):</div>
+              "All set boss! Tomorrow at nine sharp I will be there at slip four with the tools to check the engine. Wepa!"
+            </div>
+          </div>
+
+          <!-- Bottom Control -->
+          <div class="expat-bottom-control">
+            <button class="expat-ptt-btn" id="expat-ptt-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+              <span id="expat-btn-label">PRESIONAR PARA HABLAR</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTER BRIDGE: AI Translation Sync Engine -->
+    <div class="center-bridge">
+      <div class="bridge-card">
+        <div class="bridge-indicator">
+          <div class="lang-node" id="node-en">
+            <span>🇺🇸</span>
+            <span>English</span>
+          </div>
+          <div class="arrow-flow" id="bridge-arrow">⇄</div>
+          <div class="lang-node" id="node-es">
+            <span>🇵🇦</span>
+            <span>Español</span>
+          </div>
+        </div>
+
+        <div class="center-waveform" id="center-wave">
+          <div class="center-bar"></div>
+          <div class="center-bar"></div>
+          <div class="center-bar"></div>
+          <div class="center-bar"></div>
+          <div class="center-bar"></div>
+          <div class="center-bar"></div>
+          <div class="center-bar"></div>
+        </div>
+
+        <div class="latency-tag">
+          ⚡ 380ms IA Instantánea
+        </div>
+      </div>
+
+      <div class="status-text-banner" id="status-banner">
+        Conexión establecida • Canal listo
+      </div>
+    </div>
+
+    <!-- RIGHT PHONE: CONTRACTOR WEB WALKIE (Spanish) -->
+    <div class="device-column">
+      <div class="device-label">
+        <span class="flag">🇵🇦</span>
+        <span>Contratista: Carlos (Web Walkie-Talkie)</span>
+      </div>
+
+      <div class="phone-chassis">
+        <div class="phone-screen contractor-screen">
+          
+          <div class="phone-status-bar" style="color: #64748B;">
+            <span>9:41</span>
+            <span>LTE 100%</span>
+          </div>
+
+          <!-- Contractor Navbar -->
+          <div class="contractor-header">
+            <div class="contractor-brand">
+              <img src="logo.svg" width="24" height="24" alt="PoquitoTalk" />
+              <span>Poquito<span style="color:#964824;">Talk</span></span>
+            </div>
+            <div class="contractor-badge">
+              <span style="display:inline-block; width:6px; height:6px; background:#16A34A; border-radius:50%;"></span>
+              <span>Canal Directo</span>
+            </div>
+          </div>
+
+          <!-- Contractor Body -->
+          <div class="contractor-body">
+            
+            <!-- Mascot Animation (Tilt Resting / Talk Recording / Listening Rx) -->
+            <div class="mascot-box" id="mascotBox">
+              <div class="mascot-halo"></div>
+              <img src="poquito_tilt_34_51_160.webp" class="mascot-img" id="mascotImg" alt="Poquito Mascot" />
+            </div>
+
+            <!-- Live Incoming Translation Card -->
+            <div class="contractor-transcript-card" id="contractor-card-1">
+              <div class="card-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                <span>Mensaje de Capt. Jim (Traducido):</span>
+              </div>
+              <div class="card-text">
+                "¡Buenas tardes! Mañana a las 9:00 am está perfecto en el muelle #4 de Bocas Marina."
+              </div>
+            </div>
+
+            <!-- Outgoing Voice Card -->
+            <div class="contractor-transcript-card" id="contractor-card-2" style="border-left: 3px solid #16A34A;">
+              <div class="card-label" style="color: #047857;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path></svg>
+                <span>Tu voz en español:</span>
+              </div>
+              <div class="card-text">
+                "¡Listo patrón! Mañana a las nueve en punto estoy allá con las herramientas. ¡Wepa!"
+              </div>
+            </div>
+
+            <!-- Big PTT Button -->
+            <div class="contractor-ptt-container">
+              <button class="contractor-ptt-btn" id="contractor-ptt-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                <span id="contractor-btn-label">PRESIONAR PARA HABLAR</span>
+              </button>
+
+              <div class="contractor-footer-links">
+                <span>Inicio</span> • <span>Directorio</span> • <span>Soporte</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Floating Subtitle Bar -->
+  <div class="subtitle-overlay" id="subtitle-box">
+    <div class="subtitle-speaker-badge badge-expat" id="sub-badge">CAPTAIN JIM (EN)</div>
+    <div class="subtitle-text" id="sub-text">"Hey buenas tardes! Tomorrow morning around 9:00 AM works great at slip #4 Bocas Marina."</div>
+  </div>
+
+  <!-- Orchestration State Engine -->
+  <script>
+    const mascotImg = document.getElementById("mascotImg");
+    const mascotBox = document.getElementById("mascotBox");
+    const touchFinger = document.getElementById("virtual-touch-finger");
+
+    // Pre-cache mascot assets
+    const mascotAssets = {
+      resting: "poquito_tilt_34_51_160.webp",
+      recording: "poquito_talk_58_73_160.webp",
+      listening: "poquito_listening_49_60_160.webp"
+    };
+
+    Object.values(mascotAssets).forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+
+    window.setMascot = (state) => {
+      mascotImg.src = mascotAssets[state] || mascotAssets.resting;
+      mascotBox.className = "mascot-box " + (state || "resting");
+    };
+
+    window.setVirtualFinger = (x, y, isPressing = false, isVisible = true) => {
+      touchFinger.style.left = x + "px";
+      touchFinger.style.top = y + "px";
+      if (isVisible) touchFinger.classList.add("visible");
+      else touchFinger.classList.remove("visible");
+      if (isPressing) touchFinger.classList.add("pressing");
+      else touchFinger.classList.remove("pressing");
+    };
+
+    window.setSubtitles = (speaker, text) => {
+      const badge = document.getElementById("sub-badge");
+      const textEl = document.getElementById("sub-text");
+      if (speaker === "expat") {
+        badge.className = "subtitle-speaker-badge badge-expat";
+        badge.innerText = "CAPTAIN JIM (ENGLISH)";
+      } else if (speaker === "contractor") {
+        badge.className = "subtitle-speaker-badge badge-contractor";
+        badge.innerText = "CARLOS MECÁNICO (ESPAÑOL)";
+      } else if (speaker === "translation_to_contractor") {
+        badge.className = "subtitle-speaker-badge badge-contractor";
+        badge.innerText = "TRADUCCIÓN IA EN VIVO ➔ ESPAÑOL";
+      } else if (speaker === "translation_to_expat") {
+        badge.className = "subtitle-speaker-badge badge-expat";
+        badge.innerText = "LIVE AI TRANSLATION ➔ ENGLISH";
+      }
+      textEl.innerText = text;
+    };
+
+    window.setExpatRecording = (active) => {
+      const btn = document.getElementById("expat-ptt-btn");
+      const label = document.getElementById("expat-btn-label");
+      const nodeEn = document.getElementById("node-en");
+      const arrow = document.getElementById("bridge-arrow");
+      const centerWave = document.getElementById("center-wave");
+
+      if (active) {
+        btn.classList.add("active");
+        label.innerText = "TRANSMITIENDO EN VIVO...";
+        nodeEn.classList.add("active");
+        arrow.className = "arrow-flow forward";
+        centerWave.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+        label.innerText = "PRESIONAR PARA HABLAR";
+        nodeEn.classList.remove("active");
+        arrow.className = "arrow-flow";
+        centerWave.classList.remove("active");
+      }
+    };
+
+    window.setContractorRecording = (active) => {
+      const btn = document.getElementById("contractor-ptt-btn");
+      const label = document.getElementById("contractor-btn-label");
+      const nodeEs = document.getElementById("node-es");
+      const arrow = document.getElementById("bridge-arrow");
+      const centerWave = document.getElementById("center-wave");
+
+      if (active) {
+        btn.classList.add("active");
+        label.innerText = "TRANSMITIENDO EN VIVO...";
+        nodeEs.classList.add("active");
+        arrow.className = "arrow-flow backward";
+        centerWave.classList.add("active");
+        setMascot("recording");
+      } else {
+        btn.classList.remove("active");
+        label.innerText = "PRESIONAR PARA HABLAR";
+        nodeEs.classList.remove("active");
+        arrow.className = "arrow-flow";
+        centerWave.classList.remove("active");
+        setMascot("resting");
+      }
+    };
+
+    window.showExpatBubble1 = () => document.getElementById("expat-bubble-1").classList.add("visible");
+    window.showExpatBubble2 = () => document.getElementById("expat-bubble-2").classList.add("visible");
+    window.showContractorCard1 = () => document.getElementById("contractor-card-1").classList.add("visible");
+    window.showContractorCard2 = () => document.getElementById("contractor-card-2").classList.add("visible");
+    window.setStatusBanner = (text) => document.getElementById("status-banner").innerText = text;
+  </script>
+</body>
+</html>

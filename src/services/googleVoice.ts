@@ -5,21 +5,46 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import { Audio } from 'expo-av';
 import { generateElevenLabsAudio } from './elevenLabsVoice';
+import { normalizeBocasTerminology } from './transcriptionService';
 
 export interface VoiceOption {
   id: string;
   name: string;
+  label: string;
   symbol: string;
   gender: 'MALE' | 'FEMALE';
   tone: string;
+  description: string;
   iconName?: string;
   pitch: number;
   rate: number;
 }
 
 export const GOOGLE_SPANISH_VOICES: VoiceOption[] = [
-  { id: 'male', name: 'Male', symbol: '♂', gender: 'MALE', tone: 'Natural', iconName: 'male', pitch: 0.75, rate: 0.85 },
-  { id: 'female', name: 'Female', symbol: '♀', gender: 'FEMALE', tone: 'Natural', iconName: 'female', pitch: 1.05, rate: 0.88 },
+  {
+    id: 'male',
+    name: 'Male',
+    label: 'Male (Warm & Natural)',
+    symbol: '♂',
+    gender: 'MALE',
+    tone: 'Warm & Natural',
+    description: 'Conversational tone, friendly and polite',
+    iconName: 'male',
+    pitch: 0.75,
+    rate: 0.85,
+  },
+  {
+    id: 'female',
+    name: 'Female',
+    label: 'Female (Clear & Friendly)',
+    symbol: '♀',
+    gender: 'FEMALE',
+    tone: 'Clear & Friendly',
+    description: 'Bright and articulate, clear pronunciation',
+    iconName: 'female',
+    pitch: 1.05,
+    rate: 0.88,
+  },
 ];
 
 let customApiKey = '';
@@ -35,7 +60,12 @@ export async function generateGoogleGeminiAudio(
   const selectedVoice = GOOGLE_SPANISH_VOICES.find((v) => v.id === voiceId || v.name.toLowerCase() === voiceId.toLowerCase()) || GOOGLE_SPANISH_VOICES[0];
   const isQuestion = text.includes('?') || text.includes('¿');
 
-  let formattedText = text.trim();
+  let formattedText = normalizeBocasTerminology(text.trim());
+  formattedText = formattedText.replace(/\bun\s+barco\b/gi, 'una lancha');
+  formattedText = formattedText.replace(/\bel\s+barco\b/gi, 'la lancha');
+  formattedText = formattedText.replace(/\bbarco\b/gi, 'lancha');
+  formattedText = formattedText.replace(/\bbarcos\b/gi, 'lanchas');
+
   if (isQuestion && !formattedText.includes('¿')) {
     formattedText = `¿${formattedText}`;
   }

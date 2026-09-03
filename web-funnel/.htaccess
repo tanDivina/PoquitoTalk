@@ -7,14 +7,17 @@ Redirect 301 /index-es.html https://poquitotalk.hero-apps.com/es/
 RewriteRule ^es/directory(\.html)?$ https://poquitotalk.hero-apps.com/es/directorio.html [R=301,L]
 
 RewriteRule ^talk/?$ talk.html [L,QSA]
+RewriteRule ^terms/?$ terms.html [L,QSA]
 RewriteRule ^privacy/?$ privacy.html [L,QSA]
 RewriteRule ^directory/?$ directory.html [L,QSA]
 RewriteRule ^es/directorio/?$ es/directorio.html [L,QSA]
 RewriteRule ^contractors/?$ contractors.html [L,QSA]
 RewriteRule ^es/contratistas/?$ es/contratistas.html [L,QSA]
+RewriteRule ^success/?$ success.html [L,QSA]
+RewriteRule ^claim/?$ success.html [L,QSA]
 
-# Prevent aggressive browser caching of HTML files so updates show instantly
-<FilesMatch "\.(html|htm)$">
+# Prevent aggressive browser caching of HTML, CSS, and JS so updates show instantly
+<FilesMatch "\.(html|htm|css|js)$">
   Header set Cache-Control "no-cache, no-store, must-revalidate"
   Header set Pragma "no-cache"
   Header set Expires 0
@@ -26,4 +29,8 @@ Header always set X-Content-Type-Options "nosniff"
 Header always set Referrer-Policy "strict-origin-when-cross-origin"
 Header always set X-Frame-Options "SAMEORIGIN"
 Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; connect-src 'self' https:; frame-ancestors 'self';"
+
+# Allow Microphone for Walkie-Talkie on poquitotalk.hero-apps.com
+Header always unset Permissions-Policy
+Header always set Permissions-Policy "microphone=(self), geolocation=(), camera=()"
 

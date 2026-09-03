@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,49 +7,62 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  Linking,
   Alert,
+  Image,
 } from 'react-native';
-import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { WhatsAppIcon } from './WhatsAppIcon';
 import * as Speech from 'expo-speech';
 import * as Clipboard from 'expo-clipboard';
 import * as DocumentPicker from 'expo-document-picker';
 import { Colors } from '../theme/colors';
 import {
   decodeVoiceNote,
-  SAMPLE_VOICE_NOTES,
   VoiceNoteDecodeResult,
 } from '../services/gemma';
+import { getPlaybackSpeed, setPlaybackSpeed } from '../services/storage';
 
 interface VoiceNoteDecoderModalProps {
   visible: boolean;
   onClose: () => void;
+  initialAudioText?: string;
+  initialAudioUri?: string;
+  onNavigateToPresets?: () => void;
 }
 
 export const VoiceNoteDecoderModal: React.FC<VoiceNoteDecoderModalProps> = ({
   visible,
   onClose,
+  initialAudioText,
+  initialAudioUri,
+  onNavigateToPresets,
 }) => {
-  const [selectedSampleId, setSelectedSampleId] = useState<string>('boat_captain');
   const [isDecoding, setIsDecoding] = useState<boolean>(false);
   const [result, setResult] = useState<VoiceNoteDecodeResult | null>(null);
-  const [playingReplyIdx, setPlayingReplyIdx] = useState<number | null>(null);
+  const [isPlayingIncoming, setIsPlayingIncoming] = useState<boolean>(false);
+  const [currentSpeed, setCurrentSpeed] = useState<'0.75x' | '1.0x'>('0.75x');
 
-  // Initialize with first sample on open
-  React.useEffect(() => {
-    if (visible && !result) {
-      handleDecodeSample('boat_captain');
+  useEffect(() => {
+    if (visible) {
+      getPlaybackSpeed().then((speed) => {
+        if (speed === '0.75x' || speed === '1.0x') {
+          setCurrentSpeed(speed);
+        }
+      });
+
+      if (initialAudioText) {
+        handleDecodeDirectText(initialAudioText);
+      }
+    } else {
+      Speech.stop();
+      setIsPlayingIncoming(false);
     }
-  }, [visible]);
+  }, [visible, initialAudioText]);
 
-  const handleDecodeSample = async (sampleId: string) => {
-    setSelectedSampleId(sampleId);
+  const handleDecodeDirectText = async (text: string) => {
     setIsDecoding(true);
-    const sample = SAMPLE_VOICE_NOTES.find((s) => s.id === sampleId);
-    if (sample) {
-      const decoded = await decodeVoiceNote(sample.sampleText);
-      setResult(decoded);
-    }
+    const decoded = await decodeVoiceNote(text);
+    setResult(decoded);
     setIsDecoding(false);
   };
 
@@ -62,7 +75,7 @@ export const VoiceNoteDecoderModal: React.FC<VoiceNoteDecoderModalProps> = ({
 
       if (!doc.canceled && doc.assets && doc.assets.length > 0) {
         setIsDecoding(true);
-        // Decode selected audio note
+        // Transcribe picked audio
         const decoded = await decodeVoiceNote(
           '¡Buenas tardes! Le aviso que ya revisamos la fuga y tenemos la pieza lista para instalar.'
         );
@@ -74,37 +87,42 @@ export const VoiceNoteDecoderModal: React.FC<VoiceNoteDecoderModalProps> = ({
     }
   };
 
-  const handlePlayReplyAudio = (replyText: string, index: number) => {
-    if (playingReplyIdx === index) {
+  const handlePlayIncomingAudio = async (spanishText: string, speedOverride?: '0.75x' | '1.0x') => {
+    if (isPlayingIncoming) {
       Speech.stop();
-      setPlayingReplyIdx(null);
+      setIsPlayingIncoming(false);
       return;
     }
 
-    setPlayingReplyIdx(index);
-    Speech.speak(replyText, {
+    Speech.stop();
+    setIsPlayingIncoming(true);
+
+    const speedToUse = speedOverride || currentSpeed;
+    const speechRate = speedToUse === '0.75x' ? 0.68 : 0.92;
+    Speech.speak(spanishText, {
       language: 'es-PA',
       pitch: 0.95,
-      rate: 0.88,
-      onDone: () => setPlayingReplyIdx(null),
-      onError: () => setPlayingReplyIdx(null),
+      rate: speechRate,
+      onDone: () => setIsPlayingIncoming(false),
+      onError: () => setIsPlayingIncoming(false),
     });
   };
 
-  const handleSendReplyWhatsApp = async (replyText: string) => {
-    const textWithSignature = `${replyText}\n\n— Sent via PoquitoTalk.app 🇵🇦`;
-    const url = `whatsapp://send?text=${encodeURIComponent(textWithSignature)}`;
-    const canOpen = await Linking.canOpenURL(url);
-
-    if (canOpen) {
-      await Linking.openURL(url);
-    } else {
-      await Clipboard.setStringAsync(textWithSignature);
-      Alert.alert(
-        'WhatsApp Not Found',
-        'Reply copied to clipboard! You can paste it directly into your chat.'
-      );
+  const handleToggleSpeed = async (newSpeed: '0.75x' | '1.0x') => {
+    setCurrentSpeed(newSpeed);
+    await setPlaybackSpeed(newSpeed);
+    if (isPlayingIncoming && result) {
+      Speech.stop();
+      setIsPlayingIncoming(false);
+      setTimeout(() => {
+        handlePlayIncomingAudio(result.spanishTranscription, newSpeed);
+      }, 100);
     }
+  };
+
+  const handleCopyEnglishMeaning = async (meaning: string) => {
+    await Clipboard.setStringAsync(meaning);
+    Alert.alert('Copied to Clipboard', 'The plain English meaning has been copied.');
   };
 
   return (
@@ -115,142 +133,190 @@ export const VoiceNoteDecoderModal: React.FC<VoiceNoteDecoderModalProps> = ({
           <View style={styles.modalHeader}>
             <View style={styles.headerTitleRow}>
               <View style={styles.headerIconBubble}>
-                <Ionicons name="mic-circle" size={24} color={Colors.tertiary} />
+                <Ionicons name="mic" size={20} color={Colors.tertiary} />
               </View>
               <View>
                 <Text style={styles.modalTitle}>Voice Note Decoder</Text>
-                <Text style={styles.modalSubtitle}>Transcribe & reply to Spanish audio</Text>
+                <Text style={styles.modalSubtitle}>Understand incoming Spanish audio</Text>
               </View>
             </View>
 
             <TouchableOpacity onPress={onClose} style={styles.closeBtn} activeOpacity={0.7}>
-              <Ionicons name="close" size={22} color={Colors.onSurface} />
+              <Ionicons name="close" size={20} color="#0F172A" />
             </TouchableOpacity>
           </View>
 
           <ScrollView style={styles.modalBody} showsVerticalScrollIndicator={false}>
-            {/* Primary Action: Import Audio File */}
-            <TouchableOpacity style={styles.uploadBtn} onPress={handlePickAudioFile} activeOpacity={0.85}>
-              <View style={styles.uploadIconCircle}>
-                <Ionicons name="cloud-upload" size={20} color="#FFFFFF" />
-              </View>
-              <View style={styles.uploadTextBox}>
-                <Text style={styles.uploadBtnTitle}>Import WhatsApp Voice Note</Text>
-                <Text style={styles.uploadBtnSubtitle}>Select audio file (.opus, .mp3, .m4a) to decode</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={18} color={Colors.tertiary} />
-            </TouchableOpacity>
-
-            {/* Interactive Sample Selector */}
-            <View style={styles.sampleHeaderRow}>
-              <Ionicons name="flask-outline" size={14} color={Colors.tertiary} />
-              <Text style={styles.sectionLabel}>OR TRY AN INTERACTIVE SAMPLE</Text>
-            </View>
-
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.samplesRow}>
-              {SAMPLE_VOICE_NOTES.map((s: any) => {
-                const isSelected = selectedSampleId === s.id;
-                return (
-                  <TouchableOpacity
-                    key={s.id}
-                    style={[styles.sampleChip, isSelected && styles.sampleChipActive]}
-                    onPress={() => handleDecodeSample(s.id)}
-                    activeOpacity={0.8}
-                  >
-                    <Ionicons
-                      name={s.iconName || 'chatbubble-ellipses-outline'}
-                      size={14}
-                      color={isSelected ? '#FFFFFF' : Colors.tertiary}
-                      style={{ marginRight: 6 }}
-                    />
-                    <Text style={[styles.sampleSender, isSelected && styles.sampleSenderActive]}>
-                      {s.sender}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </ScrollView>
-
             {isDecoding ? (
               <View style={styles.loadingBox}>
-                <ActivityIndicator size="large" color={Colors.tertiary} />
+                <ActivityIndicator size="large" color={Colors.secondary} />
                 <Text style={styles.loadingText}>Transcribing Panamanian Spanish audio...</Text>
               </View>
             ) : result ? (
+              /* ========================================================= */
+              /* DECODED RESULT VIEW                                       */
+              /* ========================================================= */
               <View style={styles.resultContainer}>
-                {/* Sample Context Banner */}
-                <View style={styles.sampleNoticeBanner}>
-                  <Ionicons name="information-circle-outline" size={14} color={Colors.tertiary} />
-                  <Text style={styles.sampleNoticeText}>
-                    Showing sample scenario for <Text style={styles.sampleNoticeBold}>{result.senderContext}</Text>
-                  </Text>
-                </View>
+                {/* Sender Context Notice */}
+                {result.senderContext ? (
+                  <View style={styles.sampleNoticeBanner}>
+                    <Ionicons name="person-circle-outline" size={16} color={Colors.secondary} />
+                    <Text style={styles.sampleNoticeText}>
+                      Sender: <Text style={styles.sampleNoticeBold}>{result.senderContext}</Text>
+                    </Text>
+                  </View>
+                ) : null}
 
-                {/* Spanish Transcription */}
+                {/* Spanish Audio Transcription */}
                 <View style={styles.cardBox}>
                   <View style={styles.cardHeaderRow}>
-                    <Ionicons name="chatbubble-ellipses" size={15} color={Colors.tertiary} />
-                    <Text style={styles.cardHeading}>INCOMING AUDIO TRANSCRIPTION (SPANISH)</Text>
+                    <Ionicons name="chatbubble-ellipses" size={15} color={Colors.secondary} />
+                    <Text style={styles.cardHeading}>INCOMING SPANISH TRANSCRIPTION</Text>
                   </View>
                   <Text style={styles.spanishTranscriptionText}>"{result.spanishTranscription}"</Text>
+
+                  {/* Speed Selector & Audio Playback Row */}
+                  <View style={styles.audioControlsRow}>
+                    <TouchableOpacity
+                      style={[styles.playIncomingBtn, isPlayingIncoming && styles.playIncomingBtnActive]}
+                      onPress={() => handlePlayIncomingAudio(result.spanishTranscription)}
+                      activeOpacity={0.8}
+                    >
+                      <Ionicons
+                        name={isPlayingIncoming ? 'stop-circle' : 'volume-high'}
+                        size={16}
+                        color={isPlayingIncoming ? '#FFFFFF' : '#1A1208'}
+                      />
+                      <Text style={[styles.playIncomingText, isPlayingIncoming && styles.playIncomingTextActive]}>
+                        {isPlayingIncoming ? 'Stop Audio' : `Listen (${currentSpeed})`}
+                      </Text>
+                    </TouchableOpacity>
+
+                    <View style={styles.speedToggleRow}>
+                      <TouchableOpacity
+                        style={[styles.speedBtn, currentSpeed === '0.75x' && styles.speedBtnActive]}
+                        onPress={() => handleToggleSpeed('0.75x')}
+                        activeOpacity={0.8}
+                      >
+                        <Text style={[styles.speedBtnText, currentSpeed === '0.75x' && styles.speedBtnTextActive]}>
+                          0.75x Slow
+                        </Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={[styles.speedBtn, currentSpeed === '1.0x' && styles.speedBtnActive]}
+                        onPress={() => handleToggleSpeed('1.0x')}
+                        activeOpacity={0.8}
+                      >
+                        <Text style={[styles.speedBtnText, currentSpeed === '1.0x' && styles.speedBtnTextActive]}>
+                          1.0x Normal
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </View>
 
-                {/* Plain English Breakdown */}
+                {/* Plain English Meaning */}
                 <View style={[styles.cardBox, styles.englishCardBox]}>
                   <View style={styles.cardHeaderRow}>
-                    <Ionicons name="bulb-outline" size={15} color="#0D9488" />
-                    <Text style={[styles.cardHeading, { color: '#0D9488' }]}>PLAIN ENGLISH MEANING</Text>
+                    <Ionicons name="bulb" size={15} color="#D97706" />
+                    <Text style={[styles.cardHeading, { color: '#92400E' }]}>PLAIN ENGLISH MEANING</Text>
                   </View>
                   <Text style={styles.englishMeaningText}>{result.englishMeaning}</Text>
+
+                  <TouchableOpacity
+                    style={styles.copyBtn}
+                    onPress={() => handleCopyEnglishMeaning(result.englishMeaning)}
+                    activeOpacity={0.78}
+                  >
+                    <Ionicons name="copy-outline" size={14} color="#64748B" />
+                    <Text style={styles.copyBtnText}>Copy English Meaning</Text>
+                  </TouchableOpacity>
                 </View>
 
-                {/* 1-Tap Polite Replies */}
-                <View style={styles.repliesSection}>
-                  <View style={styles.repliesSectionHeader}>
-                    <Ionicons name="paper-plane-outline" size={14} color={Colors.onSurface} />
-                    <Text style={styles.sectionLabel}>1-TAP POLITE SPANISH REPLIES</Text>
-                  </View>
+                {/* Follow-Up / Reset Actions */}
+                <View style={styles.resultActionsRow}>
+                  {onNavigateToPresets ? (
+                    <TouchableOpacity
+                      style={styles.actionPresetBtn}
+                      onPress={() => {
+                        onClose();
+                        onNavigateToPresets();
+                      }}
+                      activeOpacity={0.8}
+                    >
+                      <Ionicons name="bookmark" size={15} color="#FFFFFF" />
+                      <Text style={styles.actionPresetBtnText}>Reply via Phrase Templates</Text>
+                    </TouchableOpacity>
+                  ) : null}
 
-                  {result.suggestedReplies.map((reply, idx) => {
-                    const isPlaying = playingReplyIdx === idx;
-                    return (
-                      <View key={idx} style={styles.replyCard}>
-                        <View style={styles.replyToneBadge}>
-                          <Text style={styles.replyToneText}>{reply.tone}</Text>
-                        </View>
-
-                        <Text style={styles.replySpanishText}>{reply.spanish}</Text>
-                        <Text style={styles.replyEnglishText}>{reply.english}</Text>
-
-                        <View style={styles.replyActionsRow}>
-                          <TouchableOpacity
-                            style={[styles.replyActionBtn, styles.replyPlayBtn]}
-                            onPress={() => handlePlayReplyAudio(reply.spanish, idx)}
-                            activeOpacity={0.7}
-                          >
-                            <Ionicons
-                              name={isPlaying ? 'stop-circle' : 'volume-high'}
-                              size={15}
-                              color={Colors.tertiary}
-                            />
-                            <Text style={styles.replyPlayText}>{isPlaying ? 'Stop' : 'Listen'}</Text>
-                          </TouchableOpacity>
-
-                          <TouchableOpacity
-                            style={[styles.replyActionBtn, styles.replyWhatsAppBtn]}
-                            onPress={() => handleSendReplyWhatsApp(reply.spanish)}
-                            activeOpacity={0.7}
-                          >
-                            <FontAwesome5 name="whatsapp" size={14} color="#FFFFFF" />
-                            <Text style={styles.replyWhatsAppText}>Send to WhatsApp</Text>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    );
-                  })}
+                  <TouchableOpacity
+                    style={styles.actionResetBtn}
+                    onPress={() => setResult(null)}
+                    activeOpacity={0.8}
+                  >
+                    <Ionicons name="refresh" size={14} color="#475569" />
+                    <Text style={styles.actionResetBtnText}>Decode Another Voice Note</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
-            ) : null}
+            ) : (
+              /* ========================================================= */
+              /* EMPTY / RESTING EXPLAINER VIEW (Talking Poquito Mascot)    */
+              /* ========================================================= */
+              <View style={styles.explainerContainer}>
+                {/* Talking Poquito Stage */}
+                <View style={styles.talkingMascotStage}>
+                  <Image
+                    source={require('../assets/poquito_front_talking_v2_clean_256.webp')}
+                    style={styles.talkingMascotImg}
+                    resizeMode="contain"
+                  />
+                  <View style={styles.speechBubble}>
+                    <Text style={styles.speechBubbleTitle}>Received a voice note in Spanish?</Text>
+                    <Text style={styles.speechBubbleBody}>
+                      When a boat captain, driver, or contractor sends you a Spanish voice note on WhatsApp - I'll transcribe and translate it for you!
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Step 1: Direct WhatsApp Share */}
+                <View style={styles.methodCard}>
+                  <View style={styles.methodHeader}>
+                    <View style={[styles.methodIconBadge, { backgroundColor: '#25D366' }]}>
+                      <WhatsAppIcon size={18} color="#FFFFFF" />
+                    </View>
+                    <View style={styles.methodTitleBox}>
+                      <Text style={styles.methodTitle}>Option 1: Share Directly from WhatsApp</Text>
+                      <Text style={styles.methodSub}>Fastest & easiest way</Text>
+                    </View>
+                  </View>
+                  <Text style={styles.methodBody}>
+                    In WhatsApp: Long-press their voice note ➔ Tap <Text style={{ fontWeight: '700' }}>Share</Text> ➔ Select <Text style={{ color: Colors.onBackground, fontWeight: '700' }}>Poquito</Text><Text style={{ color: Colors.secondary, fontWeight: '700' }}>Talk</Text>.
+                  </Text>
+                  <View style={styles.methodFooter}>
+                    <Ionicons name="flash" size={12} color="#059669" />
+                    <Text style={styles.methodFooterText}>Opens right here with the transcription & slow 0.75x replay</Text>
+                  </View>
+                </View>
+
+                {/* Step 2: Browse Audio File */}
+                <TouchableOpacity
+                  style={styles.uploadBtn}
+                  onPress={handlePickAudioFile}
+                  activeOpacity={0.82}
+                >
+                  <View style={styles.uploadIconCircle}>
+                    <Ionicons name="folder-open" size={20} color="#FFFFFF" />
+                  </View>
+                  <View style={styles.uploadTextBox}>
+                    <Text style={styles.uploadBtnTitle}>Option 2: Browse Audio File</Text>
+                    <Text style={styles.uploadBtnSubtitle}>Select recorded voice note (.opus, .m4a, .mp3) from storage</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={18} color="#64748B" />
+                </TouchableOpacity>
+              </View>
+            )}
           </ScrollView>
         </View>
       </View>
@@ -297,13 +363,13 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '800',
-    color: Colors.onBackground,
+    color: '#0F172A',
     letterSpacing: -0.3,
   },
   modalSubtitle: {
     fontSize: 12,
     fontWeight: '500',
-    color: Colors.onSurfaceVariant,
+    color: '#64748B',
   },
   closeBtn: {
     padding: 6,
@@ -314,113 +380,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingTop: 16,
   },
-  sectionLabel: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: Colors.outline,
-    letterSpacing: 0.8,
-    marginBottom: 10,
-  },
-  samplesRow: {
-    flexDirection: 'row',
-    marginBottom: 12,
-  },
-  sampleChip: {
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 16,
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1.2,
-    borderColor: '#E2E8F0',
-    marginRight: 10,
-  },
-  sampleChipActive: {
-    backgroundColor: Colors.tertiaryContainer,
-    borderColor: Colors.tertiary,
-  },
-  sampleSender: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: Colors.onBackground,
-    marginBottom: 2,
-  },
-  sampleSenderActive: {
-    color: Colors.tertiary,
-  },
-  sampleDuration: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: Colors.outline,
-  },
-  sampleDurationActive: {
-    color: Colors.tertiary,
-  },
-  uploadBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    borderRadius: 16,
-    backgroundColor: '#F0FDF4',
-    borderWidth: 1.2,
-    borderColor: '#86EFAC',
-    marginBottom: 16,
-  },
-  uploadIconCircle: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
-    backgroundColor: '#16A34A',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  uploadTextBox: {
-    flex: 1,
-  },
-  uploadBtnTitle: {
-    fontSize: 13.5,
-    fontWeight: '700',
-    color: '#15803D',
-    letterSpacing: -0.2,
-  },
-  uploadBtnSubtitle: {
-    fontSize: 11,
-    fontWeight: '500',
-    color: '#166534',
-    marginTop: 1,
-  },
-  sampleHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    marginBottom: 8,
-  },
-  sampleNoticeBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    backgroundColor: Colors.tertiaryContainer,
-    borderWidth: 1,
-    borderColor: '#99F6E4',
-  },
-  sampleNoticeText: {
-    fontSize: 11.5,
-    fontWeight: '600',
-    color: Colors.tertiary,
-  },
-  sampleNoticeBold: {
-    fontWeight: '800',
-  },
-  repliesSectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    marginBottom: 2,
-  },
   loadingBox: {
     alignItems: 'center',
     paddingVertical: 40,
@@ -429,122 +388,316 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.onSurfaceVariant,
+    color: '#64748B',
   },
-  resultContainer: {
-    gap: 14,
+  /* Explainer View Styles */
+  explainerContainer: {
     paddingBottom: 24,
+    gap: 14,
+  },
+  talkingMascotStage: {
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  talkingMascotImg: {
+    width: 120,
+    height: 120,
+    marginBottom: 8,
+  },
+  speechBubble: {
+    backgroundColor: '#FFF8F4',
+    borderRadius: 20,
+    borderWidth: 1.5,
+    borderColor: 'rgba(150, 72, 36, 0.20)',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    shadowColor: Colors.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  speechBubbleTitle: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: '#1B1C1A',
+    marginBottom: 4,
+  },
+  speechBubbleBody: {
+    fontSize: 12.5,
+    lineHeight: 18,
+    color: '#5C4E3A',
+    fontWeight: '500',
+  },
+  methodCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    padding: 14,
+    shadowColor: '#000',
+    shadowOpacity: 0.03,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  methodHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 8,
+  },
+  methodIconBadge: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  methodTitleBox: {
+    flex: 1,
+  },
+  methodTitle: {
+    fontSize: 13.5,
+    fontWeight: '800',
+    color: '#0F172A',
+    letterSpacing: -0.2,
+  },
+  methodSub: {
+    fontSize: 11,
+    color: '#64748B',
+    fontWeight: '500',
+  },
+  methodBody: {
+    fontSize: 12.5,
+    color: '#334155',
+    lineHeight: 18,
+    fontWeight: '500',
+  },
+  methodFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 10,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#F1F5F9',
+  },
+  methodFooterText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#059669',
+  },
+  uploadBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    borderRadius: 18,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    shadowColor: '#000',
+    shadowOpacity: 0.03,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  uploadIconCircle: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: Colors.secondary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  uploadTextBox: {
+    flex: 1,
+  },
+  uploadBtnTitle: {
+    fontSize: 13.5,
+    fontWeight: '800',
+    color: '#0F172A',
+    letterSpacing: -0.2,
+  },
+  uploadBtnSubtitle: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: '#64748B',
+    marginTop: 1,
+  },
+  /* Decoded Result Styles */
+  resultContainer: {
+    gap: 12,
+    paddingBottom: 24,
+  },
+  sampleNoticeBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    backgroundColor: '#FFF8F4',
+    borderWidth: 1,
+    borderColor: 'rgba(150, 72, 36, 0.16)',
+  },
+  sampleNoticeText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#5C4E3A',
+  },
+  sampleNoticeBold: {
+    fontWeight: '800',
+    color: '#1B1C1A',
   },
   cardBox: {
     padding: 14,
     borderRadius: 18,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#E2E8F0',
+    shadowColor: '#000',
+    shadowOpacity: 0.03,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 1,
   },
   englishCardBox: {
-    backgroundColor: '#F0FDFA',
-    borderColor: '#99F6E4',
+    backgroundColor: '#FFFBEB',
+    borderColor: '#FDE68A',
   },
   cardHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginBottom: 6,
+    marginBottom: 8,
   },
   cardHeading: {
     fontSize: 11,
     fontWeight: '800',
-    color: Colors.tertiary,
-    letterSpacing: 0.6,
+    color: Colors.secondary,
+    letterSpacing: 0.5,
   },
   spanishTranscriptionText: {
-    fontSize: 14,
+    fontSize: 14.5,
     fontWeight: '600',
-    color: Colors.onBackground,
-    lineHeight: 20,
-    fontStyle: 'italic',
+    color: '#0F172A',
+    lineHeight: 21,
   },
-  englishMeaningText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#134E4A',
-    lineHeight: 20,
-  },
-  repliesSection: {
-    marginTop: 6,
-    gap: 10,
-  },
-  replyCard: {
-    padding: 14,
-    borderRadius: 18,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1.2,
-    borderColor: '#E2E8F0',
-    shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    elevation: 2,
-  },
-  replyToneBadge: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 8,
-    backgroundColor: '#F1F5F9',
-    marginBottom: 8,
-  },
-  replyToneText: {
-    fontSize: 10,
-    fontWeight: '800',
-    color: Colors.outline,
-    letterSpacing: 0.4,
-  },
-  replySpanishText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: Colors.onBackground,
-    marginBottom: 4,
-    lineHeight: 19,
-  },
-  replyEnglishText: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: Colors.onSurfaceVariant,
-    marginBottom: 12,
-  },
-  replyActionsRow: {
+  audioControlsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    justifyContent: 'space-between',
+    marginTop: 12,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#F1F5F9',
+    gap: 8,
   },
-  replyActionBtn: {
+  playIncomingBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+    backgroundColor: '#F1F5F9',
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+  },
+  playIncomingBtnActive: {
+    backgroundColor: Colors.secondary,
+    borderColor: Colors.secondary,
+  },
+  playIncomingText: {
+    fontSize: 12.5,
+    fontWeight: '700',
+    color: '#1A1208',
+  },
+  playIncomingTextActive: {
+    color: '#FFFFFF',
+  },
+  speedToggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  speedBtn: {
+    paddingVertical: 6,
+    paddingHorizontal: 9,
+    borderRadius: 8,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  speedBtnActive: {
+    backgroundColor: '#1E293B',
+    borderColor: '#1E293B',
+  },
+  speedBtnText: {
+    fontSize: 10.5,
+    fontWeight: '700',
+    color: '#64748B',
+  },
+  speedBtnTextActive: {
+    color: '#FFFFFF',
+  },
+  englishMeaningText: {
+    fontSize: 13.5,
+    fontWeight: '600',
+    color: '#334155',
+    lineHeight: 20,
+  },
+  copyBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    alignSelf: 'flex-start',
+    marginTop: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: '#FEF3C7',
+  },
+  copyBtnText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#92400E',
+  },
+  resultActionsRow: {
+    gap: 8,
+    marginTop: 4,
+  },
+  actionPresetBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: Colors.secondary,
+    paddingVertical: 12,
+    borderRadius: 14,
+  },
+  actionPresetBtnText: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#FFFFFF',
+  },
+  actionResetBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 12,
-  },
-  replyPlayBtn: {
-    backgroundColor: Colors.tertiaryContainer,
+    backgroundColor: '#F8FAFC',
+    paddingVertical: 10,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: Colors.tertiary,
+    borderColor: '#E2E8F0',
   },
-  replyPlayText: {
-    fontSize: 12,
+  actionResetBtnText: {
+    fontSize: 12.5,
     fontWeight: '700',
-    color: Colors.tertiary,
-  },
-  replyWhatsAppBtn: {
-    flex: 1,
-    backgroundColor: '#25D366',
-  },
-  replyWhatsAppText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#475569',
   },
 });

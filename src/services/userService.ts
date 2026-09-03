@@ -119,3 +119,72 @@ export async function deductCreditForVoiceNote(personaName: string): Promise<{ s
   await saveUserProfile(updatedProfile);
   return { success: true, profile: updatedProfile };
 }
+
+export async function deductCreditForWalkieTalkie(sessionName: string = 'Walkie-Talkie Session', creditsCost: number = 5): Promise<{ success: boolean; profile: UserProfileData }> {
+  const profile = await getUserProfile();
+
+  if (profile.isProSubscriber) {
+    // Pro subscribers have unlimited walkie-talkie access
+    return { success: true, profile };
+  }
+
+  if (profile.creditsBalance < creditsCost) {
+    return { success: false, profile };
+  }
+
+  const newTxn: UserTransaction = {
+    id: `txn_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    type: 'USAGE',
+    amount: -creditsCost,
+    source: 'Walkie-Talkie Session',
+    details: `Live 2-Way Channel: ${sessionName} (${creditsCost} credits)`,
+    timestamp: Date.now(),
+  };
+
+  const updatedProfile: UserProfileData = {
+    ...profile,
+    creditsBalance: profile.creditsBalance - creditsCost,
+    transactions: [newTxn, ...profile.transactions],
+  };
+
+  await saveUserProfile(updatedProfile);
+  return { success: true, profile: updatedProfile };
+}
+
+export async function setProSubscriber(isPro: boolean): Promise<UserProfileData> {
+  const profile = await getUserProfile();
+  const updatedProfile: UserProfileData = {
+    ...profile,
+    isProSubscriber: isPro,
+  };
+  await saveUserProfile(updatedProfile);
+  return updatedProfile;
+}
+
+export async function redeemWebPurchase(
+  claimToken: string,
+  isPro: boolean,
+  credits: number,
+  packageName: string
+): Promise<UserProfileData> {
+  const profile = await getUserProfile();
+  const newTxn: UserTransaction = {
+    id: `txn_claim_${Date.now()}`,
+    type: 'PURCHASE_WEB',
+    amount: credits,
+    source: 'Stripe Web Checkout',
+    details: `Claimed: ${packageName} (Token: ${claimToken})`,
+    timestamp: Date.now(),
+  };
+
+  const updatedProfile: UserProfileData = {
+    ...profile,
+    isProSubscriber: isPro || profile.isProSubscriber,
+    creditsBalance: profile.creditsBalance + credits,
+    transactions: [newTxn, ...profile.transactions],
+  };
+
+  await saveUserProfile(updatedProfile);
+  return updatedProfile;
+}
+

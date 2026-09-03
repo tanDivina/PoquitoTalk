@@ -6,7 +6,7 @@
   <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PoquitoTalk — Notas de Voz de WhatsApp en 1-Tap para Panamá 🇵🇦</title>
+  <title>PoquitoTalk • Notas de Voz de WhatsApp en 1-Tap para Panamá 🇵🇦</title>
   <meta name="description" content="Traduce y envía notas de voz de WhatsApp en español panameño a plomeros, mecánicos, arrendadores y técnicos de aire acondicionado en Bocas del Toro, Panamá." />
   
   <!-- Canonical & Multilingual Hreflang Tags per multilingual-url-seo skill -->
@@ -18,7 +18,7 @@
   <!-- Open Graph & Social Cards -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="PoquitoTalk" />
-  <meta property="og:title" content="PoquitoTalk — Notas de Voz de WhatsApp para Panamá 🇵🇦" />
+  <meta property="og:title" content="PoquitoTalk • Notas de Voz de WhatsApp para Panamá 🇵🇦" />
   <meta property="og:description" content="Comunícate fácilmente con servicios locales en Bocas del Toro. Impulsado por IA de Voz Panameña de Alta Fidelidad." />
   <meta property="og:url" content="https://poquitotalk.hero-apps.com/es/" />
   <meta property="og:image" content="https://poquitotalk.hero-apps.com/twitter_card.png?v=1.2.0" />
@@ -30,11 +30,11 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@DorienVibecodes" />
   <meta name="twitter:creator" content="@DorienVibecodes" />
-  <meta name="twitter:title" content="PoquitoTalk — Notas de Voz de WhatsApp para Panamá" />
+  <meta name="twitter:title" content="PoquitoTalk • Notas de Voz de WhatsApp para Panamá" />
   <meta name="twitter:description" content="Genera notas de voz amables en español panameño listas para enviar por WhatsApp en 1-tap." />
   <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/twitter_card.png?v=1.2.0" />
 
-  <link rel="stylesheet" href="../style.css?v=5.7.0" />
+  <link rel="stylesheet" href="../style.css?v=6.2.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
 
@@ -76,6 +76,22 @@
               "@type": "Answer",
               "text": "Los profesionales en Bocas del Toro a menudo conducen lanchas, están en obras o trabajando. Escuchar una nota de voz educada en español panameño de 10 segundos recibe una respuesta más rápida que el texto traducido formal."
             }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Cómo funciona una Sesión de Audio en Vivo Bidireccional y cuándo comienza?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Una sesión en vivo permite hablar en inglés y que su contratista o capitán escuche en español mediante un enlace web ligero sin necesidad de que instalen ninguna aplicación. La sesión solo comienza cuando se envía el primer mensaje de voz (no al hacer clic en el enlace) e incluye una ventana activa de 15 minutos (hasta 15 intercambios de voz) que se cierra automáticamente tras 5 minutos de silencio. Los pases anuales y mensuales incluyen sesiones ilimitadas; los paquetes de créditos descuentan 5 créditos por sesión."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Por qué PoquitoTalk usa Push-To-Talk en vez de traducción continua con manos libres?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "El sistema Push-To-Talk (Walkie) es rápido, ligero, de bajo costo y perfecto para las condiciones fluctuantes de internet y señal en islas. Evita que el ruido ambiental o la lluvia interrumpan las notas. En la versión V2 planeamos abrir un plan específico Live Duo para traducción presencial en restaurantes y ferreterías."
+            }
           }
         ]
       }
@@ -88,15 +104,21 @@
   <header class="navbar" role="banner">
     <div class="nav-container">
       <div class="brand">
-        <img src="/logo.svg?v=1.3.0" width="40" height="40" alt="PoquitoTalk Logo" style="margin-right: 8px; filter: drop-shadow(0 2px 10px rgba(37, 211, 102, 0.4));" />
-        <span class="brand-name">PoquitoTalk <span class="badge-tag">Panamá 🇵🇦</span></span>
+        <a href="/es/" class="brand-link" aria-label="PoquitoTalk Inicio">
+          <img src="/logo.svg?v=1.3.1" width="40" height="40" alt="PoquitoTalk Logo" style="filter: drop-shadow(0 2px 8px rgba(37, 211, 102, 0.35));" />
+          <div class="brand-text-group">
+            <span class="brand-name"><span class="brand-wordmark">Poquito<span class="brand-talk">Talk</span></span></span>
+            <span class="brand-subtext">Bocas del Toro, Panamá</span>
+          </div>
+        </a>
       </div>
       <nav class="nav-links" aria-label="Navegación Principal">
         <!-- Language Switcher Toggle -->
-        <div class="lang-toggle">
-          <a href="/" class="lang-btn">🇺🇸 EN</a>
-          <a href="/es/" class="lang-btn active">🇵🇦 ES</a>
+        <div class="lang-toggle" aria-label="Selector de Idioma">
+          <a href="/" class="lang-btn">EN</a>
+          <a href="/es/" class="lang-btn active">ES</a>
         </div>
+        <a href="#featured-directory" class="nav-link">Servicios Locales</a>
         <a href="#app-video" class="nav-link">Video Demo</a>
         <a href="#demo" class="nav-link">Generador en Vivo</a>
         <a href="#playstore" class="nav-link">Google Play</a>
@@ -121,9 +143,23 @@
         Sin complicaciones al enviar mensajes a tu plomero, arrendador, mecánico o técnico de aire acondicionado. PoquitoTalk genera notas de voz educadas y naturales en español de Panamá.
       </p>
 
+      <!-- Prominent Hero Directory Hook -->
+      <div class="hero-directory-hook">
+        <a href="/es/directorio.html" class="hero-directory-pill">
+          <span class="pulse-dot"></span>
+          <span>¿Buscas un profesional local? Explora <strong>80+ Capitanes y Contratistas Verificados en Bocas</strong></span>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+
       <div class="hero-actions">
-        <a href="#app-video" class="btn-hero-primary">
-          Ver Demostración en Video <span class="arrow">→</span>
+        <a href="/es/directorio.html" class="btn-hero-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          <span>Abrir Directorio Bocas</span>
+          <span class="arrow">→</span>
+        </a>
+        <a href="#app-video" class="btn-hero-secondary">
+          Ver Video Demo
         </a>
         <a href="#demo" class="btn-hero-secondary">
           Probar Generador
@@ -136,10 +172,215 @@
           <span>🇵🇦 Modismos Auténticos del Español Panameño</span>
         </div>
         <div class="proof-badge">
-          <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: text-bottom;"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg> Notas de Voz para Panamá</span>
+          <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: text-bottom;"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg> Notas de Voz para Panamá</span>
         </div>
         <div class="proof-badge">
-          <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: text-bottom;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Integración Directa con WhatsApp — Sin App para el Destinatario</span>
+          <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: text-bottom;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Integración Directa con WhatsApp - Sin App para el Destinatario</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Bocas del Toro Directory Hub Section -->
+  <section id="featured-directory" class="home-directory-section" aria-label="Sección del Directorio Verificado de Bocas">
+    <div class="container">
+      <div class="home-directory-card">
+        <div class="home-dir-header">
+          <span class="badge-tag" style="background: rgba(4, 120, 87, 0.12); color: #047857;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Directorio Verificado de Servicios 🇵🇦
+          </span>
+          <h2>Encuentra Servicios Confiables en Bocas del Toro</h2>
+          <p>
+            Conecta directamente con profesionales verificados, capitanes certificados, camiones cisterna de agua y cajeros automáticos en Isla Colón, Carenero, Bastimentos y Tierra Firme — listos con notas de voz en 1-tap.
+          </p>
+        </div>
+
+        <!-- Instant Search Box -->
+        <form class="home-dir-search-form" action="/es/directorio.html" method="GET">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7E766D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" name="q" placeholder="Buscar por servicio (ej. aire acondicionado, capitán, agua, electricista)..." aria-label="Buscar en el Directorio de Bocas" />
+          <button type="submit" class="btn-search-submit">
+            <span>Buscar en Directorio</span>
+            <span class="arrow">→</span>
+          </button>
+        </form>
+
+        <!-- 6 Quick-Access Category Tiles -->
+        <div class="home-dir-grid">
+          <!-- 1. Boat Captains -->
+          <a href="/es/directorio.html?cat=WATER_TAXI" class="home-dir-tile">
+            <div class="home-dir-tile-header">
+              <div class="home-dir-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.19"/><path d="M12 10V4"/><path d="m8 8 4-4 4 4"/></svg>
+              </div>
+              <span class="home-dir-count-pill">75 Capitanes</span>
+            </div>
+            <div>
+              <h3>Capitanes y Taxis Acuáticos</h3>
+              <p>Operadores de lancha certificados Hope Spot para traslados en Isla Colón, Carenero, Bastimentos, Red Frog y Almirante.</p>
+            </div>
+            <div class="home-dir-tile-action">
+              <span>Ver Capitanes</span>
+              <span class="arrow">→</span>
+            </div>
+          </a>
+
+          <!-- 2. Electricians, A/C & Trades -->
+          <a href="/es/directorio.html?cat=CONTRACTORS" class="home-dir-tile">
+            <div class="home-dir-tile-header">
+              <div class="home-dir-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </div>
+              <span class="home-dir-count-pill">Verificados</span>
+            </div>
+            <div>
+              <h3>Electricistas, A/C y Oficios</h3>
+              <p>Técnicos de confianza para goteos de aire acondicionado, cableado eléctrico, refrigeración y reparaciones del hogar.</p>
+            </div>
+            <div class="home-dir-tile-action">
+              <span>Ver Técnicos</span>
+              <span class="arrow">→</span>
+            </div>
+          </a>
+
+          <!-- 3. Land Taxis & Airport Drivers -->
+          <a href="/es/directorio.html?cat=TAXI_LAND" class="home-dir-tile">
+            <div class="home-dir-tile-header">
+              <div class="home-dir-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11.2 2 11.8 2 12.4V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+              </div>
+              <span class="home-dir-count-pill">Flota Local</span>
+            </div>
+            <div>
+              <h3>Taxis Terrestres y Chóferes</h3>
+              <p>Taxis amarillos, camionetas 4x4 a Playa Bluff / Paunch, y colectivos compartidos en Isla Colón y Almirante.</p>
+            </div>
+            <div class="home-dir-tile-action">
+              <span>Ver Taxis Terrestres</span>
+              <span class="arrow">→</span>
+            </div>
+          </a>
+
+          <!-- 4. Mechanics & Outboard Marine -->
+          <a href="/es/directorio.html?cat=MECHANIC" class="home-dir-tile">
+            <div class="home-dir-tile-header">
+              <div class="home-dir-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </div>
+              <span class="home-dir-count-pill">Marino y Autos</span>
+            </div>
+            <div>
+              <h3>Talleres y Motores Fuera de Borda</h3>
+              <p>Reparación de motores fuera de borda Yamaha/Suzuki, mecánica de autos y mulas, soldadura y golf carts.</p>
+            </div>
+            <div class="home-dir-tile-action">
+              <span>Ver Talleres</span>
+              <span class="arrow">→</span>
+            </div>
+          </a>
+
+          <!-- 5. Doctors & Emergency Medical -->
+          <a href="/es/directorio.html?cat=MEDICAL" class="home-dir-tile">
+            <div class="home-dir-tile-header">
+              <div class="home-dir-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+              <span class="home-dir-count-pill">Atención 24/7</span>
+            </div>
+            <div>
+              <h3>Médicos y Farmacias</h3>
+              <p>Urgencias del Hospital de Isla Colón, clínicas médicas privadas, recetas, antibióticos y primeros auxilios.</p>
+            </div>
+            <div class="home-dir-tile-action">
+              <span>Ver Servicios Médicos</span>
+              <span class="arrow">→</span>
+            </div>
+          </a>
+
+          <!-- 6. Hardware & Building Supplies -->
+          <a href="/es/directorio.html?cat=HARDWARE" class="home-dir-tile">
+            <div class="home-dir-tile-header">
+              <div class="home-dir-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.91 3.26-1.57-1.57a1.6 1.6 0 0 0-2.26 0L14 4.77l4.14 4.14 3.08-3.08a1.6 1.6 0 0 0 0-2.26z"/></svg>
+              </div>
+              <span class="home-dir-count-pill">Materiales</span>
+            </div>
+            <div>
+              <h3>Ferreterías y Materiales</h3>
+              <p>Tornillos marinos de acero inoxidable, tuberías PVC, techos de zinc, bombas de agua, cemento y electricidad.</p>
+            </div>
+            <div class="home-dir-tile-action">
+              <span>Ver Ferreterías</span>
+              <span class="arrow">→</span>
+            </div>
+          </a>
+
+          <!-- 7. Border Runs & Costa Rica Shuttles -->
+          <a href="/es/directorio.html?cat=SHUTTLE" class="home-dir-tile">
+            <div class="home-dir-tile-header">
+              <div class="home-dir-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              </div>
+              <span class="home-dir-count-pill">Internacional</span>
+            </div>
+            <div>
+              <h3>Shuttles y Frontera Costa Rica</h3>
+              <p>Traslados directos diarios entre Bocas del Toro y Puerto Viejo, Cahuita, Limón y San José con apoyo en frontera.</p>
+            </div>
+            <div class="home-dir-tile-action">
+              <span>Ver Shuttles</span>
+              <span class="arrow">→</span>
+            </div>
+          </a>
+
+          <!-- 8. ATMs & Banking -->
+          <a href="/es/directorio.html?cat=BANKING" class="home-dir-tile">
+            <div class="home-dir-tile-header">
+              <div class="home-dir-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              </div>
+              <span class="home-dir-count-pill">5 Puntos</span>
+            </div>
+            <div>
+              <h3>Cajeros y Servicios Financieros</h3>
+              <p>Sucursal de Banco Nacional en Bocas Town (3 cajeros automáticos), giros de Western Union y cambio de efectivo.</p>
+            </div>
+            <div class="home-dir-tile-action">
+              <span>Ver Puntos Financieros</span>
+              <span class="arrow">→</span>
+            </div>
+          </a>
+
+          <!-- 9. Gardening & Property Care -->
+          <a href="/es/directorio.html?cat=GARDENING" class="home-dir-tile">
+            <div class="home-dir-tile-header">
+              <div class="home-dir-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-7"/><path d="M17 8a5 5 0 0 0-10 0c0 4 5 7 5 7s5-3 5-7z"/></svg>
+              </div>
+              <span class="home-dir-count-pill">Mantenimiento</span>
+            </div>
+            <div>
+              <h3>Jardinería y Cuidado de Fincas</h3>
+              <p>Chapeo, mantenimiento de senderos, desmalezado, plantas tropicales y cuidado integral de propiedades.</p>
+            </div>
+            <div class="home-dir-tile-action">
+              <span>Ver Jardineros</span>
+              <span class="arrow">→</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Footer Callout Bar -->
+        <div class="home-dir-footer-bar">
+          <a href="/es/directorio.html" class="dir-primary-cta">
+            <span>Explorar los 80+ Contactos de Bocas</span>
+            <span class="arrow">→</span>
+          </a>
+          <a href="/es/contratistas.html" class="dir-secondary-cta">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <span>¿Eres un profesional o técnico? Regístrate Gratis</span>
+          </a>
         </div>
       </div>
     </div>
@@ -150,7 +391,7 @@
     <div class="container">
       <div class="video-showcase-card">
         <div class="video-showcase-info">
-          <span class="badge-tag" style="background: rgba(37, 211, 102, 0.15); color: #10B981; font-size: 13px; padding: 6px 14px; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+          <span class="badge-tag" style="background: rgba(4, 120, 87, 0.12); color: #047857; font-size: 13px; padding: 6px 14px; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             Demostración Oficial de la App
           </span>
@@ -161,19 +402,19 @@
 
           <div class="video-feature-list">
             <div class="video-feature-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               <span>Notas de Voz en Español de Panamá en 1-Tap</span>
             </div>
             <div class="video-feature-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               <span>Decodificador de Audios de WhatsApp con Respuestas Rápidas</span>
             </div>
             <div class="video-feature-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               <span>Escáner de Facturas y Menús con Explicaciones</span>
             </div>
             <div class="video-feature-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               <span>18 Categorías de Presets y Directorio Verificado de Contratistas</span>
             </div>
           </div>
@@ -203,7 +444,7 @@
     <div class="container">
       <div class="card-panel">
         <!-- Pure Poquito Mascot (Perched Over Top-Right of Card) -->
-        <div id="poquito-corner-mascot-wrapper" class="poquito-corner-mascot-wrapper" onclick="cheerPoquito()" role="button" tabindex="0" title="¡Qué xopa! Soy Poquito 🇵🇦 — ¡Haz clic para animarme!">
+        <div id="poquito-corner-mascot-wrapper" class="poquito-corner-mascot-wrapper" onclick="cheerPoquito()" role="button" tabindex="0" title="¡Qué xopa! Soy Poquito 🇵🇦 - ¡Haz clic para animarme!">
           <svg class="poquito-corner-mascot-svg" viewBox="0 0 160 160" fill="none" id="poquito-mascot">
             <!-- 1. Wooden Perch Branch -->
             <g id="side-perch">
@@ -218,7 +459,7 @@
               <path d="M 35 125 C 27 108 25 90 29 70 C 33 42 50 18 73 18 C 91 18 100 34 98 52 C 95 72 97 100 92 116 C 82 131 58 136 35 125 Z" fill="#10B981" stroke="#047857" stroke-width="4.5" stroke-linejoin="round" />
               <g id="side-crest">
                 <path d="M 58 19.2 C 55 13 52 9 47 8" stroke="#047857" stroke-width="3.5" stroke-linecap="round" fill="none" />
-                <path d="M 67 17.8 C 64 12 61 9 56 7" stroke="#047857" stroke-width="3" stroke-linecap="round" fill="none" />
+                <path d="M 67 17.8 C 64 12 61 9 56 7" stroke="#047857" stroke-width="3.5" stroke-linecap="round" fill="none" />
               </g>
             </g>
             <!-- 4. Sleek Cyan Wing -->
@@ -292,7 +533,7 @@
                       <span>Poquito</span>
                     </button>
                     <div class="tone-tooltip">
-                      <p>Calidez panameña natural — frases amables, educadas y respetuosas (ej., <em>"¡Buenas!", "¿Podría venir a revisarlo?"</em>).</p>
+                      <p>Calidez panameña natural: frases amables, educadas y respetuosas (ej., <em>"¡Buenas!", "¿Podría venir a revisarlo?"</em>).</p>
                     </div>
                   </div>
 
@@ -302,7 +543,7 @@
                       <span>Full panameño</span>
                     </button>
                     <div class="tone-tooltip">
-                      <p>Dialecto auténtico local — expresiones cotidianas y jerga panameña (ej., <em>"¡Qué xopa!", "al tiro"</em>).</p>
+                      <p>Dialecto auténtico local: expresiones cotidianas y jerga panameña (ej., <em>"¡Qué xopa!", "al tiro"</em>).</p>
                     </div>
                   </div>
                 </div>
@@ -363,10 +604,10 @@
 
           <div id="playstore-success-es" class="playstore-success-box" style="display: none;">
             <div class="success-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
             <div class="success-text">
-              <p class="playstore-success-title" style="font-weight: 700; font-size: 16px; color: #10B981; margin: 0 0 4px 0;">¡Estás en la Lista VIP de Google Play!</p>
+              <p class="playstore-success-title" style="font-weight: 700; font-size: 16px; color: #047857; margin: 0 0 4px 0;">¡Estás en la Lista VIP de Google Play!</p>
               <p>Hemos reservado tu lugar. Te enviaremos el enlace directo de descarga a tu correo en cuanto PoquitoTalk esté disponible en Google Play Store.</p>
             </div>
           </div>
@@ -374,15 +615,15 @@
       </div>
 
       <!-- Contractor Directory Promo Card -->
-      <div class="contractor-promo-banner" style="margin-top: 24px; background: rgba(37, 211, 102, 0.06); border: 1px solid rgba(37, 211, 102, 0.2); border-radius: 20px; padding: 24px 32px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+      <div class="contractor-promo-banner" style="margin-top: 24px; background: rgba(4, 120, 87, 0.06); border: 1px solid rgba(4, 120, 87, 0.2); border-radius: 20px; padding: 24px 32px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
         <div>
-          <h3 style="font-family: 'Lexend', sans-serif; font-size: 18px; font-weight: 700; color: #10B981; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+          <h3 style="font-family: 'Lexend', sans-serif; font-size: 18px; font-weight: 700; color: #047857; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
             ¿Ofreces servicios técnicos o reparaciones en Bocas del Toro?
           </h3>
           <p style="color: #4D463E; font-size: 14px; margin: 0;">¡Únete gratis a nuestro directorio verificado de contratistas para recibir solicitudes de clientes a tu WhatsApp!</p>
         </div>
-        <a href="contratistas.html" class="btn-primary-nav" style="background: #10B981; color: #FFFFFF; text-decoration: none; padding: 12px 20px; border-radius: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+        <a href="contratistas.html" class="btn-primary-nav" style="background: #047857; color: #FFFFFF; text-decoration: none; padding: 12px 20px; border-radius: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
           Unirse al Directorio <span class="arrow">→</span>
         </a>
       </div>
@@ -440,6 +681,50 @@
 
         <div class="faq-card" onclick="toggleFaq(this)">
           <button class="faq-question" type="button">
+            <span>En su demostración, las voces sonaban muy naturales y humanas. ¿Por qué una voz podría sonar diferente en ciertas situaciones?</span>
+            <span class="faq-toggle-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>¡Queremos que todos disfruten de un español panameño natural y auténtico! Así es como funciona la calidad de voz en la aplicación:<br><br>
+            • <strong>Frases del Directorio Isleño (100% Gratis para Todos):</strong> Todas las frases pregrabadas en nuestras 23 categorías de servicios (capitanes de lancha, plomeros, electricistas, pedidos de víveres, emergencias) son totalmente gratis para escuchar con audio humano auténtico y claro.<br><br>
+            • <strong>Notas de Voz Personalizadas y Walkie-Talkie:</strong> Cuando escribe o graba su propio mensaje para enviarlo por WhatsApp, generar notas de voz nuevas y naturales utiliza nuestros paquetes de voz de alta calidad. Esto se desbloquea con el <strong>Paquete de 50 Créditos</strong> o cualquier <strong>Pase Ilimitado</strong>. (Las pruebas gratuitas en la web utilizan la voz básica de su dispositivo para que pueda probar frases sin gastar créditos).<br><br>
+            • <strong>Modo Sin Señal en Lancha o Selva:</strong> Si está en el agua o en áreas remotas con 1 barra de señal, PoquitoTalk utiliza automáticamente una voz instantánea sin conexión para que su mensaje esté listo de inmediato sin esperar internet lento.<br><br>
+            • <strong>Diferencias en el Celular del Trabajador:</strong> Cuando los trabajadores abren el enlace sin instalación en su navegador móvil (Safari, Chrome), el audio se reproduce en alta calidad si tienen conexión, o mediante el altavoz de su teléfono si la señal se interrumpe.</p>
+            <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(150,72,36,0.15); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+              <span style="font-weight: 700; color: #1A1208; font-size: 0.95rem;">¿Listo para enviar notas de voz naturales en Panamá?</span>
+              <a href="#pricing" class="btn-primary-nav" style="padding: 8px 18px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; border-radius: 9999px;">
+                Obtener Créditos o Probar Gratis <span class="arrow">→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-card" onclick="toggleFaq(this)">
+          <button class="faq-question" type="button">
+            <span>¿Cómo funciona una Sesión de Audio en Vivo Bidireccional y cuándo comienza?</span>
+            <span class="faq-toggle-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Una sesión de audio en vivo le permite tener una conversación bidireccional donde usted habla en inglés y el capitán o técnico escucha en español a través de un enlace web ligero, ¡sin que ellos tengan que descargar ninguna app!<br><br>
+            • <strong>¿Cuándo empieza?</strong> La sesión solo inicia cuando se transmite el primer mensaje de voz, NO cuando se abre el enlace.<br>
+            • <strong>Cero cobros por enlaces sin actividad:</strong> Si genera un enlace y el contratista lo abre pero no se graba ningún audio (o si la sesión se cierra por inactividad sin mensajes de voz), <strong>no se descuenta ningún crédito</strong> y su saldo permanece intacto.<br>
+            • <strong>Duración y Turnos:</strong> Una vez activa, cada sesión incluye una ventana de <strong>15 minutos (hasta 15 intercambios de voz)</strong>, y se cierra automáticamente tras 5 minutos de silencio.<br>
+            • <strong>Precios y Créditos:</strong> Los pases anuales y mensuales incluyen <strong>sesiones en vivo ilimitadas</strong>. Para usuarios con paquetes de créditos, 1 sesión en vivo activa descuenta 5 créditos (el paquete de 50 créditos incluye 10 sesiones en vivo completas o 50 notas de voz individuales).</p>
+          </div>
+        </div>
+
+        <div class="faq-card" onclick="toggleFaq(this)">
+          <button class="faq-question" type="button">
+            <span>¿Por qué PoquitoTalk usa Push-To-Talk en lugar de traducción continua con manos libres?</span>
+            <span class="faq-toggle-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Nuestro sistema Push-To-Talk (Walkie) es intencionalmente rápido, ligero, económico y está optimizado para las condiciones fluctuantes de señal celular y Wi-Fi en islas y zonas costeras. Evita que el ruido de motores de lanchas o lluvia tropical interrumpa la grabación o gaste saldo innecesariamente.<br><br>Aunque la traducción simultánea continua existe, consume mucha más batería y ancho de banda. Contamos con la tecnología para habilitarla y abriremos un <strong>plan especial Live Duo</strong> en nuestra versión V2, pensado específicamente para quienes necesitan traducción presencial continua en restaurantes o ferreterías.</p>
+          </div>
+        </div>
+
+        <div class="faq-card" onclick="toggleFaq(this)">
+          <button class="faq-question" type="button">
             <span>¿PoquitoTalk está disponible para Android e iPhone?</span>
             <span class="faq-toggle-icon">+</span>
           </button>
@@ -457,6 +742,18 @@
           </div>
         </div>
 
+        <div class="faq-card" onclick="toggleFaq(this)">
+          <button class="faq-question" type="button">
+            <span>¿Puedo eliminar la firma "Enviado con PoquitoTalk" de mis mensajes de WhatsApp?</span>
+            <span class="faq-toggle-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p><strong>¡Sí!</strong> Todos los usuarios con cualquier plan de pago (Paquete de 50 Créditos, Pase de Viaje de 7 Días, Pase Mensual de Residente o Pase Anual de Explorador) pueden desactivar la firma automáticamente con 1 solo toque en la app.<br><br>
+            <strong>Cómo desactivarla automáticamente:</strong> Abre la aplicación PoquitoTalk, toca el icono de <strong>Configuración (⚙️)</strong> en la parte superior derecha y desactiva la opción <strong>Firma "Enviado con PoquitoTalk"</strong>. Tus mensajes se enviarán limpios sin pie de página.<br><br>
+            <strong>Para usuarios gratuitos:</strong> Siempre puedes borrar o editar manualmente la línea de firma directamente en WhatsApp antes de presionar enviar. De todas formas, ¡agradecemos de corazón a todos los que mantienen la firma y nos ayudan a correr la voz sobre PoquitoTalk en toda nuestra comunidad de Panamá! 🌴</p>
+          </div>
+        </div>
+
 
       </div>
     </div>
@@ -468,87 +765,110 @@
       <div class="section-title">
         <span class="promo-tag-pill">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          25% DE DTO ESPECIAL EN WEB (VÁLIDO HASTA EL 30 DE SEPTIEMBRE DE 2026)
+          PROMO WEB EXCLUSIVA • 25% DE DESCUENTO EN PAQUETE DE CRÉDITOS (VÁLIDO HASTA 30 SEPTIEMBRE 2026)
         </span>
         <h2>Selecciona tu Pase de PoquitoTalk</h2>
         <p>Diseñado para Bocas del Toro (Panamá) 🇵🇦</p>
       </div>
 
       <div class="pricing-grid">
-        <!-- 1. Paquete de Créditos (Destacado 25% DTO) -->
-        <div class="pricing-card featured">
-          <div class="featured-badge">25% DTO HASTA EL 30 DE SEPTIEMBRE, 2026</div>
+        <!-- 1. Annual Explorer Pass (Featured Hero Tier) -->
+        <div class="pricing-card featured-tier">
+          <div class="featured-badge">MEJOR VALOR • AHORRA 66%</div>
           <div class="plan-header">
-            <h3>Paquete de 50 Créditos</h3>
-            <p class="plan-desc">Créditos flexibles • ¡Nunca vencen! • ¡Compra varios paquetes!</p>
+            <h3>Pase Anual Explorer</h3>
+            <p class="plan-desc">Para residentes, propietarios y viajeros frecuentes en Panamá</p>
           </div>
           <div class="price-box">
             <div class="price-main">
-              <span class="original-price">$4.99</span>
-              <span class="currency">$</span><span class="amount">3.74</span>
-              <span class="period">/ 50 créditos</span>
+              <span class="currency">$</span><span class="amount">3.33</span>
+              <span class="period">/ mes</span>
             </div>
-            <span class="price-sub">Precio exclusivo en Web • No vence</span>
+            <span class="price-sub" style="color: #059669; font-weight: 700;">$39.99 / año • Prueba de 7 Días Gratis</span>
           </div>
           <ul class="features">
-            <li>✓ <strong>50 Créditos</strong> para Notas de Voz y Walkie-Talkie</li>
-            <li>✓ 1 Nota de Voz Personalizada = 1 Crédito</li>
-            <li>✓ 1 Sesión de Walkie = 5 Créditos</li>
-            <li>✓ <strong>¡Aprovecha ahora!</strong> Compra 1, 2, 3 o más paquetes al 25% DTO antes del 30 de septiembre</li>
-            <li>✓ Los créditos <strong>no vencen</strong></li>
+            <li>✓ <strong>Notas de Voz Ilimitadas</strong> y Walkie-Talkie</li>
+            <li>✓ Voces Panameñas Naturales de las Islas</li>
+            <li>✓ Las 23 Categorías de Servicios en Islas y Tierra Firme</li>
+            <li>✓ Directorio de Bocas 100% Sin Conexión (98+ Profesionales)</li>
+            <li>✓ 7 Días de Prueba Gratis Incluidos</li>
           </ul>
-          <button class="btn-checkout featured-btn" onclick="initiateStripeCheckout('credits_50')">
-            Comprar 50 Créditos ($3.74) <span class="arrow">→</span>
+          <button class="btn-checkout featured-btn" onclick="initiateStripeCheckout('annual_pass')">
+            Iniciar Prueba de 7 Días ($39.99/año) <span class="arrow">→</span>
           </button>
         </div>
 
-        <!-- 2. Pase Turista -->
+        <!-- 2. Membresía Mensual -->
         <div class="pricing-card">
           <div class="plan-header">
-            <h3>Pase Turista Semanal</h3>
+            <h3>Pase Mensual Residente</h3>
+            <p class="plan-desc">Acceso mes a mes flexible • Cancela cuando quieras</p>
+          </div>
+          <div class="price-box">
+            <div class="price-main">
+              <span class="currency">$</span><span class="amount">9.99</span>
+              <span class="period">/ mes</span>
+            </div>
+            <span class="price-sub" style="color: #64748B;">Facturado mensualmente • Cancela en 1 tap</span>
+          </div>
+          <ul class="features">
+            <li>✓ <strong>Acceso Total</strong> para Notas de Voz y Walkie</li>
+            <li>✓ Voces Panameñas Naturales</li>
+            <li>✓ Las 23 Categorías de Servicios en Islas y Tierra Firme</li>
+            <li>✓ Directorio de Bocas 100% Sin Conexión (98+ Profesionales)</li>
+          </ul>
+          <button class="btn-checkout" onclick="initiateStripeCheckout('monthly_pass')">
+            Obtener Pase Mensual ($9.99/mes) <span class="arrow">→</span>
+          </button>
+        </div>
+
+        <!-- 3. Pase de Viaje (7 Días) -->
+        <div class="pricing-card">
+          <div class="plan-header">
+            <h3>Pase de Viaje (7 Días)</h3>
             <p class="plan-desc">Para viajes cortos y vacaciones (7 Días)</p>
           </div>
           <div class="price-box">
             <div class="price-main">
               <span class="currency">$</span><span class="amount">4.99</span>
-              <span class="period">/ semana</span>
+              <span class="period">/ 7 días</span>
             </div>
-            <span class="price-sub" style="color: #64748B;">Pase de 7 días • Renueva semanalmente</span>
+            <span class="price-sub" style="color: #64748B;">Pase de 7 días • Sin renovación automática</span>
           </div>
           <ul class="features">
-            <li>✓ <strong>100</strong> Notas de Voz Premium / semana</li>
-            <li>✓ <strong>25</strong> Sesiones de Walkie-Talkie / semana</li>
-            <li>✓ Todas las 22 categorías de servicio</li>
-            <li>✓ Voces Premium Naturales de Panamá</li>
+            <li>✓ <strong>100 Notas de Voz • 20 Sesiones en Vivo</strong></li>
+            <li>✓ Las 23 Categorías de Servicios</li>
+            <li>✓ Voces Premium Naturales</li>
             <li>✓ Sin compromisos a largo plazo</li>
           </ul>
           <button class="btn-checkout" onclick="initiateStripeCheckout('tourist_weekly')">
-            Reservar Pase Turista ($4.99) <span class="arrow">→</span>
+            Obtener Pase de Viaje ($4.99) <span class="arrow">→</span>
           </button>
         </div>
 
-        <!-- 3. Pro Mensual -->
-        <div class="pricing-card">
+        <!-- 4. Paquete de 50 Créditos -->
+        <div class="pricing-card" style="border: 2px solid #F59E0B; position: relative;">
+          <div style="position: absolute; top: -11px; right: 16px; background: #F59E0B; color: #FFFFFF; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 10px; letter-spacing: 0.4px;">EXCLUSIVO PARA WEB • 25% OFF</div>
           <div class="plan-header">
-            <h3>Membresía Pro Mensual</h3>
-            <p class="plan-desc">Para residentes permanentes y nómadas digitales</p>
+            <h3>Paquete de 50 Créditos</h3>
+            <p class="plan-desc">Créditos prepagados flexibles • Nunca vencen</p>
           </div>
           <div class="price-box">
             <div class="price-main">
-              <span class="currency">$</span><span class="amount">12.99</span>
-              <span class="period">/ mes</span>
+              <span class="original-price" style="text-decoration: line-through; color: #94A3B8; font-size: 18px; font-weight: 700; margin-right: 4px;">$4.99</span>
+              <span class="currency">$</span><span class="amount">3.74</span>
+              <span class="period">único</span>
             </div>
-            <span class="price-sub" style="color: #64748B;">Acceso total • Cancela cuando quieras</span>
+            <span class="price-sub" style="color: #059669; font-weight: 600;">25% de descuento hasta 30 sept • 50 Notas / 10 Sesiones</span>
           </div>
           <ul class="features">
-            <li>✓ <strong>300</strong> Notas de Voz Premium / mes</li>
-            <li>✓ <strong>65 Sesiones Walkie-Talkie</strong> / mes</li>
-            <li>✓ Voces Premium Naturales de Panamá</li>
-            <li>✓ Motor Prioritario de Modismos Panameños</li>
-            <li>✓ Cancela cuando quieras en 1-Tap</li>
+            <li>✓ <strong>50 Notas de Voz • 10 Sesiones en Vivo</strong></li>
+            <li>✓ Los créditos <strong>nunca vencen</strong></li>
+            <li>✓ Recarga instantánea cuando lo necesites</li>
+            <li>✓ <strong>Precio Especial Exclusivo para Web ($3.74)</strong></li>
           </ul>
-          <button class="btn-checkout" onclick="initiateStripeCheckout('pro_monthly')">
-            Reservar Membresía Pro ($12.99/mes) <span class="arrow">→</span>
+          <button class="btn-checkout" onclick="initiateStripeCheckout('credits_50')">
+            Comprar 50 Créditos ($3.74) <span class="arrow">→</span>
           </button>
         </div>
       </div>
@@ -564,6 +884,7 @@
       <nav class="footer-links" aria-label="Enlaces del Pie de Página">
         <a href="directorio.html">Directorio Local</a>
         <a href="contratistas.html">Para Contratistas</a>
+        <a href="../terms.html">Términos de Servicio</a>
         <a href="../privacy.html">Política de Privacidad</a>
         <a href="mailto:support@hero-apps.com">Soporte</a>
       </nav>
@@ -646,17 +967,20 @@
       </form>
 
       <div id="fb-success-msg" class="success-msg" style="display: none;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ¡Gracias! Tus comentarios han sido enviados directamente a nuestro equipo.
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ¡Gracias! Tus comentarios han sido enviados directamente a nuestro equipo.
       </div>
+    </div>
+  </div>
+
   <!-- Cookie Consent Banner -->
-  <div id="cookie-banner" class="cookie-banner">
+  <aside id="cookie-banner" class="cookie-banner" role="region" aria-label="Aviso de Cookies y Privacidad">
     <div class="cookie-content">
       <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: middle;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="8" r="1"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><circle cx="12" cy="17" r="1"/></svg> <strong>Aviso de Cookies y Privacidad</strong>: Utilizamos cookies esenciales para recordar tus preferencias de idioma y guardar localmente tus sesiones de traducción. Lee nuestra <a href="../privacy.html">Política de Privacidad</a>.</span>
       <button class="btn-cookie-accept" onclick="acceptCookieConsent()">Aceptar Cookies Esenciales</button>
     </div>
-  </div>
+  </aside>
 
   <script src="../tracker.js?v=1.0.0" defer></script>
-  <script src="../script.js?v=5.7.0"></script>
+  <script src="../script.js?v=5.9.0"></script>
 </body>
 </html>

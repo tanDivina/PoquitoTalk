@@ -1,0 +1,288 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%">
+  <defs>
+    <linearGradient id="vicBodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+    <linearGradient id="vicWingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+    <linearGradient id="vicGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    /* ==========================================================
+       POQUITO VICTORY LEAP - 60FPS PARAMETRIC VECTOR ENGINE
+       ========================================================== */
+    @keyframes victoryLeap {
+      0%, 100% {
+        transform: translateY(0px) scale(1, 1);
+      }
+      15% {
+        transform: translateY(12px) scale(1.09, 0.86); /* Anticipation crouch */
+      }
+      38% {
+        transform: translateY(-50px) scale(0.92, 1.12); /* High explosive launch */
+      }
+      52% {
+        transform: translateY(-54px) scale(1.02, 0.98); /* Float at apex */
+      }
+      74% {
+        transform: translateY(10px) scale(1.12, 0.84); /* Cushioned landing squash */
+      }
+      88% {
+        transform: translateY(-4px) scale(0.98, 1.02); /* Secondary rebound */
+      }
+    }
+
+    /* Left Wing Spreads Wide Open In Joy */
+    @keyframes wingFlapOutL {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      15% {
+        transform: rotate(18deg) scale(0.92); /* Tucked in before jump */
+      }
+      38%, 52% {
+        transform: rotate(-72deg) scale(1.28); /* Wide open victory wing span! */
+      }
+      74% {
+        transform: rotate(14deg) scale(0.92);
+      }
+      88% {
+        transform: rotate(-6deg);
+      }
+    }
+
+    /* Right Wing Spreads Wide Open In Joy */
+    @keyframes wingFlapOutR {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      15% {
+        transform: rotate(-18deg) scale(0.92); /* Tucked in before jump */
+      }
+      38%, 52% {
+        transform: rotate(72deg) scale(1.28); /* Wide open victory wing span! */
+      }
+      74% {
+        transform: rotate(-14deg) scale(0.92);
+      }
+      88% {
+        transform: rotate(6deg);
+      }
+    }
+
+    /* Signature Crest Hair Secondary Motion Lag */
+    @keyframes crestHairPhysics {
+      0%, 100% {
+        transform: rotate(0deg) scaleY(1);
+      }
+      15% {
+        transform: rotate(-12deg) scaleY(0.85);
+      }
+      38% {
+        transform: rotate(26deg) scaleY(1.35); /* Hair whips backwards in the wind */
+      }
+      52% {
+        transform: rotate(-16deg) scaleY(1.20); /* Crest springs forward at apex */
+      }
+      74% {
+        transform: rotate(12deg) scaleY(0.90);
+      }
+    }
+
+    /* Beak Cheerful Opening */
+    @keyframes beakLaugh {
+      0%, 15%, 78%, 100% {
+        transform: translateY(0);
+      }
+      38%, 52% {
+        transform: translateY(8px); /* Cheering open beak at peak */
+      }
+    }
+
+    /* Velocity Speed Streaks on Left and Right */
+    @keyframes speedStreaksBurst {
+      0%, 20%, 72%, 100% {
+        opacity: 0;
+        transform: scale(0.65);
+      }
+      38%, 52% {
+        opacity: 0.95;
+        transform: scale(1.15);
+      }
+    }
+
+    /* Victory Star Sparkles Pop at Peak */
+    @keyframes victoryStarsPop {
+      0%, 24%, 68%, 100% {
+        opacity: 0;
+        transform: scale(0.2) rotate(0deg);
+      }
+      40%, 50% {
+        opacity: 1;
+        transform: scale(1.3) rotate(45deg);
+      }
+    }
+
+    /* Wooden Perch Flexible Rebound */
+    @keyframes perchBounce {
+      0%, 100% { transform: scaleY(1); }
+      15% { transform: scaleY(1.14) translateY(4px); }
+      38%, 52% { transform: scaleY(0.92) translateY(-2px); }
+      74% { transform: scaleY(1.18) translateY(5px); }
+    }
+
+    .vic-character {
+      animation: victoryLeap 1.9s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+      transform-origin: 120px 215px;
+    }
+    .vic-wing-left {
+      animation: wingFlapOutL 1.9s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+      transform-origin: 80px 135px;
+    }
+    .vic-wing-right {
+      animation: wingFlapOutR 1.9s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+      transform-origin: 160px 135px;
+    }
+    .vic-crest-hair {
+      animation: crestHairPhysics 1.9s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+      transform-origin: 120px 78px;
+    }
+    .vic-beak-lower {
+      animation: beakLaugh 1.9s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+      transform-origin: 120px 125px;
+    }
+    .vic-speed-lines {
+      animation: speedStreaksBurst 1.9s ease-out infinite;
+      transform-origin: 120px 145px;
+    }
+    .vic-sparkles {
+      animation: victoryStarsPop 1.9s ease-out infinite;
+      transform-origin: 120px 65px;
+    }
+    .vic-perch-bar {
+      animation: perchBounce 1.9s ease-out infinite;
+      transform-origin: 120px 220px;
+    }
+  </style>
+
+  <!-- 1. ACTION MOVEMENT SPEED LINES (Side Velocity Streaks) -->
+  <g class="vic-speed-lines" opacity="0">
+    <!-- Left side velocity curves -->
+    <path d="M 28 125 C 16 142 20 166 34 182" stroke="#38BDF8" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.8" />
+    <path d="M 42 110 C 28 130 36 156 52 174" stroke="#22D3EE" stroke-width="4.2" stroke-linecap="round" fill="none" />
+    <path d="M 56 92 C 44 112 50 140 66 160" stroke="#34D399" stroke-width="3.6" stroke-linecap="round" fill="none" opacity="0.9" />
+
+    <!-- Right side velocity curves -->
+    <path d="M 212 125 C 224 142 220 166 206 182" stroke="#38BDF8" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.8" />
+    <path d="M 198 110 C 212 130 204 156 188 174" stroke="#22D3EE" stroke-width="4.2" stroke-linecap="round" fill="none" />
+    <path d="M 184 92 C 196 112 190 140 174 160" stroke="#34D399" stroke-width="3.6" stroke-linecap="round" fill="none" opacity="0.9" />
+
+    <!-- Launch Lift Dash Marks -->
+    <line x1="98" y1="228" x2="98" y2="246" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 4" opacity="0.8" />
+    <line x1="120" y1="230" x2="120" y2="252" stroke="#34D399" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="4 4" opacity="0.9" />
+    <line x1="142" y1="228" x2="142" y2="246" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 4" opacity="0.8" />
+  </g>
+
+  <!-- 2. VICTORY CELEBRATION SPARKLES AND STARS -->
+  <g class="vic-sparkles" opacity="0">
+    <!-- Gold 4-point stars -->
+    <path d="M 48 45 Q 48 55 38 55 Q 48 55 48 65 Q 48 55 58 55 Q 48 55 48 45 Z" fill="url(#vicGoldGrad)" />
+    <path d="M 192 45 Q 192 55 182 55 Q 192 55 192 65 Q 192 55 202 55 Q 192 55 192 45 Z" fill="url(#vicGoldGrad)" />
+    <path d="M 120 18 Q 120 28 110 28 Q 120 28 120 38 Q 120 28 130 28 Q 120 28 120 18 Z" fill="url(#vicGoldGrad)" />
+    <!-- Accent Dots -->
+    <circle cx="66" cy="32" r="3.5" fill="#38BDF8" />
+    <circle cx="174" cy="32" r="3.5" fill="#38BDF8" />
+  </g>
+
+  <!-- 3. WOODEN PERCH (Flexible Grounding) -->
+  <g class="vic-perch-bar">
+    <path d="M 45 220 Q 120 214 195 220" stroke="#B45309" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 70 219 Q 120 215 170 219" stroke="#78350F" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+  </g>
+
+  <!-- 4. ANIMATED CHARACTER RIG (Leaping Mascot) -->
+  <g class="vic-character">
+    
+    <!-- Claws (Lifting off during jump) -->
+    <g id="vic-claws">
+      <path d="M 98 204 C 96 212 98 220 104 220 M 108 204 C 106 212 108 220 114 220" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" />
+      <path d="M 126 204 C 124 212 126 220 132 220 M 136 204 C 134 212 136 220 142 220" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" />
+    </g>
+
+    <!-- Main Torso and Belly -->
+    <g id="vic-torso">
+      <path d="M 120 78 C 138 78 152 92 156 116 C 160 142 162 172 152 190 C 144 202 134 204 120 204 C 106 204 96 202 88 190 C 78 172 80 142 84 116 C 88 92 102 78 120 78 Z" fill="url(#vicBodyGrad)" stroke="#047857" stroke-width="5" stroke-linejoin="round" />
+      <!-- Soft Emerald Belly Badge -->
+      <ellipse cx="120" cy="162" rx="22" ry="26" fill="#6EE7B7" opacity="0.45" />
+    </g>
+
+    <!-- Signature Green Crest Feathers ("His Hair") -->
+    <g class="vic-crest-hair" id="vic-crest">
+      <!-- Left feather tuft -->
+      <path d="M 116 78 C 108 64 96 54 82 50" stroke="#047857" stroke-width="4.8" stroke-linecap="round" fill="none" />
+      <path d="M 116 78 C 109 66 99 57 86 53" stroke="#34D399" stroke-width="2.6" stroke-linecap="round" fill="none" />
+      
+      <!-- Right feather tuft -->
+      <path d="M 124 78 C 132 64 144 54 158 50" stroke="#047857" stroke-width="4.8" stroke-linecap="round" fill="none" />
+      <path d="M 124 78 C 131 66 141 57 154 53" stroke="#34D399" stroke-width="2.6" stroke-linecap="round" fill="none" />
+      
+      <!-- Center crown sprout -->
+      <path d="M 120 77 C 120 60 124 48 128 40" stroke="#047857" stroke-width="4" stroke-linecap="round" fill="none" />
+      <path d="M 120 77 C 120 61 123 50 126 43" stroke="#6EE7B7" stroke-width="2.2" stroke-linecap="round" fill="none" />
+    </g>
+
+    <!-- Dynamic Spreading Cyan Wings -->
+    <!-- Left Wing (Flank resting, flaps outwards to the left) -->
+    <g class="vic-wing-left" id="vic-wing-l">
+      <path d="M 82 130 C 58 134 46 156 52 176 C 56 186 68 188 76 180 C 76 162 78 144 82 130 Z" fill="url(#vicWingGrad)" stroke="#047857" stroke-width="4" stroke-linejoin="round" />
+      <path d="M 58 154 C 52 168 58 178 66 180" stroke="#A5F3FC" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.85" />
+    </g>
+    
+    <!-- Right Wing (Flank resting, flaps outwards to the right) -->
+    <g class="vic-wing-right" id="vic-wing-r">
+      <path d="M 158 130 C 182 134 194 156 188 176 C 184 186 172 188 164 180 C 164 162 162 144 158 130 Z" fill="url(#vicWingGrad)" stroke="#047857" stroke-width="4" stroke-linejoin="round" />
+      <path d="M 182 154 C 188 168 182 178 174 180" stroke="#A5F3FC" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.85" />
+    </g>
+
+    <!-- Face and Cheerful Joyous Eyes -->
+    <g id="vic-face">
+      <!-- Left Eye -->
+      <circle cx="104" cy="116" r="11" fill="#FFFFFF" stroke="#047857" stroke-width="3" />
+      <circle cx="106" cy="116" r="5.5" fill="#0F172A" />
+      <circle cx="104" cy="113" r="2.2" fill="#FFFFFF" />
+      <circle cx="108" cy="118" r="1.2" fill="#FFFFFF" />
+
+      <!-- Right Eye -->
+      <circle cx="136" cy="116" r="11" fill="#FFFFFF" stroke="#047857" stroke-width="3" />
+      <circle cx="134" cy="116" r="5.5" fill="#0F172A" />
+      <circle cx="132" cy="113" r="2.2" fill="#FFFFFF" />
+      <circle cx="136" cy="118" r="1.2" fill="#FFFFFF" />
+
+      <!-- Cute Blushing Cheeks -->
+      <ellipse cx="94" cy="126" rx="5" ry="3.5" fill="#F43F5E" opacity="0.45" />
+      <ellipse cx="146" cy="126" rx="5" ry="3.5" fill="#F43F5E" opacity="0.45" />
+
+      <!-- Open Smiling Beak -->
+      <!-- Lower Beak (Cheering / Drop) -->
+      <g class="vic-beak-lower" id="vic-beak-bottom">
+        <path d="M 111 133 C 113 145 127 145 129 133 L 125 137 C 122 140 118 140 115 137 Z" fill="#D97706" stroke="#047857" stroke-width="2.5" stroke-linejoin="round" />
+        <!-- Pink Tongue -->
+        <ellipse cx="120" cy="136" rx="3.5" ry="2.2" fill="#FB7185" />
+      </g>
+      <!-- Upper Beak Cone -->
+      <g id="vic-beak-top">
+        <path d="M 108 125 C 111 120 129 120 132 125 L 125 139 C 123 142 117 142 115 139 Z" fill="#F59E0B" stroke="#047857" stroke-width="3.5" stroke-linejoin="round" />
+        <!-- Beak Highlight -->
+        <path d="M 112 126 L 117 135" stroke="#FDE68A" stroke-width="1.8" stroke-linecap="round" opacity="0.8" />
+      </g>
+    </g>
+
+  </g>
+</svg>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { WhatsAppIcon } from './WhatsAppIcon';
 import { Colors } from '../theme/colors';
 import { ServicePreset } from '../types';
 import { sharePhrasebookToCommunity } from '../services/deepLinks';
@@ -68,7 +69,7 @@ export const PresetCard: React.FC<PresetCardProps> = ({ preset, onSelect, onSele
         onPress={handleSharePhrasebook}
         activeOpacity={0.8}
       >
-        <FontAwesome5 name="whatsapp" size={14} color={Colors.whatsapp} />
+        <WhatsAppIcon size={14} color={Colors.whatsapp} />
         <Text style={styles.sharePhrasebookText}>Share Phrasebook to Bocas Expat Groups 🌴</Text>
       </TouchableOpacity>
     </View>

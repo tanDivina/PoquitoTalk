@@ -5,76 +5,101 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
   ActivityIndicator,
   Alert,
   Share,
   Linking,
+  Platform,
+  Image,
 } from 'react-native';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
-import { GoogleSignInButton } from './GoogleSignInButton';
-import { GreenParrotLogo } from './GreenParrotLogo';
+import { AnimatedParrotMascot } from './AnimatedParrotMascot';
 import { revenueCat } from '../services/revenuecat';
-import { getUserProfile } from '../services/userService';
+import { getUserProfile, setProSubscriber } from '../services/userService';
 
 interface PaywallModalProps {
   visible: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  onOpenRestore?: () => void;
 }
 
-export type PlanTier = 'CREDITS' | 'WEEKLY' | 'PRO_MONTHLY';
+export type PlanTier = 'ANNUAL_TRIAL' | 'MONTHLY' | 'TRAVEL_PASS' | 'CREDITS';
 
 export const PaywallModal: React.FC<PaywallModalProps> = ({
   visible,
   onClose,
   onSuccess,
+  onOpenRestore,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [selectedTier, setSelectedTier] = useState<PlanTier>('PRO_MONTHLY');
+  const [selectedTier, setSelectedTier] = useState<PlanTier>(() => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      const t = new URLSearchParams(window.location.search).get('tier');
+      if (t === 'MONTHLY' || t === 'TRAVEL_PASS' || t === 'CREDITS') return t as PlanTier;
+    }
+    return 'ANNUAL_TRIAL';
+  });
 
   const handleSubscribe = async () => {
     setLoading(true);
     try {
+      await setProSubscriber(true);
       const success = await revenueCat.purchaseProPackage();
       if (success) {
-        Alert.alert('Welcome to PoquitoTalk Pro!', 'You now have full access to Premium voice notes and Walkie-Talkie.');
+        if (Platform.OS === 'web' && typeof window !== 'undefined') {
+          window.alert('¡Bienvenido a PoquitoTalk! Your 7-day free trial has started. Enjoy unlimited voice notes, 2-way walkie-talkie, and island presets!');
+        } else {
+          Alert.alert('¡Bienvenido a PoquitoTalk!', 'You now have full access to natural voice notes, island presets, and Walkie-Talkie.');
+        }
         onSuccess();
         onClose();
       }
     } catch (error) {
-      Alert.alert('Purchase Error', 'Unable to complete transaction.');
+      if (Platform.OS === 'web' && typeof window !== 'undefined') {
+        window.alert('Purchase Note: Unable to complete transaction at this time.');
+      } else {
+        Alert.alert('Purchase Note', 'Unable to complete transaction at this time.');
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  const handleInviteNeighbor = async () => {
+  const handleRestore = async () => {
+    setLoading(true);
     try {
-      const profile = await getUserProfile();
-      const refCode = profile.uid || 'usr_guest_bocas';
-      const inviteUrl = `https://poquitotalk.hero-apps.com?ref=${encodeURIComponent(refCode)}`;
-      
-      // Fire-and-forget background analytics log
-      fetch('https://poquitotalk.hero-apps.com/api/referral.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'track_invite',
-          referrer_code: refCode,
-          referrer_uid: profile.uid,
-          channel: 'share_modal'
-        })
-      }).catch(() => {});
-
-      await Share.share({
-        message: '🌴 Hey! Try PoquitoTalk to translate WhatsApp voice notes with local Bocas plumbers, boat captains, and landlords: ' + inviteUrl,
-        url: inviteUrl,
-        title: 'PoquitoTalk Free Referral',
-      });
+      if (onOpenRestore) {
+        onClose();
+        setTimeout(() => onOpenRestore(), 300);
+        return;
+      }
+      const restored = await revenueCat.restorePurchases();
+      if (restored) {
+        await setProSubscriber(true);
+        if (Platform.OS === 'web' && typeof window !== 'undefined') {
+          window.alert('Purchases Restored: Your PoquitoTalk subscription is active.');
+        } else {
+          Alert.alert('Purchases Restored', 'Your PoquitoTalk subscription is active.');
+        }
+        onSuccess();
+        onClose();
+      } else {
+        if (Platform.OS === 'web' && typeof window !== 'undefined') {
+          window.alert('No Subscription Found: No prior purchases found for this account.');
+        } else {
+          Alert.alert('No Subscription Found', 'No prior purchases were found for this account.');
+        }
+      }
     } catch (e) {
-      console.warn('Share error:', e);
+      if (Platform.OS === 'web' && typeof window !== 'undefined') {
+        window.alert('Restore Error: Unable to reach the App Store.');
+      } else {
+        Alert.alert('Restore Error', 'Unable to reach the App Store.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -82,170 +107,176 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
     <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={styles.overlay}>
         <View style={styles.container}>
-          {/* Close Button */}
-          <TouchableOpacity style={styles.closeBtn} onPress={onClose} activeOpacity={0.7}>
-            <Ionicons name="close" size={22} color={Colors.onBackground} />
-          </TouchableOpacity>
-
-          <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-            {/* Header Logo */}
-            <View style={styles.crownContainer}>
-              <GreenParrotLogo size={52} />
-            </View>
-
-            {/* Single Line Clean Title */}
-            <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit>
-              Unlock Premium Voices
-            </Text>
-            <Text style={styles.subtitle}>
-              Human-grade Spanish voice notes with natural Panamanian cadence.
-            </Text>
-
-            {/* Feature Highlights */}
-            <View style={styles.featuresList}>
-              <View style={styles.featureRow}>
-                <Ionicons name="volume-high-outline" size={20} color={Colors.tertiary} />
-                <Text style={styles.featureText}>
-                  Natural Panamanian Premium Voices
-                </Text>
-              </View>
-
-              <View style={styles.featureRow}>
-                <Ionicons name="radio-outline" size={20} color={Colors.secondary} />
-                <Text style={styles.featureText}>
-                  2-Way Live Walkie-Talkie Web Links for Contractors
-                </Text>
-              </View>
-
-              <View style={styles.featureRow}>
-                <FontAwesome5 name="whatsapp" size={18} color={Colors.whatsapp} />
-                <Text style={styles.featureText}>
-                  1-Tap Voice Notes sent directly to WhatsApp
-                </Text>
-              </View>
-
-              <View style={styles.featureRow}>
-                <Ionicons name="shield-checkmark-outline" size={20} color={Colors.tertiary} />
-                <Text style={styles.featureText}>
-                  Zero Ads & Zero Sponsor Spotlights
-                </Text>
-              </View>
-            </View>
-
-            {/* Plan 1: Pro Monthly Membership ($12.99/mo) */}
-            <TouchableOpacity
-              style={[styles.pricingCard, selectedTier === 'PRO_MONTHLY' && styles.pricingCardSelected]}
-              onPress={() => setSelectedTier('PRO_MONTHLY')}
-              activeOpacity={0.8}
-            >
-              <View style={[styles.popularBadge, { backgroundColor: Colors.tertiary }]}>
-                <Text style={styles.popularText}>BEST VALUE FOR RESIDENTS</Text>
-              </View>
-              <Text style={styles.planTitle}>Pro Monthly Membership</Text>
-              <View style={styles.priceRow}>
-                <Text style={styles.priceAmount}>$12.99</Text>
-                <Text style={styles.pricePeriod}>/ month</Text>
-              </View>
-              <Text style={styles.trialText}>
-                300 Voice Notes + 65 Walkie Sessions / mo • For permanent Panama residents
-              </Text>
+          {/* Top Bar with Dismiss and Close */}
+          <View style={styles.topBar}>
+            <TouchableOpacity style={styles.closeBtn} onPress={onClose} activeOpacity={0.7} accessibilityLabel="Close paywall and continue free">
+              <Ionicons name="close" size={18} color="#6B5E51" />
             </TouchableOpacity>
+          </View>
 
-            {/* Plan 2: Weekly Tourist Pass ($4.99/wk) */}
+          {/* Header Mascot with Talking Loop */}
+          <View style={styles.heroSection}>
+            <Image
+              source={require('../assets/poquito_talk_58_73_160.webp')}
+              style={styles.mascotImg}
+              resizeMode="contain"
+            />
+            <Text style={styles.title} adjustsFontSizeToFit numberOfLines={1}>
+              Get Things Done Stress-Free 🇵🇦
+            </Text>
+            <View style={styles.locationTagRow}>
+              <Text style={styles.locationTagText}>ZERO LANGUAGE BARRIERS</Text>
+            </View>
+          </View>
+
+          {/* Compact 4-Plan Selector with Wide Dedicated Price Columns */}
+          <View style={styles.plansContainer}>
+            {/* Plan 1: Annual Explorer Pass */}
             <TouchableOpacity
-              style={[styles.pricingCard, selectedTier === 'WEEKLY' && styles.pricingCardSelected]}
-              onPress={() => setSelectedTier('WEEKLY')}
-              activeOpacity={0.8}
+              style={[styles.pricingCard, selectedTier === 'ANNUAL_TRIAL' && styles.pricingCardSelected]}
+              onPress={() => setSelectedTier('ANNUAL_TRIAL')}
+              activeOpacity={0.85}
             >
               <View style={styles.popularBadge}>
-                <Text style={styles.popularText}>WEEKLY TOURIST PASS</Text>
+                <Text style={styles.popularText}>BEST VALUE • 7 DAYS FREE</Text>
               </View>
-              <Text style={styles.planTitle}>7-Day Tourist Pass</Text>
-              <View style={styles.priceRow}>
-                <Text style={styles.priceAmount}>$4.99</Text>
-                <Text style={styles.pricePeriod}>/ 7 days</Text>
+              <View style={styles.cardHeaderRow}>
+                <View style={[styles.radioCircle, selectedTier === 'ANNUAL_TRIAL' && styles.radioCircleActive]}>
+                  {selectedTier === 'ANNUAL_TRIAL' && <View style={styles.radioInnerDot} />}
+                </View>
+                <View style={styles.planInfoColumn}>
+                  <Text style={styles.planTitle}>Annual Explorer Pass</Text>
+                  <Text style={styles.planSubtitle}>Unlimited Full Access</Text>
+                </View>
+                <View style={styles.priceColumn}>
+                  <View style={styles.priceRow}>
+                    <Text style={styles.priceAmount}>$3.33</Text>
+                    <Text style={styles.pricePeriod}> / mo</Text>
+                  </View>
+                  <Text style={styles.priceSubText}>$39.99/yr • Save 66%</Text>
+                </View>
               </View>
-              <Text style={styles.trialText}>
-                100 Voice Notes + 25 Walkie Sessions / week • Ideal for island trips
-              </Text>
             </TouchableOpacity>
 
-            {/* Plan 3: 50 Credits Pack ($4.99 one-time) */}
+            {/* Plan 2: Monthly Resident Pass */}
+            <TouchableOpacity
+              style={[styles.pricingCard, selectedTier === 'MONTHLY' && styles.pricingCardSelected]}
+              onPress={() => setSelectedTier('MONTHLY')}
+              activeOpacity={0.85}
+            >
+              <View style={styles.cardHeaderRow}>
+                <View style={[styles.radioCircle, selectedTier === 'MONTHLY' && styles.radioCircleActive]}>
+                  {selectedTier === 'MONTHLY' && <View style={styles.radioInnerDot} />}
+                </View>
+                <View style={styles.planInfoColumn}>
+                  <Text style={styles.planTitle}>Monthly Resident Pass</Text>
+                  <Text style={styles.planSubtitle}>Full Access • Cancel anytime</Text>
+                </View>
+                <View style={styles.priceColumn}>
+                  <View style={styles.priceRow}>
+                    <Text style={styles.priceAmount}>$9.99</Text>
+                    <Text style={styles.pricePeriod}> / mo</Text>
+                  </View>
+                  <Text style={styles.priceSubTextEmerald}>Billed monthly</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+
+            {/* Plan 3: 7-Day Travel Pass */}
+            <TouchableOpacity
+              style={[styles.pricingCard, selectedTier === 'TRAVEL_PASS' && styles.pricingCardSelected]}
+              onPress={() => setSelectedTier('TRAVEL_PASS')}
+              activeOpacity={0.85}
+            >
+              <View style={[styles.popularBadge, { backgroundColor: '#059669' }]}>
+                <Text style={styles.popularText}>FOR ISLAND TRIPS</Text>
+              </View>
+              <View style={styles.cardHeaderRow}>
+                <View style={[styles.radioCircle, selectedTier === 'TRAVEL_PASS' && styles.radioCircleActive]}>
+                  {selectedTier === 'TRAVEL_PASS' && <View style={styles.radioInnerDot} />}
+                </View>
+                <View style={styles.planInfoColumn}>
+                  <Text style={styles.planTitle}>7-Day Travel Pass</Text>
+                  <Text style={styles.planSubtitle}>100 Voice Notes • 20 Live Sessions</Text>
+                </View>
+                <View style={styles.priceColumn}>
+                  <View style={styles.priceRow}>
+                    <Text style={styles.priceAmount}>$4.99</Text>
+                    <Text style={styles.pricePeriod}> / 7 days</Text>
+                  </View>
+                  <Text style={styles.priceSubTextMuted}>Non-renewing</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+
+            {/* Plan 4: 50 Poquito Credits Pack */}
             <TouchableOpacity
               style={[styles.pricingCard, selectedTier === 'CREDITS' && styles.pricingCardSelected]}
               onPress={() => setSelectedTier('CREDITS')}
-              activeOpacity={0.8}
+              activeOpacity={0.85}
             >
-              <Text style={styles.planTitle}>50 Poquito Credits Pack</Text>
-              <View style={styles.priceRow}>
-                <Text style={styles.priceAmount}>$4.99</Text>
-                <Text style={styles.pricePeriod}>one-time payment</Text>
+              <View style={styles.cardHeaderRow}>
+                <View style={[styles.radioCircle, selectedTier === 'CREDITS' && styles.radioCircleActive]}>
+                  {selectedTier === 'CREDITS' && <View style={styles.radioInnerDot} />}
+                </View>
+                <View style={styles.planInfoColumn}>
+                  <Text style={styles.planTitle}>50 Credits Pack</Text>
+                  <Text style={styles.planSubtitle}>50 Voice Notes • 10 Live Sessions</Text>
+                </View>
+                <View style={styles.priceColumn}>
+                  <View style={styles.priceRow}>
+                    <Text style={styles.priceAmount}>$4.99</Text>
+                    <Text style={styles.pricePeriod}> once</Text>
+                  </View>
+                  <Text style={styles.priceSubTextEmerald}>Never expires</Text>
+                </View>
               </View>
-              <Text style={styles.trialText}>
-                50 Voice Notes or 10 Walkie Sessions • Never expires
-              </Text>
             </TouchableOpacity>
+          </View>
 
-            {/* CTA Button */}
-            <TouchableOpacity
-              style={styles.subscribeBtn}
-              onPress={handleSubscribe}
-              disabled={loading}
-              activeOpacity={0.8}
-            >
-              {loading ? (
-                <ActivityIndicator color="#FFF" />
-              ) : (
+          {/* Action Button */}
+          <TouchableOpacity
+            style={styles.subscribeBtn}
+            onPress={handleSubscribe}
+            disabled={loading}
+            activeOpacity={0.85}
+          >
+            {loading ? (
+              <ActivityIndicator color="#FFF" />
+            ) : (
+              <View style={styles.ctaRow}>
                 <Text style={styles.subscribeBtnText}>
-                  {selectedTier === 'PRO_MONTHLY' && 'Get Pro Monthly ($12.99 / mo)'}
-                  {selectedTier === 'WEEKLY' && 'Get 7-Day Tourist Pass ($4.99 / wk)'}
+                  {selectedTier === 'ANNUAL_TRIAL' && 'Start 7-Day Free Trial'}
+                  {selectedTier === 'MONTHLY' && 'Get Monthly Pass ($9.99/mo)'}
+                  {selectedTier === 'TRAVEL_PASS' && 'Get 7-Day Travel Pass ($4.99)'}
                   {selectedTier === 'CREDITS' && 'Get 50 Poquito Credits ($4.99)'}
                 </Text>
-              )}
-            </TouchableOpacity>
+                <Ionicons name="arrow-forward" size={17} color="#FFF" />
+              </View>
+            )}
+          </TouchableOpacity>
 
-            {/* Web Stripe Discount Callout */}
-            <TouchableOpacity
-              style={styles.webDiscountBox}
-              onPress={() => Linking.openURL('https://poquitotalk.hero-apps.com/#pricing')}
-              activeOpacity={0.8}
-            >
-              <View style={styles.webDiscountIconCircle}>
-                <Ionicons name="globe-outline" size={17} color="#047857" />
-              </View>
-              <View style={{ flex: 1 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                  <Text style={styles.webDiscountTitle}>Prefer paying on Web via Stripe?</Text>
-                  <View style={styles.discountBadge}>
-                    <Text style={styles.discountBadgeText}>25% OFF UNTIL SEPT 30</Text>
-                  </View>
-                </View>
-                <Text style={styles.webDiscountSub}>Get 50 Credits for $3.74 on poquitotalk.hero-apps.com (Valid until Sept 30, 2026)</Text>
-              </View>
-              <Ionicons name="open-outline" size={16} color="#047857" />
-            </TouchableOpacity>
+          {/* Clean Free Version Link */}
+          <TouchableOpacity onPress={onClose} activeOpacity={0.7} style={styles.freeForeverBtn}>
+            <Text style={styles.freeForeverText}>Try it first</Text>
+          </TouchableOpacity>
 
-            {/* Growth Loop: Invite a Neighbor */}
-            <TouchableOpacity
-              style={styles.referralCard}
-              onPress={handleInviteNeighbor}
-              activeOpacity={0.8}
-            >
-              <View style={styles.referralIconCircle}>
-                <Ionicons name="gift-outline" size={20} color={Colors.tertiary} />
-              </View>
-              <View style={styles.referralTextContainer}>
-                <Text style={styles.referralTitle}>Invite a Bocas Neighbor</Text>
-                <Text style={styles.referralSub}>Get +5 Free Voice Notes when they try PoquitoTalk!</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={16} color={Colors.tertiary} />
+          {/* Minimal Legal Row */}
+          <View style={styles.minimalLegalRow}>
+            <Text style={styles.legalNoticeText}>Cancel anytime in Settings</Text>
+            <Text style={styles.legalBullet}>•</Text>
+            <TouchableOpacity onPress={handleRestore}>
+              <Text style={styles.legalLink}>Restore</Text>
             </TouchableOpacity>
-
-            {/* In-App Store Secured Checkout Footer */}
-            <Text style={styles.footerNote}>
-              In-App purchases processed securely via Apple & Google Play • 1-Tap restore
-            </Text>
-          </ScrollView>
+            <Text style={styles.legalBullet}>•</Text>
+            <TouchableOpacity onPress={() => Linking.openURL('https://poquitotalk.hero-apps.com/terms.html')}>
+              <Text style={styles.legalLink}>Terms</Text>
+            </TouchableOpacity>
+            <Text style={styles.legalBullet}>•</Text>
+            <TouchableOpacity onPress={() => Linking.openURL('https://poquitotalk.hero-apps.com/privacy.html')}>
+              <Text style={styles.legalLink}>Privacy</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
@@ -255,217 +286,296 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.55)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-end',
   },
   container: {
-    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
+    width: '100%',
+    maxWidth: 480,
+    backgroundColor: '#FAF8F5',
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
-    paddingTop: 16,
+    paddingTop: 14,
     paddingHorizontal: 20,
-    maxHeight: '92%',
+    paddingBottom: 24,
+    borderTopWidth: 1,
+    borderColor: '#E8E1D7',
   },
-  closeBtn: {
-    alignSelf: 'flex-end',
-    padding: 8,
-  },
-  content: {
-    alignItems: 'center',
-    paddingBottom: 32,
-  },
-  crownContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: Colors.onBackground,
-    textAlign: 'center',
-    width: '100%',
-  },
-  subtitle: {
-    fontSize: 12.5,
-    color: Colors.onSurfaceVariant,
-    textAlign: 'center',
-    marginTop: 4,
-    paddingHorizontal: 12,
-    lineHeight: 17,
-  },
-  featuresList: {
-    width: '100%',
-    marginVertical: 16,
-    gap: 8,
-  },
-  featureRow: {
+  topBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    backgroundColor: Colors.surfaceContainer,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 14,
+    justifyContent: 'flex-end',
+    marginBottom: 0,
   },
-  featureText: {
-    flex: 1,
-    fontSize: 12.5,
-    fontWeight: '600',
-    color: Colors.onBackground,
+  trialTopBadge: {
+    backgroundColor: '#D5E8D1',
+    paddingHorizontal: 11,
+    paddingVertical: 4.5,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#A7F3D0',
+  },
+  trialTopBadgeText: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: '#065F46',
+    letterSpacing: 0.4,
+  },
+  closeBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#E8E1D7',
+    ...(Platform.OS === 'web' ? { outlineStyle: 'none', outline: 'none' } as any : {}),
+  },
+  heroSection: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 3,
+    marginTop: -8,
+    marginBottom: 16,
+  },
+  mascotImg: {
+    width: 78,
+    height: 78,
+  },
+  title: {
+    fontSize: 18.5,
+    fontWeight: '900',
+    color: '#1A130E',
+    textAlign: 'center',
+    marginTop: 2,
+  },
+  subtitle: {
+    fontSize: 12,
+    color: '#4A3E33',
+    textAlign: 'center',
+    paddingHorizontal: 8,
+  },
+  featureGrid: {
+    width: '100%',
+    flexDirection: 'row',
     flexWrap: 'wrap',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 11,
+    borderWidth: 1,
+    borderColor: '#E8E1D7',
+    rowGap: 6.5,
+  },
+  gridItem: {
+    width: '50%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    paddingHorizontal: 2,
+  },
+  gridIconDisc: {
+    width: 26,
+    height: 26,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    flexShrink: 0,
+  },
+  benefitTextCol: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  gridText: {
+    fontSize: 10.2,
+    fontWeight: '800',
+    color: '#1A130E',
+  },
+  gridSubText: {
+    fontSize: 8.5,
+    lineHeight: 11,
+    fontWeight: '500',
+    color: '#4A3E33',
+    marginTop: 0.5,
+  },
+  plansContainer: {
+    width: '100%',
+    gap: 8,
   },
   pricingCard: {
     width: '100%',
-    backgroundColor: Colors.surfaceContainerLowest || '#FFF',
-    borderRadius: 20,
-    padding: 16,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 15,
+    paddingHorizontal: 13,
+    paddingVertical: 10,
     borderWidth: 1.5,
-    borderColor: Colors.cardBorder,
-    alignItems: 'center',
+    borderColor: '#E8E1D7',
     position: 'relative',
-    marginVertical: 8,
   },
   pricingCardSelected: {
-    borderColor: Colors.tertiary,
-    borderWidth: 2.5,
-    backgroundColor: Colors.tertiaryContainer || '#F4FAFE',
+    borderColor: '#964824',
+    borderWidth: 2,
+    backgroundColor: '#FFF9F6',
   },
   popularBadge: {
     position: 'absolute',
-    top: -11,
-    backgroundColor: Colors.secondary,
-    paddingHorizontal: 12,
-    paddingVertical: 3,
-    borderRadius: 12,
+    top: -7.5,
+    right: 10,
+    backgroundColor: '#964824',
+    paddingHorizontal: 7,
+    paddingVertical: 1.5,
+    borderRadius: 5,
   },
   popularText: {
-    fontSize: 9.5,
+    fontSize: 7.5,
     fontWeight: '800',
     color: '#FFF',
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
+  },
+  cardHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  radioCircle: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    borderWidth: 1.5,
+    borderColor: '#CFC5BB',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  radioCircleActive: {
+    borderColor: '#964824',
+  },
+  radioInnerDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 3.5,
+    backgroundColor: '#964824',
+  },
+  planInfoColumn: {
+    flex: 1,
+    justifyContent: 'center',
   },
   planTitle: {
-    fontSize: 14.5,
-    fontWeight: '700',
-    color: Colors.onBackground,
-    marginTop: 2,
+    fontSize: 12.5,
+    fontWeight: '800',
+    color: '#1A130E',
+  },
+  planSubtitle: {
+    fontSize: 9.2,
+    color: '#4A3E33',
+    marginTop: 0.5,
+    fontWeight: '500',
+  },
+  priceColumn: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
   },
   priceRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: 4,
-    marginTop: 4,
   },
   priceAmount: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: Colors.onBackground,
+    fontSize: 14,
+    fontWeight: '900',
+    color: '#1A130E',
   },
   pricePeriod: {
-    fontSize: 12.5,
-    color: Colors.onSurfaceVariant,
+    fontSize: 9.2,
+    fontWeight: '700',
+    color: '#4A3E33',
   },
-  trialText: {
-    fontSize: 11,
-    color: Colors.tertiary,
+  priceSubText: {
+    fontSize: 8.5,
+    fontWeight: '700',
+    color: '#059669',
+  },
+  priceSubTextEmerald: {
+    fontSize: 8.5,
+    fontWeight: '700',
+    color: '#059669',
+  },
+  priceSubTextMuted: {
+    fontSize: 8.5,
     fontWeight: '600',
-    marginTop: 4,
-    textAlign: 'center',
+    color: '#64748B',
   },
   subscribeBtn: {
     width: '100%',
-    backgroundColor: Colors.secondary,
-    borderRadius: 18,
+    backgroundColor: '#4F46E5',
+    borderRadius: 20,
     paddingVertical: 14,
-    alignItems: 'center',
     marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#4F46E5',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  ctaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    flexWrap: 'nowrap',
   },
   subscribeBtnText: {
     fontSize: 15,
-    fontWeight: '800',
+    fontWeight: '900',
     color: '#FFF',
+    letterSpacing: 0.2,
   },
-  webDiscountBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    backgroundColor: '#F4FAF6',
-    borderRadius: 16,
-    padding: 12,
-    marginTop: 12,
-    borderWidth: 1,
-    borderColor: '#A7F3D0',
+  freeForeverBtn: {
+    paddingVertical: 2,
+    paddingHorizontal: 8,
   },
-  webDiscountIconCircle: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: '#E6F4EA',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 10,
+  freeForeverText: {
+    fontSize: 10.5,
+    fontWeight: '700',
+    color: '#964824',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
   },
-  webDiscountTitle: {
-    fontSize: 12.5,
-    fontWeight: '800',
-    color: '#065F46',
-  },
-  discountBadge: {
-    backgroundColor: '#047857',
-    paddingHorizontal: 6,
+  locationTagRow: {
+    marginTop: 1,
+    backgroundColor: 'rgba(150, 72, 36, 0.08)',
+    paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
   },
-  discountBadgeText: {
-    color: '#FFF',
+  locationTagText: {
     fontSize: 9,
     fontWeight: '800',
-    letterSpacing: 0.5,
+    color: '#964824',
+    letterSpacing: 0.6,
   },
-  webDiscountSub: {
-    fontSize: 11,
-    color: '#047857',
-    marginTop: 2,
-    fontWeight: '600',
-  },
-  referralCard: {
+  minimalLegalRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '100%',
-    backgroundColor: Colors.tertiaryContainer,
-    borderRadius: 16,
-    padding: 12,
-    marginTop: 10,
-    borderWidth: 1,
-    borderColor: Colors.tertiary,
-  },
-  referralIconCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#FFF',
-    alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    gap: 6,
+    marginTop: 2,
   },
-  referralTextContainer: {
-    flex: 1,
+  legalNoticeText: {
+    fontSize: 9.5,
+    fontWeight: '600',
+    color: '#4A3E33',
   },
-  referralTitle: {
-    fontSize: 12.5,
-    fontWeight: '800',
-    color: Colors.onBackground,
+  legalLink: {
+    fontSize: 9.5,
+    fontWeight: '700',
+    color: '#4A3E33',
+    textDecorationLine: 'underline',
   },
-  referralSub: {
-    fontSize: 11,
-    color: Colors.onSurfaceVariant,
-    marginTop: 1,
-  },
-  footerNote: {
-    fontSize: 10.5,
-    color: Colors.outline,
-    marginTop: 14,
-    textAlign: 'center',
+  legalBullet: {
+    fontSize: 9.5,
+    color: '#94A3B8',
   },
 });

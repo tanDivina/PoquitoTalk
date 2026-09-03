@@ -18,7 +18,7 @@ For expats and travelers who only know textbook Spanish, trying to explain compl
 1. They produce rigid, formal textbook Spanish that sounds robotic to local Panamanians.
 2. They output static text strings, forcing you to read aloud awkwardly into your phone's microphone.
 
-To solve this, I built **PoquitoTalk** — an AI-powered voice translation platform that turns English speech into natural Panamanian Spanish voice notes sent straight to WhatsApp with 1-tap.
+To solve this, I built **PoquitoTalk**  -  an AI-powered voice translation platform that turns English speech into natural Panamanian Spanish voice notes sent straight to WhatsApp with 1-tap.
 
 Here is the complete architectural breakdown of how I designed, built, and shipped PoquitoTalk in 5 days using **Expo, React Native, Gemma AI, ElevenLabs, Cloud Firestore, and WebSockets**.
 

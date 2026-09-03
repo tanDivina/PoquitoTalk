@@ -106,50 +106,50 @@ export const AnimatedParrotMascot: React.FC<AnimatedParrotMascotProps> = ({
     if (!isAnimating) return;
 
     if (isDancing) {
-      // Upbeat Happy Dance Groove (Bouncy tempo with tilt)
+      // Upbeat Happy Dance Groove (Bouncy rhythm with tilt sway)
       const danceLoop = Animated.loop(
         Animated.parallel([
           Animated.sequence([
             Animated.timing(bobAnim, {
-              toValue: -7,
-              duration: 260,
-              useNativeDriver: true,
-            }),
-            Animated.timing(bobAnim, {
-              toValue: 3,
-              duration: 240,
-              useNativeDriver: true,
-            }),
-            Animated.timing(bobAnim, {
-              toValue: -5,
+              toValue: -10,
               duration: 220,
               useNativeDriver: true,
             }),
             Animated.timing(bobAnim, {
-              toValue: 0,
+              toValue: 4,
               duration: 200,
+              useNativeDriver: true,
+            }),
+            Animated.timing(bobAnim, {
+              toValue: -6,
+              duration: 180,
+              useNativeDriver: true,
+            }),
+            Animated.timing(bobAnim, {
+              toValue: 0,
+              duration: 160,
               useNativeDriver: true,
             }),
           ]),
           Animated.sequence([
             Animated.timing(tiltAnim, {
-              toValue: 1,
-              duration: 260,
+              toValue: 1.2,
+              duration: 220,
               useNativeDriver: true,
             }),
             Animated.timing(tiltAnim, {
-              toValue: -1,
-              duration: 260,
+              toValue: -1.2,
+              duration: 220,
               useNativeDriver: true,
             }),
             Animated.timing(tiltAnim, {
-              toValue: 0.5,
-              duration: 200,
+              toValue: 0.6,
+              duration: 180,
               useNativeDriver: true,
             }),
             Animated.timing(tiltAnim, {
               toValue: 0,
-              duration: 200,
+              duration: 160,
               useNativeDriver: true,
             }),
           ]),
@@ -178,34 +178,38 @@ export const AnimatedParrotMascot: React.FC<AnimatedParrotMascotProps> = ({
     }
   }, [isAnimating, isDancing]);
 
-  // 2. Radiating Soundwave Stagger Loop
+  // 2. Radiating Soundwave Stagger Loop (Syncs with dance mode / speech)
   useEffect(() => {
     if (!isAnimating) return;
+
+    const pulseDuration = isDancing ? 200 : 400;
+    const fadeDuration = isDancing ? 300 : 600;
+    const waveStagger = isDancing ? 120 : 200;
 
     const waveLoop = Animated.loop(
       Animated.sequence([
         Animated.parallel([
           Animated.sequence([
-            Animated.timing(wave1, { toValue: 0.95, duration: 400, useNativeDriver: true }),
-            Animated.timing(wave1, { toValue: 0.2, duration: 600, useNativeDriver: true }),
+            Animated.timing(wave1, { toValue: 1.0, duration: pulseDuration, useNativeDriver: true }),
+            Animated.timing(wave1, { toValue: 0.2, duration: fadeDuration, useNativeDriver: true }),
           ]),
           Animated.sequence([
-            Animated.delay(200),
-            Animated.timing(wave2, { toValue: 0.95, duration: 400, useNativeDriver: true }),
-            Animated.timing(wave2, { toValue: 0.2, duration: 600, useNativeDriver: true }),
+            Animated.delay(waveStagger),
+            Animated.timing(wave2, { toValue: 1.0, duration: pulseDuration, useNativeDriver: true }),
+            Animated.timing(wave2, { toValue: 0.2, duration: fadeDuration, useNativeDriver: true }),
           ]),
           Animated.sequence([
-            Animated.delay(400),
-            Animated.timing(wave3, { toValue: 0.95, duration: 400, useNativeDriver: true }),
-            Animated.timing(wave3, { toValue: 0.2, duration: 600, useNativeDriver: true }),
+            Animated.delay(waveStagger * 2),
+            Animated.timing(wave3, { toValue: 1.0, duration: pulseDuration, useNativeDriver: true }),
+            Animated.timing(wave3, { toValue: 0.2, duration: fadeDuration, useNativeDriver: true }),
           ]),
         ]),
-        Animated.delay(600),
+        Animated.delay(isDancing ? 150 : 600),
       ])
     );
     waveLoop.start();
     return () => waveLoop.stop();
-  }, [isAnimating]);
+  }, [isAnimating, isDancing]);
 
   const handleParrotTap = () => {
     if (Platform.OS !== 'web') {
@@ -284,12 +288,12 @@ export const AnimatedParrotMascot: React.FC<AnimatedParrotMascotProps> = ({
           }}
         >
           <Svg width={size} height={size} viewBox="0 0 200 200" fill="none">
-            {/* Outer WhatsApp Green Speech Bubble Outline */}
+            {/* Outer WhatsApp Green Speech Bubble Outline (Smooth Rounded Organic Arc) */}
             <Path
-              d="M 100 20 C 50 20 20 52 20 95 C 20 120 32 142 50 156 C 42 172 26 182 25 182 C 25 182 52 186 78 174 C 85 177 92 178 100 178 C 150 178 180 146 180 95 C 180 52 150 20 100 20 Z"
+              d="M 100 20 C 142 20 176 54 176 96 C 176 138 142 172 100 172 C 88 172 74 169 62 163 C 48 175 30 182 28 182 C 28 182 34 166 36 150 C 28 135 24 116 24 96 C 24 54 58 20 100 20 Z"
               fill="none"
               stroke="#25D366"
-              strokeWidth={12}
+              strokeWidth={11}
               strokeLinecap="round"
               strokeLinejoin="round"
             />

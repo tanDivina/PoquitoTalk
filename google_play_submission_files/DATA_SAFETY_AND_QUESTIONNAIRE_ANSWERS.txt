@@ -1,0 +1,57 @@
+================================================================================
+GOOGLE PLAY CONSOLE — APP CONTENT & DATA SAFETY QUESTIONNAIRE ANSWERS
+================================================================================
+
+1. DATA SAFETY SECTION
+----------------------
+Q: Does your app collect or share any of the required user data types?
+A: YES (Only Voice / Audio recordings for translation functionality)
+
+Data Type: Audio files / Voice recordings
+- Collected? YES
+- Shared with third parties? NO
+- Is this data processed ephemerally? YES (Audio is sent to Google AI / translation API to generate audio in real-time, then discarded; it is not saved on external servers or linked to user identity)
+- Is this data required or optional? OPTIONAL (Users can use text typing instead of voice recording)
+- Why is it collected? App functionality (Translation & voice generation)
+
+Other Data Types:
+- Location: NO (Not collected)
+- Personal info (Name, email, phone): NO (Not collected in app)
+- Financial info (Credit card, bank): NO (In-app purchases handled securely by Google Play / RevenueCat)
+- Health & Fitness: NO
+- Messages (SMS / Email): NO
+- Photos & Videos: NO
+- Files & Docs: NO
+- Calendar: NO
+- Contacts: NO
+- Device or other IDs: NO (Only anonymous device installation IDs for crash reporting)
+
+Security Practices:
+- Data in transit is encrypted: YES (All network communication uses HTTPS / TLS)
+- Can users request data deletion?: YES (Users can clear local cache & data directly in Settings)
+
+2. APP CONTENT DECLARATIONS
+---------------------------
+- Privacy Policy:
+  URL: https://poquitotalk.hero-apps.com/privacy
+
+- Ads Declaration:
+  Does your app contain ads? NO ("No, my app does not contain ads")
+
+- App Access / Login Credentials:
+  Are parts of your app restricted by login? NO ("All functionality is available without special access")
+
+- Target Age & Audience:
+  Target age groups: 13-15, 16-17, 18 and over
+  Could the app appeal to children unintentionally?: NO
+
+- News Apps: NO
+- COVID-19 Contact Tracing: NO
+- Financial Features: NO
+- Health & Medical: NO
+- Government Apps: NO
+
+3. PERMISSIONS DECLARATION
+--------------------------
+- RECORD_AUDIO (Microphone Permission):
+  Purpose: Used exclusively to record the user's spoken English phrase so it can be translated into Panamanian Spanish. Audio recording is strictly user-initiated by holding or tapping the microphone button.
