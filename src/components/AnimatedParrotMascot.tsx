@@ -8,6 +8,7 @@ import {
   Platform,
   Vibration,
   useWindowDimensions,
+  Easing,
 } from 'react-native';
 import Svg, { Path, Circle, G } from 'react-native-svg';
 import { Colors } from '../theme/colors';
@@ -28,6 +29,7 @@ interface AnimatedParrotMascotProps {
   isAnimating?: boolean;
   isDancing?: boolean;
   showSpeechBubble?: boolean;
+  showSoundwaves?: boolean;
   bubblePlacement?: 'auto' | 'top' | 'bottom' | 'inline';
   customTip?: string;
   onPress?: () => void;
@@ -38,6 +40,7 @@ export const AnimatedParrotMascot: React.FC<AnimatedParrotMascotProps> = ({
   isAnimating = true,
   isDancing = false,
   showSpeechBubble = false,
+  showSoundwaves = false,
   bubblePlacement = 'auto',
   customTip,
   onPress,
@@ -158,17 +161,25 @@ export const AnimatedParrotMascot: React.FC<AnimatedParrotMascotProps> = ({
       danceLoop.start();
       return () => danceLoop.stop();
     } else {
-      // Gentle Ambient Float
+      // Gentle Ambient Float (Continuous harmonic sine cycle with zero jump on loop boundary)
       const bobLoop = Animated.loop(
         Animated.sequence([
           Animated.timing(bobAnim, {
             toValue: -3,
             duration: 1600,
+            easing: Easing.inOut(Easing.sin),
             useNativeDriver: true,
           }),
           Animated.timing(bobAnim, {
             toValue: 3,
+            duration: 2000,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.timing(bobAnim, {
+            toValue: -3,
             duration: 1600,
+            easing: Easing.inOut(Easing.sin),
             useNativeDriver: true,
           }),
         ])
@@ -178,9 +189,9 @@ export const AnimatedParrotMascot: React.FC<AnimatedParrotMascotProps> = ({
     }
   }, [isAnimating, isDancing]);
 
-  // 2. Radiating Soundwave Stagger Loop (Syncs with dance mode / speech)
+  // 2. Radiating Soundwave Stagger Loop (Syncs with dance mode / speech, only when showSoundwaves is true)
   useEffect(() => {
-    if (!isAnimating) return;
+    if (!isAnimating || !showSoundwaves) return;
 
     const pulseDuration = isDancing ? 200 : 400;
     const fadeDuration = isDancing ? 300 : 600;
@@ -300,8 +311,8 @@ export const AnimatedParrotMascot: React.FC<AnimatedParrotMascotProps> = ({
 
             {/* Canonical Studio Parrot Group (Centered within speech bubble) */}
             <G transform="translate(43, 39) scale(0.75)">
-              {/* 1. Wooden Perch Branch */}
-              <Path d="M 30 135 Q 70 132 115 135" stroke="#B45309" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
+              {/* 1. Straightened Wooden Perch Branch */}
+              <Path d="M 28 135 L 118 135" stroke="#B45309" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
 
               {/* 2. Golden Parrot Claws */}
               <Path
@@ -356,31 +367,35 @@ export const AnimatedParrotMascot: React.FC<AnimatedParrotMascotProps> = ({
                 />
               </G>
 
-              {/* 6. Staggered Radiating Soundwave Arcs */}
-              <AnimatedPath
-                d="M 112 43 A 11 11 0 0 1 112 60"
-                fill="none"
-                stroke="#F59E0B"
-                strokeWidth={4}
-                strokeLinecap="round"
-                opacity={wave1}
-              />
-              <AnimatedPath
-                d="M 121 37 A 17 17 0 0 1 121 66"
-                fill="none"
-                stroke="#F59E0B"
-                strokeWidth={4}
-                strokeLinecap="round"
-                opacity={wave2}
-              />
-              <AnimatedPath
-                d="M 130 31 A 23 23 0 0 1 130 72"
-                fill="none"
-                stroke="#F59E0B"
-                strokeWidth={4}
-                strokeLinecap="round"
-                opacity={wave3}
-              />
+              {/* 6. Staggered Radiating Soundwave Arcs (Only if explicitly enabled) */}
+              {showSoundwaves && (
+                <>
+                  <AnimatedPath
+                    d="M 112 43 A 11 11 0 0 1 112 60"
+                    fill="none"
+                    stroke="#F59E0B"
+                    strokeWidth={4}
+                    strokeLinecap="round"
+                    opacity={wave1}
+                  />
+                  <AnimatedPath
+                    d="M 121 37 A 17 17 0 0 1 121 66"
+                    fill="none"
+                    stroke="#F59E0B"
+                    strokeWidth={4}
+                    strokeLinecap="round"
+                    opacity={wave2}
+                  />
+                  <AnimatedPath
+                    d="M 130 31 A 23 23 0 0 1 130 72"
+                    fill="none"
+                    stroke="#F59E0B"
+                    strokeWidth={4}
+                    strokeLinecap="round"
+                    opacity={wave3}
+                  />
+                </>
+              )}
             </G>
           </Svg>
         </Animated.View>

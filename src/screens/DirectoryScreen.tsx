@@ -20,9 +20,7 @@ import { DirectoryCard } from '../components/DirectoryCard';
 import { AddProviderModal } from '../components/AddProviderModal';
 import { fetchRegionalProviders, LocalServiceProvider, INITIAL_BOCAS_DIRECTORY } from '../services/directory';
 
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
+
 
 interface DirectoryScreenProps {
   isPro: boolean;
@@ -38,18 +36,18 @@ const PROVIDER_CARD_WIDTH = Math.min(SCREEN_WIDTH - 48, 335);
 
 // Rule 12 Falling Rainbow Spectrum & Logical Domain Order (1-to-1 matching DIRECTORY_DECKS)
 const CATEGORY_FILTERS = [
-  { id: 'boat', label: 'Boat & Water Taxi', icon: 'boat-outline', color: '#0284C7', bg: '#F0F9FF', border: '#BAE6FD', badgeBg: '#E0F2FE' },
-  { id: 'taxi', label: 'Land Taxis & Transport', icon: 'car-outline', color: '#0891B2', bg: '#ECFEFF', border: '#A5F3FC', badgeBg: '#CFFAFE' },
-  { id: 'plumbing', label: 'Plumbing & Water Tanks', icon: 'water-outline', color: '#0D9488', bg: '#F0FDFA', border: '#99F6E4', badgeBg: '#CCFBF1' },
-  { id: 'ac', label: 'A/C, Electric & Solar', icon: 'snow-outline', color: '#059669', bg: '#ECFDF5', border: '#A7F3D0', badgeBg: '#D1FAE5' },
-  { id: 'gardening', label: 'Gardening & Maintenance', icon: 'leaf-outline', color: '#65A30D', bg: '#F7FEE7', border: '#D9F99D', badgeBg: '#ECFCCB' },
-  { id: 'contractor', label: 'Contractors & Handymen', icon: 'construct-outline', color: '#CA8A04', bg: '#FEFCE8', border: '#FEF08A', badgeBg: '#FEF9C3' },
-  { id: 'starlink', label: 'Starlink & Internet', icon: 'radio-outline', color: '#D97706', bg: '#FFFBEB', border: '#FDE68A', badgeBg: '#FEF3C7' },
-  { id: 'banking', label: 'ATMs & Cash Services', icon: 'cash-outline', color: '#EA580C', bg: '#FFF7ED', border: '#FED7AA', badgeBg: '#FFEDD5' },
-  { id: 'dining', label: 'Supermarkets & Dining', icon: 'restaurant-outline', color: '#F43F5E', bg: '#FFF1F2', border: '#FECDD3', badgeBg: '#FFE4E6' },
-  { id: 'medical', label: 'Doctor & Pharmacy', icon: 'medkit-outline', color: '#E11D48', bg: '#FFF1F2', border: '#FECDD3', badgeBg: '#FFE4E6' },
-  { id: 'vet', label: 'Island Vets & Animal Care', icon: 'paw-outline', color: '#C026D3', bg: '#FDF4FF', border: '#F5D0FE', badgeBg: '#FAE8FF' },
-  { id: 'community', label: 'Community & Culture', icon: 'people-outline', color: '#7C3AED', bg: '#F5F3FF', border: '#DDD6FE', badgeBg: '#EDE9FE' },
+  { id: 'boat', label: 'Boat & Water Taxi', icon: 'boat', color: '#0284C7', bg: '#F0F9FF', border: '#BAE6FD', badgeBg: '#E0F2FE' },
+  { id: 'taxi', label: 'Land Taxis & Transport', icon: 'car', color: '#0891B2', bg: '#ECFEFF', border: '#A5F3FC', badgeBg: '#CFFAFE' },
+  { id: 'plumbing', label: 'Plumbing & Water Tanks', icon: 'water', color: '#0D9488', bg: '#F0FDFA', border: '#99F6E4', badgeBg: '#CCFBF1' },
+  { id: 'ac', label: 'A/C, Electric & Solar', icon: 'snow', color: '#059669', bg: '#ECFDF5', border: '#A7F3D0', badgeBg: '#D1FAE5' },
+  { id: 'gardening', label: 'Gardening & Maintenance', icon: 'leaf', color: '#65A30D', bg: '#F7FEE7', border: '#D9F99D', badgeBg: '#ECFCCB' },
+  { id: 'contractor', label: 'Contractors & Handymen', icon: 'construct', color: '#CA8A04', bg: '#FEFCE8', border: '#FEF08A', badgeBg: '#FEF9C3' },
+  { id: 'starlink', label: 'Starlink & Internet', icon: 'radio', color: '#D97706', bg: '#FFFBEB', border: '#FDE68A', badgeBg: '#FEF3C7' },
+  { id: 'banking', label: 'ATMs & Cash Services', icon: 'cash', color: '#EA580C', bg: '#FFF7ED', border: '#FED7AA', badgeBg: '#FFEDD5' },
+  { id: 'dining', label: 'Supermarkets & Dining', icon: 'restaurant', color: '#F43F5E', bg: '#FFF1F2', border: '#FECDD3', badgeBg: '#FFE4E6' },
+  { id: 'medical', label: 'Doctor & Pharmacy', icon: 'medkit', color: '#E11D48', bg: '#FFF1F2', border: '#FECDD3', badgeBg: '#FFE4E6' },
+  { id: 'vet', label: 'Island Vets & Animal Care', icon: 'paw', color: '#C026D3', bg: '#FDF4FF', border: '#F5D0FE', badgeBg: '#FAE8FF' },
+  { id: 'community', label: 'Community & Culture', icon: 'people', color: '#7C3AED', bg: '#F5F3FF', border: '#DDD6FE', badgeBg: '#EDE9FE' },
 ];
 
 const DIRECTORY_DECKS = [
@@ -63,10 +61,17 @@ const DIRECTORY_DECKS = [
     border: '#BAE6FD',
     badgeBg: '#E0F2FE',
     match: (p: LocalServiceProvider) =>
-      p.category === 'water_taxi' ||
-      p.category === 'boat_repair' ||
-      p.category === 'boat' ||
-      /\b(lancha|marítimo|maritimo|water taxi|capitán|capitan)\b/i.test(p.name + ' ' + (p.notes || '')),
+      p.category !== 'banking_money' &&
+      p.category !== 'banking' &&
+      p.category !== 'atm' &&
+      p.serviceType !== 'western_union' &&
+      p.serviceType !== 'atm' &&
+      p.serviceType !== 'bank' &&
+      p.serviceType !== 'punto_pago' &&
+      (p.category === 'water_taxi' ||
+        p.category === 'boat_repair' ||
+        p.category === 'boat' ||
+        /\b(lancha|marítimo|maritimo|water taxi|capitán|capitan)\b/i.test(p.name)),
   },
   {
     id: 'taxi',
@@ -81,7 +86,12 @@ const DIRECTORY_DECKS = [
       p.category !== 'water_taxi' &&
       p.category !== 'boat_repair' &&
       p.category !== 'boat' &&
-      !/\b(lancha|marítimo|maritimo|water taxi|capitán|capitan)\b/i.test(p.name + ' ' + (p.notes || '')) &&
+      p.category !== 'banking_money' &&
+      p.category !== 'banking' &&
+      p.serviceType !== 'western_union' &&
+      p.serviceType !== 'atm' &&
+      p.serviceType !== 'bank' &&
+      !/\b(lancha|marítimo|maritimo|water taxi|capitán|capitan)\b/i.test(p.name) &&
       (p.category === 'land_taxi' ||
         p.category === 'taxi_land' ||
         p.category === 'car_mechanic' ||
@@ -173,7 +183,12 @@ const DIRECTORY_DECKS = [
     match: (p: LocalServiceProvider) =>
       p.category === 'banking_money' ||
       p.category === 'banking' ||
-      p.category === 'atm',
+      p.category === 'atm' ||
+      p.serviceType === 'western_union' ||
+      p.serviceType === 'bank' ||
+      p.serviceType === 'atm' ||
+      p.serviceType === 'punto_pago' ||
+      p.serviceType === 'utility',
   },
   {
     id: 'dining',
@@ -252,7 +267,13 @@ export const DirectoryScreen: React.FC<DirectoryScreenProps> = ({
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   // Starts clean and collapsed in 100% resting state so all category cards fit above fold (Rule 6)
-  const [activeDeckId, setActiveDeckId] = useState<string>('');
+  const [activeDeckId, setActiveDeckId] = useState<string>(() => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      const d = new URLSearchParams(window.location.search).get('deck');
+      if (d) return d;
+    }
+    return '';
+  });
   const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {

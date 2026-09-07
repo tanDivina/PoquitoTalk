@@ -39,13 +39,13 @@ $permanentEntities = [
         'rating' => 4.8,
         'verified' => true,
         'status' => 'approved',
-        'location' => 'Frente a Duo2 Market, Calle 1ra / Calle 2da (Cerca de la Policía y el Parque Central), Bocas Town',
+        'location' => 'Dentro de Duo2 Market, Calle 1ra / Calle 2da (Cerca de la Policía y el Parque Central), Bocas Town',
         'hours' => 'Todos los días: ~7:00 AM – 9:30 PM (Horario del supermercado)',
         'phone' => '',
         'phone_raw' => '',
         'map_url' => 'https://www.google.com/maps/search/?api=1&query=Duo2+Market+Bocas+del+Toro+Isla+Colon',
-        'description' => 'Cajero automático Telered ubicado al frente de Duo2 Market, cerca de la estación de Policía Nacional y el Parque Simón Bolívar.',
-        'description_en' => 'Telered ATM located in front of Duo2 Market, near the National Police station and Simon Bolivar Central Park.'
+        'description' => 'Cajero automático Telered ubicado dentro del supermercado Duo2 Market, cerca de la estación de Policía Nacional y el Parque Simón Bolívar.',
+        'description_en' => 'Telered ATM located inside the Duo2 Market supermarket, near the National Police station and Simon Bolivar Central Park.'
     ],
     [
         'id' => 'atm-super-gourmet',
@@ -80,8 +80,8 @@ $permanentEntities = [
         'phone' => '+507 301-2623',
         'phone_raw' => '+5073012623',
         'map_url' => 'https://www.google.com/maps/search/?api=1&query=Western+Union+Changuinola+Panama',
-        'description' => 'Agencia principal en la provincia de Bocas del Toro para cobro y envío de giros internacionales, transferencias y remesas.',
-        'description_en' => 'Main Western Union branch in Bocas del Toro province for international money transfers, remittances, and cash pickups.'
+        'description' => 'Agencia principal en la provincia de Bocas del Toro para cobro y envío de giros internacionales (Nota: No hay sucursal en Bocas Town, solo en Changuinola).',
+        'description_en' => 'Main Western Union branch in Bocas del Toro province for international money transfers (Note: No branch in Bocas Town, only in Changuinola).'
     ],
     [
         'id' => 'wu-guabito',
@@ -241,7 +241,9 @@ if (file_exists($contractorsFile)) {
                 $canonicalCategory = 'BANKING';
             } else {
                 // 2. Fallback to semantic inspection of name and summary (ignoring SOLARTE)
-                if (preg_match('/\b(CAR RENTAL|RENTAL CAR|UTV|4X4|RENTAL|TAXI|SHUTTLE|VEHICLE RENTAL)\b/i', $cleanedCombined)) {
+                if (preg_match('/\b(BANK|ATM|BANCO|WESTERN UNION|REMESAS|GIROS)\b/i', $cleanedCombined)) {
+                    $canonicalCategory = 'BANKING';
+                } elseif (preg_match('/\b(CAR RENTAL|RENTAL CAR|UTV|4X4|RENTAL|TAXI|SHUTTLE|VEHICLE RENTAL)\b/i', $cleanedCombined)) {
                     $canonicalCategory = 'LAND_TAXI';
                 } elseif (preg_match('/\b(SOIL|GARDEN|PLANT|JARDIN|VIVERO|MICROBIOLOGY|COMPOST|MULCH|PODA|FRUIT TREE)\b/i', $cleanedCombined)) {
                     $canonicalCategory = 'GARDENING';

@@ -24,7 +24,7 @@ export const MicButton: React.FC<MicButtonProps> = ({
   const isSpeaking = isTranslating || isPlayingAudio;
 
   // Determine avatar state:
-  // In Translator mode: friendly conversational Poquito on perch (curious/idle, listening, talking)
+  // In Translator mode: friendly conversational Poquito on perch (sway with eye-scan, listening nod, talking beak)
   // In Walkie mode: radio walkie-talkie stance (talkie-standby, talkie-tx, talkie-rx)
   const mascotState: PoquitoState =
     mode === 'walkie'
@@ -37,7 +37,7 @@ export const MicButton: React.FC<MicButtonProps> = ({
       ? 'listening'
       : isSpeaking
       ? 'talking'
-      : 'curious';
+      : 'sway';
 
   return (
     <View style={styles.container}>
@@ -50,8 +50,8 @@ export const MicButton: React.FC<MicButtonProps> = ({
         onPress={onPress}
         activeOpacity={0.85}
       >
-        {/* Poquito Mascot in Conversational or Walkie Stance */}
-        <PoquitoAvatar state={mascotState} size={110} />
+        {/* Poquito Mascot on Perch (sways left/right, scans eyes, flaps beak, calm listening) */}
+        <PoquitoAvatar state={mascotState} size={118} />
 
         {/* Docked PTT Capsule Pill */}
         <View

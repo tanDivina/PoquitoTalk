@@ -21,9 +21,12 @@ import {
   toggleFavoriteContact,
   recordRecentContact,
   syncDirectoryFavorite,
+  subscribePhoneBookChanged,
 } from '../services/storage';
 import { INITIAL_BOCAS_DIRECTORY } from '../services/directory';
 import { shareVoiceNoteToWhatsApp, sendTextToWhatsApp } from '../services/sharing';
+import { getOrCreateThreadForContact, addMessageToThread } from '../services/conversations';
+import { getUserProfile } from '../services/userService';
 import { AddContactModal } from './AddContactModal';
 import { ImportContactsModal } from './ImportContactsModal';
 
@@ -32,6 +35,7 @@ interface RecipientDispatchModalProps {
   onClose: () => void;
   audioUri?: string | null;
   spanishText: string;
+  englishText?: string;
   dispatchType: 'voice_note' | 'text';
   presetCategory?: string;
   onDispatched?: () => void;
@@ -42,6 +46,7 @@ export const RecipientDispatchModal: React.FC<RecipientDispatchModalProps> = ({
   onClose,
   audioUri,
   spanishText,
+  englishText,
   dispatchType,
   presetCategory,
   onDispatched,
@@ -61,6 +66,13 @@ export const RecipientDispatchModal: React.FC<RecipientDispatchModalProps> = ({
       loadContacts();
     }
   }, [visible]);
+
+  useEffect(() => {
+    const unsubscribe = subscribePhoneBookChanged((updatedList) => {
+      setPhoneBook(updatedList);
+    });
+    return unsubscribe;
+  }, []);
 
   const loadContacts = async () => {
     const contacts = await getPhoneBookContacts();
@@ -120,8 +132,42 @@ export const RecipientDispatchModal: React.FC<RecipientDispatchModalProps> = ({
       await recordRecentContact(contact.id);
       loadContacts();
 
+      // 1. Find or create persistent chat thread
+      const thread = await getOrCreateThreadForContact({
+        id: contact.id,
+        name: contact.name,
+        category: contact.category,
+        whatsappNumber: contact.whatsappNumber,
+        avatarIcon: 'person-outline',
+      });
+
+      // 2. Record outgoing message into thread
+      await addMessageToThread(thread.id, {
+        sender: 'EXPAT',
+        textEnglish: englishText || spanishText,
+        textSpanish: spanishText,
+        audioUri: audioUri || undefined,
+        timestamp: Date.now(),
+      });
+
+      // 3. Dispatch to WhatsApp with room & thread metadata
+      const profile = await getUserProfile();
+      const clientName = (profile.displayName && profile.displayName.trim() && profile.displayName.trim().toLowerCase() !== 'client') ? profile.displayName.trim() : '';
+
       if (dispatchType === 'voice_note' && audioUri) {
-        await shareVoiceNoteToWhatsApp(audioUri, contact.name, spanishText, contact.whatsappNumber);
+        await shareVoiceNoteToWhatsApp(
+          audioUri,
+          contact.name,
+          spanishText,
+          contact.whatsappNumber,
+          {
+            roomId: thread.roomId,
+            contractorName: contact.name,
+            clientName: clientName,
+            phone: contact.whatsappNumber,
+            englishText: englishText,
+          }
+        );
       } else {
         await sendTextToWhatsApp(spanishText, contact.whatsappNumber);
       }
@@ -145,8 +191,42 @@ export const RecipientDispatchModal: React.FC<RecipientDispatchModalProps> = ({
 
     setSendingRecipientId(provider.id);
     try {
+      // 1. Find or create persistent chat thread for directory provider
+      const thread = await getOrCreateThreadForContact({
+        id: provider.id,
+        name: provider.name,
+        category: provider.category,
+        whatsappNumber: phone,
+        avatarIcon: 'boat-outline',
+      });
+
+      // 2. Record outgoing message into thread
+      await addMessageToThread(thread.id, {
+        sender: 'EXPAT',
+        textEnglish: englishText || spanishText,
+        textSpanish: spanishText,
+        audioUri: audioUri || undefined,
+        timestamp: Date.now(),
+      });
+
+      // 3. Dispatch to WhatsApp with room & thread metadata
+      const profile = await getUserProfile();
+      const clientName = (profile.displayName && profile.displayName.trim() && profile.displayName.trim().toLowerCase() !== 'client') ? profile.displayName.trim() : '';
+
       if (dispatchType === 'voice_note' && audioUri) {
-        await shareVoiceNoteToWhatsApp(audioUri, provider.name, spanishText, phone);
+        await shareVoiceNoteToWhatsApp(
+          audioUri,
+          provider.name,
+          spanishText,
+          phone,
+          {
+            roomId: thread.roomId,
+            contractorName: provider.name,
+            clientName: clientName,
+            phone: phone,
+            englishText: englishText,
+          }
+        );
       } else {
         await sendTextToWhatsApp(spanishText, phone);
       }
@@ -177,8 +257,36 @@ export const RecipientDispatchModal: React.FC<RecipientDispatchModalProps> = ({
   const handleGeneralShare = async () => {
     setSendingRecipientId('general_share');
     try {
+      const thread = await getOrCreateThreadForContact({
+        name: 'Shared Contact',
+        category: 'General',
+        avatarIcon: 'chatbubbles-outline',
+      });
+
+      await addMessageToThread(thread.id, {
+        sender: 'EXPAT',
+        textEnglish: englishText || spanishText,
+        textSpanish: spanishText,
+        audioUri: audioUri || undefined,
+        timestamp: Date.now(),
+      });
+
+      const profile = await getUserProfile();
+      const clientName = (profile.displayName && profile.displayName.trim() && profile.displayName.trim().toLowerCase() !== 'client') ? profile.displayName.trim() : '';
+
       if (dispatchType === 'voice_note' && audioUri) {
-        await shareVoiceNoteToWhatsApp(audioUri, 'Contact', spanishText);
+        await shareVoiceNoteToWhatsApp(
+          audioUri,
+          'Contact',
+          spanishText,
+          undefined,
+          {
+            roomId: thread.roomId,
+            contractorName: 'Provider',
+            clientName: clientName,
+            englishText: englishText,
+          }
+        );
       } else {
         await sendTextToWhatsApp(spanishText);
       }
@@ -850,24 +958,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    flexShrink: 0,
   },
   starBtn: {
     padding: 6,
+    flexShrink: 0,
   },
   sendItemBtn: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#25D366',
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     paddingVertical: 7,
     borderRadius: 10,
-    gap: 4,
+    gap: 5,
+    minWidth: 80,
+    flexShrink: 0,
     overflow: 'visible',
   },
   sendItemBtnText: {
-    fontSize: 12,
+    fontSize: 12.5,
     fontWeight: '700',
     color: '#FFFFFF',
+    letterSpacing: 0.2,
+    paddingRight: 4,
+    includeFontPadding: false,
   },
   emptyState: {
     alignItems: 'center',

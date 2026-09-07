@@ -14,6 +14,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { WhatsAppIcon } from '../components/WhatsAppIcon';
+import { SpeakerIcon } from '../components/SpeakerIcon';
 import { Colors } from '../theme/colors';
 import { GOOGLE_SPANISH_VOICES, VoiceOption } from '../services/googleVoice';
 import { AnimatedParrotMascot } from '../components/AnimatedParrotMascot';
@@ -164,7 +165,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
 
               <View style={styles.featureItem}>
                 <View style={[styles.featIconDisc, { backgroundColor: '#F0F9FF', borderColor: '#BAE6FD' }]}>
-                  <Ionicons name="volume-medium-outline" size={20} color="#0284C7" />
+                  <SpeakerIcon size={20} color="#0284C7" />
                 </View>
                 <View style={styles.featText}>
                   <Text style={[styles.featTag, { color: '#0284C7' }]}>AUTHENTIC DIALECT</Text>
@@ -350,7 +351,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
               <View style={styles.summaryRow}>
                 <View style={styles.summaryLeft}>
                   <View style={[styles.featIconDisc, { backgroundColor: '#F4F1EA', borderColor: '#E5E0D8' }]}>
-                    <Ionicons name="volume-medium-outline" size={18} color="#1B1C1A" />
+                    <SpeakerIcon size={18} color="#1B1C1A" />
                   </View>
                   <View>
                     <Text style={styles.summaryLabel}>CHOSEN VOICE</Text>

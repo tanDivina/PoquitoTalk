@@ -32,6 +32,8 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
   const armRaiseAnim = useRef(new Animated.Value(0)).current;
   const antennaVibrateAnim = useRef(new Animated.Value(0)).current;
   const featherRuffleAnim = useRef(new Animated.Value(0)).current;
+  const walkieWaveAnim = useRef(new Animated.Value(0)).current;
+  const walkieLedAnim = useRef(new Animated.Value(0)).current;
 
   // Inject web keyframe animations for ultra-smooth feather ruffling and radio waves
   useEffect(() => {
@@ -88,6 +90,8 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
     beakAnim.setValue(0);
     armRaiseAnim.setValue(0);
     antennaVibrateAnim.setValue(0);
+    walkieWaveAnim.setValue(0);
+    walkieLedAnim.setValue(0);
 
     let loop: Animated.CompositeAnimation | null = null;
 
@@ -111,41 +115,41 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
               }),
             ])
           ),
-          // Expressive looking-around sequence (Strictly inside eyeball socket: max 2.2px offset)
+          // Expressive looking-around sequence (Gentle, smooth sinusoidal glide)
           Animated.loop(
             Animated.sequence([
               // Look right toward radio
               Animated.timing(pupilAnim, {
-                toValue: { x: 2.2, y: 0 },
-                duration: 400,
-                easing: Easing.inOut(Easing.ease),
+                toValue: { x: 1.5, y: 0 },
+                duration: 800,
+                easing: Easing.inOut(Easing.sin),
                 useNativeDriver: true,
               }),
-              Animated.delay(1600),
-              // Look up
-              Animated.timing(pupilAnim, {
-                toValue: { x: 0, y: -1.8 },
-                duration: 350,
-                easing: Easing.inOut(Easing.ease),
-                useNativeDriver: true,
-              }),
-              Animated.delay(1200),
-              // Look left at user
-              Animated.timing(pupilAnim, {
-                toValue: { x: -2.2, y: 0.4 },
-                duration: 400,
-                easing: Easing.inOut(Easing.ease),
-                useNativeDriver: true,
-              }),
-              Animated.delay(1600),
+              Animated.delay(2000),
               // Return to center
               Animated.timing(pupilAnim, {
                 toValue: { x: 0, y: 0 },
-                duration: 350,
-                easing: Easing.inOut(Easing.ease),
+                duration: 650,
+                easing: Easing.inOut(Easing.sin),
                 useNativeDriver: true,
               }),
-              Animated.delay(1400),
+              Animated.delay(1600),
+              // Look left at user
+              Animated.timing(pupilAnim, {
+                toValue: { x: -1.4, y: 0.3 },
+                duration: 800,
+                easing: Easing.inOut(Easing.sin),
+                useNativeDriver: true,
+              }),
+              Animated.delay(2000),
+              // Return to center
+              Animated.timing(pupilAnim, {
+                toValue: { x: 0, y: 0 },
+                duration: 650,
+                easing: Easing.inOut(Easing.sin),
+                useNativeDriver: true,
+              }),
+              Animated.delay(2200),
             ])
           ),
         ]);
@@ -196,35 +200,80 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
         Animated.parallel([
           Animated.spring(tiltAnim, { toValue: 13, useNativeDriver: true }),
           Animated.timing(pupilAnim, {
-            toValue: { x: 2.5, y: -3 },
-            duration: 600,
+            toValue: { x: 2.0, y: -2.0 },
+            duration: 650,
+            easing: Easing.inOut(Easing.sin),
             useNativeDriver: true,
           }),
         ]).start();
         break;
 
       case 'listening':
-        Animated.spring(eyeScaleYAnim, { toValue: 1.08, useNativeDriver: true }).start();
-        loop = Animated.loop(
-          Animated.sequence([
-            Animated.timing(tiltAnim, {
-              toValue: -5,
-              duration: 900,
-              easing: Easing.inOut(Easing.ease),
-              useNativeDriver: true,
-            }),
-            Animated.timing(tiltAnim, {
-              toValue: -2,
-              duration: 900,
-              easing: Easing.inOut(Easing.ease),
-              useNativeDriver: true,
-            }),
-          ])
-        );
+        Animated.spring(eyeScaleYAnim, { toValue: 1.05, useNativeDriver: true }).start();
+        loop = Animated.parallel([
+          Animated.timing(tiltAnim, {
+            toValue: -2.5,
+            duration: 350,
+            easing: Easing.out(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.loop(
+            Animated.sequence([
+              Animated.timing(breatheAnim, {
+                toValue: 0.6,
+                duration: 800,
+                easing: Easing.inOut(Easing.sin),
+                useNativeDriver: true,
+              }),
+              Animated.timing(breatheAnim, {
+                toValue: 0,
+                duration: 800,
+                easing: Easing.inOut(Easing.sin),
+                useNativeDriver: true,
+              }),
+            ])
+          ),
+          Animated.timing(pupilAnim, {
+            toValue: { x: 0, y: 0 },
+            duration: 400,
+            easing: Easing.out(Easing.sin),
+            useNativeDriver: true,
+          }),
+          Animated.loop(
+            Animated.sequence([
+              Animated.timing(featherRuffleAnim, {
+                toValue: 1,
+                duration: 220,
+                easing: Easing.inOut(Easing.sin),
+                useNativeDriver: true,
+              }),
+              Animated.timing(featherRuffleAnim, {
+                toValue: -1,
+                duration: 220,
+                easing: Easing.inOut(Easing.sin),
+                useNativeDriver: true,
+              }),
+              Animated.timing(featherRuffleAnim, {
+                toValue: 0.5,
+                duration: 180,
+                easing: Easing.inOut(Easing.sin),
+                useNativeDriver: true,
+              }),
+              Animated.timing(featherRuffleAnim, {
+                toValue: 0,
+                duration: 180,
+                easing: Easing.inOut(Easing.sin),
+                useNativeDriver: true,
+              }),
+              Animated.delay(450),
+            ])
+          ),
+        ]);
         break;
 
       case 'talkie-rx':
         Animated.spring(eyeScaleYAnim, { toValue: 1.08, useNativeDriver: true }).start();
+        beakAnim.setValue(0); // Mouth stays firmly closed
         loop = Animated.parallel([
           Animated.loop(
             Animated.sequence([
@@ -244,18 +293,57 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
           ),
           Animated.loop(
             Animated.sequence([
-              Animated.timing(antennaVibrateAnim, {
+              Animated.timing(walkieWaveAnim, {
                 toValue: 1,
-                duration: 280,
+                duration: 700,
                 easing: Easing.inOut(Easing.ease),
+                useNativeDriver: true,
+              }),
+              Animated.timing(walkieWaveAnim, {
+                toValue: 0,
+                duration: 400,
+                easing: Easing.inOut(Easing.ease),
+                useNativeDriver: true,
+              }),
+            ])
+          ),
+          Animated.loop(
+            Animated.sequence([
+              Animated.timing(walkieLedAnim, {
+                toValue: 1,
+                duration: 400,
+                easing: Easing.inOut(Easing.ease),
+                useNativeDriver: true,
+              }),
+              Animated.timing(walkieLedAnim, {
+                toValue: 0,
+                duration: 400,
+                easing: Easing.inOut(Easing.ease),
+                useNativeDriver: true,
+              }),
+            ])
+          ),
+          Animated.loop(
+            Animated.sequence([
+              Animated.timing(antennaVibrateAnim, {
+                toValue: 1.5,
+                duration: 100,
+                easing: Easing.linear,
                 useNativeDriver: true,
               }),
               Animated.timing(antennaVibrateAnim, {
-                toValue: -1,
-                duration: 280,
-                easing: Easing.inOut(Easing.ease),
+                toValue: -1.5,
+                duration: 100,
+                easing: Easing.linear,
                 useNativeDriver: true,
               }),
+              Animated.timing(antennaVibrateAnim, {
+                toValue: 0,
+                duration: 100,
+                easing: Easing.linear,
+                useNativeDriver: true,
+              }),
+              Animated.delay(600),
             ])
           ),
         ]);
@@ -281,14 +369,93 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
         Animated.spring(eyeScaleYAnim, { toValue: 1, useNativeDriver: true }).start();
         Animated.parallel([
           Animated.spring(tiltAnim, { toValue: 0, useNativeDriver: true }),
-          Animated.spring(pupilAnim, {
-            toValue: { x: 2, y: -1 },
+          Animated.timing(pupilAnim, {
+            toValue: { x: 1.5, y: -0.8 },
+            duration: 550,
+            easing: Easing.out(Easing.sin),
             useNativeDriver: true,
           }),
         ]).start();
         break;
 
       case 'talkie-tx':
+        Animated.spring(eyeScaleYAnim, { toValue: 1, useNativeDriver: true }).start();
+        beakAnim.setValue(0); // Mouth stays firmly closed while transmitting
+        loop = Animated.parallel([
+          Animated.loop(
+            Animated.sequence([
+              Animated.timing(walkieWaveAnim, {
+                toValue: 1,
+                duration: 550,
+                easing: Easing.out(Easing.ease),
+                useNativeDriver: true,
+              }),
+              Animated.timing(walkieWaveAnim, {
+                toValue: 0,
+                duration: 250,
+                easing: Easing.in(Easing.ease),
+                useNativeDriver: true,
+              }),
+            ])
+          ),
+          Animated.loop(
+            Animated.sequence([
+              Animated.timing(walkieLedAnim, {
+                toValue: 1,
+                duration: 300,
+                easing: Easing.inOut(Easing.ease),
+                useNativeDriver: true,
+              }),
+              Animated.timing(walkieLedAnim, {
+                toValue: 0,
+                duration: 300,
+                easing: Easing.inOut(Easing.ease),
+                useNativeDriver: true,
+              }),
+            ])
+          ),
+          Animated.loop(
+            Animated.sequence([
+              Animated.timing(antennaVibrateAnim, {
+                toValue: 2,
+                duration: 70,
+                easing: Easing.linear,
+                useNativeDriver: true,
+              }),
+              Animated.timing(antennaVibrateAnim, {
+                toValue: -2,
+                duration: 70,
+                easing: Easing.linear,
+                useNativeDriver: true,
+              }),
+              Animated.timing(antennaVibrateAnim, {
+                toValue: 0,
+                duration: 70,
+                easing: Easing.linear,
+                useNativeDriver: true,
+              }),
+              Animated.delay(350),
+            ])
+          ),
+          Animated.loop(
+            Animated.sequence([
+              Animated.timing(breatheAnim, {
+                toValue: 0.5,
+                duration: 900,
+                easing: Easing.inOut(Easing.ease),
+                useNativeDriver: true,
+              }),
+              Animated.timing(breatheAnim, {
+                toValue: 0,
+                duration: 900,
+                easing: Easing.inOut(Easing.ease),
+                useNativeDriver: true,
+              }),
+            ])
+          ),
+        ]);
+        break;
+
       case 'talking':
         Animated.spring(eyeScaleYAnim, { toValue: 1, useNativeDriver: true }).start();
         loop = Animated.parallel([
@@ -330,61 +497,83 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
       case 'sway':
         Animated.spring(eyeScaleYAnim, { toValue: 1, useNativeDriver: true }).start();
         loop = Animated.parallel([
-          Animated.loop(
-            Animated.sequence([
-              Animated.timing(tiltAnim, {
-                toValue: -6,
-                duration: 1000,
-                easing: Easing.inOut(Easing.ease),
-                useNativeDriver: true,
-              }),
-              Animated.timing(tiltAnim, {
-                toValue: 6,
-                duration: 1000,
-                easing: Easing.inOut(Easing.ease),
-                useNativeDriver: true,
-              }),
-            ])
-          ),
+          Animated.sequence([
+            // Warm up gracefully from 0 to -3.5 with out-sine (smooth deceleration to 0 velocity)
+            Animated.timing(tiltAnim, {
+              toValue: -3.5,
+              duration: 800,
+              easing: Easing.out(Easing.sin),
+              useNativeDriver: true,
+            }),
+            // Infinite, continuous harmonic pendulum oscillation (0 velocity at both turnaround points)
+            Animated.loop(
+              Animated.sequence([
+                Animated.timing(tiltAnim, {
+                  toValue: 3.5,
+                  duration: 1600,
+                  easing: Easing.inOut(Easing.sin),
+                  useNativeDriver: true,
+                }),
+                Animated.timing(tiltAnim, {
+                  toValue: -3.5,
+                  duration: 1600,
+                  easing: Easing.inOut(Easing.sin),
+                  useNativeDriver: true,
+                }),
+              ])
+            ),
+          ]),
           Animated.loop(
             Animated.sequence([
               Animated.timing(breatheAnim, {
-                toValue: 0.6,
-                duration: 1200,
-                easing: Easing.inOut(Easing.ease),
+                toValue: 0.5,
+                duration: 1600,
+                easing: Easing.inOut(Easing.sin),
                 useNativeDriver: true,
               }),
               Animated.timing(breatheAnim, {
                 toValue: 0,
-                duration: 1200,
-                easing: Easing.inOut(Easing.ease),
+                duration: 1600,
+                easing: Easing.inOut(Easing.sin),
                 useNativeDriver: true,
               }),
             ])
           ),
           Animated.loop(
             Animated.sequence([
+              // 1. Gently glide gaze to the right
               Animated.timing(pupilAnim, {
-                toValue: { x: 2, y: 0 },
-                duration: 350,
-                easing: Easing.inOut(Easing.ease),
+                toValue: { x: 1.1, y: 0 },
+                duration: 850,
+                easing: Easing.inOut(Easing.sin),
                 useNativeDriver: true,
               }),
-              Animated.delay(1200),
-              Animated.timing(pupilAnim, {
-                toValue: { x: -2, y: 0.5 },
-                duration: 350,
-                easing: Easing.inOut(Easing.ease),
-                useNativeDriver: true,
-              }),
-              Animated.delay(1200),
+              Animated.delay(2400),
+              // 2. Softly glide back to center
               Animated.timing(pupilAnim, {
                 toValue: { x: 0, y: 0 },
-                duration: 300,
-                easing: Easing.inOut(Easing.ease),
+                duration: 700,
+                easing: Easing.inOut(Easing.sin),
                 useNativeDriver: true,
               }),
-              Animated.delay(1000),
+              Animated.delay(1800),
+              // 3. Gently glance slightly up-left (inquisitive parrot expression)
+              Animated.timing(pupilAnim, {
+                toValue: { x: -1.0, y: -0.5 },
+                duration: 850,
+                easing: Easing.inOut(Easing.sin),
+                useNativeDriver: true,
+              }),
+              Animated.delay(2400),
+              // 4. Softly glide back to center
+              Animated.timing(pupilAnim, {
+                toValue: { x: 0, y: 0 },
+                duration: 700,
+                easing: Easing.inOut(Easing.sin),
+                useNativeDriver: true,
+              }),
+              // 5. Rest comfortably looking forward at user
+              Animated.delay(2800),
             ])
           ),
         ]);
@@ -399,9 +588,74 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
   }, [state]);
 
   const isTalkie = state.startsWith('talkie-');
-  const isFront = state === 'talking' || state === 'sway';
   const ledColor = state === 'talkie-tx' ? '#EF4444' : '#25D366';
   const waveColor = state === 'talkie-tx' ? '#F59E0B' : '#25D366';
+
+  const walkieWaveScale = walkieWaveAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.85, 1.25],
+  });
+  const walkieWaveOpacity = walkieWaveAnim.interpolate({
+    inputRange: [0, 0.3, 1],
+    outputRange: [0.2, 1, 0],
+  });
+  const walkieLedScale = walkieLedAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.9, 1.4],
+  });
+  const walkieLedOpacity = walkieLedAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.35, 1],
+  });
+
+  if (state === 'sway' || state === 'idle') {
+    return (
+      <View style={[styles.container, { width: size, height: size }]}>
+        <Image
+          source={require('../assets/poquito_idle_perch_1_7_160.webp')}
+          style={{ width: size, height: size }}
+          resizeMode="contain"
+        />
+      </View>
+    );
+  }
+
+  if (state === 'listening') {
+    return (
+      <View style={[styles.container, { width: size, height: size }]}>
+        <Image
+          source={require('../assets/poquito_tilt_34_51_160.webp')}
+          style={{ width: size, height: size }}
+          resizeMode="contain"
+        />
+      </View>
+    );
+  }
+
+  if (state === 'talking') {
+    return (
+      <View style={[styles.container, { width: size, height: size }]}>
+        <Image
+          source={require('../assets/poquito_talk_58_73_160.webp')}
+          style={{ width: size, height: size }}
+          resizeMode="contain"
+        />
+      </View>
+    );
+  }
+
+  if (state === 'talkie-rx') {
+    return (
+      <View style={[styles.container, { width: size, height: size }]}>
+        <Image
+          source={require('../assets/poquito_listening_49_60_160.webp')}
+          style={{ width: size, height: size }}
+          resizeMode="contain"
+        />
+      </View>
+    );
+  }
+
 
   return (
     <View style={[styles.container, { width: size, height: size }]}>
@@ -409,6 +663,7 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
         style={{
           width: '100%',
           height: '100%',
+          transformOrigin: ['50%', '86%'],
           transform: [
             {
               rotate: tiltAnim.interpolate({
@@ -419,7 +674,7 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
             {
               scaleY: breatheAnim.interpolate({
                 inputRange: [0, 1, 2],
-                outputRange: [1, 1.02, 1.07],
+                outputRange: [1, 1.02, 1.06],
               }),
             },
           ],
@@ -429,8 +684,8 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
           <View style={{ width: size, height: size, position: 'relative' }}>
             {/* Base Talkie Rig & Body & Beak SVG */}
             <Svg viewBox="0 0 180 180" width={size} height={size} fill="none" style={StyleSheet.absoluteFill}>
-              {/* Wooden Perch */}
-              <Path d="M 30 152 Q 80 148 135 152" stroke="#B45309" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
+              {/* Straightened Wooden Perch */}
+              <Path d="M 28 152 L 138 152" stroke="#B45309" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
               {/* Claws */}
               <Path d="M 52 142 C 50 149 52 156 56 156 M 60 142 C 58 149 60 156 64 156 M 74 142 C 72 149 74 156 78 156 M 82 142 C 80 149 82 156 86 156" stroke="#F59E0B" strokeWidth={4.5} strokeLinecap="round" />
               {/* Body & Anchored Crown Group */}
@@ -443,8 +698,9 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
               </G>
               {/* Eye White Base */}
               <Circle cx="82" cy="54" r="9" fill="#FFF" stroke="#047857" strokeWidth={2.5} />
-              {/* Beak */}
+              {/* Beak Upper */}
               <Path d="M 96 48 C 112 48 120 62 106 74 C 101 77 94 73 95 67 C 97 61 94 52 96 48 Z" fill="#F59E0B" stroke="#047857" strokeWidth={3.5} strokeLinejoin="round" />
+              {/* Lower Beak (Static & Natural - closed while operating walkie) */}
               <Path d="M 96 68 C 102 70 104 74 98 75 C 95 75 94 71 96 68 Z" fill="#D97706" stroke="#047857" strokeWidth={1.8} strokeLinejoin="round" />
               {/* Walkie-Talkie Rig */}
               <G id="talkie-radio-group" transform="translate(-4, 0)">
@@ -458,15 +714,7 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
                 <Line x1="122" y1="102" x2="138" y2="102" stroke="#64748B" strokeWidth={2} strokeLinecap="round" />
                 <Rect x="143" y="76" width="4.5" height="14" rx="2.2" fill="#1E293B" />
                 <Circle cx="125" cy="78" r="3.8" fill="#0F172A" />
-                <Circle cx="125" cy="78" r="2.8" fill={ledColor} />
                 <Rect x="120" y="65" width="7" height="6" rx="1.5" fill="#1E293B" />
-                {state !== 'talkie-standby' && (
-                  <G className="talkie-radio-wave">
-                    <Path d="M 135 38 A 10 10 0 0 1 145 48" fill="none" stroke={waveColor} strokeWidth="3" strokeLinecap="round" />
-                    <Path d="M 139 32 A 16 16 0 0 1 153 46" fill="none" stroke={waveColor} strokeWidth="3" strokeLinecap="round" />
-                    <Path d="M 143 26 A 22 22 0 0 1 161 44" fill="none" stroke={waveColor} strokeWidth={2.5} strokeLinecap="round" opacity={0.75} />
-                  </G>
-                )}
               </G>
               {/* Wing Holding Walkie-Talkie (Solid and Stable) */}
               <G>
@@ -500,79 +748,203 @@ export const PoquitoAvatar: React.FC<PoquitoAvatarProps> = ({
                 <Circle cx="5.5" cy="7" r="1.8" fill="#FFF" />
               </Svg>
             </Animated.View>
-          </View>
-        ) : state === 'sway' || state === 'curious' || state === 'idle' ? (
-          <Image
-            source={require('../assets/poquito_talk_34_51_seamless_256.webp')}
-            style={{ width: size, height: size }}
-            resizeMode="contain"
-          />
-        ) : state === 'talking' ? (
-          <Image
-            source={require('../assets/poquito_talk_58_73_160.webp')}
-            style={{ width: size, height: size }}
-            resizeMode="contain"
-          />
-        ) : state === 'listening' ? (
-          <Image
-            source={require('../assets/poquito_listening_49_60_160.webp')}
-            style={{ width: size, height: size }}
-            resizeMode="contain"
-          />
-        ) : isFront ? (
-          <Svg viewBox="0 0 160 160" width={size} height={size} fill="none">
-            {/* Wooden Perch */}
-            <Path d="M 30 138 Q 80 134 130 138" stroke="#B45309" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
-            {/* Claws */}
-            <Path d="M 62 127 C 60 133 62 139 66 139 M 70 127 C 68 133 70 139 74 139" stroke="#F59E0B" strokeWidth={4} strokeLinecap="round" />
-            <Path d="M 86 127 C 84 133 86 139 90 139 M 94 127 C 92 133 94 139 98 139" stroke="#F59E0B" strokeWidth={4} strokeLinecap="round" />
-            {/* Front Body & Crown Feathers */}
-            <G id="front-body">
-              <Path d="M 80 18 C 96 18 108 30 112 50 C 116 72 118 100 110 118 C 104 130 96 132 80 132 C 64 132 56 130 50 118 C 42 100 44 72 48 50 C 52 30 64 18 80 18 Z" fill="#10B981" stroke="#047857" strokeWidth={4.5} strokeLinejoin="round" />
-              <Ellipse cx="80" cy="100" rx="18" ry="22" fill="#34D399" opacity={0.4} />
-              {/* Front Crown Feathers */}
-              <Path d="M 77 18.5 C 73 12 68 9 63 8" stroke="#047857" strokeWidth={3.2} strokeLinecap="round" fill="none" />
-              <Path d="M 83 18.5 C 87 12 92 9 97 8" stroke="#047857" strokeWidth={3.2} strokeLinecap="round" fill="none" />
-            </G>
-            <Path d="M 48 68 C 38 74 34 90 38 104 C 40 110 46 112 50 108 C 48 96 47 80 48 68 Z" fill="#06B6D4" stroke="#047857" strokeWidth={3} strokeLinejoin="round" />
-            <Path d="M 112 68 C 122 74 126 90 122 104 C 120 110 114 112 110 108 C 112 96 113 80 112 68 Z" fill="#06B6D4" stroke="#047857" strokeWidth={3} strokeLinejoin="round" />
-            <Circle cx="67" cy="56" r="9" fill="#FFF" stroke="#047857" strokeWidth={2.5} />
-            <Circle cx="69" cy="56" r="4.5" fill="#0F172A" />
-            <Circle cx="67" cy="54" r="1.8" fill="#FFF" />
-            <Circle cx="93" cy="56" r="9" fill="#FFF" stroke="#047857" strokeWidth={2.5} />
-            <Circle cx="95" cy="56" r="4.5" fill="#0F172A" />
-            <Circle cx="93" cy="54" r="1.8" fill="#FFF" />
-            <Path d="M 74 72 C 76 81 84 81 86 72 L 83 75 C 81 77 79 77 77 75 Z" fill="#D97706" stroke="#047857" strokeWidth={2} strokeLinejoin="round" />
-            <Path d="M 72 65 C 74 61 86 61 88 65 L 83 76 C 82 78 78 78 77 76 Z" fill="#F59E0B" stroke="#047857" strokeWidth={3} strokeLinejoin="round" />
-          </Svg>
-        ) : (
-          <Svg viewBox="0 0 160 160" width={size} height={size} fill="none">
-            {/* Wooden Perch */}
-            <Path d="M 30 135 Q 70 132 115 135" stroke="#B45309" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
-            {/* Claws */}
-            <Path d="M 48 124 C 46 131 48 138 52 138 M 56 124 C 54 131 56 138 60 138 M 70 124 C 68 131 70 138 74 138 M 78 124 C 76 131 78 138 82 138" stroke="#F59E0B" strokeWidth={4.5} strokeLinecap="round" />
-            {/* Body & Anchored Crown Group */}
-            <G id="side-body-group">
-              <Path d="M 35 125 C 27 108 25 90 29 70 C 33 42 50 18 73 18 C 91 18 100 34 98 52 C 95 72 97 100 92 116 C 82 131 58 136 35 125 Z" fill="#10B981" stroke="#047857" strokeWidth={4.5} strokeLinejoin="round" />
-              <Path d="M 58 19.2 C 55 13 52 9 47 8" stroke="#047857" strokeWidth={3.5} strokeLinecap="round" fill="none" />
-              <Path d="M 67 17.8 C 64 12 61 9 56 7" stroke="#047857" strokeWidth={3} strokeLinecap="round" fill="none" />
-            </G>
-            {/* Sleek Proportionate Wing */}
-            <Path
-              d="M 35 83 C 40 68 53 63 64 78 C 70 93 64 116 47 119 C 39 111 34 97 35 83 Z"
-              fill="#06B6D4"
-              stroke="#047857"
-              strokeWidth={3.5}
-              strokeLinejoin="round"
+
+            {/* Pulsing Transmit/Receive Radio Waves */}
+            {state !== 'talkie-standby' && (
+              <Animated.View
+                style={{
+                  position: 'absolute',
+                  left: 124 * (size / 180),
+                  top: 20 * (size / 180),
+                  width: 38 * (size / 180),
+                  height: 38 * (size / 180),
+                  opacity: walkieWaveOpacity,
+                  transform: [
+                    { scale: walkieWaveScale },
+                    { translateX: antennaVibrateAnim },
+                  ],
+                }}
+                pointerEvents="none"
+              >
+                <Svg viewBox="0 0 38 38" width={38 * (size / 180)} height={38 * (size / 180)} fill="none">
+                  <Path d="M 5 24 A 10 10 0 0 1 15 34" fill="none" stroke={waveColor} strokeWidth={3} strokeLinecap="round" />
+                  <Path d="M 9 18 A 16 16 0 0 1 23 32" fill="none" stroke={waveColor} strokeWidth={3} strokeLinecap="round" />
+                  <Path d="M 13 12 A 22 22 0 0 1 31 30" fill="none" stroke={waveColor} strokeWidth={2.5} strokeLinecap="round" opacity={0.8} />
+                </Svg>
+              </Animated.View>
+            )}
+
+            {/* Glowing Transmit/Receive LED Indicator */}
+            <Animated.View
+              style={{
+                position: 'absolute',
+                left: (121 - 3) * (size / 180),
+                top: (78 - 3) * (size / 180),
+                width: 6 * (size / 180),
+                height: 6 * (size / 180),
+                borderRadius: 3 * (size / 180),
+                backgroundColor: ledColor,
+                opacity: state === 'talkie-standby' ? 0.4 : walkieLedOpacity,
+                transform: [{ scale: state === 'talkie-standby' ? 1 : walkieLedScale }],
+              }}
+              pointerEvents="none"
             />
-            {/* Eye (Scalable for wake-up / closed eye) */}
-            <Circle cx="76" cy="42" r="9" fill="#FFF" stroke="#047857" strokeWidth={2.5} />
-            <Circle cx="74.5" cy="42" r="4.5" fill="#0F172A" />
-            <Circle cx="72.5" cy="40" r="1.8" fill="#FFF" />
-            {/* Beak */}
-            <Path d="M 90 36 C 106 36 114 50 100 62 C 95 65 88 61 89 55 C 91 49 88 40 90 36 Z" fill="#F59E0B" stroke="#047857" strokeWidth={3.5} strokeLinejoin="round" />
-            <Path d="M 90 56 C 96 58 98 62 92 63 C 89 63 88 59 90 56 Z" fill="#D97706" stroke="#047857" strokeWidth={1.8} strokeLinejoin="round" />
-          </Svg>
+          </View>
+        ) : (
+          <View style={{ width: size, height: size, position: 'relative' }}>
+            <Svg viewBox="0 0 160 160" width={size} height={size} fill="none" style={StyleSheet.absoluteFill}>
+              {/* 1. Wooden Perch Branch */}
+              <Path
+                d="M 28 136 Q 80 133 132 136"
+                stroke="#B45309"
+                strokeWidth={7}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+
+              {/* 2. Symmetric Golden Claws */}
+              <Path
+                d="M 62 126 C 60 132 62 138 66 138 M 70 126 C 68 132 70 138 74 138"
+                stroke="#F59E0B"
+                strokeWidth={4}
+                strokeLinecap="round"
+              />
+              <Path
+                d="M 86 126 C 84 132 86 138 90 138 M 94 126 C 92 132 94 138 98 138"
+                stroke="#F59E0B"
+                strokeWidth={4}
+                strokeLinecap="round"
+              />
+
+              {/* 3. Front Torso & Chest Glow */}
+              <G id="front-body">
+                <Path
+                  d="M 80 18 C 96 18 108 30 112 50 C 116 72 118 100 110 118 C 104 130 96 132 80 132 C 64 132 56 130 50 118 C 42 100 44 72 48 50 C 52 30 64 18 80 18 Z"
+                  fill="#10B981"
+                  stroke="#047857"
+                  strokeWidth={4.5}
+                  strokeLinejoin="round"
+                />
+                <Ellipse cx={80} cy={100} rx={18} ry={22} fill="#34D399" opacity={0.4} />
+              </G>
+
+              {/* 4. Left & Right Cyan Wings */}
+              <Path
+                d="M 48 68 C 38 74 34 90 38 104 C 40 110 46 112 50 108 C 48 96 47 80 48 68 Z"
+                fill="#06B6D4"
+                stroke="#047857"
+                strokeWidth={3}
+                strokeLinejoin="round"
+              />
+              <Path
+                d="M 112 68 C 122 74 126 90 122 104 C 120 110 114 112 110 108 C 112 96 113 80 112 68 Z"
+                fill="#06B6D4"
+                stroke="#047857"
+                strokeWidth={3}
+                strokeLinejoin="round"
+              />
+
+              {/* 5. Big Expressive Eye Whites */}
+              <Circle cx={67} cy={56} r={9} fill="#FFFFFF" stroke="#047857" strokeWidth={2.5} />
+              <Circle cx={93} cy={56} r={9} fill="#FFFFFF" stroke="#047857" strokeWidth={2.5} />
+
+              {/* 6. Beak */}
+              <Path
+                d="M 74 72 C 76 80 84 80 86 72 L 83 75 C 81 77 79 77 77 75 Z"
+                fill="#D97706"
+                stroke="#047857"
+                strokeWidth={2}
+                strokeLinejoin="round"
+              />
+              <Path
+                d="M 72 65 C 74 61 86 61 88 65 L 83 76 C 82 78 78 78 77 76 Z"
+                fill="#F59E0B"
+                stroke="#047857"
+                strokeWidth={3}
+                strokeLinejoin="round"
+              />
+            </Svg>
+
+            {/* Left Eye Animated Looking Pupil */}
+            <Animated.View
+              style={{
+                position: 'absolute',
+                left: (67 - 4.5) * (size / 160),
+                top: (56 - 4.5) * (size / 160),
+                width: 9 * (size / 160),
+                height: 9 * (size / 160),
+                transform: [
+                  { translateX: pupilAnim.x },
+                  { translateY: pupilAnim.y },
+                ],
+              }}
+              pointerEvents="none"
+            >
+              <Svg viewBox="0 0 9 9" width={9 * (size / 160)} height={9 * (size / 160)} fill="none">
+                <Circle cx="4.5" cy="4.5" r="4.5" fill="#0F172A" />
+                <Circle cx="3" cy="3.5" r="1.8" fill="#FFFFFF" />
+              </Svg>
+            </Animated.View>
+
+            {/* Right Eye Animated Looking Pupil */}
+            <Animated.View
+              style={{
+                position: 'absolute',
+                left: (93 - 4.5) * (size / 160),
+                top: (56 - 4.5) * (size / 160),
+                width: 9 * (size / 160),
+                height: 9 * (size / 160),
+                transform: [
+                  { translateX: pupilAnim.x },
+                  { translateY: pupilAnim.y },
+                ],
+              }}
+              pointerEvents="none"
+            >
+              <Svg viewBox="0 0 9 9" width={9 * (size / 160)} height={9 * (size / 160)} fill="none">
+                <Circle cx="4.5" cy="4.5" r="4.5" fill="#0F172A" />
+                <Circle cx="3" cy="3.5" r="1.8" fill="#FFFFFF" />
+              </Svg>
+            </Animated.View>
+
+            {/* Crown Crest Feathers with Animated Flutter / Ruffle */}
+            <Animated.View
+              style={{
+                position: 'absolute',
+                left: (80 - 24) * (size / 160),
+                top: 4 * (size / 160),
+                width: 48 * (size / 160),
+                height: 22 * (size / 160),
+                transformOrigin: ['50%', '100%'],
+                transform: [
+                  {
+                    rotate: featherRuffleAnim.interpolate({
+                      inputRange: [-1, 0, 1],
+                      outputRange: ['-9deg', '0deg', '9deg'],
+                    }),
+                  },
+                ],
+              }}
+              pointerEvents="none"
+            >
+              <Svg viewBox="0 0 48 22" width={48 * (size / 160)} height={22 * (size / 160)} fill="none">
+                <Path
+                  d="M 21 17 C 17 10 12 7 7 6"
+                  stroke="#047857"
+                  strokeWidth={3.4}
+                  strokeLinecap="round"
+                  fill="none"
+                />
+                <Path
+                  d="M 27 17 C 31 10 36 7 41 6"
+                  stroke="#047857"
+                  strokeWidth={3.4}
+                  strokeLinecap="round"
+                  fill="none"
+                />
+              </Svg>
+            </Animated.View>
+          </View>
         )}
       </Animated.View>
     </View>

@@ -111,7 +111,7 @@ Located in `src/services/documentScanner.ts`, the scanner analyzes documents and
 Strictly bans unverified mock placeholders. Contains real, active services in Bocas del Toro:
 
 1. **Banco Nacional de Panamá**: Calle 4ta (Vía Aeropuerto), Bocas Town • +507 757-9230 • Branch + 3 ATMs 24/7.
-2. **Duo2 Market ATM (Near Police Station)**: In front of Duo2 Market, Calle 1ra/2da next to Policía Nacional & Parque Simón Bolívar.
+2. **Duo2 Market ATM (Near Police Station)**: Inside Duo2 Market, Calle 1ra/2da next to Policía Nacional & Parque Simón Bolívar.
 3. **Supermarket Alba ATM (Calle 3ra)**: In front of Supermarket Alba on the main street.
 4. **Western Union Changuinola Main**: Av. 17 de Abril, Edificio Sincota • +507 301-2623.
 5. **Western Union Guabito Border**: Ave. Principal Guabito (Costa Rica border crossing) • +507 758-3877.

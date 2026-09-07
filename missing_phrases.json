@@ -1,0 +1,534 @@
+{
+  "diegoMissing": [
+    {
+      "id": "boat_fiberglass_patch",
+      "category": "Boats",
+      "title": "Fiberglass Hull Leak Repair",
+      "input": "Hello, we noticed a minor crack and slow leak on the fiberglass hull. Do you do marine fiberglass repairs?",
+      "output": "¡Hola! Notamos una pequeña fisura y filtración de agua en el casco de fibra de vidrio. ¿Hacen trabajos de fibra marina?",
+      "resolvedId": "boat_fiberglass_patch"
+    },
+    {
+      "id": "taxi_drago_starfish",
+      "category": "Taxi",
+      "title": "Trip to Boca del Drago",
+      "input": "Hello, are you available to take us to Boca del Drago and pick us back up at 4 PM?",
+      "output": "¡Buenas! ¿Estará disponible para llevarnos a Boca del Drago y pasar por nosotros de regreso a las 4 de la tarde?",
+      "resolvedId": "taxi_drago_starfish"
+    },
+    {
+      "id": "car_golf_cart_electric_issue",
+      "category": "Taxi",
+      "title": "Electric Golf Cart Issue",
+      "input": "Hi, our electric golf cart is losing acceleration and the solenoid clicks. Do you service UTVs or golf carts?",
+      "output": "¡Buenas! El carrito de golf eléctrico pierde fuerza y el solenoide hace clic. ¿Dan mantenimiento a carritos de golf o UTV?",
+      "resolvedId": "car_golf_cart_electric_issue"
+    },
+    {
+      "id": "electrician_breaker_panel",
+      "category": "Electric",
+      "title": "Breaker Tripping / Short Circuit",
+      "input": "Hi, our main circuit breaker keeps tripping whenever we turn on the stove or water heater. Can an electrician inspect it?",
+      "output": "¡Buenas! El breaker principal se sigue disparando cada vez que prendemos la estufa o el calentador. ¿Puede venir un electricista?",
+      "resolvedId": "electrician_breaker_panel"
+    },
+    {
+      "id": "solar_inverter_battery_bank",
+      "category": "Electric",
+      "title": "Solar Inverter Error / Batteries",
+      "input": "Hi! Our off-grid solar system inverter has a red fault light and the lithium battery bank is not charging properly.",
+      "output": "¡Buenas! El inversor del sistema solar tiene luz roja de falla y el banco de baterías no está cargando bien.",
+      "resolvedId": "solar_inverter_battery_bank"
+    },
+    {
+      "id": "solar_panel_cleaning_check",
+      "category": "Electric",
+      "title": "Solar Panel Inspection & Check",
+      "input": "Hello, I need maintenance and output testing for our rooftop solar panels and charge controller in Bocas.",
+      "output": "¡Hola! Necesito mantenimiento y prueba de generación para nuestros paneles solares y controlador de carga en Bocas.",
+      "resolvedId": "solar_panel_cleaning_check"
+    },
+    {
+      "id": "garden_mowing_chapeo",
+      "category": "Gardening",
+      "title": "Lawn Mowing & Machete Chapeo",
+      "input": "Hi! Are you available this week for mowing, weed whacking (chapeo), and clearing overgrown brush on our property?",
+      "output": "¡Buenas! ¿Tendrá disponibilidad esta semana para cortar la hierba, chapear con machete y limpiar el terreno?",
+      "resolvedId": "garden_mowing_chapeo"
+    },
+    {
+      "id": "garden_tree_palm_trimming",
+      "category": "Gardening",
+      "title": "Coconut Palm & Tree Trimming",
+      "input": "Hello! We have tall coconut palms with heavy coconuts and dead fronds hanging over the roof. Do you climb and trim palms?",
+      "output": "¡Hola! Tenemos palmas de coco altas con cocos y pencas secas sobre el techo. ¿Usted trepa y poda palmas?",
+      "resolvedId": "garden_tree_palm_trimming"
+    },
+    {
+      "id": "garden_brush_haulaway",
+      "category": "Gardening",
+      "title": "Yard Debris & Brush Removal",
+      "input": "Hi! Do you have a truck or boat to haul away green yard waste and branches cut from our garden?",
+      "output": "¡Buenas! ¿Tiene vehículo o lancha para recoger y botar los restos de poda y ramas de nuestro patio?",
+      "resolvedId": "garden_brush_haulaway"
+    },
+    {
+      "id": "garden_soil_compost_delivery",
+      "category": "Gardening",
+      "title": "Black Soil & Compost Delivery",
+      "input": "Hello! How much is a yard or sack of rich black garden soil and organic compost delivered to our dock or home?",
+      "output": "¡Hola! ¿A cuánto tiene la yarda o saco de tierra negra abonada y compost orgánico con entrega a nuestro muelle o casa?",
+      "resolvedId": "garden_soil_compost_delivery"
+    },
+    {
+      "id": "garden_plants_fruit_trees",
+      "category": "Gardening",
+      "title": "Fruit Trees & Native Plants",
+      "input": "Hi! Do you have grafted fruit trees (mango, avocado, citrus) and tropical ornamental plants available at your nursery?",
+      "output": "¡Buenas! ¿Tienen árboles frutales injertados (mango, aguacate, cítricos) y plantas ornamentales en su vivero?",
+      "resolvedId": "garden_plants_fruit_trees"
+    },
+    {
+      "id": "garden_nursery_availability",
+      "category": "Gardening",
+      "title": "Grass Plugs & Tropical Flowers",
+      "input": "Hello! Do you have San Agustín grass plugs, bougainvillea, and hibiscus plants ready for planting?",
+      "output": "¡Hola! ¿Tienen esquejes de pasto San Agustín, veraneras e hibiscos listos para sembrar?",
+      "resolvedId": "garden_nursery_availability"
+    },
+    {
+      "id": "contractor_dock_repair",
+      "category": "Contractor",
+      "title": "Dock Pilings & Deck Planks",
+      "input": "Hi! We need an experienced contractor to replace rotten dock planks and inspect over-water pilings.",
+      "output": "¡Buenas! Necesitamos un contratista con experiencia para cambiar tablas podridas del muelle y revisar los pilotes sobre el agua.",
+      "resolvedId": "contractor_dock_repair"
+    },
+    {
+      "id": "contractor_wood_treatment",
+      "category": "Contractor",
+      "title": "Marine Hardwood & Termite Treatment",
+      "input": "Hello! Do you build with local hardwoods (nispero, almendro) and do anti-termite / marine wood sealer treatments?",
+      "output": "¡Hola! ¿Trabajan con maderas duras locales (níspero, almendro) y aplican tratamiento contra termitas y sellador marino?",
+      "resolvedId": "contractor_wood_treatment"
+    },
+    {
+      "id": "contractor_carpentry_custom",
+      "category": "Contractor",
+      "title": "Custom Shelving & Door Fitting",
+      "input": "Hi, I need a carpenter to build custom hardwood shelves and fix a wooden exterior door swollen from humidity.",
+      "output": "¡Buenas! Necesito un carpintero para fabricar repisas de madera y ajustar una puerta exterior que se hinchó con la humedad.",
+      "resolvedId": "contractor_carpentry_custom"
+    },
+    {
+      "id": "landlord_roof_leak_rain",
+      "category": "Contractor",
+      "title": "Urgent Roof Leak in Heavy Rain",
+      "input": "Hi! During the rain, water started leaking through the roof ceiling. Could someone inspect and seal the leak?",
+      "output": "¡Buenas! Con el aguacero empezó a gotear agua por el cielo raso. ¿Podría venir alguien a revisar y sellar la gotera?",
+      "resolvedId": "landlord_roof_leak_rain"
+    },
+    {
+      "id": "contractor_concrete_masonry",
+      "category": "Contractor",
+      "title": "Masonry, Tile & Concrete Fixes",
+      "input": "Hello, we need a mason to patch cracked concrete walkway steps and replace loose outdoor tiles.",
+      "output": "¡Hola! Necesitamos un albañil para reparar escalones de concreto cuarteados y cambiar baldosas sueltas de exterior.",
+      "resolvedId": "contractor_concrete_masonry"
+    },
+    {
+      "id": "starlink_rooftop_mount_cable",
+      "category": "Internet",
+      "title": "Rooftop Mast Mount & Cable Routing",
+      "input": "Hi! We need help mounting our Starlink dish on a sturdy roof pole and neatly routing the cable indoors.",
+      "output": "¡Buenas! Necesitamos ayuda para montar la antena de Starlink en un poste firme en el techo y pasar el cable hacia adentro.",
+      "resolvedId": "starlink_rooftop_mount_cable"
+    },
+    {
+      "id": "starlink_mesh_extender",
+      "category": "Internet",
+      "title": "Mesh Wi-Fi Extenders Setup",
+      "input": "Hi! The Wi-Fi signal does not reach our guest bedrooms or dock. Can you install and configure mesh Wi-Fi access points?",
+      "output": "¡Buenas! La señal de Wi-Fi no llega a los cuartos de visita ni al muelle. ¿Puede instalar y configurar repetidores de red mesh?",
+      "resolvedId": "starlink_mesh_extender"
+    },
+    {
+      "id": "banking_yappy_acceptance",
+      "category": "Money",
+      "title": "Accepting Yappy Mobile Pay",
+      "input": "Hello! Do you accept Yappy for payment here, or is it cash only?",
+      "output": "¡Buenas! ¿Aceptan pago por Yappy aquí o solo es en efectivo?",
+      "resolvedId": "banking_yappy_acceptance"
+    },
+    {
+      "id": "banking_yappy_qr",
+      "category": "Money",
+      "title": "Phone Number / Name for Yappy",
+      "input": "Hello! What is your registered phone number or business name in Yappy so I can transfer the payment?",
+      "output": "¡Hola! ¿A qué número de teléfono o nombre comercial le transfiero el pago por Yappy?",
+      "resolvedId": "banking_yappy_qr"
+    },
+    {
+      "id": "yappy_receipt_sent",
+      "category": "Money",
+      "title": "Yappy Payment Proof Sent",
+      "input": "Hi! I just sent the payment via Yappy. I am sharing the digital transfer receipt screenshot right here.",
+      "output": "¡Buenas! Ya le envié el pago por Yappy. Le comparto la captura del comprobante de transferencia aquí mismo.",
+      "resolvedId": "yappy_receipt_sent"
+    },
+    {
+      "id": "dining_split_bill_tip",
+      "category": "Dining",
+      "title": "Separate Checks & Tip Included",
+      "input": "Hello, could you please split the bill between 2 cards, and does the total include the tip (propina)?",
+      "output": "¡Buenas! ¿Nos podría dividir la cuenta entre 2 tarjetas, y el total ya incluye la propina?",
+      "resolvedId": "dining_split_bill_tip"
+    },
+    {
+      "id": "pharmacy_rehydration_electrolytes",
+      "category": "Medical",
+      "title": "Electrolytes & Stomach Infection",
+      "input": "Hi! Do you have oral rehydration electrolyte salts (suero oral) and probiotics for food poisoning or traveler diarrhea?",
+      "output": "¡Buenas! ¿Tienen suero oral de rehidratación con electrolitos y probióticos para infección estomacal o diarrea?",
+      "resolvedId": "pharmacy_rehydration_electrolytes"
+    },
+    {
+      "id": "pharmacy_mosquito_dengue_repellent",
+      "category": "Medical",
+      "title": "Mosquito Repellent & Dengue Prevention",
+      "input": "Hello! Do you have strong mosquito repellent with DEET / Picaridin and antihistamine cream for sandfly bites?",
+      "output": "¡Hola! ¿Tienen repelente fuerte con DEET y crema antihistamínica para picaduras de chitras o mosquitos?",
+      "resolvedId": "pharmacy_mosquito_dengue_repellent"
+    },
+    {
+      "id": "pet_dog_injury_cut",
+      "category": "Vet",
+      "title": "Dog Wound / Cut Emergency",
+      "input": "Hello, our dog stepped on broken glass or coral and has a deep bleeding cut on his paw pad. Can a vet stitch it?",
+      "output": "¡Hola! Nuestro perro pisó vidrio o coral y tiene una cortada profunda sangrando en la almohadilla. ¿Pueden suturarlo?",
+      "resolvedId": "pet_dog_injury_cut"
+    },
+    {
+      "id": "pet_spay_neuter_vaccines",
+      "category": "Vet",
+      "title": "Rabies Vaccines & Deworming",
+      "input": "Hi, I would like to schedule an annual rabies vaccination booster and internal deworming for our rescue pet.",
+      "output": "¡Buenas! Quisiera agendar el refuerzo anual de la vacuna contra la rabia y desparasitación interna para nuestra mascota.",
+      "resolvedId": "pet_spay_neuter_vaccines"
+    },
+    {
+      "id": "community_bocas_slang_friendly",
+      "category": "Community",
+      "title": "Island Slang: ¿Qué xopá mi compa?",
+      "input": "Friendly local greeting: ",
+      "output": "¡Qué xopá mi compa! ¿Cómo va todo por acá hoy? Todo bien, todo pritty.",
+      "resolvedId": "community_bocas_slang_friendly"
+    },
+    {
+      "id": "community_greeting_respect",
+      "category": "Community",
+      "title": "Respectful Morning Greeting: ¡Buenas!",
+      "input": "Polite daytime greeting: ",
+      "output": "¡Buenas días! ¿Cómo está usted hoy? Que tenga una excelente y bendecida jornada.",
+      "resolvedId": "community_greeting_respect"
+    },
+    {
+      "id": "community_surf_swell_tides",
+      "category": "Community",
+      "title": "Surf Swell, Wave Report & Tides",
+      "input": "Hi! How is the surf swell breaking at Paunch, Bluff, or Carenero point today, and when is high tide?",
+      "output": "¡Buenas! ¿Cómo están reventando las olas en Paunch, Bluff o la punta de Carenero hoy, y a qué hora es marea alta?",
+      "resolvedId": "community_surf_swell_tides"
+    },
+    {
+      "id": "community_weather_rain_forecast",
+      "category": "Community",
+      "title": "Rain Forecast & Sea Conditions",
+      "input": "Hello, is the open ocean rough outside the bay today, or is the water calm for boat crossings?",
+      "output": "¡Hola! ¿Estará picado el mar abierto fuera de la bahía hoy, o está calma el agua para cruzar en lancha?",
+      "resolvedId": "community_weather_rain_forecast"
+    },
+    {
+      "id": "community_garbage_boat_schedule",
+      "category": "Community",
+      "title": "Garbage Collection Boat Schedule",
+      "input": "Hi! What days and times does the municipal garbage boat or truck pass by our neighborhood dock for collection?",
+      "output": "¡Buenas! ¿Qué días y a qué horas pasa la lancha o el camión recolector de basura por nuestro muelle?",
+      "resolvedId": "community_garbage_boat_schedule"
+    },
+    {
+      "id": "community_artisan_farmers_market",
+      "category": "Community",
+      "title": "Local Farmers Market & Produce",
+      "input": "Hello! When and where does the local organic farmers market take place in Bocas Town or Old Bank?",
+      "output": "¡Hola! ¿Cuándo y en qué lugar se realiza el mercado orgánico de productores agrícolas locales en Bocas Town u Old Bank?",
+      "resolvedId": "community_artisan_farmers_market"
+    }
+  ],
+  "sofiaMissing": [
+    {
+      "id": "boat_fiberglass_patch",
+      "category": "Boats",
+      "title": "Fiberglass Hull Leak Repair",
+      "input": "Hello, we noticed a minor crack and slow leak on the fiberglass hull. Do you do marine fiberglass repairs?",
+      "output": "¡Hola! Notamos una pequeña fisura y filtración de agua en el casco de fibra de vidrio. ¿Hacen trabajos de fibra marina?",
+      "resolvedId": "boat_fiberglass_patch"
+    },
+    {
+      "id": "taxi_drago_starfish",
+      "category": "Taxi",
+      "title": "Trip to Boca del Drago",
+      "input": "Hello, are you available to take us to Boca del Drago and pick us back up at 4 PM?",
+      "output": "¡Buenas! ¿Estará disponible para llevarnos a Boca del Drago y pasar por nosotros de regreso a las 4 de la tarde?",
+      "resolvedId": "taxi_drago_starfish"
+    },
+    {
+      "id": "car_golf_cart_electric_issue",
+      "category": "Taxi",
+      "title": "Electric Golf Cart Issue",
+      "input": "Hi, our electric golf cart is losing acceleration and the solenoid clicks. Do you service UTVs or golf carts?",
+      "output": "¡Buenas! El carrito de golf eléctrico pierde fuerza y el solenoide hace clic. ¿Dan mantenimiento a carritos de golf o UTV?",
+      "resolvedId": "car_golf_cart_electric_issue"
+    },
+    {
+      "id": "electrician_breaker_panel",
+      "category": "Electric",
+      "title": "Breaker Tripping / Short Circuit",
+      "input": "Hi, our main circuit breaker keeps tripping whenever we turn on the stove or water heater. Can an electrician inspect it?",
+      "output": "¡Buenas! El breaker principal se sigue disparando cada vez que prendemos la estufa o el calentador. ¿Puede venir un electricista?",
+      "resolvedId": "electrician_breaker_panel"
+    },
+    {
+      "id": "solar_inverter_battery_bank",
+      "category": "Electric",
+      "title": "Solar Inverter Error / Batteries",
+      "input": "Hi! Our off-grid solar system inverter has a red fault light and the lithium battery bank is not charging properly.",
+      "output": "¡Buenas! El inversor del sistema solar tiene luz roja de falla y el banco de baterías no está cargando bien.",
+      "resolvedId": "solar_inverter_battery_bank"
+    },
+    {
+      "id": "solar_panel_cleaning_check",
+      "category": "Electric",
+      "title": "Solar Panel Inspection & Check",
+      "input": "Hello, I need maintenance and output testing for our rooftop solar panels and charge controller in Bocas.",
+      "output": "¡Hola! Necesito mantenimiento y prueba de generación para nuestros paneles solares y controlador de carga en Bocas.",
+      "resolvedId": "solar_panel_cleaning_check"
+    },
+    {
+      "id": "garden_mowing_chapeo",
+      "category": "Gardening",
+      "title": "Lawn Mowing & Machete Chapeo",
+      "input": "Hi! Are you available this week for mowing, weed whacking (chapeo), and clearing overgrown brush on our property?",
+      "output": "¡Buenas! ¿Tendrá disponibilidad esta semana para cortar la hierba, chapear con machete y limpiar el terreno?",
+      "resolvedId": "garden_mowing_chapeo"
+    },
+    {
+      "id": "garden_tree_palm_trimming",
+      "category": "Gardening",
+      "title": "Coconut Palm & Tree Trimming",
+      "input": "Hello! We have tall coconut palms with heavy coconuts and dead fronds hanging over the roof. Do you climb and trim palms?",
+      "output": "¡Hola! Tenemos palmas de coco altas con cocos y pencas secas sobre el techo. ¿Usted trepa y poda palmas?",
+      "resolvedId": "garden_tree_palm_trimming"
+    },
+    {
+      "id": "garden_brush_haulaway",
+      "category": "Gardening",
+      "title": "Yard Debris & Brush Removal",
+      "input": "Hi! Do you have a truck or boat to haul away green yard waste and branches cut from our garden?",
+      "output": "¡Buenas! ¿Tiene vehículo o lancha para recoger y botar los restos de poda y ramas de nuestro patio?",
+      "resolvedId": "garden_brush_haulaway"
+    },
+    {
+      "id": "garden_soil_compost_delivery",
+      "category": "Gardening",
+      "title": "Black Soil & Compost Delivery",
+      "input": "Hello! How much is a yard or sack of rich black garden soil and organic compost delivered to our dock or home?",
+      "output": "¡Hola! ¿A cuánto tiene la yarda o saco de tierra negra abonada y compost orgánico con entrega a nuestro muelle o casa?",
+      "resolvedId": "garden_soil_compost_delivery"
+    },
+    {
+      "id": "garden_plants_fruit_trees",
+      "category": "Gardening",
+      "title": "Fruit Trees & Native Plants",
+      "input": "Hi! Do you have grafted fruit trees (mango, avocado, citrus) and tropical ornamental plants available at your nursery?",
+      "output": "¡Buenas! ¿Tienen árboles frutales injertados (mango, aguacate, cítricos) y plantas ornamentales en su vivero?",
+      "resolvedId": "garden_plants_fruit_trees"
+    },
+    {
+      "id": "garden_nursery_availability",
+      "category": "Gardening",
+      "title": "Grass Plugs & Tropical Flowers",
+      "input": "Hello! Do you have San Agustín grass plugs, bougainvillea, and hibiscus plants ready for planting?",
+      "output": "¡Hola! ¿Tienen esquejes de pasto San Agustín, veraneras e hibiscos listos para sembrar?",
+      "resolvedId": "garden_nursery_availability"
+    },
+    {
+      "id": "contractor_dock_repair",
+      "category": "Contractor",
+      "title": "Dock Pilings & Deck Planks",
+      "input": "Hi! We need an experienced contractor to replace rotten dock planks and inspect over-water pilings.",
+      "output": "¡Buenas! Necesitamos un contratista con experiencia para cambiar tablas podridas del muelle y revisar los pilotes sobre el agua.",
+      "resolvedId": "contractor_dock_repair"
+    },
+    {
+      "id": "contractor_wood_treatment",
+      "category": "Contractor",
+      "title": "Marine Hardwood & Termite Treatment",
+      "input": "Hello! Do you build with local hardwoods (nispero, almendro) and do anti-termite / marine wood sealer treatments?",
+      "output": "¡Hola! ¿Trabajan con maderas duras locales (níspero, almendro) y aplican tratamiento contra termitas y sellador marino?",
+      "resolvedId": "contractor_wood_treatment"
+    },
+    {
+      "id": "contractor_carpentry_custom",
+      "category": "Contractor",
+      "title": "Custom Shelving & Door Fitting",
+      "input": "Hi, I need a carpenter to build custom hardwood shelves and fix a wooden exterior door swollen from humidity.",
+      "output": "¡Buenas! Necesito un carpintero para fabricar repisas de madera y ajustar una puerta exterior que se hinchó con la humedad.",
+      "resolvedId": "contractor_carpentry_custom"
+    },
+    {
+      "id": "landlord_roof_leak_rain",
+      "category": "Contractor",
+      "title": "Urgent Roof Leak in Heavy Rain",
+      "input": "Hi! During the rain, water started leaking through the roof ceiling. Could someone inspect and seal the leak?",
+      "output": "¡Buenas! Con el aguacero empezó a gotear agua por el cielo raso. ¿Podría venir alguien a revisar y sellar la gotera?",
+      "resolvedId": "landlord_roof_leak_rain"
+    },
+    {
+      "id": "contractor_concrete_masonry",
+      "category": "Contractor",
+      "title": "Masonry, Tile & Concrete Fixes",
+      "input": "Hello, we need a mason to patch cracked concrete walkway steps and replace loose outdoor tiles.",
+      "output": "¡Hola! Necesitamos un albañil para reparar escalones de concreto cuarteados y cambiar baldosas sueltas de exterior.",
+      "resolvedId": "contractor_concrete_masonry"
+    },
+    {
+      "id": "starlink_rooftop_mount_cable",
+      "category": "Internet",
+      "title": "Rooftop Mast Mount & Cable Routing",
+      "input": "Hi! We need help mounting our Starlink dish on a sturdy roof pole and neatly routing the cable indoors.",
+      "output": "¡Buenas! Necesitamos ayuda para montar la antena de Starlink en un poste firme en el techo y pasar el cable hacia adentro.",
+      "resolvedId": "starlink_rooftop_mount_cable"
+    },
+    {
+      "id": "starlink_mesh_extender",
+      "category": "Internet",
+      "title": "Mesh Wi-Fi Extenders Setup",
+      "input": "Hi! The Wi-Fi signal does not reach our guest bedrooms or dock. Can you install and configure mesh Wi-Fi access points?",
+      "output": "¡Buenas! La señal de Wi-Fi no llega a los cuartos de visita ni al muelle. ¿Puede instalar y configurar repetidores de red mesh?",
+      "resolvedId": "starlink_mesh_extender"
+    },
+    {
+      "id": "banking_yappy_acceptance",
+      "category": "Money",
+      "title": "Accepting Yappy Mobile Pay",
+      "input": "Hello! Do you accept Yappy for payment here, or is it cash only?",
+      "output": "¡Buenas! ¿Aceptan pago por Yappy aquí o solo es en efectivo?",
+      "resolvedId": "banking_yappy_acceptance"
+    },
+    {
+      "id": "banking_yappy_qr",
+      "category": "Money",
+      "title": "Phone Number / Name for Yappy",
+      "input": "Hello! What is your registered phone number or business name in Yappy so I can transfer the payment?",
+      "output": "¡Hola! ¿A qué número de teléfono o nombre comercial le transfiero el pago por Yappy?",
+      "resolvedId": "banking_yappy_qr"
+    },
+    {
+      "id": "yappy_receipt_sent",
+      "category": "Money",
+      "title": "Yappy Payment Proof Sent",
+      "input": "Hi! I just sent the payment via Yappy. I am sharing the digital transfer receipt screenshot right here.",
+      "output": "¡Buenas! Ya le envié el pago por Yappy. Le comparto la captura del comprobante de transferencia aquí mismo.",
+      "resolvedId": "yappy_receipt_sent"
+    },
+    {
+      "id": "dining_split_bill_tip",
+      "category": "Dining",
+      "title": "Separate Checks & Tip Included",
+      "input": "Hello, could you please split the bill between 2 cards, and does the total include the tip (propina)?",
+      "output": "¡Buenas! ¿Nos podría dividir la cuenta entre 2 tarjetas, y el total ya incluye la propina?",
+      "resolvedId": "dining_split_bill_tip"
+    },
+    {
+      "id": "pharmacy_rehydration_electrolytes",
+      "category": "Medical",
+      "title": "Electrolytes & Stomach Infection",
+      "input": "Hi! Do you have oral rehydration electrolyte salts (suero oral) and probiotics for food poisoning or traveler diarrhea?",
+      "output": "¡Buenas! ¿Tienen suero oral de rehidratación con electrolitos y probióticos para infección estomacal o diarrea?",
+      "resolvedId": "pharmacy_rehydration_electrolytes"
+    },
+    {
+      "id": "pharmacy_mosquito_dengue_repellent",
+      "category": "Medical",
+      "title": "Mosquito Repellent & Dengue Prevention",
+      "input": "Hello! Do you have strong mosquito repellent with DEET / Picaridin and antihistamine cream for sandfly bites?",
+      "output": "¡Hola! ¿Tienen repelente fuerte con DEET y crema antihistamínica para picaduras de chitras o mosquitos?",
+      "resolvedId": "pharmacy_mosquito_dengue_repellent"
+    },
+    {
+      "id": "pet_dog_injury_cut",
+      "category": "Vet",
+      "title": "Dog Wound / Cut Emergency",
+      "input": "Hello, our dog stepped on broken glass or coral and has a deep bleeding cut on his paw pad. Can a vet stitch it?",
+      "output": "¡Hola! Nuestro perro pisó vidrio o coral y tiene una cortada profunda sangrando en la almohadilla. ¿Pueden suturarlo?",
+      "resolvedId": "pet_dog_injury_cut"
+    },
+    {
+      "id": "pet_spay_neuter_vaccines",
+      "category": "Vet",
+      "title": "Rabies Vaccines & Deworming",
+      "input": "Hi, I would like to schedule an annual rabies vaccination booster and internal deworming for our rescue pet.",
+      "output": "¡Buenas! Quisiera agendar el refuerzo anual de la vacuna contra la rabia y desparasitación interna para nuestra mascota.",
+      "resolvedId": "pet_spay_neuter_vaccines"
+    },
+    {
+      "id": "community_bocas_slang_friendly",
+      "category": "Community",
+      "title": "Island Slang: ¿Qué xopá mi compa?",
+      "input": "Friendly local greeting: ",
+      "output": "¡Qué xopá mi compa! ¿Cómo va todo por acá hoy? Todo bien, todo pritty.",
+      "resolvedId": "community_bocas_slang_friendly"
+    },
+    {
+      "id": "community_greeting_respect",
+      "category": "Community",
+      "title": "Respectful Morning Greeting: ¡Buenas!",
+      "input": "Polite daytime greeting: ",
+      "output": "¡Buenas días! ¿Cómo está usted hoy? Que tenga una excelente y bendecida jornada.",
+      "resolvedId": "community_greeting_respect"
+    },
+    {
+      "id": "community_surf_swell_tides",
+      "category": "Community",
+      "title": "Surf Swell, Wave Report & Tides",
+      "input": "Hi! How is the surf swell breaking at Paunch, Bluff, or Carenero point today, and when is high tide?",
+      "output": "¡Buenas! ¿Cómo están reventando las olas en Paunch, Bluff o la punta de Carenero hoy, y a qué hora es marea alta?",
+      "resolvedId": "community_surf_swell_tides"
+    },
+    {
+      "id": "community_weather_rain_forecast",
+      "category": "Community",
+      "title": "Rain Forecast & Sea Conditions",
+      "input": "Hello, is the open ocean rough outside the bay today, or is the water calm for boat crossings?",
+      "output": "¡Hola! ¿Estará picado el mar abierto fuera de la bahía hoy, o está calma el agua para cruzar en lancha?",
+      "resolvedId": "community_weather_rain_forecast"
+    },
+    {
+      "id": "community_garbage_boat_schedule",
+      "category": "Community",
+      "title": "Garbage Collection Boat Schedule",
+      "input": "Hi! What days and times does the municipal garbage boat or truck pass by our neighborhood dock for collection?",
+      "output": "¡Buenas! ¿Qué días y a qué horas pasa la lancha o el camión recolector de basura por nuestro muelle?",
+      "resolvedId": "community_garbage_boat_schedule"
+    },
+    {
+      "id": "community_artisan_farmers_market",
+      "category": "Community",
+      "title": "Local Farmers Market & Produce",
+      "input": "Hello! When and where does the local organic farmers market take place in Bocas Town or Old Bank?",
+      "output": "¡Hola! ¿Cuándo y en qué lugar se realiza el mercado orgánico de productores agrícolas locales en Bocas Town u Old Bank?",
+      "resolvedId": "community_artisan_farmers_market"
+    }
+  ]
+}

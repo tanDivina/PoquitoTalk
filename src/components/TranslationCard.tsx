@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { WhatsAppIcon } from './WhatsAppIcon';
+import { SpeakerIcon } from './SpeakerIcon';
 import * as Speech from 'expo-speech';
 import * as Clipboard from 'expo-clipboard';
 import * as Sharing from 'expo-sharing';
@@ -23,6 +24,7 @@ import {
   GOOGLE_SPANISH_VOICES,
   VoiceOption,
 } from '../services/googleVoice';
+import { resolvePresetAudioUri } from '../services/presetAudio';
 import { AnimatedParrotMascot } from './AnimatedParrotMascot';
 import { DirectoryCard } from './DirectoryCard';
 import { getMatchingProviderForCategory } from '../services/directory';
@@ -64,6 +66,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 }) => {
   const [selectedVoice, setSelectedVoice] = useState<VoiceOption>(initialVoice || GOOGLE_SPANISH_VOICES[0]);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const [isSharingVoice, setIsSharingVoice] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showDispatchModal, setShowDispatchModal] = useState(false);
@@ -103,20 +106,27 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
     if (isPlaying) {
       await stopAllAudioPlayback();
       setIsPlaying(false);
+      setIsLoadingAudio(false);
+      return;
+    }
+
+    if (isLoadingAudio) {
       return;
     }
 
     // Stop any existing sound globally
     await stopAllAudioPlayback();
-    setIsPlaying(true);
+    setIsLoadingAudio(true);
 
     const savedSpeed = await getPlaybackSpeed();
     const isMale = selectedVoice.gender === 'MALE';
 
-    // 1. First Priority: Hyper-Realistic Studio Voice (ElevenLabs / Google)
+    // 1. First Priority: Hyper-Realistic Studio Voice (Pre-rendered Preset or Studio Voice)
     try {
-      const fileUri = await generateGoogleGeminiAudio(currentDisplayText, isMale ? 'Male' : 'Female');
+      const fileUri = await resolvePresetAudioUri(undefined, currentDisplayText, isMale ? 'Male' : 'Female');
+      setIsLoadingAudio(false);
       if (fileUri) {
+        setIsPlaying(true);
         const sound = await playGoogleAudioFile(fileUri, selectedVoice);
         if (sound) {
           sound.setOnPlaybackStatusUpdate((status) => {
@@ -129,10 +139,12 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
         }
       }
     } catch (e) {
+      setIsLoadingAudio(false);
       console.warn('High-def voice playback error, falling back to device TTS:', e);
     }
 
     // 2. Native Speech with Explicit Male/Female Device Voice Resolution
+    setIsPlaying(true);
     let speechText = currentDisplayText;
     const isQuestion = speechText.includes('?') || speechText.includes('¿');
     if (isQuestion && !speechText.startsWith('¿')) {
@@ -210,7 +222,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
   const handleSendWhatsAppVoiceNote = async () => {
     try {
       setIsSharingVoice(true);
-      const audioUri = await generateGoogleGeminiAudio(currentDisplayText, selectedVoice.id);
+      const audioUri = await resolvePresetAudioUri(undefined, currentDisplayText, selectedVoice.name);
       setPreparedAudioUri(audioUri);
       setDispatchType('voice_note');
       setShowDispatchModal(true);
@@ -358,16 +370,26 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
         <View style={styles.topUtilityRow}>
           {/* In-Person Speaker Audio Playback (Icon Only) */}
           <TouchableOpacity
-            style={[styles.speakerIconBtn, isPlaying && styles.actionBtnActive]}
+            style={[styles.speakerIconBtn, (isPlaying || isLoadingAudio) && styles.actionBtnActive]}
             onPress={handlePlayTTS}
+            disabled={isLoadingAudio}
             activeOpacity={0.7}
             accessibilityLabel={isPlaying ? 'Stop Audio' : 'Play Speaker Audio'}
           >
-            <Ionicons
-              name={isPlaying ? 'stop-circle' : 'volume-high'}
-              size={18}
-              color={isPlaying ? '#BA1A1A' : '#0F172A'}
-            />
+            {isLoadingAudio ? (
+              <ActivityIndicator size="small" color={Colors.secondary} />
+            ) : isPlaying ? (
+              <Ionicons
+                name="stop-circle"
+                size={18}
+                color="#BA1A1A"
+              />
+            ) : (
+              <SpeakerIcon
+                size={18}
+                color="#0F172A"
+              />
+            )}
           </TouchableOpacity>
 
           {/* Copy Button */}
@@ -453,6 +475,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
         onClose={() => setShowDispatchModal(false)}
         audioUri={preparedAudioUri}
         spanishText={currentDisplayText}
+        englishText={inputText}
         dispatchType={dispatchType}
         presetCategory={category}
       />

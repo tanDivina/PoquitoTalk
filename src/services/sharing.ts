@@ -4,28 +4,45 @@ import * as Clipboard from 'expo-clipboard';
 import { getIncludeAppSignature } from './storage';
 import { getUserProfile } from './userService';
 
+export interface ShareVoiceNoteOptions {
+  roomId?: string;
+  contractorName?: string;
+  clientName?: string;
+  phone?: string;
+  englishText?: string;
+}
+
 /**
  * Uploads a local voice audio file to the PoquitoTalk server for web playback
  */
 export async function uploadVoiceNoteAudio(
-  audioUri: string,
-  spanishText?: string
+  audioUri?: string | null,
+  spanishText?: string,
+  options?: ShareVoiceNoteOptions
 ): Promise<string | null> {
   try {
-    if (!audioUri) return null;
+    let base64Data: string = '';
 
-    // 1. If it's already a web URL or preset filename
-    if (audioUri.startsWith('http://') || audioUri.startsWith('https://')) {
-      return audioUri;
+    // If local file provided, read as base64
+    if (audioUri && !audioUri.startsWith('http://') && !audioUri.startsWith('https://')) {
+      base64Data = await FileSystem.readAsStringAsync(audioUri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
     }
 
-    // 2. Read local file as base64
-    const base64Data = await FileSystem.readAsStringAsync(audioUri, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
+    const payload: Record<string, string> = {
+      text: spanishText || '',
+      room: options?.roomId || '',
+      contractor: options?.contractorName || '',
+      sender: options?.clientName || '',
+      phone: options?.phone || '',
+      englishText: options?.englishText || '',
+    };
 
-    if (!base64Data || base64Data.length === 0) {
-      return null;
+    if (base64Data) {
+      payload.audioBase64 = base64Data;
+    } else if (audioUri && (audioUri.startsWith('http://') || audioUri.startsWith('https://'))) {
+      payload.presetId = audioUri;
     }
 
     const res = await fetch('https://poquitotalk.hero-apps.com/api/audio.php', {
@@ -33,25 +50,27 @@ export async function uploadVoiceNoteAudio(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        audioBase64: base64Data,
-        text: spanishText || '',
-      }),
+      body: JSON.stringify(payload),
     });
 
     if (res.ok) {
       const data = await res.json();
-      if (data && data.success && data.listenUrl) {
-        return data.listenUrl;
+      if (data && data.success && (data.shortUrl || data.listenUrl)) {
+        return data.shortUrl || data.listenUrl;
       }
     }
   } catch (e) {
-    console.warn('Failed to upload voice note audio to server:', e);
+    console.warn('Failed to upload/shorten voice note link on server:', e);
   }
 
-  // Fallback web player link with encoded text
+  // Fallback web player link if server unreachable
   if (spanishText) {
-    return `https://poquitotalk.hero-apps.com/listen.html?text=${encodeURIComponent(spanishText.trim())}`;
+    const params = new URLSearchParams();
+    params.set('text', spanishText.trim());
+    if (options?.roomId) params.set('room', options.roomId);
+    if (options?.contractorName) params.set('contractor', options.contractorName);
+    if (options?.clientName) params.set('sender', options.clientName);
+    return `https://poquitotalk.hero-apps.com/listen.html?${params.toString()}`;
   }
   return null;
 }
@@ -141,7 +160,7 @@ async function formatWhatsAppMessage(spanishText: string, listenUrl?: string | n
     // default to signature
   }
 
-  return `${baseMsg}\n\n- Sent via poquitotalk.hero-apps.com 🇵🇦`;
+  return `${baseMsg}\n\n- Enviado por la app PoquitoTalk 🇵🇦`;
 }
 
 /**
@@ -151,14 +170,18 @@ export async function shareVoiceNoteToWhatsApp(
   audioUri?: string | null,
   recipientName: string = 'Provider',
   spanishText?: string,
-  whatsappNumber?: string
+  whatsappNumber?: string,
+  options?: ShareVoiceNoteOptions
 ): Promise<boolean> {
   let listenUrl: string | null = null;
+  const mergedOptions: ShareVoiceNoteOptions = {
+    contractorName: recipientName,
+    phone: whatsappNumber,
+    ...options,
+  };
 
-  if (audioUri) {
-    listenUrl = await uploadVoiceNoteAudio(audioUri, spanishText);
-  } else if (spanishText) {
-    listenUrl = `https://poquitotalk.hero-apps.com/listen.html?text=${encodeURIComponent(spanishText.trim())}`;
+  if (audioUri || spanishText) {
+    listenUrl = await uploadVoiceNoteAudio(audioUri, spanishText, mergedOptions);
   }
 
   const formattedText = await formatWhatsAppMessage(spanishText || '¡Buenas!', listenUrl);

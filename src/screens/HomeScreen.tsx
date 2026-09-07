@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import {
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { WhatsAppIcon } from '../components/WhatsAppIcon';
 import { WalkieTalkieIcon } from '../components/WalkieTalkieIcon';
+import { SpeakerIcon } from '../components/SpeakerIcon';
 import * as Clipboard from 'expo-clipboard';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Speech from 'expo-speech';
@@ -184,6 +185,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     }
     return null;
   });
+  const [isChannelMinimized, setIsChannelMinimized] = useState(false);
   const [incomingWalkieMessage, setIncomingWalkieMessage] = useState<{
     id?: string;
     esText: string;
@@ -249,6 +251,55 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   });
   const [isWalkieTapRecording, setIsWalkieTapRecording] = useState(false);
   const walkiePressStartRef = useRef<number>(0);
+
+  const handleExitChannel = useCallback(() => {
+    walkieTalkieService.closeSession();
+    setActiveWalkieSession(null);
+    setIncomingWalkieMessage(null);
+    setWalkieMessages([]);
+    setIsReplyingToWalkie(false);
+    setIsWalkieTapRecording(false);
+    setIsChannelMinimized(false);
+  }, []);
+
+  const promptExitChannel = useCallback((onConfirm?: () => void) => {
+    Alert.alert(
+      'Leave Channel',
+      'Would you like to keep this walkie session active in the background, or end the session?',
+      [
+        { text: 'Stay in Channel', style: 'cancel' },
+        {
+          text: 'Minimize (Keep Active)',
+          onPress: () => {
+            setIsChannelMinimized(true);
+            if (onConfirm) onConfirm();
+          },
+        },
+        {
+          text: 'End Session',
+          style: 'destructive',
+          onPress: () => {
+            handleExitChannel();
+            if (onConfirm) onConfirm();
+          },
+        },
+      ]
+    );
+  }, [handleExitChannel]);
+
+  // Keep activeWalkieSession synchronized with walkieTalkieService
+  useEffect(() => {
+    const unsubscribe = walkieTalkieService.subscribeSession((session) => {
+      if (!session) {
+        setActiveWalkieSession(null);
+        setIncomingWalkieMessage(null);
+        setWalkieMessages([]);
+        setIsReplyingToWalkie(false);
+        setIsWalkieTapRecording(false);
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   // Poll for live Walkie-Talkie messages from server when a session is active
   useEffect(() => {
@@ -331,6 +382,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         topicEs: finalTopicEs,
         topicEn: finalTopicEn,
       });
+      setIsChannelMinimized(false);
       if (session.messages && session.messages.length > 0) {
         setWalkieMessages(session.messages);
       }
@@ -681,6 +733,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           lower.includes('poquitotalk') ||
           lower.includes('hero-apps') ||
           lower.includes('sent via') ||
+          lower.includes('enviado por') ||
+          lower.includes('enviado desde') ||
           lower.includes('poquito')
         ) {
           return;
@@ -866,35 +920,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
 
       {/* ========================================================================= */}
-      {/* 1. DEDICATED WALKIE-TALKIE CHANNEL MODE (When activeWalkieSession !== null) */}
+      {/* 1. DEDICATED WALKIE-TALKIE CHANNEL MODE (When activeWalkieSession !== null && !isChannelMinimized) */}
       {/* ========================================================================= */}
-      {activeWalkieSession ? (
+      {activeWalkieSession && !isChannelMinimized ? (
         <View>
           {/* Top Bar with Clear Return to Menu Action */}
           <View style={styles.channelTopBar}>
             <TouchableOpacity
               style={styles.channelBackBtn}
-              onPress={() => {
-                Alert.alert(
-                  'Exit Walkie Channel?',
-                  'Do you want to return to the main menu?',
-                  [
-                    { text: 'Stay in Channel', style: 'cancel' },
-                    {
-                      text: 'Return to Menu',
-                      style: 'destructive',
-                      onPress: () => {
-                        walkieTalkieService.closeSession();
-                        setActiveWalkieSession(null);
-                        setIncomingWalkieMessage(null);
-                        setWalkieMessages([]);
-                        setIsReplyingToWalkie(false);
-                        setIsWalkieTapRecording(false);
-                      },
-                    },
-                  ]
-                );
-              }}
+              onPress={() => promptExitChannel()}
               activeOpacity={0.8}
             >
               <Ionicons name="arrow-back" size={16} color="#C2410C" />
@@ -1024,7 +1058,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                           onPress={() => handlePlayWalkieEnglish(primaryEnglish)}
                           activeOpacity={0.8}
                         >
-                          <Ionicons name="volume-medium" size={15} color="#047857" />
+                          <SpeakerIcon size={15} color="#047857" />
                           <Text style={styles.channelAudioBtnText}>Listen in English</Text>
                         </TouchableOpacity>
                       ) : null}
@@ -1133,9 +1167,33 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </View>
       ) : (
         /* ========================================================================= */
-        /* 2. STANDARD TRANSLATOR VIEW (When activeWalkieSession === null)           */
+        /* 2. STANDARD TRANSLATOR VIEW (When activeWalkieSession === null or minimized) */
         /* ========================================================================= */
         <View>
+          {/* Active Channel Minimized Banner */}
+          {activeWalkieSession && isChannelMinimized && (
+            <TouchableOpacity
+              style={styles.minimizedChannelBanner}
+              onPress={() => setIsChannelMinimized(false)}
+              activeOpacity={0.88}
+            >
+              <View style={styles.minimizedChannelPulseDot} />
+              <Ionicons name="radio" size={18} color="#059669" />
+              <View style={{ flex: 1, marginLeft: 10 }}>
+                <Text style={styles.minimizedChannelTitle} numberOfLines={1}>
+                  {`Live Channel Active: ${formatExpatFacingSenderName(incomingWalkieSender)}`}
+                </Text>
+                <Text style={styles.minimizedChannelSub} numberOfLines={1}>
+                  Tap anywhere to return to live walkie conversation
+                </Text>
+              </View>
+              <View style={styles.minimizedChannelBadge}>
+                <Text style={styles.minimizedChannelBadgeText}>RESUME</Text>
+                <Ionicons name="chevron-forward" size={14} color="#FFFFFF" />
+              </View>
+            </TouchableOpacity>
+          )}
+
           {/* WhatsApp Clipboard Reply Detection Banner (Only if real contractor reply detected) */}
           {clipboardReplyText && (
             <View style={styles.replyBanner}>
@@ -2527,5 +2585,56 @@ const styles = StyleSheet.create({
   },
   channelSendBtnDisabled: {
     backgroundColor: '#CBD5E1',
+  },
+  minimizedChannelBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#ECFDF5',
+    borderWidth: 1.5,
+    borderColor: '#A7F3D0',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginBottom: 16,
+    shadowColor: '#059669',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  minimizedChannelPulseDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#10B981',
+    marginRight: 2,
+  },
+  minimizedChannelTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: '#065F46',
+    letterSpacing: -0.2,
+  },
+  minimizedChannelSub: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#047857',
+    marginTop: 2,
+  },
+  minimizedChannelBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#059669',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 12,
+    marginLeft: 8,
+    gap: 2,
+  },
+  minimizedChannelBadgeText: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
   },
 });

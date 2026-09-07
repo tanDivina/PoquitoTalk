@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   titleTalk: {
-    color: Colors.secondary,
+    color: Colors.secondary, // Warm Terracotta Brown (#964824)
   },
   subtitle: {
     fontSize: 11,

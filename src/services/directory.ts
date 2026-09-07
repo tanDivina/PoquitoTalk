@@ -28,11 +28,11 @@ export const INITIAL_BOCAS_DIRECTORY: LocalServiceProvider[] = [
     category: 'banking_money',
     serviceType: 'atm',
     name: 'Duo2 Market ATM (Near Police Station)',
-    address: 'In front of Duo2 Market, Calle 1ra / Calle 2da (near National Police Station & Parque Simón Bolívar), Bocas Town',
+    address: 'Inside Duo2 Market, Calle 1ra / Calle 2da (near National Police Station & Parque Simón Bolívar), Bocas Town',
     hours: 'Daily during store hours: ~7:00 AM – 9:30 PM',
     rating: 4.8,
     verified: true,
-    notes: 'Telered ATM located right in front of Duo2 Market by the police station / central park. Very handy alternative if Banco Nacional is out of cash.',
+    notes: 'Telered ATM located inside the Duo2 Market supermarket by the police station / central park. Very handy alternative if Banco Nacional is out of cash.',
     googleMapsQuery: 'Duo2 Market Bocas del Toro Isla Colon',
   },
   {
@@ -59,7 +59,7 @@ export const INITIAL_BOCAS_DIRECTORY: LocalServiceProvider[] = [
     hours: 'Mon-Sat: 8:00 AM – 5:00 PM • Sun: Closed',
     rating: 4.9,
     verified: true,
-    notes: 'Primary full-service Western Union in Bocas province for picking up and sending international money transfers.',
+    notes: 'NOTE: No Western Union in Bocas Town! This Changuinola branch is the only official Western Union agency in Bocas del Toro province for international wire pickups (take passenger ferry to Almirante, then 40m taxi/bus to Changuinola).',
     googleMapsQuery: 'Western Union Changuinola Panama',
   },
   {
@@ -732,13 +732,16 @@ export async function fetchRegionalProviders(
             sType = 'vet_pet';
           } else if (/\b(BANK|ATM|BANCO|WESTERN UNION)\b/i.test(trade) || /\b(BANK|ATM|BANCO|WESTERN UNION)\b/i.test(rawCat)) {
             standardCat = 'banking_money';
-            sType = item.id?.includes('atm') ? 'atm' : item.id?.includes('banconal') ? 'bank' : 'service';
+            sType = item.id?.includes('atm') ? 'atm' : item.id?.includes('banconal') ? 'bank' : item.id?.includes('wu') || item.name?.toLowerCase().includes('western union') ? 'western_union' : 'service';
           } else if (/\b(SUPERMARKET|GROCERY|RESTAURANT|DINING|SUPERMERCADO)\b/i.test(trade) || /\b(SUPERMARKET|GROCERY|RESTAURANT|DINING|SUPERMERCADO)\b/i.test(rawCat)) {
             standardCat = 'dining_provisions';
             sType = 'dining_groceries';
           } else {
             // 2. Semantic fallback inspection of business name and description (ignoring 'SOLARTE')
-            if (/\b(BOAT|LANCHA|CAPITAN|CAPTAIN|WATER TAXI|WATER_TAXI|MARITIMO|ACUATICO|MARINA|ISLAND TOUR|DOLPHIN BAY)\b/i.test(cleanedCombined)) {
+            if (/\b(BANK|ATM|BANCO|WESTERN UNION|REMESAS|GIROS)\b/i.test(cleanedCombined)) {
+              standardCat = 'banking_money';
+              sType = item.id?.includes('atm') ? 'atm' : item.id?.includes('banconal') ? 'bank' : item.id?.includes('wu') || item.name?.toLowerCase().includes('western union') ? 'western_union' : 'service';
+            } else if (/\b(BOAT|LANCHA|CAPITAN|CAPTAIN|WATER TAXI|WATER_TAXI|MARITIMO|ACUATICO|MARINA|ISLAND TOUR|DOLPHIN BAY)\b/i.test(cleanedCombined)) {
               standardCat = 'water_taxi';
             } else if (/\b(CAR RENTAL|RENTAL CAR|UTV|4X4|RENTAL|TAXI|SHUTTLE|VEHICLE RENTAL)\b/i.test(cleanedCombined)) {
               standardCat = 'land_taxi';

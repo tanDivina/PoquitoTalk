@@ -6,6 +6,7 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 Redirect 301 /index-es.html https://poquitotalk.hero-apps.com/es/
 RewriteRule ^es/directory(\.html)?$ https://poquitotalk.hero-apps.com/es/directorio.html [R=301,L]
 
+RewriteRule ^l/([a-zA-Z0-9_-]+)/?$ l.php?id=$1 [L,QSA]
 RewriteRule ^talk/?$ talk.html [L,QSA]
 RewriteRule ^terms/?$ terms.html [L,QSA]
 RewriteRule ^privacy/?$ privacy.html [L,QSA]

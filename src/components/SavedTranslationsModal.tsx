@@ -11,6 +11,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
 import { TranslationCard } from './TranslationCard';
 import { TranslationItem } from '../types';
+import { VoiceOption, GOOGLE_SPANISH_VOICES } from '../services/googleVoice';
+import { getPreferredVoiceGender } from '../services/storage';
 
 interface SavedTranslationsModalProps {
   visible: boolean;
@@ -25,6 +27,16 @@ export const SavedTranslationsModal: React.FC<SavedTranslationsModalProps> = ({
   savedTranslations,
   onToggleSave,
 }) => {
+  const [userVoice, setUserVoice] = React.useState<VoiceOption | undefined>(undefined);
+
+  React.useEffect(() => {
+    if (visible) {
+      getPreferredVoiceGender().then((gender) => {
+        const v = GOOGLE_SPANISH_VOICES.find((voice) => voice.gender === gender) || GOOGLE_SPANISH_VOICES[0];
+        setUserVoice(v);
+      });
+    }
+  }, [visible]);
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <View style={styles.overlay}>
@@ -52,7 +64,7 @@ export const SavedTranslationsModal: React.FC<SavedTranslationsModalProps> = ({
               <Text style={styles.subheadline}>
                 {savedTranslations.length === 0
                   ? 'Keep your most important custom translations ready for 1-tap reuse.'
-                  : `${savedTranslations.length} ${savedTranslations.length === 1 ? 'phrase' : 'phrases'} saved for quick WhatsApp dispatch & replay.`}
+                  : `${savedTranslations.length} ${savedTranslations.length === 1 ? 'phrase' : 'phrases'} saved for quick WhatsApp dispatch and audio replay.`}
               </Text>
             </View>
 
@@ -90,6 +102,7 @@ export const SavedTranslationsModal: React.FC<SavedTranslationsModalProps> = ({
                     toLang={item.toLang}
                     category={item.category}
                     isSaved={true}
+                    initialVoice={userVoice}
                     onSave={() => onToggleSave(item)}
                   />
                 ))}
@@ -173,7 +186,7 @@ const styles = StyleSheet.create({
   subheadline: {
     fontSize: 13,
     color: '#6B5E51',
-    lineHeight: 18,
+    lineHeight: 19,
     marginTop: 4,
   },
   emptyCard: {

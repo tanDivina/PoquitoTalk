@@ -670,7 +670,7 @@
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          <span id="senderNameLabel">Mensaje del Cliente</span>
+          <span id="senderNameLabel">Mensaje de un cliente</span>
         </div>
         <div class="panama-indicator">
           <span>🇵🇦 Bocas del Toro</span>
@@ -772,7 +772,7 @@
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
             </svg>
-            <span id="textToggleLabel">O responder con texto corto</span>
+            <span id="textToggleLabel">Responder con texto corto</span>
           </button>
         </div>
 
@@ -814,13 +814,15 @@
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const rawText = urlParams.get('text') || urlParams.get('msg') || '¡Buenas! ¿Tiene lancha disponible para llevarnos desde Bocas Town hasta Isla Solarte hoy a las 2:00 PM?';
-    const rawEnText = urlParams.get('en') || urlParams.get('prompt') || 'Hello! Do you have a boat available to take us from Bocas Town to Isla Solarte today at 2:00 PM?';
-    const rawAudio = urlParams.get('audio') || urlParams.get('v') || '';
-    const clientName = urlParams.get('name') || urlParams.get('sender') || 'Cliente';
-    const contractorName = urlParams.get('contractor') || urlParams.get('to') || 'Capitán Luis';
-    const roomId = urlParams.get('room') || urlParams.get('id') || 'room_general_' + Math.floor(Math.random() * 8999 + 1000);
-    const phone = urlParams.get('phone') || '';
+    const shortOrFileId = urlParams.get('v') || urlParams.get('id') || '';
+
+    let rawText = urlParams.get('text') || urlParams.get('msg') || '';
+    let rawEnText = urlParams.get('en') || urlParams.get('prompt') || '';
+    let rawAudio = urlParams.get('audio') || urlParams.get('v') || '';
+    let clientName = urlParams.get('name') || urlParams.get('sender') || '';
+    let contractorName = urlParams.get('contractor') || urlParams.get('to') || 'Capitán';
+    let roomId = urlParams.get('room') || (urlParams.get('id') && !shortOrFileId ? urlParams.get('id') : '') || '';
+    let phone = urlParams.get('phone') || '';
 
     const spanishTextBox = document.getElementById('spanishText');
     const englishTextBox = document.getElementById('englishText');
@@ -848,8 +850,24 @@
     const sentPreviewBubble = document.getElementById('sentPreviewBubble');
     const voiceReplyCard = document.getElementById('voiceReplyCard');
 
-    spanishTextBox.textContent = rawText;
-    senderNameLabel.textContent = `Mensaje de ${clientName}`;
+    // Initial display
+    if (rawText) {
+      spanishTextBox.textContent = rawText;
+    } else if (shortOrFileId) {
+      spanishTextBox.textContent = 'Cargando nota de voz...';
+    } else {
+      rawText = '¡Buenas! ¿Tiene lancha disponible para llevarnos desde Bocas Town hasta Isla Solarte hoy a las 2:00 PM?';
+      spanishTextBox.textContent = rawText;
+    }
+
+    function formatSenderLabel(name) {
+      if (name && name.trim() && name.toLowerCase() !== 'client' && name.toLowerCase() !== 'cliente') {
+        return `Mensaje de ${name.trim()}`;
+      }
+      return 'Mensaje de un cliente';
+    }
+
+    senderNameLabel.textContent = formatSenderLabel(clientName);
 
     if (rawEnText) {
       englishTextBox.textContent = `"${rawEnText}"`;
@@ -870,6 +888,37 @@
         audioUrl = `https://poquitotalk.hero-apps.com/audio/presets/${rawAudio}.mp3`;
       }
       audioElement.src = audioUrl;
+    }
+
+    // Dynamic hydration from short code or note ID
+    if (shortOrFileId) {
+      fetch(`/api/audio.php?id=${encodeURIComponent(shortOrFileId)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.success) {
+            if (data.text) {
+              rawText = data.text;
+              spanishTextBox.textContent = rawText;
+            }
+            if (data.enText) {
+              rawEnText = data.enText;
+              englishTextBox.textContent = `"${rawEnText}"`;
+              englishBox.style.display = 'block';
+            }
+            if (data.sender) {
+              clientName = data.sender;
+              senderNameLabel.textContent = formatSenderLabel(clientName);
+            }
+            if (data.contractor) contractorName = data.contractor;
+            if (data.room) roomId = data.room;
+            if (data.phone) phone = data.phone;
+            if (data.audioUrl) {
+              audioUrl = data.audioUrl;
+              audioElement.src = audioUrl;
+            }
+          }
+        })
+        .catch(err => console.warn('Could not hydrate note metadata:', err));
     }
 
     function toggleAudio() {
@@ -1081,9 +1130,11 @@
     function toggleTextInput() {
       if (textReplyBox.style.display === 'none') {
         textReplyBox.style.display = 'flex';
+        textToggleLabel.textContent = 'Ocultar teclado';
         textReplyInput.focus();
       } else {
         textReplyBox.style.display = 'none';
+        textToggleLabel.textContent = 'Responder con texto corto';
       }
     }
 

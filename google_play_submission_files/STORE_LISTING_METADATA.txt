@@ -4,11 +4,13 @@ POQUITOTALK — GOOGLE PLAY STORE METADATA & ASSET CHEAT-SHEET
 
 1. APP DETAILS
 --------------
-App Name / Title (27 / 30 chars):
-PoquitoTalk: Panama Spanish
+App Name / Title (28 / 30 chars):
+PoquitoTalk: Bocas del Toro
 
-Short Description (77 / 80 chars):
-Panamanian Spanish WhatsApp voice notes & verified island service directory.
+Short Description (76 / 80 chars):
+Panama Spanish voice translator & verified Bocas del Toro service directory.
+
+
 
 Full Description (Copy-paste between the dashed lines):
 --------------------------------------------------------------------------------

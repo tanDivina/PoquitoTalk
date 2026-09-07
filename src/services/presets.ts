@@ -32,9 +32,9 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     description: 'Water taxis to Carenero, Bastimentos, Red Frog, outboard motor maintenance & hull repairs.',
     defaultInputPrompt: 'Hi Captain, is a water taxi available to take us to Red Frog Beach right now?',
     subCategories: [
-      { id: 'all', label: 'All', icon: 'view-grid-outline' },
+      { id: 'all', label: 'All', icon: 'view-grid' },
       { id: 'water_taxi', label: 'Water Taxis', icon: 'ferry' },
-      { id: 'outboard_hull', label: 'Outboard & Hull Repair', icon: 'wrench-outline' },
+      { id: 'outboard_hull', label: 'Outboard & Hull Repair', icon: 'wrench' },
     ],
     phrases: [
       {
@@ -105,7 +105,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     description: 'Island taxis to Paunch/Bluff beach, airport transfers, golf cart repairs, and border runs to Sixaola.',
     defaultInputPrompt: 'Hi, I need a land taxi driver to pick me up for a trip to Playa Bluff.',
     subCategories: [
-      { id: 'all', label: 'All', icon: 'view-grid-outline' },
+      { id: 'all', label: 'All', icon: 'view-grid' },
       { id: 'island_taxis', label: 'Island Taxis', icon: 'taxi' },
       { id: 'cart_repair', label: 'Auto & Cart Repair', icon: 'car-wrench' },
       { id: 'border_runs', label: 'Border Runs', icon: 'passport' },
@@ -215,8 +215,8 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     description: 'Pressure pumps, water tanker trucks, rainwater catchment cisterns, and emergency pipe repairs.',
     defaultInputPrompt: 'Hi, our water pump lost pressure and our rainwater cistern is running low.',
     subCategories: [
-      { id: 'all', label: 'All', icon: 'view-grid-outline' },
-      { id: 'cisterns', label: 'Water Trucks & Cisterns', icon: 'water-outline' },
+      { id: 'all', label: 'All', icon: 'view-grid' },
+      { id: 'cisterns', label: 'Water Trucks & Cisterns', icon: 'water' },
       { id: 'pumps', label: 'Leak & Pump Repair', icon: 'pipe-wrench' },
     ],
     phrases: [
@@ -288,10 +288,10 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     description: 'Air conditioning repairs, refrigerant gas refills, electrical troubleshooting, and off-grid solar systems.',
     defaultInputPrompt: 'My air conditioning unit is leaking water and not blowing cold air.',
     subCategories: [
-      { id: 'all', label: 'All', icon: 'view-grid-outline' },
+      { id: 'all', label: 'All', icon: 'view-grid' },
       { id: 'ac_service', label: 'A/C Service', icon: 'air-conditioner' },
-      { id: 'electrician', label: 'Electrician', icon: 'flash-outline' },
-      { id: 'solar_power', label: 'Solar Power', icon: 'solar-power-variant-outline' },
+      { id: 'electrician', label: 'Electrician', icon: 'flash' },
+      { id: 'solar_power', label: 'Solar Power', icon: 'solar-power' },
     ],
     phrases: [
       {
@@ -376,13 +376,13 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     id: 'gardening',
     category: 'Gardening',
     title: 'Gardening & Landscaping',
-    icon: 'sprout-outline',
+    icon: 'sprout',
     description: 'Lawn mowing, machete chapeo, coconut palm trimming, organic black soil delivery, and tropical nursery plants.',
     defaultInputPrompt: 'Hi, I need someone for weed whacking and lawn care on our property.',
     subCategories: [
-      { id: 'all', label: 'All', icon: 'view-grid-outline' },
+      { id: 'all', label: 'All', icon: 'view-grid' },
       { id: 'chapeo', label: 'Machete & Chapeo', icon: 'grass' },
-      { id: 'nurseries', label: 'Soil & Nurseries', icon: 'sprout-outline' },
+      { id: 'nurseries', label: 'Soil & Nurseries', icon: 'sprout' },
     ],
     phrases: [
       {
@@ -453,9 +453,9 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     description: 'Over-water dock repairs, marine carpentry, zinc roofing leaks, masonry, and handyman island projects.',
     defaultInputPrompt: 'Hi, I need a carpenter or contractor to inspect dock pilings and repair deck boards.',
     subCategories: [
-      { id: 'all', label: 'All', icon: 'view-grid-outline' },
+      { id: 'all', label: 'All', icon: 'view-grid' },
       { id: 'carpentry', label: 'Carpentry & Docks', icon: 'hammer-wrench' },
-      { id: 'roof_general', label: 'Roof & General Repair', icon: 'home-outline' },
+      { id: 'roof_general', label: 'Roof & General Repair', icon: 'home' },
     ],
     phrases: [
       {
@@ -526,7 +526,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     description: 'Starlink roof mast mounting, router mesh setups, fiber optic repairs, and high-speed Wi-Fi optimizations.',
     defaultInputPrompt: 'Hi, our Starlink satellite dish lost connection and we need a technician.',
     subCategories: [
-      { id: 'all', label: 'All', icon: 'view-grid-outline' },
+      { id: 'all', label: 'All', icon: 'view-grid' },
       { id: 'starlink_mounts', label: 'Starlink Mounts', icon: 'satellite-variant' },
       { id: 'wifi_routers', label: 'Wi-Fi & Mesh Routers', icon: 'wifi' },
     ],
@@ -587,13 +587,13 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     category: 'Money',
     title: 'Banking, ATMs & Yappy',
     icon: 'cash-multiple',
-    description: 'Banco Nacional ATM cash status, Western Union transfers, Punto Pago kiosk bill payments, and Yappy mobile transfers.',
+    description: 'Banco Nacional ATM cash status, Yappy mobile transfers, Punto Pago kiosks, and Western Union in Changuinola.',
     defaultInputPrompt: 'Hi, does the Banco Nacional ATM have cash today, or do you accept Yappy?',
     subCategories: [
-      { id: 'all', label: 'All', icon: 'view-grid-outline' },
+      { id: 'all', label: 'All', icon: 'view-grid' },
       { id: 'atm_cash', label: 'ATMs & Cash', icon: 'cash-multiple' },
       { id: 'yappy_punto', label: 'Yappy & Punto Pago', icon: 'cellphone-check' },
-      { id: 'western_union', label: 'Western Union', icon: 'bank-transfer' },
+      { id: 'western_union', label: 'Western Union (Changuinola)', icon: 'bank-transfer' },
     ],
     phrases: [
       {
@@ -603,28 +603,28 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         title: 'Banco Nacional ATM Cash Status',
         input: 'Hi! Does anyone know if the Banco Nacional ATM in Bocas Town currently has USD cash dispensing?',
         output: '¡Buenas! ¿Alguien sabe si el cajero automático de Banco Nacional en Bocas Town tiene dinero en efectivo ahorita?',
-        fullPanamenoOutput: '¡Buenas! ¿Saben si el cajero del Banco Nacional tiene plata hoy o está sin efectivo?',
+        fullPanamenoOutput: '¡Buenas gente! ¿El cajero de Banco Nacional en Bocas tiene plata ahorita o tá seco?',
       },
       {
-        id: 'banking_small_bill_change',
+        id: 'banking_atm_supermarket',
         subCategory: 'atm_cash',
         subCategoryLabel: 'ATMs & Cash',
-        title: 'Change for $20 / Small Bills',
-        input: 'Hello! Do you have change for a twenty-dollar bill? I need one-dollar bills or quarters for taxi fares.',
-        output: '¡Hola! ¿Tendrá cambio de un billete de veinte dólares? Necesito billetes de uno o cambio para los pasajes de taxi.',
-        fullPanamenoOutput: '¡Buenas! ¿Tendrá cambio de veinte en billetes chicos o sencillo de a dólar pa pagar el taxi?',
+        title: 'Independent Telered ATM Machine',
+        input: 'Hi! Is the independent ATM at Duo2 Market or Supermarket Alba in Bocas Town working and dispensing cash?',
+        output: '¡Hola! ¿El cajero de Duo2 o de Supermercado Alba en Bocas Town está funcionando y sacando plata hoy?',
+        fullPanamenoOutput: '¡Buenas! ¿El cajero de Duo2 o de Alba tá sacando plata hoy o está fuera de servicio?',
       },
       {
-        id: 'yappy_payment_method',
+        id: 'banking_yappy_acceptance',
         subCategory: 'yappy_punto',
         subCategoryLabel: 'Yappy & Punto Pago',
-        title: 'Do You Accept Yappy?',
-        input: 'Hi! Can I pay you via Yappy (Banco General mobile payment) for this purchase or service?',
-        output: '¡Buenas! ¿Le puedo pagar por Yappy de Banco General por esta compra o servicio?',
-        fullPanamenoOutput: '¡Xopá! ¿Aceptas Yappy pa pagarte directo por el cel?',
+        title: 'Accepting Yappy Mobile Pay',
+        input: 'Hello! Do you accept Yappy for payment here, or is it cash only?',
+        output: '¡Buenas! ¿Aceptan pago por Yappy aquí o solo es en efectivo?',
+        fullPanamenoOutput: '¡Buenas compa! ¿Aceptas Yappy o pura plata en mano?',
       },
       {
-        id: 'yappy_phone_number_request',
+        id: 'banking_yappy_qr',
         subCategory: 'yappy_punto',
         subCategoryLabel: 'Yappy & Punto Pago',
         title: 'Phone Number / Name for Yappy',
@@ -644,16 +644,16 @@ export const SERVICE_PRESETS: ServicePreset[] = [
       {
         id: 'banking_western_union',
         subCategory: 'western_union',
-        subCategoryLabel: 'Western Union',
-        title: 'Western Union Wire Pickup Hours',
-        input: 'Hello! What time does the Western Union office in Bocas Town open and do they currently have cash for wire pickups?',
-        output: '¡Hola! ¿A qué hora abre la sucursal de Western Union en Bocas Town y tienen efectivo para retiros hoy?',
-        fullPanamenoOutput: '¡Buenas! ¿A qué hora abre Western Union y están entregando plata de giros hoy?',
+        subCategoryLabel: 'Western Union (Changuinola)',
+        title: 'Western Union (Only in Changuinola)',
+        input: 'Hello! Is the Western Union office in Changuinola open today for wire pickups? (Since there is no branch in Bocas Town).',
+        output: '¡Hola! ¿La sucursal de Western Union en Changuinola está abierta hoy para retiros de giros internacionales? Sé que no hay sucursal en Bocas Town.',
+        fullPanamenoOutput: '¡Buenas! ¿Western Union en Changuinola está abierto hoy pa cobrar giros? Ya que acá en Bocas no hay.',
       },
       {
         id: 'banking_punto_pago',
-        subCategory: 'western_union',
-        subCategoryLabel: 'Western Union',
+        subCategory: 'yappy_punto',
+        subCategoryLabel: 'Yappy & Punto Pago',
         title: 'Punto Pago Kiosk Machine',
         input: 'Hi! Where is the nearest working Punto Pago machine to recharge cell phone data or pay Naturgy electric bills?',
         output: '¡Buenas! ¿Dónde queda la máquina de Punto Pago más cercana que esté funcionando para recargas o pagar la luz?',
@@ -673,8 +673,8 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     description: 'Fresh seafood catch, specialty grocery provisions, island table bookings, and restaurant bills.',
     defaultInputPrompt: 'Hi, I would like to reserve a dinner table or ask about fresh grocery provisions.',
     subCategories: [
-      { id: 'all', label: 'All', icon: 'view-grid-outline' },
-      { id: 'groceries', label: 'Groceries & Delivery', icon: 'cart-outline' },
+      { id: 'all', label: 'All', icon: 'view-grid' },
+      { id: 'groceries', label: 'Groceries & Delivery', icon: 'cart' },
       { id: 'dining_table', label: 'Table Booking & Bill', icon: 'silverware-fork-knife' },
     ],
     phrases: [
@@ -746,7 +746,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     description: 'Medical consultations, emergency ambulance clinics, prescription antibiotics, and island dental visits.',
     defaultInputPrompt: 'Hi, I need an urgent doctor consultation or nearest open pharmacy in Bocas.',
     subCategories: [
-      { id: 'all', label: 'All', icon: 'view-grid-outline' },
+      { id: 'all', label: 'All', icon: 'view-grid' },
       { id: 'doctor_clinic', label: 'Doctor & Clinic', icon: 'stethoscope' },
       { id: 'pharmacy_meds', label: 'Pharmacy & Meds', icon: 'pill' },
     ],
@@ -819,8 +819,8 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     description: 'Emergency veterinary visits, cane toad toxicity, wound care, flea/tick prevention, and pet health certificates.',
     defaultInputPrompt: 'Hi, I need an emergency veterinarian to examine our sick dog or cat.',
     subCategories: [
-      { id: 'all', label: 'All', icon: 'view-grid-outline' },
-      { id: 'emergency_vet', label: 'Emergency Vet', icon: 'paw-outline' },
+      { id: 'all', label: 'All', icon: 'view-grid' },
+      { id: 'emergency_vet', label: 'Emergency Vet', icon: 'paw' },
       { id: 'vaccines_parasite', label: 'Vaccines & Parasite Meds', icon: 'needle' },
     ],
     phrases: [
@@ -883,10 +883,10 @@ export const SERVICE_PRESETS: ServicePreset[] = [
     description: 'Authentic Bocas slang, respectful local greetings, ocean surf swells, island weather, and recycling schedules.',
     defaultInputPrompt: 'Hi, how can I politely ask for local information in Bocas del Toro?',
     subCategories: [
-      { id: 'all', label: 'All', icon: 'view-grid-outline' },
-      { id: 'slang', label: 'Panama Slang', icon: 'chat-processing-outline' },
-      { id: 'surf_weather', label: 'Surf & Weather', icon: 'weather-partly-cloudy' },
-      { id: 'island_info', label: 'Island Info', icon: 'information-outline' },
+      { id: 'all', label: 'All', icon: 'view-grid' },
+      { id: 'slang', label: 'Panama Slang', icon: 'chat-processing' },
+      { id: 'surf_weather', label: 'Surf & Weather', icon: 'wave' },
+      { id: 'island_info', label: 'Island Info', icon: 'information' },
     ],
     phrases: [
       {
@@ -1066,7 +1066,7 @@ export function getCategoryUnifiedMeta(categoryOrId?: string): CategoryMeta {
       border: "#D9F99D",
       badgeBg: "#ECFCCB",
       chipBg: "#FFFFFF",
-      icon: "sprout-outline",
+      icon: "sprout",
       ioniconsName: "leaf",
     };
   }

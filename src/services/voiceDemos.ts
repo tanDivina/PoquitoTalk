@@ -19,13 +19,6 @@ export const VOICE_DEMO_SAMPLES: Record<string, VoiceDemoSample> = {
     englishText: 'Hi Captain! Are you available to take two of us to Old Bank on Bastimentos tonight, and how much would it be for the two of us?',
     spanishDemoText: '¿Buenas capitán? ¿Tendrá disponibilidad para llevarnos a dos personas a Old Bank en Bastimentos esta noche y cuánto nos saldría?',
   },
-  Mateo: {
-    personaName: 'Mateo',
-    scenarioTitle: 'A/C Technician Repair Request',
-    categoryIcon: 'snowflake',
-    englishText: 'Hello, the air conditioner in the main bedroom is leaking water and not cooling. Can someone inspect it today?',
-    spanishDemoText: '¿Buenas? El aire acondicionado de la habitación principal está goteando agua y no está enfriando bien. ¿Podría venir un técnico a revisarlo hoy?',
-  },
   Sofia: {
     personaName: 'Sofia',
     scenarioTitle: 'Waterfront Table & Dinner Catch of the Day',
@@ -33,22 +26,15 @@ export const VOICE_DEMO_SAMPLES: Record<string, VoiceDemoSample> = {
     englishText: 'Hi! Do you have a table for two available tonight around 7:00 PM, and what is the catch of the day?',
     spanishDemoText: '¡Buenas! ¿Tienen mesa disponible para dos personas hoy a las 7 de la noche y cuál es la pesca del día?',
   },
-  Valeria: {
-    personaName: 'Valeria',
-    scenarioTitle: 'Bocas Town Laundry Wash & Fold',
-    categoryIcon: 'tshirt',
-    englishText: 'Hi! If I drop off two bags of laundry this morning, will they be ready by 5:00 PM today?',
-    spanishDemoText: '¡Hola! ¿Si les llevo dos bolsas de ropa a lavar esta mañana, estarán listas hoy antes de las 5 de la tarde?',
-  },
   Male: {
-    personaName: 'Male',
+    personaName: 'Diego',
     scenarioTitle: 'Boat Captain to Old Bank (Bastimentos)',
     categoryIcon: 'sail-boat',
     englishText: 'Hi Captain! Are you available to take two of us to Old Bank on Bastimentos tonight?',
     spanishDemoText: '¿Buenas capitán? ¿Tendrá disponibilidad para llevarnos a dos personas a Old Bank en Bastimentos esta noche?',
   },
   Female: {
-    personaName: 'Female',
+    personaName: 'Sofia',
     scenarioTitle: 'Waterfront Table & Dinner Catch of the Day',
     categoryIcon: 'silverware-fork-knife',
     englishText: 'Hi! Do you have a table for two available tonight around 7:00 PM?',
@@ -60,7 +46,7 @@ let currentSoundObject: Audio.Sound | null = null;
 let isPlayingDemo = false;
 
 export async function playVoiceDemoSample(persona: VoiceOption): Promise<void> {
-  const sample = VOICE_DEMO_SAMPLES[persona.name] || VOICE_DEMO_SAMPLES.Diego;
+  const sample = VOICE_DEMO_SAMPLES[persona.name] || VOICE_DEMO_SAMPLES[persona.gender === 'FEMALE' ? 'Sofia' : 'Diego'] || VOICE_DEMO_SAMPLES.Diego;
   
   // If already playing, stop playback and return (toggle)
   if (isPlayingDemo) {
@@ -73,9 +59,9 @@ export async function playVoiceDemoSample(persona: VoiceOption): Promise<void> {
   await stopVoiceDemoSample();
   isPlayingDemo = true;
 
-  // 1. First Priority: Try Hyper-Realistic ElevenLabs Voices (Diego, Mateo, Sofia, Valeria)
+  // 1. First Priority: Try Hyper-Realistic ElevenLabs Voices (Diego, Sofia)
   try {
-    const elevenMp3Uri = await generateElevenLabsAudio(sample.spanishDemoText, persona.name);
+    const elevenMp3Uri = await generateElevenLabsAudio(sample.spanishDemoText, sample.personaName);
     if (elevenMp3Uri) {
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: false,
@@ -105,10 +91,8 @@ export async function playVoiceDemoSample(persona: VoiceOption): Promise<void> {
   let pitch = persona.pitch || 1.0;
   let rate = persona.rate || 0.88;
 
-  if (persona.name === 'Diego') pitch = 0.72;
-  else if (persona.name === 'Mateo') pitch = 0.65;
-  else if (persona.name === 'Sofia') pitch = 1.05;
-  else if (persona.name === 'Valeria') pitch = 1.15;
+  if (persona.name === 'Diego' || persona.gender === 'MALE') pitch = 0.72;
+  else if (persona.name === 'Sofia' || persona.gender === 'FEMALE') pitch = 1.05;
 
   try {
     const availableVoices = await Speech.getAvailableVoicesAsync();

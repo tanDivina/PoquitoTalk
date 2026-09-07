@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,9 @@ import {
   Platform,
   Linking,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { WhatsAppIcon } from '../components/WhatsAppIcon';
 import { Colors } from '../theme/colors';
@@ -24,6 +26,8 @@ import {
   toggleFavoriteContact,
   deletePhoneBookContact,
   recordRecentContact,
+  subscribePhoneBookChanged,
+  mapDirectoryCategoryToPhoneBook,
 } from '../services/storage';
 
 interface PhoneBookScreenProps {
@@ -45,56 +49,15 @@ const PHONEBOOK_CATEGORIES = [
   { id: 'other', label: 'Personal & Friends', icon: 'person' },
 ];
 
-const DEFAULT_INITIAL_CONTACTS: PhoneBookContact[] = [
-  {
-    id: 'seed-1',
-    name: 'Capt. Luis - Bocas Water Taxi',
-    phoneNumber: '+507 6712-4491',
-    whatsappNumber: '+507 6712-4491',
-    normalizedPhone: '+50767124491',
-    category: 'boat_repair',
-    notes: '24/7 fast boat between Isla Colón, Carenero & Bastimentos',
-    isFavorite: true,
-    isVerifiedDirectory: true,
-    createdAt: Date.now() - 100000,
-  },
-  {
-    id: 'seed-2',
-    name: 'Carlos - Master Electrician & A/C',
-    phoneNumber: '+507 6823-1190',
-    whatsappNumber: '+507 6823-1190',
-    normalizedPhone: '+50768231190',
-    category: 'home_trades',
-    notes: 'Reliable solar inverter & inverter A/C repair',
-    isFavorite: true,
-    isVerifiedDirectory: true,
-    createdAt: Date.now() - 200000,
-  },
-  {
-    id: 'seed-3',
-    name: 'Solarte Soil Works (Finca Natural)',
-    phoneNumber: '+507 6590-3321',
-    whatsappNumber: '+507 6590-3321',
-    normalizedPhone: '+50765903321',
-    category: 'home_trades',
-    notes: 'Living soils, compost & permaculture delivery',
-    isFavorite: false,
-    isVerifiedDirectory: false,
-    createdAt: Date.now() - 300000,
-  },
-  {
-    id: 'seed-4',
-    name: 'Island Veterinary Clinic',
-    phoneNumber: '+507 6445-8812',
-    whatsappNumber: '+507 6445-8812',
-    normalizedPhone: '+50764458812',
-    category: 'other',
-    notes: 'Dr. Mendez - Emergency pet care & vaccinations',
-    isFavorite: false,
-    isVerifiedDirectory: true,
-    createdAt: Date.now() - 400000,
-  },
-];
+const getCategoryDisplayLabel = (category?: string): string => {
+  if (!category) return '';
+  const match = PHONEBOOK_CATEGORIES.find((c) => c.id === category);
+  if (match) return match.label;
+  const mapped = mapDirectoryCategoryToPhoneBook(category);
+  const mappedMatch = PHONEBOOK_CATEGORIES.find((c) => c.id === mapped);
+  if (mappedMatch) return mappedMatch.label;
+  return category.replace(/_/g, ' ');
+};
 
 export const PhoneBookScreen: React.FC<PhoneBookScreenProps> = ({
   isPro,
@@ -105,33 +68,44 @@ export const PhoneBookScreen: React.FC<PhoneBookScreenProps> = ({
 }) => {
   const [contacts, setContacts] = useState<PhoneBookContact[]>([]);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [showAddContactModal, setShowAddContactModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
 
-  const loadContacts = async () => {
-    setLoading(true);
+  const loadContacts = useCallback(async (isPullToRefresh = false) => {
+    if (!isPullToRefresh) setLoading(true);
     try {
-      let list = await getPhoneBookContacts();
-      if (!list || list.length === 0) {
-        for (const c of DEFAULT_INITIAL_CONTACTS) {
-          await savePhoneBookContact(c);
-        }
-        list = DEFAULT_INITIAL_CONTACTS;
-      }
+      const list = await getPhoneBookContacts();
       setContacts(list || []);
     } catch (e) {
       console.error('Error loading contacts:', e);
       setContacts([]);
     } finally {
-      setLoading(false);
+      if (!isPullToRefresh) setLoading(false);
     }
-  };
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadContacts();
+    }, [loadContacts])
+  );
 
   useEffect(() => {
     loadContacts();
-  }, []);
+    const unsubscribe = subscribePhoneBookChanged((updatedList) => {
+      setContacts(updatedList);
+    });
+    return unsubscribe;
+  }, [loadContacts]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadContacts(true);
+    setRefreshing(false);
+  }, [loadContacts]);
 
   const handleToggleFavorite = async (contactId: string) => {
     const updated = await toggleFavoriteContact(contactId);
@@ -177,13 +151,38 @@ export const PhoneBookScreen: React.FC<PhoneBookScreenProps> = ({
     });
   };
 
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {
+      ALL: contacts.length,
+      FAVORITES: contacts.filter((c) => c.isFavorite).length,
+    };
+
+    PHONEBOOK_CATEGORIES.forEach((cat) => {
+      if (cat.id !== 'ALL' && cat.id !== 'FAVORITES') {
+        const target = cat.id.toLowerCase();
+        counts[cat.id] = contacts.filter((c) => {
+          const raw = (c.category || '').toLowerCase();
+          const mapped = mapDirectoryCategoryToPhoneBook(raw).toLowerCase();
+          return raw === target || mapped === target;
+        }).length;
+      }
+    });
+
+    return counts;
+  }, [contacts]);
+
   const filteredContacts = useMemo(() => {
     let result = contacts;
 
     if (selectedCategory === 'FAVORITES') {
       result = result.filter((c) => c.isFavorite);
     } else if (selectedCategory !== 'ALL') {
-      result = result.filter((c) => (c.category || '').toLowerCase() === selectedCategory.toLowerCase());
+      const target = selectedCategory.toLowerCase();
+      result = result.filter((c) => {
+        const raw = (c.category || '').toLowerCase();
+        const mapped = mapDirectoryCategoryToPhoneBook(raw).toLowerCase();
+        return raw === target || mapped === target;
+      });
     }
 
     if (searchQuery.trim()) {
@@ -193,7 +192,8 @@ export const PhoneBookScreen: React.FC<PhoneBookScreenProps> = ({
           c.name.toLowerCase().includes(q) ||
           c.phoneNumber.includes(q) ||
           (c.notes && c.notes.toLowerCase().includes(q)) ||
-          (c.category && c.category.toLowerCase().includes(q))
+          (c.category && c.category.toLowerCase().includes(q)) ||
+          mapDirectoryCategoryToPhoneBook(c.category).toLowerCase().includes(q)
       );
     }
 
@@ -261,6 +261,7 @@ export const PhoneBookScreen: React.FC<PhoneBookScreenProps> = ({
         >
           {PHONEBOOK_CATEGORIES.map((cat) => {
             const isSelected = selectedCategory === cat.id;
+            const count = categoryCounts[cat.id] || 0;
             return (
               <TouchableOpacity
                 key={cat.id}
@@ -282,7 +283,7 @@ export const PhoneBookScreen: React.FC<PhoneBookScreenProps> = ({
                     isSelected && styles.filterChipTextActive,
                   ]}
                 >
-                  {cat.label}
+                  {cat.label} ({count})
                 </Text>
               </TouchableOpacity>
             );
@@ -295,6 +296,14 @@ export const PhoneBookScreen: React.FC<PhoneBookScreenProps> = ({
         style={styles.container}
         contentContainerStyle={[styles.content, { paddingBottom: 160 }]}
         showsVerticalScrollIndicator={true}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={Colors.secondary}
+            colors={[Colors.secondary]}
+          />
+        }
       >
         {loading ? (
           <ActivityIndicator size="large" color={Colors.secondary} style={{ marginTop: 30 }} />
@@ -304,14 +313,35 @@ export const PhoneBookScreen: React.FC<PhoneBookScreenProps> = ({
               <Ionicons name="book-outline" size={32} color="#0F172A" />
             </View>
             <Text style={styles.emptyTitle}>
-              {searchQuery.trim() ? 'No Matching Contacts' : 'Your Phone Book is Empty'}
+              {searchQuery.trim()
+                ? 'No Matching Contacts'
+                : selectedCategory !== 'ALL'
+                ? 'No Contacts in This Category'
+                : 'Your Phone Book is Empty'}
             </Text>
             <Text style={styles.emptySub}>
               {searchQuery.trim()
                 ? `No contacts found matching "${searchQuery}".`
+                : selectedCategory !== 'ALL'
+                ? `You have ${contacts.length} contact${contacts.length === 1 ? '' : 's'} saved across other categories.`
                 : 'Save providers from the Bocas Directory with the "+ Phone Book" button, or tap "Add Contact" above to save your landlord, water taxi captain, maid, or friends.'}
             </Text>
-            {!searchQuery.trim() && (
+            {selectedCategory !== 'ALL' && contacts.length > 0 && (
+              <TouchableOpacity
+                style={styles.showAllCategoryBtn}
+                onPress={() => {
+                  setSelectedCategory('ALL');
+                  setSearchQuery('');
+                }}
+                activeOpacity={0.85}
+              >
+                <Ionicons name="people" size={15} color="#FFF" />
+                <Text style={styles.showAllCategoryBtnText}>
+                  Show All Contacts ({contacts.length})
+                </Text>
+              </TouchableOpacity>
+            )}
+            {contacts.length === 0 && !searchQuery.trim() && (
               <View style={styles.emptyActionRow}>
                 <TouchableOpacity
                   style={styles.importFirstBtn}
@@ -356,7 +386,16 @@ export const PhoneBookScreen: React.FC<PhoneBookScreenProps> = ({
                     <Text style={styles.contactName} numberOfLines={1}>
                       {contact.name}
                     </Text>
-                    <Text style={styles.contactPhone}>🇵🇦 {contact.phoneNumber}</Text>
+                    <View style={styles.phoneCategoryRow}>
+                      <Text style={styles.contactPhone}>🇵🇦 {contact.phoneNumber}</Text>
+                      {contact.category ? (
+                        <View style={styles.categoryPill}>
+                          <Text style={styles.categoryPillText}>
+                            {getCategoryDisplayLabel(contact.category)}
+                          </Text>
+                        </View>
+                      ) : null}
+                    </View>
                   </View>
 
                   {/* Star Favorite Button */}
@@ -640,6 +679,22 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
   },
+  showAllCategoryBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#0F172A',
+    paddingHorizontal: 16,
+    height: 42,
+    borderRadius: 10,
+    marginTop: 6,
+  },
+  showAllCategoryBtnText: {
+    color: '#FFF',
+    fontSize: 13,
+    fontWeight: '700',
+  },
   contactList: {
     gap: 12,
   },
@@ -705,6 +760,26 @@ const styles = StyleSheet.create({
     fontSize: 12.5,
     color: '#64748B',
     fontWeight: '600',
+  },
+  phoneCategoryRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    flexWrap: 'wrap',
+  },
+  categoryPill: {
+    backgroundColor: '#F1F5F9',
+    paddingHorizontal: 6,
+    paddingVertical: 1.5,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  categoryPillText: {
+    fontSize: 9.5,
+    fontWeight: '700',
+    color: '#475569',
+    textTransform: 'uppercase',
   },
   favBtn: {
     padding: 6,

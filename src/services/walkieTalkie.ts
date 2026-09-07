@@ -38,9 +38,34 @@ const SESSION_MAX_DURATION_MS = 15 * 60 * 1000; // 15 minutes max active session
 const SESSION_INACTIVITY_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes silence auto-close
 const SESSION_MAX_TURNS = 15; // 15 voice exchanges per session
 
+export type WalkieSessionListener = (session: WalkieSession | null) => void;
+
 class WalkieTalkieService {
   private activeSession: WalkieSession | null = null;
   private inactivityTimer: NodeJS.Timeout | null = null;
+  private sessionListeners: Set<WalkieSessionListener> = new Set();
+
+  public subscribeSession(listener: WalkieSessionListener): () => void {
+    this.sessionListeners.add(listener);
+    try {
+      listener(this.activeSession);
+    } catch (err) {
+      console.warn('Error in initial walkie session listener:', err);
+    }
+    return () => {
+      this.sessionListeners.delete(listener);
+    };
+  }
+
+  private notifySessionChanged(): void {
+    this.sessionListeners.forEach((listener) => {
+      try {
+        listener(this.activeSession);
+      } catch (err) {
+        console.warn('Error in walkie session listener:', err);
+      }
+    });
+  }
 
   public createSession(
     clientName?: string,
@@ -51,7 +76,8 @@ class WalkieTalkieService {
   ): WalkieSession {
     const randomId = Math.random().toString(36).substring(2, 8);
     const roomId = `room_${randomId}`;
-    const nameParam = clientName && clientName.trim().length > 0 && clientName.trim() !== 'Client' ? `&n=${encodeURIComponent(clientName.trim())}` : '';
+    const isKnownName = !!(clientName && clientName.trim().length > 0 && !['client', 'cliente'].includes(clientName.trim().toLowerCase()));
+    const nameParam = isKnownName ? `&n=${encodeURIComponent(clientName!.trim())}` : '';
     const cleanTopicEs = (topicEs || topic || '').trim();
     const cleanTopicEn = (topicEn || (cleanTopicEs !== topic ? topic : '') || '').trim();
     const shareUrl = `https://poquitotalk.hero-apps.com/talk?r=${roomId}${nameParam}`;
@@ -62,7 +88,7 @@ class WalkieTalkieService {
         id: `msg_init_${Date.now()}`,
         roomId,
         sender: 'expat',
-        senderName: `${clientName || 'Client'}`,
+        senderName: isKnownName ? clientName!.trim() : 'un cliente',
         rawText: cleanTopicEn || cleanTopicEs,
         cleanedEnglishText: cleanTopicEn || cleanTopicEs,
         spanishText: cleanTopicEs,
@@ -77,7 +103,7 @@ class WalkieTalkieService {
 
     this.activeSession = {
       roomId,
-      clientName: clientName || 'Client',
+      clientName: isKnownName ? clientName!.trim() : 'un cliente',
       topic: cleanTopicEn || cleanTopicEs,
       topicEs: cleanTopicEs,
       topicEn: cleanTopicEn,
@@ -98,11 +124,12 @@ class WalkieTalkieService {
         roomId,
         cleanTopicEn || cleanTopicEs,
         cleanTopicEs,
-        clientName || 'Client',
+        isKnownName ? clientName!.trim() : 'un cliente',
         initialAudioBase64
       );
     }
 
+    this.notifySessionChanged();
     return this.activeSession;
   }
 
@@ -128,12 +155,14 @@ class WalkieTalkieService {
       this.activeSession.status = 'active';
       this.activeSession.startedAt = now;
       this.activeSession.expiresAt = now + SESSION_MAX_DURATION_MS;
+      this.notifySessionChanged();
     }
 
     // Check expiration
     if (this.activeSession.expiresAt && now > this.activeSession.expiresAt) {
       this.activeSession.status = 'expired';
       this.clearInactivityTimer();
+      this.notifySessionChanged();
       return { active: false, remainingTurns: 0, reason: 'time_limit_reached' };
     }
 
@@ -144,6 +173,7 @@ class WalkieTalkieService {
     if (this.activeSession.turnCount > SESSION_MAX_TURNS) {
       this.activeSession.status = 'closed';
       this.clearInactivityTimer();
+      this.notifySessionChanged();
       return { active: false, remainingTurns: 0, reason: 'turn_limit_reached' };
     }
 
@@ -164,6 +194,7 @@ class WalkieTalkieService {
     if (this.activeSession.expiresAt && now > this.activeSession.expiresAt) {
       this.activeSession.status = 'expired';
       this.clearInactivityTimer();
+      this.notifySessionChanged();
       return;
     }
 
@@ -171,6 +202,7 @@ class WalkieTalkieService {
     if (this.activeSession.status === 'active' && (now - this.activeSession.lastActivityAt) > SESSION_INACTIVITY_TIMEOUT_MS) {
       this.activeSession.status = 'closed';
       this.clearInactivityTimer();
+      this.notifySessionChanged();
       return;
     }
   }
@@ -180,6 +212,7 @@ class WalkieTalkieService {
     this.inactivityTimer = setTimeout(() => {
       if (this.activeSession && this.activeSession.status === 'active') {
         this.activeSession.status = 'closed';
+        this.notifySessionChanged();
       }
     }, SESSION_INACTIVITY_TIMEOUT_MS);
   }
@@ -196,6 +229,7 @@ class WalkieTalkieService {
     if (this.activeSession) {
       this.activeSession.status = 'closed';
       this.activeSession = null;
+      this.notifySessionChanged();
     }
   }
 

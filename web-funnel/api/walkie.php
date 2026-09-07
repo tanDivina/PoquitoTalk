@@ -14,9 +14,9 @@ if (!is_dir($roomsDir)) {
     @mkdir($roomsDir, 0777, true);
 }
 
-$action = trim($_GET['action'] ?? $_POST['action'] ?? 'poll');
 $rawInput = file_get_contents('php://input');
 $jsonData = json_decode($rawInput, true) ?? [];
+$action = trim($_GET['action'] ?? $_POST['action'] ?? $jsonData['action'] ?? 'poll');
 
 $roomId = trim($_GET['r'] ?? $_GET['room'] ?? $_POST['r'] ?? $_POST['room'] ?? $jsonData['roomId'] ?? $jsonData['room'] ?? '');
 if (empty($roomId)) {

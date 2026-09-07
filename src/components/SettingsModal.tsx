@@ -14,7 +14,6 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { Colors } from '../theme/colors';
-import { GoogleSignInButton } from './GoogleSignInButton';
 import { GreenParrotLogo } from './GreenParrotLogo';
 import { FeedbackModal } from './FeedbackModal';
 import { RestorePurchasesModal } from './RestorePurchasesModal';
@@ -107,8 +106,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <Ionicons name="settings" size={20} color={Colors.primary} />
               </View>
               <View>
-                <Text style={styles.modalTitle}>Settings & Account</Text>
-                <Text style={styles.modalSubtitle}>Sync account & app preferences</Text>
+                <Text style={styles.modalTitle}>Settings</Text>
+                <Text style={styles.modalSubtitle}>Audio, voice & app preferences</Text>
               </View>
             </View>
 
@@ -122,10 +121,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
           >
-            {/* Google Account Sign-In Card */}
-            <View style={styles.card}>
-              <GoogleSignInButton />
-            </View>
 
             {/* Audio Playback Speed Preference */}
             <View style={styles.card}>
@@ -206,7 +201,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 >
                   <Text style={[styles.genderSymbol, voiceGender === 'MALE' && styles.genderSymbolActive]}>♂</Text>
                   <Text style={[styles.genderText, voiceGender === 'MALE' && styles.genderTextActive]}>
-                    Male
+                    Diego (Male)
                   </Text>
                 </TouchableOpacity>
 
@@ -220,7 +215,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 >
                   <Text style={[styles.genderSymbol, voiceGender === 'FEMALE' && styles.genderSymbolActive]}>♀</Text>
                   <Text style={[styles.genderText, voiceGender === 'FEMALE' && styles.genderTextActive]}>
-                    Female
+                    Sofia (Female)
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -349,7 +344,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </View>
 
               <View style={styles.signatureToggleRow}>
-                <Text style={styles.signatureToggleLabel}>Add Link to Messages</Text>
+                <Text style={styles.signatureToggleLabel}>Include App Signature</Text>
                 <Switch
                   value={includeSignature}
                   onValueChange={handleToggleSignature}
@@ -361,12 +356,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               {includeSignature ? (
                 <View style={styles.signaturePreviewBox}>
                   <Text style={styles.signaturePreviewLabel}>MESSAGE PREVIEW</Text>
-                  <Text style={styles.signaturePreviewText}>- Sent via poquitotalk.hero-apps.com 🇵🇦</Text>
+                  <Text style={styles.signaturePreviewText}>- Enviado por la app PoquitoTalk 🇵🇦</Text>
                 </View>
               ) : (
                 <View style={styles.signatureCleanBox}>
                   <Ionicons name="checkmark-circle" size={14} color="#059669" />
-                  <Text style={styles.signatureCleanText}>Clean mode active • No link added</Text>
+                  <Text style={styles.signatureCleanText}>Clean mode active • No signature added</Text>
                 </View>
               )}
             </View>

@@ -6,15 +6,17 @@ This document contains everything needed to publish **PoquitoTalk** (`com.heroap
 
 ## 1. 📱 Store Listing Metadata (Copy-Paste Ready)
 
-### 🏷️ App Title (29 / 30 chars)
+### 🏷️ App Title (28 / 30 chars)
 ```text
-PoquitoTalk: Panama Spanish
+PoquitoTalk: Bocas del Toro
 ```
 
-### 📝 Short Description (77 / 80 chars)
+### 📝 Short Description (76 / 80 chars)
 ```text
-Panamanian Spanish WhatsApp voice notes & verified island service directory.
+Panama Spanish voice translator & verified Bocas del Toro service directory.
 ```
+
+
 
 ### 📄 Full Description (ASO-Optimized)
 ```text
@@ -90,10 +92,14 @@ All graphic assets are generated and located directly in the project root:
 - **Website URL**: `https://poquitotalk.hero-apps.com`
 - **Privacy Policy URL**: `https://poquitotalk.hero-apps.com/privacy`
 
-### B. Data Safety Questionnaire Guide
-- **Data Collection**: No personal information, financial data, health, or location is collected or sold.
-- **Microphone / Voice Audio**: Collected ephemeral in-app only for English-to-Spanish voice transcription and translation; not shared with 3rd parties; user-initiated only.
-- **Security Practices**: Data in transit is encrypted via HTTPS/TLS.
+### B. Data Safety Questionnaire Guide (1-Click CSV Import)
+- **Instant CSV Import**: The entire Data Safety questionnaire is pre-configured and ready to import via CSV in Google Play Console!
+- **File location**: [`google_play_submission_files/data_safety_export_poquitotalk.csv`](file:///Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/google_play_submission_files/data_safety_export_poquitotalk.csv) (and in `~/Downloads/data_safety_export.csv`).
+- **How to import**: In Google Play Console > App Content > Data Safety, click **Import from CSV** (rechtsboven) and select the file. It will automatically complete all 5 steps!
+- **Declarations Summary**:
+  - Personal Info / Accounts: App does not support account creation (`PSL_ACM_NONE`).
+  - Audio / Voice: Collected ephemerally for translation (`PSL_AUDIO`), optional for users, encrypted in transit, not shared with third parties.
+  - All other data types: None.
 
 ### C. Content Rating
 - Target Age: 12+ / Everyone (No mature content, no gambling, no offensive language).

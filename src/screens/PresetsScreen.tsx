@@ -11,21 +11,23 @@ import {
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
-import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
+import { WhatsAppIcon } from '../components/WhatsAppIcon';
+import { SpeakerIcon } from '../components/SpeakerIcon';
 import { SERVICE_PRESETS, getCategoryPastelTheme } from '../services/presets';
 import { generateGoogleGeminiAudio, playGoogleAudioFile } from '../services/googleVoice';
+import { resolvePresetAudioUri } from '../services/presetAudio';
 import { PresetPhrase } from '../types';
 import { shareVoiceNoteToWhatsApp, sendTextToWhatsApp } from '../services/sharing';
+import { getPreferredVoiceGender } from '../services/storage';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const SCENARIO_CARD_WIDTH = Math.min(SCREEN_WIDTH - 64, 320);
 
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
+
 
 interface PresetsScreenProps {
   isPro: boolean;
@@ -52,7 +54,16 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
   const quickBarRef = React.useRef<ScrollView>(null);
 
   // Single active expanded card ID (defaults to empty string for clean resting stack above the fold)
-  const [activeCardId, setActiveCardId] = useState<string>('');
+  const [activeCardId, setActiveCardId] = useState<string>(() => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search).get('preset') || new URLSearchParams(window.location.search).get('deck');
+      if (p) {
+        if (p === 'water_taxi') return 'boat';
+        return p;
+      }
+    }
+    return '';
+  });
   const [selectedSubPills, setSelectedSubPills] = useState<Record<string, string>>({});
   const [playingPhraseId, setPlayingPhraseId] = useState<string | null>(null);
   const [loadingAudioId, setLoadingAudioId] = useState<string | null>(null);
@@ -108,8 +119,12 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
 
     setLoadingAudioId(phraseKey);
 
+    const preferredGender = await getPreferredVoiceGender();
+    const isMale = preferredGender !== 'FEMALE';
+    const personaName = isMale ? 'Male' : 'Female';
+
     try {
-      const fileUri = await generateGoogleGeminiAudio(textToSpeak, 'Male');
+      const fileUri = await resolvePresetAudioUri(phrase.id, textToSpeak, personaName);
       setLoadingAudioId(null);
 
       if (fileUri) {
@@ -122,11 +137,41 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       setLoadingAudioId(null);
     }
 
-    // Fallback to Device Speech
+    // Fallback to Device Speech with persona awareness
     setPlayingPhraseId(phraseKey);
+    let targetVoice = undefined;
+    try {
+      const availableVoices = await Speech.getAvailableVoicesAsync();
+      const spanishVoices = availableVoices.filter((v) => v.language.toLowerCase().includes('es'));
+      if (isMale) {
+        targetVoice = spanishVoices.find(
+          (v) =>
+            v.name.toLowerCase().includes('jorge') ||
+            v.name.toLowerCase().includes('juan') ||
+            v.name.toLowerCase().includes('diego') ||
+            v.name.toLowerCase().includes('carlos') ||
+            v.name.toLowerCase().includes('male') ||
+            v.identifier.toLowerCase().includes('jorge') ||
+            v.identifier.toLowerCase().includes('juan') ||
+            v.identifier.toLowerCase().includes('male')
+        );
+      } else {
+        targetVoice = spanishVoices.find(
+          (v) =>
+            v.name.toLowerCase().includes('monica') ||
+            v.name.toLowerCase().includes('paolina') ||
+            v.name.toLowerCase().includes('sofia') ||
+            v.name.toLowerCase().includes('lucia') ||
+            v.name.toLowerCase().includes('female') ||
+            v.identifier.toLowerCase().includes('female')
+        );
+      }
+    } catch (e) {}
+
     Speech.speak(textToSpeak, {
-      language: 'es-US',
-      pitch: 0.96,
+      language: 'es-419',
+      voice: targetVoice ? targetVoice.identifier : undefined,
+      pitch: isMale ? 0.75 : 1.10,
       rate: 0.82,
       onDone: () => setPlayingPhraseId(null),
       onError: () => setPlayingPhraseId(null),
@@ -145,7 +190,9 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
     const phraseKey = phrase.id || phrase.title;
     try {
       setSharingAudioId(phraseKey);
-      const audioUri = await generateGoogleGeminiAudio(spanish, 'Male');
+      const preferredGender = await getPreferredVoiceGender();
+      const personaName = preferredGender === 'FEMALE' ? 'Female' : 'Male';
+      const audioUri = await resolvePresetAudioUri(phrase.id, spanish, personaName);
       if (audioUri) {
         await shareVoiceNoteToWhatsApp(audioUri, 'Contact', spanish);
       } else {
@@ -331,8 +378,9 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                                 style={[
                                   styles.subPill,
                                   {
-                                    backgroundColor: isSubActive ? theme.accent : '#FFFFFF',
+                                    backgroundColor: isSubActive ? theme.badgeBg : '#FFFFFF',
                                     borderColor: isSubActive ? theme.accent : theme.border,
+                                    borderWidth: isSubActive ? 1.5 : 1,
                                   },
                                 ]}
                                 onPress={() =>
@@ -347,14 +395,14 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                                   <MaterialCommunityIcons
                                     name={sub.icon as any}
                                     size={13}
-                                    color={isSubActive ? '#FFFFFF' : theme.accent}
+                                    color="#0F172A"
                                   />
                                 )}
                                 <Text
                                   style={[
                                     styles.subPillText,
                                     {
-                                      color: isSubActive ? '#FFFFFF' : '#1E293B',
+                                      color: '#0F172A',
                                       fontWeight: isSubActive ? '800' : '600',
                                     },
                                   ]}
@@ -462,16 +510,24 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                               <TouchableOpacity
                                 style={[
                                   styles.speakerOnlyBtn,
-                                  { borderColor: theme.border, backgroundColor: '#FAF9F6' },
+                                  {
+                                    borderColor: isPlayingThis ? '#FCA5A5' : theme.border,
+                                    backgroundColor: isPlayingThis ? '#FEE2E2' : theme.badgeBg,
+                                  },
                                 ]}
                                 onPress={() => handlePlayPhraseAudio(phrase)}
                                 activeOpacity={0.7}
                               >
                                 {isLoadingThis ? (
-                                  <ActivityIndicator size="small" color={theme.accent} />
-                                ) : (
+                                  <ActivityIndicator size="small" color={isPlayingThis ? '#BA1A1A' : theme.accent} />
+                                ) : isPlayingThis ? (
                                   <Ionicons
-                                    name={isPlayingThis ? 'stop-circle' : 'volume-high'}
+                                    name="stop-circle"
+                                    size={18}
+                                    color="#BA1A1A"
+                                  />
+                                ) : (
+                                  <SpeakerIcon
                                     size={18}
                                     color={theme.accent}
                                   />
@@ -484,7 +540,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                                 onPress={() => handleSendWhatsAppText(phrase)}
                                 activeOpacity={0.7}
                               >
-                                <FontAwesome5 name="whatsapp" size={13} color="#047857" />
+                                <WhatsAppIcon size={14} color="#047857" />
                                 <Text style={styles.textWhatsappBtnLabel}>Text</Text>
                               </TouchableOpacity>
 
@@ -499,7 +555,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                                   <ActivityIndicator size="small" color="#FFF" />
                                 ) : (
                                   <>
-                                    <FontAwesome5 name="whatsapp" size={13} color="#FFFFFF" />
+                                    <WhatsAppIcon size={14} color="#FFFFFF" />
                                     <Text style={styles.voiceWhatsappBtnLabel}>Voice</Text>
                                   </>
                                 )}

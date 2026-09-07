@@ -6,7 +6,6 @@ import { Header } from '../components/Header';
 import { FeedbackModal } from '../components/FeedbackModal';
 import { GreenParrotLogo } from '../components/GreenParrotLogo';
 import { AnimatedParrotMascot } from '../components/AnimatedParrotMascot';
-import { GoogleSignInButton } from '../components/GoogleSignInButton';
 import { getPlaybackSpeed, setPlaybackSpeed, PlaybackSpeed } from '../services/storage';
 
 interface SettingsScreenProps {
@@ -28,13 +27,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ isPro, onOpenPay
       <Header isPro={isPro} onOpenPaywall={onOpenPaywall} onResetOnboarding={onResetOnboarding} />
 
       <View style={styles.titleSection}>
-        <Text style={styles.title}>Settings & Account</Text>
-        <Text style={styles.subtitle}>Configure preferences and sync your Google account.</Text>
-      </View>
-
-      {/* Google Account Sign-In Card */}
-      <View style={styles.card}>
-        <GoogleSignInButton />
+        <Text style={styles.title}>Settings</Text>
+        <Text style={styles.subtitle}>Audio, voice & app preferences.</Text>
       </View>
 
       {/* Audio Playback Speed Preference */}

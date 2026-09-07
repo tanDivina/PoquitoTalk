@@ -20,8 +20,8 @@ export const GreenParrotLogo: React.FC<GreenParrotLogoProps> = ({ size = 42 }) =
 
       {/* Canonical Studio Parrot Group (Scaled & centered within speech bubble with zero overlap) */}
       <G transform="translate(43, 39) scale(0.75)">
-        {/* 1. Wooden Perch Branch */}
-        <Path d="M 30 135 Q 70 132 115 135" stroke="#B45309" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
+        {/* 1. Straightened Wooden Perch Branch */}
+        <Path d="M 28 135 L 118 135" stroke="#B45309" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
 
         {/* 2. Golden Parrot Claws */}
         <Path

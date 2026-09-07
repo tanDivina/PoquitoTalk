@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Platform, Linking, Alert } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, Platform, Linking, Alert, TouchableOpacity, Text } from 'react-native';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -21,8 +21,14 @@ import { ClaimCelebrationModal } from './src/components/ClaimCelebrationModal';
 import { TranslationItem, UserPersona } from './src/types';
 import { GOOGLE_SPANISH_VOICES, VoiceOption } from './src/services/googleVoice';
 import { getUserPersona, setUserPersona, getSavedTranslations, toggleSavedTranslationItem } from './src/services/storage';
+import {
+  loadConversationThreads,
+  syncAllThreadsWithServer,
+  subscribeToThreadUpdates,
+} from './src/services/conversations';
 import { revenueCat } from './src/services/revenuecat';
 import { handleIncomingClaimDeepLink } from './src/services/deepLinks';
+import { walkieTalkieService } from './src/services/walkieTalkie';
 
 const Tab = createBottomTabNavigator();
 
@@ -56,6 +62,61 @@ function MainAppTabs({
     return false;
   });
   const [restoreModalVisible, setRestoreModalVisible] = useState(false);
+  const [totalUnreadThreads, setTotalUnreadThreads] = useState(0);
+  const [incomingNotification, setIncomingNotification] = useState<{
+    threadId: string;
+    contactName: string;
+    messageText: string;
+  } | null>(null);
+
+  const navigationRef = useNavigationContainerRef();
+
+  // Background thread sync and reactive notifications
+  useEffect(() => {
+    let isMounted = true;
+    const updateUnread = async () => {
+      const threads = await loadConversationThreads();
+      if (!isMounted) return;
+      const count = threads.reduce((acc, t) => acc + (t.unreadCount || 0), 0);
+      setTotalUnreadThreads(count);
+    };
+
+    updateUnread();
+
+    const pollInterval = setInterval(async () => {
+      const res = await syncAllThreadsWithServer();
+      if (res.updatedCount > 0 && isMounted) {
+        updateUnread();
+      }
+    }, 6000);
+
+    const unsub = subscribeToThreadUpdates(({ thread, isIncomingReply, newMessage }) => {
+      if (!isMounted) return;
+      updateUnread();
+      if (isIncomingReply && newMessage) {
+        setIncomingNotification({
+          threadId: thread.id,
+          contactName: thread.contactName,
+          messageText: newMessage.textEnglish || newMessage.textSpanish || 'New message received',
+        });
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      clearInterval(pollInterval);
+      unsub();
+    };
+  }, []);
+
+  // Auto-dismiss banner toast after 6 seconds
+  useEffect(() => {
+    if (!incomingNotification) return;
+    const timer = setTimeout(() => {
+      setIncomingNotification(null);
+    }, 6000);
+    return () => clearTimeout(timer);
+  }, [incomingNotification]);
 
   const initialTab =
     Platform.OS === 'web' && typeof window !== 'undefined'
@@ -64,10 +125,61 @@ function MainAppTabs({
 
   return (
     <View style={styles.mainContainer}>
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <Tab.Navigator
           id="main_tabs"
           initialRouteName={initialTab}
+          screenListeners={({ navigation, route }: any) => ({
+            tabPress: (e: any) => {
+              const activeSession = walkieTalkieService.getActiveSession();
+              if (!activeSession) return;
+
+              e.preventDefault();
+
+              const tabDestinations: Record<string, string> = {
+                Translate: 'the main menu',
+                Presets: 'Templates',
+                Conversations: 'Threads',
+                Directory: 'the Directory',
+                PhoneBook: 'the Phone Book',
+              };
+
+              const destination = tabDestinations[route.name] || route.name;
+
+              if (route.name === 'Translate') {
+                Alert.alert(
+                  'Exit Walkie Channel?',
+                  'Do you want to return to the main menu?',
+                  [
+                    { text: 'Stay in Channel', style: 'cancel' },
+                    {
+                      text: 'Return to Menu',
+                      style: 'destructive',
+                      onPress: () => {
+                        walkieTalkieService.closeSession();
+                      },
+                    },
+                  ]
+                );
+              } else {
+                Alert.alert(
+                  'Exit Walkie Channel?',
+                  `Do you want to exit the channel and go to ${destination}?`,
+                  [
+                    { text: 'Stay in Channel', style: 'cancel' },
+                    {
+                      text: `Go to ${destination}`,
+                      style: 'destructive',
+                      onPress: () => {
+                        walkieTalkieService.closeSession();
+                        navigation.navigate(route.name);
+                      },
+                    },
+                  ]
+                );
+              }
+            },
+          })}
           screenOptions={{
             headerShown: false,
             tabBarActiveTintColor: Colors.secondary,
@@ -138,6 +250,13 @@ function MainAppTabs({
             name="Conversations"
             options={{
               tabBarLabel: 'Threads',
+              tabBarBadge: totalUnreadThreads > 0 ? totalUnreadThreads : undefined,
+              tabBarBadgeStyle: {
+                backgroundColor: Colors.secondary,
+                color: '#FFFFFF',
+                fontSize: 10,
+                fontWeight: '700',
+              },
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="chatbubbles-outline" size={23} color={color} />
               ),
@@ -251,6 +370,42 @@ function MainAppTabs({
           setTimeout(() => setPaywallVisible(true), 250);
         }}
       />
+
+      {/* In-App Reply Toast Notification */}
+      {incomingNotification && (
+        <TouchableOpacity
+          style={[styles.toastBanner, { top: insets.top + 8 }]}
+          activeOpacity={0.9}
+          onPress={() => {
+            setIncomingNotification(null);
+            if (navigationRef.isReady()) {
+              (navigationRef as any).navigate('Conversations');
+            }
+          }}
+        >
+          <View style={styles.toastIconCircle}>
+            <Ionicons name="chatbubble-ellipses" size={18} color="#FFFFFF" />
+          </View>
+          <View style={styles.toastTextContainer}>
+            <View style={styles.toastHeaderRow}>
+              <Text style={styles.toastTitle} numberOfLines={1}>
+                Reply from {incomingNotification.contactName}
+              </Text>
+              <Text style={styles.toastActionText}>View</Text>
+            </View>
+            <Text style={styles.toastSnippet} numberOfLines={2}>
+              "{incomingNotification.messageText}"
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={styles.toastCloseBtn}
+            onPress={() => setIncomingNotification(null)}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons name="close" size={16} color="#71717A" />
+          </TouchableOpacity>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -350,8 +505,12 @@ export default function App() {
     setSavedTranslations(updated);
   };
 
+  const handleSplashFinish = useCallback(() => {
+    setIsSplashComplete(true);
+  }, []);
+
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider style={styles.mainContainer}>
       <StatusBar style="dark" />
       {showOnboarding ? (
         <OnboardingScreen onComplete={handleCompleteOnboarding} />
@@ -374,7 +533,7 @@ export default function App() {
 
       {/* Animated Brand Splash Screen */}
       {!isSplashComplete && (
-        <SplashScreen onFinish={() => setIsSplashComplete(true)} />
+        <SplashScreen onFinish={handleSplashFinish} />
       )}
 
       {/* Web-to-App Claim Celebration Modal */}
@@ -390,6 +549,10 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
   mainContainer: {
     flex: 1,
     backgroundColor: Colors.background,
@@ -425,5 +588,65 @@ const styles = StyleSheet.create({
     fontSize: 9.5,
     fontWeight: '700',
     marginTop: 2,
+  },
+  toastBanner: {
+    position: 'absolute',
+    left: 16,
+    right: 16,
+    zIndex: 99999,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
+    elevation: 10,
+    borderWidth: 1.5,
+    borderColor: 'rgba(150, 72, 36, 0.20)',
+  },
+  toastIconCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: Colors.secondary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+    flexShrink: 0,
+  },
+  toastTextContainer: {
+    flex: 1,
+    marginRight: 8,
+  },
+  toastHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 2,
+  },
+  toastTitle: {
+    fontSize: 13.5,
+    fontWeight: '800',
+    color: '#1A1208',
+    flex: 1,
+    marginRight: 6,
+  },
+  toastActionText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.secondary,
+  },
+  toastSnippet: {
+    fontSize: 12.5,
+    color: '#5C4E3A',
+    lineHeight: 16,
+  },
+  toastCloseBtn: {
+    padding: 4,
+    flexShrink: 0,
   },
 });

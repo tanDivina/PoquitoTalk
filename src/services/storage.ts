@@ -2,10 +2,59 @@ import { Platform } from 'react-native';
 import * as FileSystem from 'expo-file-system/legacy';
 import { PanamaTone, LocalServiceProvider, PhoneBookContact, UserPersona, TranslationItem } from '../types';
 
-const SETTINGS_FILE_PATH = `${FileSystem.documentDirectory || FileSystem.cacheDirectory}poquito_settings_v2.json`;
-const CUSTOM_PROVIDERS_FILE_PATH = `${FileSystem.documentDirectory || FileSystem.cacheDirectory}poquito_custom_providers_v1.json`;
-const PHONEBOOK_FILE_PATH = `${FileSystem.documentDirectory || FileSystem.cacheDirectory}poquito_phonebook_v1.json`;
-const SAVED_TRANSLATIONS_FILE_PATH = `${FileSystem.documentDirectory || FileSystem.cacheDirectory}poquito_saved_translations_v1.json`;
+function getDocPath(filename: string): string {
+  let base = FileSystem.documentDirectory || FileSystem.cacheDirectory || '';
+  if (base && !base.endsWith('/')) {
+    base += '/';
+  }
+  return `${base}${filename}`;
+}
+
+async function readJsonFile<T>(filename: string): Promise<T | null> {
+  const filePath = getDocPath(filename);
+  try {
+    const info = await FileSystem.getInfoAsync(filePath);
+    if (info.exists) {
+      const text = await FileSystem.readAsStringAsync(filePath);
+      return JSON.parse(text);
+    }
+  } catch (e) {
+    // fallback
+  }
+  try {
+    const cacheDir = FileSystem.cacheDirectory;
+    if (cacheDir) {
+      const cachePath = `${cacheDir.endsWith('/') ? cacheDir : cacheDir + '/'}${filename}`;
+      if (cachePath !== filePath) {
+        const info = await FileSystem.getInfoAsync(cachePath);
+        if (info.exists) {
+          const text = await FileSystem.readAsStringAsync(cachePath);
+          return JSON.parse(text);
+        }
+      }
+    }
+  } catch (e) {}
+  return null;
+}
+
+async function writeJsonFile(filename: string, data: any): Promise<void> {
+  const json = JSON.stringify(data);
+  const filePath = getDocPath(filename);
+  try {
+    await FileSystem.writeAsStringAsync(filePath, json);
+  } catch (e) {
+    console.warn(`Failed writing to ${filePath}:`, e);
+    try {
+      const cacheDir = FileSystem.cacheDirectory;
+      if (cacheDir) {
+        const cachePath = `${cacheDir.endsWith('/') ? cacheDir : cacheDir + '/'}${filename}`;
+        if (cachePath !== filePath) {
+          await FileSystem.writeAsStringAsync(cachePath, json);
+        }
+      }
+    } catch (e2) {}
+  }
+}
 
 let cachedSavedTranslations: TranslationItem[] | null = null;
 
@@ -49,10 +98,9 @@ export async function getAppSettings(): Promise<AppSettingsStorage> {
   if (cachedSettings) return cachedSettings;
 
   try {
-    const info = await FileSystem.getInfoAsync(SETTINGS_FILE_PATH);
-    if (info.exists) {
-      const text = await FileSystem.readAsStringAsync(SETTINGS_FILE_PATH);
-      cachedSettings = { ...DEFAULT_SETTINGS, ...JSON.parse(text) };
+    const parsed = await readJsonFile<AppSettingsStorage>('poquito_settings_v2.json');
+    if (parsed) {
+      cachedSettings = { ...DEFAULT_SETTINGS, ...parsed };
       return cachedSettings;
     }
   } catch (e) {
@@ -65,11 +113,7 @@ export async function getAppSettings(): Promise<AppSettingsStorage> {
 
 export async function saveAppSettings(settings: AppSettingsStorage): Promise<void> {
   cachedSettings = settings;
-  try {
-    await FileSystem.writeAsStringAsync(SETTINGS_FILE_PATH, JSON.stringify(settings));
-  } catch (e) {
-    console.warn('Failed to save settings:', e);
-  }
+  await writeJsonFile('poquito_settings_v2.json', settings);
 }
 
 export async function getGlobalDefaultTone(): Promise<PanamaTone> {
@@ -146,11 +190,10 @@ export async function getCustomProviders(): Promise<LocalServiceProvider[]> {
   if (cachedCustomProviders) return cachedCustomProviders;
 
   try {
-    const info = await FileSystem.getInfoAsync(CUSTOM_PROVIDERS_FILE_PATH);
-    if (info.exists) {
-      const text = await FileSystem.readAsStringAsync(CUSTOM_PROVIDERS_FILE_PATH);
-      cachedCustomProviders = JSON.parse(text);
-      return cachedCustomProviders || [];
+    const parsed = await readJsonFile<LocalServiceProvider[]>('poquito_custom_providers_v1.json');
+    if (parsed && Array.isArray(parsed)) {
+      cachedCustomProviders = parsed;
+      return cachedCustomProviders;
     }
   } catch (e) {
     // fallback
@@ -186,11 +229,7 @@ export async function saveCustomProvider(newProvider: LocalServiceProvider): Pro
   }
 
   cachedCustomProviders = updatedList;
-  try {
-    await FileSystem.writeAsStringAsync(CUSTOM_PROVIDERS_FILE_PATH, JSON.stringify(updatedList));
-  } catch (e) {
-    console.warn('Failed to save custom provider:', e);
-  }
+  await writeJsonFile('poquito_custom_providers_v1.json', updatedList);
 
   return updatedList;
 }
@@ -199,19 +238,154 @@ export async function saveCustomProvider(newProvider: LocalServiceProvider): Pro
 // PHONE BOOK / FAVORITES STORAGE LAYER
 // ==========================================
 
+export function mapDirectoryCategoryToPhoneBook(dirCategory?: string): string {
+  if (!dirCategory) return 'other';
+  const cat = dirCategory.toLowerCase();
+  if (
+    cat.includes('boat') ||
+    cat.includes('lancha') ||
+    cat.includes('water_taxi') ||
+    cat.includes('land_taxi') ||
+    cat.includes('taxi') ||
+    cat.includes('transport')
+  ) {
+    return 'boat_repair';
+  }
+  if (
+    cat.includes('ac_repair') ||
+    cat.includes('contractor') ||
+    cat.includes('gardening') ||
+    cat.includes('plumb') ||
+    cat.includes('electric') ||
+    cat.includes('solar') ||
+    cat.includes('handyman') ||
+    cat.includes('starlink') ||
+    cat.includes('tech') ||
+    cat.includes('trades')
+  ) {
+    return 'home_trades';
+  }
+  if (cat.includes('clean') || cat.includes('maid') || cat.includes('aseo')) {
+    return 'cleaning';
+  }
+  if (cat.includes('housing') || cat.includes('landlord') || cat.includes('rent')) {
+    return 'housing';
+  }
+  if (cat.includes('tour') || cat.includes('rental') || cat.includes('surf') || cat.includes('dive')) {
+    return 'tours';
+  }
+  return 'other';
+}
+
+type PhoneBookChangeListener = (contacts: PhoneBookContact[]) => void;
+const phoneBookListeners = new Set<PhoneBookChangeListener>();
+
+export function subscribePhoneBookChanged(listener: PhoneBookChangeListener): () => void {
+  phoneBookListeners.add(listener);
+  return () => {
+    phoneBookListeners.delete(listener);
+  };
+}
+
+function notifyPhoneBookChanged(contacts: PhoneBookContact[]) {
+  phoneBookListeners.forEach((listener) => {
+    try {
+      listener(contacts);
+    } catch (e) {
+      console.warn('Error in phoneBookListener:', e);
+    }
+  });
+}
+
+export const DEFAULT_INITIAL_CONTACTS: PhoneBookContact[] = [
+  {
+    id: 'seed-1',
+    name: 'Capt. Luis - Bocas Water Taxi',
+    phoneNumber: '+507 6712-4491',
+    whatsappNumber: '+507 6712-4491',
+    normalizedPhone: '50767124491',
+    category: 'boat_repair',
+    notes: '24/7 fast boat between Isla Colón, Carenero & Bastimentos',
+    isFavorite: true,
+    isVerifiedDirectory: true,
+    createdAt: Date.now() - 100000,
+  },
+  {
+    id: 'seed-2',
+    name: 'Carlos - Master Electrician & A/C',
+    phoneNumber: '+507 6823-1190',
+    whatsappNumber: '+507 6823-1190',
+    normalizedPhone: '50768231190',
+    category: 'home_trades',
+    notes: 'Reliable solar inverter & inverter A/C repair',
+    isFavorite: true,
+    isVerifiedDirectory: true,
+    createdAt: Date.now() - 200000,
+  },
+  {
+    id: 'seed-3',
+    name: 'Bocas Organic Soil & Compost',
+    phoneNumber: '+507 6590-3321',
+    whatsappNumber: '+507 6590-3321',
+    normalizedPhone: '50765903321',
+    category: 'home_trades',
+    notes: 'Living soils, compost & permaculture delivery',
+    isFavorite: false,
+    isVerifiedDirectory: false,
+    createdAt: Date.now() - 300000,
+  },
+  {
+    id: 'seed-4',
+    name: 'Island Veterinary Clinic',
+    phoneNumber: '+507 6445-8812',
+    whatsappNumber: '+507 6445-8812',
+    normalizedPhone: '50764458812',
+    category: 'other',
+    notes: 'Emergency pet care & vaccinations',
+    isFavorite: false,
+    isVerifiedDirectory: true,
+    createdAt: Date.now() - 400000,
+  },
+];
+
 let phoneBookPromise: Promise<PhoneBookContact[]> | null = null;
 
+async function persistPhoneBook(list: PhoneBookContact[]): Promise<void> {
+  cachedPhoneBook = list;
+  if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
+    try {
+      localStorage.setItem('poquito_phonebook_v1', JSON.stringify(list));
+    } catch (e) {}
+  }
+  await writeJsonFile('poquito_phonebook_v1.json', list);
+  notifyPhoneBookChanged(list);
+}
+
 export async function getPhoneBookContacts(): Promise<PhoneBookContact[]> {
-  if (cachedPhoneBook) return cachedPhoneBook;
+  if (cachedPhoneBook && cachedPhoneBook.length > 0) return cachedPhoneBook;
   if (phoneBookPromise) return phoneBookPromise;
 
   phoneBookPromise = (async () => {
+    if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
+      try {
+        const raw = localStorage.getItem('poquito_phonebook_v1');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            cachedPhoneBook = parsed;
+            return cachedPhoneBook;
+          }
+        }
+      } catch (e) {
+        // fallback
+      }
+    }
+
     try {
-      const info = await FileSystem.getInfoAsync(PHONEBOOK_FILE_PATH);
-      if (info.exists) {
-        const text = await FileSystem.readAsStringAsync(PHONEBOOK_FILE_PATH);
-        cachedPhoneBook = JSON.parse(text) || [];
-        return cachedPhoneBook || [];
+      const parsed = await readJsonFile<PhoneBookContact[]>('poquito_phonebook_v1.json');
+      if (parsed && Array.isArray(parsed) && parsed.length > 0) {
+        cachedPhoneBook = parsed;
+        return cachedPhoneBook;
       }
     } catch (e) {
       // fallback
@@ -219,8 +393,10 @@ export async function getPhoneBookContacts(): Promise<PhoneBookContact[]> {
       phoneBookPromise = null;
     }
 
-    cachedPhoneBook = [];
-    return [];
+    // Default seed on initial launch
+    cachedPhoneBook = [...DEFAULT_INITIAL_CONTACTS];
+    persistPhoneBook(cachedPhoneBook);
+    return cachedPhoneBook;
   })();
 
   return phoneBookPromise;
@@ -231,7 +407,11 @@ export async function savePhoneBookContact(contact: PhoneBookContact): Promise<P
   const normalizedNew = normalizePanamaPhoneNumber(contact.whatsappNumber || contact.phoneNumber || '');
 
   const existingIdx = existing.findIndex(
-    (c) => c.id === contact.id || (normalizedNew && normalizePanamaPhoneNumber(c.whatsappNumber || c.phoneNumber || '') === normalizedNew)
+    (c) =>
+      c.id === contact.id ||
+      (c.directoryProviderId && contact.directoryProviderId && c.directoryProviderId === contact.directoryProviderId) ||
+      (normalizedNew &&
+        normalizePanamaPhoneNumber(c.whatsappNumber || c.phoneNumber || c.normalizedPhone || '') === normalizedNew)
   );
 
   let updatedList: PhoneBookContact[];
@@ -253,27 +433,14 @@ export async function savePhoneBookContact(contact: PhoneBookContact): Promise<P
     ];
   }
 
-  cachedPhoneBook = updatedList;
-  try {
-    await FileSystem.writeAsStringAsync(PHONEBOOK_FILE_PATH, JSON.stringify(updatedList));
-  } catch (e) {
-    console.warn('Failed to save phone book contact:', e);
-  }
-
+  await persistPhoneBook(updatedList);
   return updatedList;
 }
 
 export async function deletePhoneBookContact(contactId: string): Promise<PhoneBookContact[]> {
   const existing = await getPhoneBookContacts();
   const updatedList = existing.filter((c) => c.id !== contactId && c.directoryProviderId !== contactId);
-
-  cachedPhoneBook = updatedList;
-  try {
-    await FileSystem.writeAsStringAsync(PHONEBOOK_FILE_PATH, JSON.stringify(updatedList));
-  } catch (e) {
-    console.warn('Failed to delete phone book contact:', e);
-  }
-
+  await persistPhoneBook(updatedList);
   return updatedList;
 }
 
@@ -285,14 +452,7 @@ export async function toggleFavoriteContact(contactId: string): Promise<PhoneBoo
     }
     return c;
   });
-
-  cachedPhoneBook = updatedList;
-  try {
-    await FileSystem.writeAsStringAsync(PHONEBOOK_FILE_PATH, JSON.stringify(updatedList));
-  } catch (e) {
-    console.warn('Failed to toggle favorite contact:', e);
-  }
-
+  await persistPhoneBook(updatedList);
   return updatedList;
 }
 
@@ -304,13 +464,7 @@ export async function recordRecentContact(contactId: string): Promise<void> {
     }
     return c;
   });
-
-  cachedPhoneBook = updatedList;
-  try {
-    await FileSystem.writeAsStringAsync(PHONEBOOK_FILE_PATH, JSON.stringify(updatedList));
-  } catch (e) {
-    console.warn('Failed to record recent contact:', e);
-  }
+  await persistPhoneBook(updatedList);
 }
 
 export async function syncDirectoryFavorite(
@@ -319,38 +473,75 @@ export async function syncDirectoryFavorite(
 ): Promise<PhoneBookContact[]> {
   const existing = await getPhoneBookContacts();
   const normalized = normalizePanamaPhoneNumber(provider.whatsappNumber || provider.phoneNumber || '');
+  const mappedCategory = mapDirectoryCategoryToPhoneBook(provider.category || provider.serviceType);
 
   if (isFavorite) {
-    const alreadySaved = existing.find(
-      (c) => c.directoryProviderId === provider.id || (normalized && c.normalizedPhone === normalized)
+    const existingIdx = existing.findIndex(
+      (c) =>
+        (c.directoryProviderId && c.directoryProviderId === provider.id) ||
+        (c.id && c.id === provider.id) ||
+        (c.id && c.id === `fav_${provider.id}`) ||
+        (provider.name && c.name.trim().toLowerCase() === provider.name.trim().toLowerCase()) ||
+        (normalized &&
+          normalizePanamaPhoneNumber(c.whatsappNumber || c.phoneNumber || c.normalizedPhone || '') === normalized)
     );
 
-    if (alreadySaved) {
-      return toggleFavoriteContact(alreadySaved.id);
+    let updatedList: PhoneBookContact[];
+    if (existingIdx >= 0) {
+      const updatedContact: PhoneBookContact = {
+        ...existing[existingIdx],
+        name: provider.name || existing[existingIdx].name,
+        whatsappNumber: provider.whatsappNumber || existing[existingIdx].whatsappNumber,
+        phoneNumber: provider.phoneNumber || existing[existingIdx].phoneNumber,
+        normalizedPhone: normalized || existing[existingIdx].normalizedPhone,
+        isFavorite: true,
+        category: existing[existingIdx].category || mappedCategory,
+        notes: provider.notes || existing[existingIdx].notes,
+        isVerifiedDirectory: true,
+        directoryProviderId: provider.id,
+      };
+      // Move favorited contact to top of list
+      const rest = existing.filter((_, idx) => idx !== existingIdx);
+      updatedList = [updatedContact, ...rest];
+    } else {
+      const newContact: PhoneBookContact = {
+        id: `fav_${provider.id}_${Date.now()}`,
+        name: provider.name,
+        whatsappNumber: provider.whatsappNumber || provider.phoneNumber || '',
+        phoneNumber: provider.phoneNumber || provider.whatsappNumber || '',
+        normalizedPhone: normalized,
+        category: mappedCategory,
+        isFavorite: true,
+        notes: provider.notes,
+        isVerifiedDirectory: true,
+        directoryProviderId: provider.id,
+        createdAt: Date.now(),
+      };
+      updatedList = [newContact, ...existing];
     }
 
-    const newContact: PhoneBookContact = {
-      id: `fav_${provider.id}_${Date.now()}`,
-      name: provider.name,
-      whatsappNumber: provider.whatsappNumber || provider.phoneNumber || '',
-      phoneNumber: provider.phoneNumber,
-      normalizedPhone: normalized,
-      category: provider.category || 'Directory Provider',
-      isFavorite: true,
-      notes: provider.notes,
-      isVerifiedDirectory: true,
-      directoryProviderId: provider.id,
-      createdAt: Date.now(),
-    };
-
-    return savePhoneBookContact(newContact);
+    await persistPhoneBook(updatedList);
+    return updatedList;
   } else {
-    // Remove or unfavorite
-    const target = existing.find(
-      (c) => c.directoryProviderId === provider.id || (normalized && c.normalizedPhone === normalized)
+    // Unfavorite
+    const targetIdx = existing.findIndex(
+      (c) =>
+        (c.directoryProviderId && c.directoryProviderId === provider.id) ||
+        (c.id && c.id === provider.id) ||
+        (c.id && c.id === `fav_${provider.id}`) ||
+        (provider.name && c.name.trim().toLowerCase() === provider.name.trim().toLowerCase()) ||
+        (normalized &&
+          normalizePanamaPhoneNumber(c.whatsappNumber || c.phoneNumber || c.normalizedPhone || '') === normalized)
     );
-    if (target) {
-      return deletePhoneBookContact(target.id);
+
+    if (targetIdx >= 0) {
+      const target = existing[targetIdx];
+      // If it originated strictly as a directory favorite (id starts with fav_), remove it from phone book
+      if (target.id.startsWith('fav_') || target.directoryProviderId === provider.id) {
+        return deletePhoneBookContact(target.id);
+      } else {
+        return toggleFavoriteContact(target.id);
+      }
     }
     return existing;
   }
@@ -376,11 +567,10 @@ export async function getSavedTranslations(): Promise<TranslationItem[]> {
   }
 
   try {
-    const info = await FileSystem.getInfoAsync(SAVED_TRANSLATIONS_FILE_PATH);
-    if (info.exists) {
-      const text = await FileSystem.readAsStringAsync(SAVED_TRANSLATIONS_FILE_PATH);
-      cachedSavedTranslations = JSON.parse(text) || [];
-      return cachedSavedTranslations || [];
+    const parsed = await readJsonFile<TranslationItem[]>('poquito_saved_translations_v1.json');
+    if (parsed && Array.isArray(parsed)) {
+      cachedSavedTranslations = parsed;
+      return cachedSavedTranslations;
     }
   } catch (e) {
     // fallback
@@ -399,11 +589,7 @@ export async function saveSavedTranslations(list: TranslationItem[]): Promise<Tr
       // fallback
     }
   }
-  try {
-    await FileSystem.writeAsStringAsync(SAVED_TRANSLATIONS_FILE_PATH, JSON.stringify(list));
-  } catch (e) {
-    console.warn('Failed to save saved translations:', e);
-  }
+  await writeJsonFile('poquito_saved_translations_v1.json', list);
   return list;
 }
 

@@ -7,7 +7,13 @@ import { LocalServiceProvider } from '../types';
 import { vouchService } from '../services/vouch';
 import { walkieTalkieService } from '../services/walkieTalkie';
 import { shareWalkieTalkieToWhatsApp } from '../services/deepLinks';
-import { getPhoneBookContacts, syncDirectoryFavorite, getPreferredVoiceGender } from '../services/storage';
+import {
+  getPhoneBookContacts,
+  syncDirectoryFavorite,
+  getPreferredVoiceGender,
+  subscribePhoneBookChanged,
+  normalizePanamaPhoneNumber,
+} from '../services/storage';
 import { deductCreditForWalkieTalkie } from '../services/userService';
 import { generateGoogleGeminiAudio, GOOGLE_SPANISH_VOICES } from '../services/googleVoice';
 import * as FileSystem from 'expo-file-system/legacy';
@@ -35,19 +41,28 @@ export const DirectoryCard: React.FC<DirectoryCardProps> = React.memo(({ provide
     });
     setVouchCount(provider.vouchCount || 0);
 
-    getPhoneBookContacts().then((contacts) => {
+    const checkFav = (contacts: any[]) => {
+      const normalized = normalizePanamaPhoneNumber(provider.whatsappNumber || provider.phoneNumber || '');
+      const isFav = contacts.some(
+        (c) =>
+          c.directoryProviderId === provider.id ||
+          c.name.toLowerCase() === provider.name.toLowerCase() ||
+          (normalized &&
+            normalizePanamaPhoneNumber(c.whatsappNumber || c.phoneNumber || c.normalizedPhone || '') === normalized)
+      );
       if (isMounted) {
-        const isFav = contacts.some(
-          (c) => c.directoryProviderId === provider.id || c.name === provider.name
-        );
         setIsFavorite(isFav);
       }
-    });
+    };
+
+    getPhoneBookContacts().then(checkFav);
+    const unsubscribe = subscribePhoneBookChanged(checkFav);
 
     return () => {
       isMounted = false;
+      unsubscribe();
     };
-  }, [provider.id, provider.vouchCount]);
+  }, [provider.id, provider.name, provider.phoneNumber, provider.whatsappNumber, provider.vouchCount]);
 
   const handleToggleFavorite = async () => {
     const nextState = !isFavorite;
@@ -57,7 +72,7 @@ export const DirectoryCard: React.FC<DirectoryCardProps> = React.memo(({ provide
     await syncDirectoryFavorite(provider, nextState);
 
     Alert.alert(
-      nextState ? 'Saved to Contacts' : 'Removed from Contacts',
+      nextState ? 'Saved to Phone Book' : 'Removed from Phone Book',
       nextState
         ? `${provider.name} is now saved in your Phone Book for 1-tap Spanish voice note dispatch.`
         : `${provider.name} was removed from your Phone Book.`

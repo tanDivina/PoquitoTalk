@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   View,
@@ -21,7 +21,12 @@ import { Colors } from "../theme/colors";
 import { ConversationThread, ThreadMessage } from "../services/conversations";
 import { getCategoryUnifiedMeta } from "../services/presets";
 import { translateWithGemma } from "../services/gemma";
-import { generateGoogleGeminiAudio, playGoogleAudioFile, GOOGLE_SPANISH_VOICES } from "../services/googleVoice";
+import {
+  generateGoogleGeminiAudio,
+  playGoogleAudioFile,
+  stopAllAudioPlayback,
+  GOOGLE_SPANISH_VOICES,
+} from "../services/googleVoice";
 import { TranslationItem } from "../types";
 
 interface ThreadViewModalProps {
@@ -42,6 +47,70 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
   const [inputText, setInputText] = useState("");
   const [isSending, setIsSharing] = useState(false);
   const [playingMsgId, setPlayingMsgId] = useState<string | null>(null);
+
+  // Live polling for contractor replies while this thread is open
+  useEffect(() => {
+    if (!visible || !thread) return;
+    const roomId = thread.roomId;
+    if (!roomId) return;
+
+    let isMounted = true;
+    const pollInterval = setInterval(async () => {
+      try {
+        const url = `https://poquitotalk.hero-apps.com/api/walkie.php?action=poll&room=${encodeURIComponent(roomId)}`;
+        const res = await fetch(url);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data || !data.success || !Array.isArray(data.messages)) return;
+
+        let hasNew = false;
+        const currentMessages = [...thread.messages];
+
+        for (const sMsg of data.messages) {
+          if (sMsg.sender === 'contractor') {
+            const sTimestamp = sMsg.timestamp || Date.now();
+            const sTextEs = sMsg.esText || '';
+            const sTextEn = sMsg.enText || sTextEs;
+            const sAudio = sMsg.audioUrl || undefined;
+
+            const alreadyExists = currentMessages.some(m =>
+              (sMsg.id && m.id === sMsg.id) ||
+              (Math.abs(m.timestamp - sTimestamp) < 3000 && m.textSpanish === sTextEs)
+            );
+
+            if (!alreadyExists) {
+              currentMessages.push({
+                id: sMsg.id || `msg_contractor_${sTimestamp}`,
+                sender: 'SERVICE_PROVIDER',
+                textEnglish: sTextEn,
+                textSpanish: sTextEs,
+                audioUri: sAudio,
+                personaName: sMsg.senderName || thread.contactName,
+                timestamp: sTimestamp,
+              });
+              hasNew = true;
+            }
+          }
+        }
+
+        if (hasNew && isMounted) {
+          const updatedThread: ConversationThread = {
+            ...thread,
+            lastUpdated: Date.now(),
+            messages: currentMessages,
+          };
+          onUpdateThread(updatedThread);
+        }
+      } catch (e) {
+        // ignore poll network errors
+      }
+    }, 3000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(pollInterval);
+    };
+  }, [visible, thread?.roomId, thread?.messages?.length]);
 
   if (!visible || !thread) return null;
 
@@ -101,8 +170,17 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
 
   const handlePlayMessageAudio = async (msg: ThreadMessage) => {
     try {
+      if (playingMsgId === msg.id) {
+        setPlayingMsgId(null);
+        await stopAllAudioPlayback();
+        return;
+      }
+
       setPlayingMsgId(msg.id);
-      const fileUri = await generateGoogleGeminiAudio(msg.textSpanish, msg.personaName || "Male");
+      let fileUri = msg.audioUri;
+      if (!fileUri) {
+        fileUri = await generateGoogleGeminiAudio(msg.textSpanish, msg.personaName || "Male");
+      }
       if (fileUri) {
         const sound = await playGoogleAudioFile(fileUri, GOOGLE_SPANISH_VOICES[0]);
         if (sound) {
@@ -113,6 +191,8 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
             }
           });
         }
+      } else {
+        setPlayingMsgId(null);
       }
     } catch (e) {
       setPlayingMsgId(null);
@@ -250,21 +330,23 @@ Arranged seamlessly with Spanish voice notes using PoquitoTalk.app 🇵🇦`;
                   <Text style={styles.englishText}>{msg.textEnglish}</Text>
                   <Text style={styles.spanishText}>{msg.textSpanish}</Text>
 
-                  {/* Actions for Expat Outgoing Voice Note */}
-                  {isExpat && (
-                    <View style={styles.msgActionsRow}>
-                      <TouchableOpacity
-                        style={styles.msgActionBtn}
-                        onPress={() => handlePlayMessageAudio(msg)}
-                      >
-                        <Ionicons
-                          name={playingMsgId === msg.id ? "pause-circle" : "play-circle"}
-                          size={18}
-                          color={Colors.secondary}
-                        />
-                        <Text style={styles.msgActionText}>Listen</Text>
-                      </TouchableOpacity>
+                  {/* Actions for Message Voice Note */}
+                  <View style={styles.msgActionsRow}>
+                    <TouchableOpacity
+                      style={styles.msgActionBtn}
+                      onPress={() => handlePlayMessageAudio(msg)}
+                    >
+                      <Ionicons
+                        name={playingMsgId === msg.id ? "pause-circle" : "play-circle"}
+                        size={18}
+                        color={isExpat ? Colors.secondary : Colors.tertiary}
+                      />
+                      <Text style={[styles.msgActionText, !isExpat && { color: Colors.tertiary }]}>
+                        {msg.audioUri ? "Listen Audio" : "Listen"}
+                      </Text>
+                    </TouchableOpacity>
 
+                    {isExpat && (
                       <TouchableOpacity
                         style={styles.msgWhatsAppBtn}
                         onPress={() => handleShareToWhatsApp(msg)}
@@ -272,8 +354,8 @@ Arranged seamlessly with Spanish voice notes using PoquitoTalk.app 🇵🇦`;
                         <WhatsAppIcon size={14} color="#FFF" />
                         <Text style={styles.msgWhatsAppText}>Send Voice Note</Text>
                       </TouchableOpacity>
-                    </View>
-                  )}
+                    )}
+                  </View>
                 </View>
               </View>
             );

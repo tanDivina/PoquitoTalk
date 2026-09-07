@@ -18,6 +18,8 @@ import {
   ConversationThread,
   loadConversationThreads,
   saveConversationThreads,
+  syncAllThreadsWithServer,
+  subscribeToThreadUpdates,
 } from "../services/conversations";
 import { getCategoryUnifiedMeta } from "../services/presets";
 import { ThreadViewModal } from "../components/ThreadViewModal";
@@ -85,7 +87,11 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
   };
 
   useEffect(() => {
-    loadConversationThreads().then((data) => {
+    let isMounted = true;
+
+    const refreshThreads = async () => {
+      const data = await loadConversationThreads();
+      if (!isMounted) return;
       setThreads(data);
       if (Platform.OS === "web" && typeof window !== "undefined") {
         const params = new URLSearchParams(window.location.search);
@@ -99,7 +105,37 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
           }
         }
       }
+    };
+
+    refreshThreads();
+
+    // Initial server sync for replies from contractor web interface
+    syncAllThreadsWithServer().then((res) => {
+      if (res.updatedCount > 0 && isMounted) {
+        refreshThreads();
+      }
     });
+
+    // 5-second polling interval
+    const interval = setInterval(async () => {
+      const res = await syncAllThreadsWithServer();
+      if (res.updatedCount > 0 && isMounted) {
+        refreshThreads();
+      }
+    }, 5000);
+
+    // Event listener subscription
+    const unsubscribe = subscribeToThreadUpdates(({ thread }) => {
+      if (!isMounted) return;
+      refreshThreads();
+      setActiveThread((prev) => (prev && (prev.id === thread.id || prev.roomId === thread.roomId) ? thread : prev));
+    });
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+      unsubscribe();
+    };
   }, []);
 
   const handleSelectThread = (thread: ConversationThread) => {

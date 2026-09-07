@@ -1319,6 +1319,15 @@ async function run() {
   fs.copyFileSync(path.join(WORKSPACE_DIR, 'play_store_screenshot_4_dynamic.png'), path.join(desktopDir, 'play_store_screenshot_4_talklive.png'));
   fs.copyFileSync(path.join(WORKSPACE_DIR, 'poquitotalk_dynamic_showcase_4up.png'), path.join(desktopDir, 'poquitotalk_showcase.png'));
 
+  // Also sync directly to google_play_submission_files
+  const submissionDir = path.join(WORKSPACE_DIR, 'google_play_submission_files');
+  if (fs.existsSync(submissionDir)) {
+    fs.copyFileSync(path.join(WORKSPACE_DIR, 'play_store_screenshot_1_dynamic.png'), path.join(submissionDir, '03_screenshot_1_voice_dispatch.png'));
+    fs.copyFileSync(path.join(WORKSPACE_DIR, 'play_store_screenshot_2_dynamic.png'), path.join(submissionDir, '04_screenshot_2_errands_presets.png'));
+    fs.copyFileSync(path.join(WORKSPACE_DIR, 'play_store_screenshot_3_dynamic.png'), path.join(submissionDir, '05_screenshot_3_verified_directory.png'));
+    fs.copyFileSync(path.join(WORKSPACE_DIR, 'play_store_screenshot_4_dynamic.png'), path.join(submissionDir, '06_screenshot_4_talk_live_decoder.png'));
+  }
+
   await browser.close();
   server.close();
   console.log('🎉 All screenshot suites and comparison grids successfully generated and synced!');
