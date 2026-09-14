@@ -156,6 +156,7 @@ const DIRECTORY_DECKS = [
       p.category === 'contractor_housing' ||
       p.category === 'contractor_handyman' ||
       p.category === 'hardware_construction' ||
+      p.category === 'hardware_supplies' ||
       p.category === 'contractors' ||
       p.category === 'welding',
   },
@@ -249,7 +250,8 @@ const DIRECTORY_DECKS = [
       p.category === 'community_culture' ||
       p.category === 'border_immigration' ||
       p.category === 'community_island' ||
-      p.category === 'community',
+      p.category === 'community' ||
+      p.category === 'hotel_lodging',
   },
 ];
 

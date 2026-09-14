@@ -1006,10 +1006,12 @@
       const devices = data.breakdowns.devices || [];
       const osList = data.breakdowns.os || [];
       const countries = data.breakdowns.countries || [];
+      const clicks = data.breakdowns.clicks || [];
       const liveEvents = data.live_stream || [];
 
       const maxRef = referrers.length > 0 ? Math.max(...referrers.map(r => r.count), 1) : 1;
       const maxPage = pages.length > 0 ? Math.max(...pages.map(p => p.count), 1) : 1;
+      const maxClick = clicks.length > 0 ? Math.max(...clicks.map(c => c.count), 1) : 1;
 
       el.innerHTML = `
         <div style="width: 100%;">
@@ -1026,6 +1028,10 @@
             </div>
 
             <div class="export-btns">
+              <a href="https://analytics.google.com/analytics/web/#/p553889256/reports/intelligenthome" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="border-color: #F59E0B; color: #D97706; text-decoration: none;" title="Open Official Google Analytics 4 Dashboard">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                GA4 Console (G-R91FWY3RHP)
+              </a>
               <button class="btn-secondary" onclick="exportAnalyticsCSV('visitors')" title="Export Unique Visitors CSV">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 Visitors CSV
@@ -1200,6 +1206,34 @@
             </div>
           </div>
 
+          <!-- Top Granular UI Clicks & Button Interactions -->
+          <div class="analytics-panel" style="margin-bottom: 24px;">
+            <h4>
+              <span>🎯 Top Clicked UI Elements & Actions</span>
+              <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">${clicks.length} Unique Interactions</span>
+            </h4>
+            ${clicks.length === 0 ? '<div style="color: var(--text-muted); font-size: 13px;">No granular UI click interactions logged yet in this timeframe. As visitors click category pills, dialect options, and audio buttons, they will rank here automatically.</div>' : `
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px;">
+                ${clicks.slice(0, 12).map(c => {
+                  const pct = Math.round((c.count / maxClick) * 100);
+                  return `
+                    <div style="background: rgba(0,0,0,0.02); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-light);">
+                      <div class="metric-row" style="padding-bottom: 2px;">
+                        <span style="font-weight: 600; font-size: 13px; color: var(--text-charcoal); word-break: break-word;">
+                          🖱️ ${escapeHtml(c.label)}
+                        </span>
+                        <strong style="color: var(--brand-terracotta);">${c.count.toLocaleString()}</strong>
+                      </div>
+                      <div class="metric-bar-bg" style="margin-top: 6px;">
+                        <div class="metric-bar-fill" style="width: ${pct}%; background: linear-gradient(90deg, #F97316, #EA580C);"></div>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            `}
+          </div>
+
           <!-- Live Activity Stream -->
           <div class="analytics-panel" style="margin-bottom: 30px;">
             <h4>
@@ -1212,7 +1246,7 @@
                   <thead>
                     <tr>
                       <th>Event</th>
-                      <th>Path / Page</th>
+                      <th>Path / Interaction</th>
                       <th>Referrer Source</th>
                       <th>Device & OS</th>
                       <th>Visitor ID</th>
@@ -1224,18 +1258,28 @@
                       let badgeClass = 'ev-pageview';
                       if (ev.event === 'waitlist_submit') badgeClass = 'ev-waitlist';
                       else if (ev.event === 'whatsapp_click' || ev.event === 'call_click') badgeClass = 'ev-whatsapp';
-                      else if (ev.event === 'play_voice_demo') badgeClass = 'ev-audio';
+                      else if (ev.event === 'play_voice_demo' || ev.event === 'audio_play') badgeClass = 'ev-audio';
                       else if (ev.event === 'toggle_tone') badgeClass = 'ev-tone';
                       else if (ev.event !== 'pageview') badgeClass = 'ev-click';
 
                       const timeStr = ev.date_formatted || (ev.timestamp ? new Date(ev.timestamp * 1000).toLocaleTimeString() : 'Just now');
                       const vidShort = (ev.visitor_id || 'anon').substring(0, 10);
                       const isMobile = (ev.device || '').toLowerCase() === 'mobile';
+                      const clickText = ev.data && (ev.data.text || ev.data.label || ev.data.action);
+                      const clickSection = ev.data && ev.data.section;
 
                       return `
                         <tr>
                           <td><span class="ev-badge ${badgeClass}">${escapeHtml(ev.event)}</span></td>
-                          <td style="font-weight: 600; color: var(--text-charcoal); font-family: monospace; font-size: 12px;">${escapeHtml(ev.path || '/')}</td>
+                          <td style="font-weight: 600; color: var(--text-charcoal); font-family: monospace; font-size: 12px;">
+                            ${escapeHtml(ev.path || '/')}
+                            ${clickText ? `
+                              <div style="font-size: 11px; color: var(--brand-terracotta); font-weight: 600; margin-top: 3px; font-family: sans-serif;">
+                                ↳ ${escapeHtml(clickText.substring(0, 45))}
+                                ${clickSection && clickSection !== 'body' && clickSection !== 'page' ? `<span style="color: var(--text-muted); font-size: 10px; font-weight: normal;"> [${escapeHtml(clickSection)}]</span>` : ''}
+                              </div>
+                            ` : ''}
+                          </td>
                           <td style="color: var(--text-muted); font-size: 12px;">${escapeHtml(ev.referrer_category || ev.referrer || 'Direct')}</td>
                           <td style="font-size: 12px;">${isMobile ? '📱' : '💻'} ${escapeHtml(ev.os || 'Unknown')}</td>
                           <td style="font-family: monospace; font-size: 11px; color: var(--text-muted);">${escapeHtml(vidShort)}...</td>

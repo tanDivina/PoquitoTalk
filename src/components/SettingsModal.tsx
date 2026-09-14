@@ -36,6 +36,7 @@ interface SettingsModalProps {
   onClose: () => void;
   isPro: boolean;
   onOpenPaywall: () => void;
+  onOpenPaidOnboarding?: () => void;
   onOpenRestore?: () => void;
   onResetOnboarding?: () => void;
 }
@@ -45,6 +46,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onClose,
   isPro,
   onOpenPaywall,
+  onOpenPaidOnboarding,
   onOpenRestore,
   onResetOnboarding,
 }) => {
@@ -388,27 +390,49 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </View>
 
               {isPro ? (
-                <TouchableOpacity
-                  style={styles.manageSubBtn}
-                  onPress={() => {
-                    const url =
-                      Platform.OS === 'ios'
-                        ? 'https://apps.apple.com/account/subscriptions'
-                        : 'https://play.google.com/store/account/subscriptions';
-                    Linking.openURL(url).catch(() => {
-                      Alert.alert(
-                        'Manage Subscription',
-                        'You can cancel or modify your PoquitoTalk subscription anytime directly in your Google Play Store or Apple ID Subscriptions settings.',
-                        [{ text: 'OK' }]
-                      );
-                    });
-                  }}
-                  activeOpacity={0.8}
-                >
-                  <Ionicons name="card-outline" size={16} color="#059669" />
-                  <Text style={styles.manageSubBtnText}>Manage or Cancel Subscription</Text>
-                  <Ionicons name="open-outline" size={14} color="#059669" />
-                </TouchableOpacity>
+                <>
+                  <TouchableOpacity
+                    style={styles.manageSubBtn}
+                    onPress={() => {
+                      const url =
+                        Platform.OS === 'ios'
+                          ? 'https://apps.apple.com/account/subscriptions'
+                          : 'https://play.google.com/store/account/subscriptions';
+                      Linking.openURL(url).catch(() => {
+                        Alert.alert(
+                          'Manage Subscription',
+                          'You can cancel or modify your PoquitoTalk subscription anytime directly in your Google Play Store or Apple ID Subscriptions settings.',
+                          [{ text: 'OK' }]
+                        );
+                      });
+                    }}
+                    activeOpacity={0.8}
+                  >
+                    <Ionicons name="card-outline" size={16} color="#059669" />
+                    <Text style={styles.manageSubBtnText}>Manage or Cancel Subscription</Text>
+                    <Ionicons name="open-outline" size={14} color="#059669" />
+                  </TouchableOpacity>
+
+                  {onOpenPaidOnboarding && (
+                    <TouchableOpacity
+                      style={[
+                        styles.manageSubBtn,
+                        { marginTop: 8, borderColor: '#D5E8D1', backgroundColor: '#F0FDF4' },
+                      ]}
+                      onPress={() => {
+                        onClose();
+                        onOpenPaidOnboarding();
+                      }}
+                      activeOpacity={0.8}
+                    >
+                      <Ionicons name="sparkles" size={16} color="#059669" />
+                      <Text style={[styles.manageSubBtnText, { color: '#047857', fontWeight: '700' }]}>
+                        Tour Pro Superpowers
+                      </Text>
+                      <Ionicons name="chevron-forward" size={14} color="#059669" />
+                    </TouchableOpacity>
+                  )}
+                </>
               ) : (
                 <TouchableOpacity
                   style={styles.actionBtn}

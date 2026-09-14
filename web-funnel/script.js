@@ -1212,6 +1212,8 @@ async function loadDynamicContractorsToDirectory() {
         item.id.startsWith('contractor-') || 
         item.id.startsWith('contractor_') || 
         item.id.startsWith('sub_') ||
+        item.id.startsWith('fb_') ||
+        item.id.startsWith('place_') ||
         (item.category && item.category !== 'WATER_TAXI' && item.category !== 'BANKING')
       )
     );
@@ -1270,14 +1272,20 @@ async function loadDynamicContractorsToDirectory() {
       const waButtonText = 'WhatsApp';
       const callButtonText = isSpanish ? 'Llamar' : 'Call';
 
+      const sourceBadgeHtml = c.source === 'facebook_group' 
+        ? `<a href="${c.source_url || 'https://www.facebook.com/groups/200167863435003'}" target="_blank" rel="noopener noreferrer" style="color: #1877F2; font-weight: 700; font-size: 11px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; background: #EBF5FF; padding: 2px 7px; border-radius: 4px;" title="Source: Bocas Facebook Group">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> FB Group
+           </a>`
+        : `<span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ${verifiedTag}
+           </span>`;
+
       card.innerHTML = `
         <div>
           <div class="dir-card-header">
             <span class="dir-badge" style="background: #FFDBCD; color: #964824; font-weight: 700;">${escapeHTML(tradeLabel)}</span>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ${verifiedTag}
-              </span>
+              ${sourceBadgeHtml}
               <button class="vouch-badge" data-provider-id="${c.id}" onclick="openPostContactModal('${c.id}', '${escapeHTML(c.name)}')" title="${isSpanish ? 'Recomendado por la comunidad' : 'Vouched by Bocas community'}">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span class="vouch-count">0</span> ${isSpanish ? 'Recomendaciones' : 'Vouches'}
               </button>
@@ -1591,12 +1599,48 @@ function initDirectoryFromURL() {
   }
 }
 
+function highlightTargetFromHash() {
+  if (typeof window === 'undefined' || !window.location.hash) return;
+  const targetId = window.location.hash.substring(1);
+  if (!targetId) return;
+
+  let attempts = 0;
+  const interval = setInterval(() => {
+    attempts++;
+    const el = document.getElementById(targetId);
+    if (el) {
+      clearInterval(interval);
+      const cardCat = el.getAttribute('data-cat');
+      if (cardCat && typeof activeCat !== 'undefined' && activeCat !== 'ALL' && activeCat !== cardCat) {
+        if (typeof setCategoryFilter === 'function') {
+          const allPill = document.querySelector('.cat-pill[onclick*="ALL"]');
+          setCategoryFilter('ALL', allPill);
+        }
+      }
+      setTimeout(() => {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.style.transition = 'box-shadow 0.4s ease, border-color 0.4s ease';
+        el.style.borderColor = '#964824';
+        el.style.boxShadow = '0 0 0 3px rgba(150, 72, 36, 0.4), 0 12px 30px rgba(0,0,0,0.1)';
+        setTimeout(() => {
+          el.style.borderColor = '';
+          el.style.boxShadow = '';
+        }, 3500);
+      }, 250);
+    } else if (attempts >= 10) {
+      clearInterval(interval);
+    }
+  }, 200);
+}
+
 // Auto-run on DOM ready
 if (typeof window !== 'undefined') {
   window.addEventListener('DOMContentLoaded', () => {
     loadCommunityVouches();
     loadDynamicContractorsToDirectory();
     initDirectoryFromURL();
+    highlightTargetFromHash();
   });
 }
+
 

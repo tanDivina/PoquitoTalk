@@ -185,6 +185,22 @@ if (file_exists($captainsFile)) {
     $captainsList = json_decode($rawCap, true) ?: [];
 }
 
+// 2b. Load Verified Google Places from data/places.json
+$placesFile = __DIR__ . '/../data/places.json';
+$placesList = [];
+if (file_exists($placesFile)) {
+    $rawPlaces = @file_get_contents($placesFile);
+    $placesList = json_decode($rawPlaces, true) ?: [];
+}
+
+// 2c. Load Verified Community Tradesmen from Facebook Groups (data/facebook_contractors.json)
+$fbContractorsFile = __DIR__ . '/../data/facebook_contractors.json';
+$fbContractorsList = [];
+if (file_exists($fbContractorsFile)) {
+    $rawFb = @file_get_contents($fbContractorsFile);
+    $fbContractorsList = json_decode($rawFb, true) ?: [];
+}
+
 // 3. Load Dynamic Approved Contractors from JSON Storage
 $dataDir = '/home/finclazc/poquitotalk_data';
 if (!is_dir($dataDir) || !is_readable($dataDir)) {
@@ -290,7 +306,7 @@ if (file_exists($contractorsFile)) {
 }
 
 // 4. Merge Lists & Filter by Category if requested
-$allEntries = array_merge($permanentEntities, $captainsList, $dynamicContractors);
+$allEntries = array_merge($permanentEntities, $captainsList, $placesList, $fbContractorsList, $dynamicContractors);
 
 $catFilter = isset($_GET['category']) ? strtoupper(trim($_GET['category'])) : 'ALL';
 if ($catFilter !== 'ALL') {

@@ -264,6 +264,11 @@ body {
   transform: translateY(-2px);
 }
 
+.btn-hero-primary .arrow {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 .btn-hero-primary:hover .arrow {
   transform: translateX(4px);
 }
@@ -3061,28 +3066,56 @@ input::placeholder {
   transform: translateY(-2px);
 }
 
+.home-dir-footer-bar .dir-primary-cta .arrow {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 .home-dir-footer-bar .dir-primary-cta:hover .arrow {
   transform: translateX(4px);
 }
 
-.home-dir-footer-bar .dir-secondary-cta {
-  color: #047857;
+.home-dir-footer-bar .dir-secondary-cta,
+.btn-provider-prominent {
+  background: #121215;
+  color: #FFFFFF;
   text-decoration: none;
-  font-weight: 700;
-  font-size: 14px;
+  font-weight: 800;
+  font-size: 14.5px;
+  padding: 14px 24px;
+  border-radius: 24px;
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 10px 16px;
-  border-radius: 16px;
-  background: #ECFDF5;
-  border: 1px solid #A7F3D0;
-  transition: all 0.2s ease;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(18, 18, 21, 0.25), 0 2px 6px rgba(0, 0, 0, 0.12);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: -0.2px;
 }
 
-.home-dir-footer-bar .dir-secondary-cta:hover {
-  background: #D1FAE5;
-  border-color: #6EE7B7;
+.home-dir-footer-bar .dir-secondary-cta svg,
+.btn-provider-prominent svg {
+  stroke: #10B981;
+  flex-shrink: 0;
+}
+
+.home-dir-footer-bar .dir-secondary-cta:hover,
+.btn-provider-prominent:hover {
+  background: #000000;
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.32), 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.home-dir-footer-bar .dir-secondary-cta .arrow,
+.btn-provider-prominent .arrow {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-dir-footer-bar .dir-secondary-cta:hover .arrow,
+.btn-provider-prominent:hover .arrow {
+  transform: translateX(4px);
 }
 
 @media (max-width: 768px) {

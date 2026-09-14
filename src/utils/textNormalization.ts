@@ -48,6 +48,67 @@ export function normalizeBocasTerminology(text: string): string {
   result = result.replace(/\b[nN]atur[gj]y\b/gi, 'Naturgy');
   result = result.replace(/\b[aA]gua[\s-]?[fF]iel\b/gi, 'Aguafiel');
 
+  // 10. Natural spoken time normalization (prevents TTS pronouncing "3:00 PM" as "tres cero cero pe eme")
+  result = normalizeSpanishSpokenTime(result);
+
+  return result;
+}
+
+/**
+ * Normalizes English/abbreviated time notation in Spanish text so TTS engines speak naturally.
+ * e.g. "3:00 PM" -> "3 de la tarde"
+ *      "8:00 AM" -> "8 de la mañana"
+ *      "3:00" -> "3 en punto"
+ */
+export function normalizeSpanishSpokenTime(text: string): string {
+  if (!text || typeof text !== "string") return "";
+
+  let result = text;
+
+  // Convert 12:00 PM / 12:00 AM
+  result = result.replace(/\b12:00\s*(?:pm|p\.m\.|PM|P\.M\.)\b/g, '12 del mediodía');
+  result = result.replace(/\b12:00\s*(?:am|a\.m\.|AM|A\.M\.)\b/g, '12 de la medianoche');
+
+  // Convert X:00 PM -> X de la tarde / de la noche
+  result = result.replace(/\b(\d{1,2}):00\s*(?:pm|p\.m\.|PM|P\.M\.)\b/g, (_m, hour) => {
+    const h = parseInt(hour, 10);
+    if (h >= 7 && h <= 11) return `${h} de la noche`;
+    return `${h} de la tarde`;
+  });
+
+  // Convert X:00 AM -> X de la mañana
+  result = result.replace(/\b(\d{1,2}):00\s*(?:am|a\.m\.|AM|A\.M\.)\b/g, (_m, hour) => {
+    return `${hour} de la mañana`;
+  });
+
+  // Convert X:30 PM
+  result = result.replace(/\b(\d{1,2}):30\s*(?:pm|p\.m\.|PM|P\.M\.)\b/g, (_m, hour) => {
+    const h = parseInt(hour, 10);
+    if (h >= 7 && h <= 11) return `${h} y media de la noche`;
+    return `${h} y media de la tarde`;
+  });
+  result = result.replace(/\b(\d{1,2}):30\s*(?:am|a\.m\.|AM|A\.M\.)\b/g, '$1 y media de la mañana');
+
+  // Convert X:15 PM
+  result = result.replace(/\b(\d{1,2}):15\s*(?:pm|p\.m\.|PM|P\.M\.)\b/g, (_m, hour) => {
+    const h = parseInt(hour, 10);
+    if (h >= 7 && h <= 11) return `${h} y cuarto de la noche`;
+    return `${h} y cuarto de la tarde`;
+  });
+
+  // Convert arbitrary HH:MM PM -> H y M de la tarde
+  result = result.replace(/\b(\d{1,2}):([0-5]\d)\s*(?:pm|p\.m\.|PM|P\.M\.)\b/g, (_m, hour, mins) => {
+    const h = parseInt(hour, 10);
+    const suffix = h >= 7 && h <= 11 ? 'de la noche' : 'de la tarde';
+    return `${h} y ${parseInt(mins, 10)} ${suffix}`;
+  });
+  result = result.replace(/\b(\d{1,2}):([0-5]\d)\s*(?:am|a\.m\.|AM|A\.M\.)\b/g, (_m, hour, mins) => {
+    return `${hour} y ${parseInt(mins, 10)} de la mañana`;
+  });
+
+  // Convert standalone X:00 -> X en punto
+  result = result.replace(/\b(\d{1,2}):00\b/g, '$1 en punto');
+
   return result;
 }
 

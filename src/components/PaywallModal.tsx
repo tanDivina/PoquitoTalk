@@ -18,10 +18,16 @@ import { AnimatedParrotMascot } from './AnimatedParrotMascot';
 import { revenueCat } from '../services/revenuecat';
 import { getUserProfile, setProSubscriber } from '../services/userService';
 
+export interface PurchaseSuccessDetails {
+  tier: PlanTier;
+  packageName: string;
+  isTrial: boolean;
+}
+
 interface PaywallModalProps {
   visible: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (details?: PurchaseSuccessDetails) => void;
   onOpenRestore?: () => void;
 }
 
@@ -48,12 +54,17 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
       await setProSubscriber(true);
       const success = await revenueCat.purchaseProPackage();
       if (success) {
-        if (Platform.OS === 'web' && typeof window !== 'undefined') {
-          window.alert('¡Bienvenido a PoquitoTalk! Your 7-day free trial has started. Enjoy unlimited voice notes, 2-way walkie-talkie, and island presets!');
-        } else {
-          Alert.alert('¡Bienvenido a PoquitoTalk!', 'You now have full access to natural voice notes, island presets, and Walkie-Talkie.');
-        }
-        onSuccess();
+        const packageNames: Record<PlanTier, string> = {
+          ANNUAL_TRIAL: 'Annual Explorer Pass',
+          MONTHLY: 'Monthly Resident Pass',
+          TRAVEL_PASS: '7-Day Travel Pass',
+          CREDITS: '50 Credits Pack',
+        };
+        onSuccess({
+          tier: selectedTier,
+          packageName: packageNames[selectedTier] || 'Annual Explorer Pass',
+          isTrial: selectedTier === 'ANNUAL_TRIAL',
+        });
         onClose();
       }
     } catch (error) {

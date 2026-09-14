@@ -195,9 +195,10 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           </View>
 
           {/* Brand Name - High-Contrast Two-Tone Identity */}
-          <Text style={styles.brandTitle}>
-            Poquito<Text style={styles.brandTitleTalk}>Talk</Text>
-          </Text>
+          <View style={styles.brandTitleRow}>
+            <Text style={styles.brandTitle}>Poquito</Text>
+            <Text style={styles.brandTitleTalk}>Talk</Text>
+          </View>
 
           {/* Location Tag */}
           <View style={styles.framelessTag}>
@@ -253,6 +254,11 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     backgroundColor: 'transparent',
   },
+  brandTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'center',
+  },
   brandTitle: {
     fontSize: 34,
     fontWeight: '900',
@@ -260,7 +266,10 @@ const styles = StyleSheet.create({
     letterSpacing: -0.6,
   },
   brandTitleTalk: {
-    color: '#EA580C', // Vibrant Island Terracotta
+    fontSize: 34,
+    fontWeight: '900',
+    color: '#964824', // Warm Terracotta Brown (Colors.secondary)
+    letterSpacing: -0.6,
   },
   framelessTag: {
     flexDirection: 'row',

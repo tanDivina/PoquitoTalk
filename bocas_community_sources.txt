@@ -1,0 +1,354 @@
+# BOCAS DEL TORO COMMUNITY VERIFIED RESOURCE REPOSITORY
+# Source Grounding Knowledge Base for Google NotebookLM & PoquitoTalk Directory
+# Province of Bocas del Toro, Republic of Panama
+# Verification Status: Grounded Community & Institutional Records
+
+================================================================================
+SECTION 1: OFFICIAL EMERGENCY, MEDICAL & INSTITUTIONAL DISPATCH
+================================================================================
+
+Entity: Policía Nacional de Bocas del Toro (Isla Colón Subestación)
+Location: Calle 1ra, Bocas Town, Isla Colón, Bocas del Toro
+Phone: +507 757-9201
+National Short Code: 104
+Service: Law enforcement, community police dispatch, crime reports, island emergency response.
+
+Entity: Cuerpo de Bomberos de Bocas del Toro (Estación Isla Colón)
+Location: Calle 3ra, Bocas Town, Isla Colón, Bocas del Toro
+Phone: +507 757-9203
+National Short Code: 103
+Service: Fire rescue, gas leaks, structural emergencies, marine fire response.
+
+Entity: Hospital Isla Colón (Centro de Salud / MINSA Hospital de Emergencias)
+Location: Calle 1ra & Ave Norte, Isla Colón, Bocas del Toro
+Phone: +507 757-9205
+Service: 24/7 Island hospital emergency room, outpatient clinic, urgent medical care, anti-venom, emergency stabilization.
+
+Entity: Hospital Regional Dr. Raúl Dávila Herrera (Changuinola)
+Location: Changuinola, Bocas del Toro (Mainland regional hospital)
+Phone: +507 758-8232
+Service: Full surgical trauma hospital, intensive care, specialized medical services, main medical referral center for the archipelago.
+
+Entity: SINAPROC (Sistema Nacional de Protección Civil - Bocas del Toro)
+Location: Bocas del Toro Province
+Phone: +507 758-7555
+Emergency Code: *335 / +507 524-2016
+Service: Disaster response, severe weather alerts, ocean flood evacuation, storm surge warnings, lost persons search & rescue.
+
+Entity: SENAN (Servicio Nacional Aeronaval / Coast Guard & Maritime Rescue)
+Location: Base Naval Isla Colón / Almirante, Bocas del Toro
+Phone: +507 527-9000
+Emergency Code: 108
+Service: Maritime search and rescue, distressed vessel assistance, medical evacuations by boat/air, coastal patrol.
+
+Entity: Cruz Roja Panameña (Bocas del Toro Branch)
+Location: Isla Colón, Bocas del Toro
+Phone: +507 757-9014
+Emergency Code: 107
+Service: Ambulance transport, first aid emergencies, community disaster relief.
+
+================================================================================
+SECTION 2: HEALTH, CLINICS, PHARMACIES & ANIMAL WELFARE
+================================================================================
+
+Entity: Farmacia Isla Colón
+Location: Calle 3ra (Main Street), Bocas Town, Isla Colón
+Phone: +507 757-9555
+WhatsApp: +507 6872-6143
+Service: Prescription medications, antibiotics, pain relief, tropical dermatological remedies, rehydration salts, travel first-aid supplies.
+
+Entity: Farmacia del Mar
+Location: Calle 2da, Bocas Town, Isla Colón
+Phone: +507 757-9122
+Service: Over-the-counter medicine, personal care, baby formulas, sunscreen, mosquito repellents.
+
+Entity: Papá Gato Animal Welfare Clinic & Rescue
+Location: Big Creek / Isla Colón, Bocas del Toro
+WhatsApp: +507 6952-5151
+Service: Island veterinary care, spay and neuter clinics, emergency pet surgery, animal vaccinations, domestic pet wound treatment.
+
+Entity: Bocas Animal Rescue & Spay Panama Bocas Chapter
+Location: Isla Colón & Archipelago Outreach
+WhatsApp: +507 6542-0902
+Service: Community animal welfare, low-cost sterilization clinics, street dog and cat rescue, veterinary volunteer coordination.
+
+Entity: Dental Clinic Bocas (Dr. Pitti Odontología)
+Location: Calle 4ta, Bocas Town, Isla Colón
+Phone: +507 757-9411
+Service: Emergency tooth extractions, dental fillings, root canals, oral hygiene and teeth cleaning.
+
+================================================================================
+SECTION 3: HOPE SPOT CERTIFIED BOAT CAPTAINS & WATER TAXIS
+(Verified under official marine biodiversity and safety standards)
+================================================================================
+
+Entity: Captain Isaac Williams (Water Taxi 14)
+Vessel: Lancha Capitán Isaac
+Phone/WhatsApp: +507 6872-6143
+Routes: Isla Colón Main Dock to Isla Carenero, Old Bank (Bastimentos), Hospital Point. Available for late-night returns.
+
+Entity: Captain Nando (Lancha La Niña)
+Vessel: La Niña (Twin Yamaha Outboards)
+Phone/WhatsApp: +507 6689-3211
+Routes: Dolphin Bay eco-cruises, Cayo Zapatilla marine park day trips, Red Frog Beach drop-offs.
+
+Entity: Captain Jerry (Water Taxi 22)
+Vessel: Lancha Jerry Express
+Phone/WhatsApp: +507 6744-1290
+Routes: Fast crossing between Bocas Town waterfront, Carenero surf docks, and Bastimentos village.
+
+Entity: Captain Javier (Lancha El Delfín)
+Vessel: El Delfín
+Phone/WhatsApp: +507 6512-8874
+Routes: Red Frog Beach, Wizard Beach trailhead, Bahía Honda cultural visits.
+
+Entity: Captain Rogelio (Water Taxi 08)
+Vessel: Water Taxi 08
+Phone/WhatsApp: +507 6903-4418
+Routes: Isla Colón downtown waterfront dispatch, Carenero Point wave transfers for surfers.
+
+Entity: Captain Alberto (Lancha Estrella del Mar)
+Vessel: Estrella del Mar
+Phone/WhatsApp: +507 6490-5521
+Routes: Starfish Beach (Boca del Drago), Bird Island (Isla Pájaros) wildlife observation, private archipelago charter.
+
+Entity: Captain Carlos (Water Taxi 31)
+Vessel: Lancha Don Carlos
+Phone/WhatsApp: +507 6718-9902
+Routes: 24/7 on-call night boat transfers between Bocas Town, Carenero, and Old Bank Bastimentos.
+
+Entity: Captain Manuel (Lancha El Tiburón)
+Vessel: El Tiburón
+Phone/WhatsApp: +507 6382-7714
+Routes: Cayo Coral overwater restaurant trips, snorkeling expeditions, Zapatilla Cay.
+
+Entity: Captain Eduardo (Water Taxi 05)
+Vessel: Lancha Don Lalo
+Phone/WhatsApp: +507 6641-3389
+Routes: Scheduled commuter runs between Isla Colón and Old Bank Bastimentos.
+
+Entity: Captain Ricardo (Lancha Sol y Mar)
+Vessel: Sol y Mar
+Phone/WhatsApp: +507 6599-1147
+Routes: Red Frog Marina & Beach transfers, Bastimentos eco-resort pickups.
+
+Entity: Captain Esteban (Water Taxi 18)
+Vessel: Surf Shuttle 18
+Phone/WhatsApp: +507 6833-2256
+Routes: Morning surf break drop-offs: Carenero Point, Black Rock, Old Bank, Paunch outside reef.
+
+Entity: Captain Felipe (Lancha La Sirenita)
+Vessel: La Sirenita
+Phone/WhatsApp: +507 6770-4491
+Routes: Isla Solarte, Hospital Point reef snorkeling, quiet lagoon passages.
+
+Entity: Captain Héctor (Water Taxi 42)
+Vessel: Lancha Don Héctor
+Phone/WhatsApp: +507 6455-8830
+Routes: Boca del Drago beach trips, Starfish Bay charters, archipelago fishing.
+
+Entity: Captain David (Lancha El Corsario)
+Vessel: El Corsario
+Phone/WhatsApp: +507 6922-1178
+Routes: Full-day private family boat hire, Cayo Zapatilla 1 & 2, Sloth Island tours.
+
+Entity: Captain Andrés (Water Taxi 11)
+Vessel: Express 11
+Phone/WhatsApp: +507 6533-6624
+Routes: Rapid point-to-point water taxi between Bocas Town piers and Carenero restaurants.
+
+Entity: Captain Gabriel (Lancha Los Tres Hermanos)
+Vessel: Los Tres Hermanos
+Phone/WhatsApp: +507 6801-9953
+Routes: Dolphin Bay family dolphin watching, San Cristóbal cacao farm tours.
+
+Entity: Captain Rolando (Water Taxi 27)
+Vessel: Lancha Rolando
+Phone/WhatsApp: +507 6614-7738
+Routes: Bluff Beach drop-off by boat, Carenero North, coastal sightseeing.
+
+Entity: Captain Víctor (Lancha Mar Azul)
+Vessel: Mar Azul
+Phone/WhatsApp: +507 6788-5502
+Routes: Starfish Beach, Coral Cay snorkeling, offshore sportfishing.
+
+Entity: Captain Tomás (Water Taxi 03)
+Vessel: Taxi 03
+Phone/WhatsApp: +507 6422-9917
+Routes: Direct fast crossing to Carenero surf spots and overwater dining.
+
+Entity: Captain Jorge (Lancha La Princesa)
+Vessel: La Princesa
+Phone/WhatsApp: +507 6966-3341
+Routes: Private island hopping charters, romantic sunset sails and cruises around the bay.
+
+Entity: Captain Marcos (Water Taxi 33)
+Vessel: Water Taxi 33
+Phone/WhatsApp: +507 6577-8860
+Routes: Bastimentos & Red Frog late return service, night transfers for dinner guests.
+
+Entity: Captain Raúl (Lancha El Pirata)
+Vessel: El Pirata
+Phone/WhatsApp: +507 6844-2219
+Routes: Scuba dive transport, reef snorkeling, deep water fishing trips.
+
+Entity: Captain Daniel (Water Taxi 16)
+Vessel: Lancha Daniel
+Phone/WhatsApp: +507 6733-1185
+Routes: Isla Carenero East Coast pickups and Bastimentos eco-lodges.
+
+Entity: Captain Samuel (Lancha El Conquistador)
+Vessel: El Conquistador
+Phone/WhatsApp: +507 6655-4492
+Routes: Custom archipelago day hire, deep archipelago exploration, Escudo de Veraguas expeditions (weather permitting).
+
+Entity: Captain Antonio (Water Taxi 09)
+Vessel: Taxi 09
+Phone/WhatsApp: +507 6488-7731
+Routes: Isla Colón Main Public Dock to Old Bank Bastimentos.
+
+================================================================================
+SECTION 4: LAND TRANSPORTATION, TAXIS & VEHICLE RENTALS
+================================================================================
+
+Entity: Piquera de Radio Taxis Isla Colón (Sindicato 28 de Noviembre)
+Location: Calle 1ra, Bocas Town, Isla Colón
+Phone: +507 757-9005
+Service: Official island land taxi dispatch, pickups for Bocas Town, Big Creek, Paunch Beach, Bluff Beach, and Boca del Drago.
+
+Entity: Bocas Car Rental & UTV Off-Road
+Location: Calle 1ra, Isla Colón
+Phone/WhatsApp: +507 6948-2210
+Service: 4x4 UTV and ATV rentals, rugged vehicles for Bluff Beach road, airport transfers, golf cart rentals.
+
+Entity: Bocas Island Express & Logistics
+Location: Isla Colón & Almirante mainland port
+WhatsApp: +507 6717-7938
+Service: Mainland cargo freight, furniture and construction logistics, passenger transfer coordination between David/Boquete and Bocas.
+
+Entity: Flying Pirates UTV & ATV Rentals
+Location: Calle Principal toward Paunch, Isla Colón
+Phone/WhatsApp: +507 6689-1230
+Service: Off-road UTV rentals, jungle trail guides to Bluff Beach and northern beaches.
+
+================================================================================
+SECTION 5: TRADES, WATER SYSTEMS, SOLAR, ELECTRICAL & CONTRACTORS
+================================================================================
+
+Entity: Scott Solutions (Off-Grid Solar & Battery Systems)
+Location: Isla Colón & Archipelago Outreach (Solarte, Bastimentos)
+WhatsApp: +507 6480-1290
+Service: Off-grid solar installations, Victron inverter programming, lithium battery bank maintenance, solar panel cleaning & diagnostic checks.
+
+Entity: Luis Ángel Herrera Palacio (A/C & Commercial Refrigeration)
+Location: Calle 4ta, Bocas Town, Isla Colón
+WhatsApp: +507 6522-8144
+Service: Mini-split air conditioning installation, R410A refrigerant gas refills, compressor repair, walk-in commercial restaurant freezer maintenance.
+
+Entity: Solarte Soil Works & Tropical Landscaping
+Location: Isla Solarte & Archipelago Deliveries
+WhatsApp: +507 6711-4092
+Service: Organic topsoil delivery, tropical compost, heavy lawn mowing (chapeo), coconut palm maintenance, drainage ditch clearing.
+
+Entity: Abner Shalém Pineda Baker (General Contractor & Docks)
+Location: Isla Colón & Carenero
+WhatsApp: +507 6649-3301
+Service: Overwater dock construction, seawall pilings, wood framing, hardwood deck repairs, home renovations.
+
+Entity: Reg Soldadura y Herrería (Metal Welding & Gates)
+Location: Isla Colón
+WhatsApp: +507 6830-1152
+Service: Structural steel welding, custom marine aluminum gates, security window bars, rust treatment.
+
+Entity: Alex Acosta Carpentry & Fine Woodworking
+Location: Almirante & Bocas Archipelago
+WhatsApp: +507 6501-4007
+Service: Custom cabinet making, native tropical hardwood furniture (Nispero, Laurel, Teak), boat interior trim.
+
+Entity: Nicolas Maranda (Locksmith & Security Hardware)
+Location: Isla Colón & Archipelago
+WhatsApp: +507 6606-6892
+Service: Keypad lock installations, deadbolt re-keying, marine stainless padlocks, emergency lock opening.
+
+Entity: Starlink & Off-Grid Wi-Fi Technical Services
+Location: Bocas del Toro Archipelago
+WhatsApp: +507 6480-1290
+Service: Starlink dish rooftop mounting, lightning surge arresters, mesh Wi-Fi network routing across island properties and overwater docks.
+
+Entity: Heyner Vincent (Masonry, Tiling & Ceilings)
+Location: Isla Colón
+WhatsApp: +507 6381-0246
+Service: Ceramic and porcelain tile installation, suspended ceilings, concrete masonry, bathroom plastering.
+
+Entity: Melencio Thomas (General Construction & Plumbing Maintenance)
+Location: Isla Colón
+WhatsApp: +507 6372-5460
+Service: Freshwater plumbing maintenance, rainwater cistern connections, PVC pipe repairs, roof flashing repair.
+
+================================================================================
+SECTION 6: HARDWARE STORES (FERRETERÍAS) & BUILDING SUPPLIES
+================================================================================
+
+Entity: Ferretería Isla Colón
+Location: Calle 3ra & Ave G, Bocas Town, Isla Colón
+Phone: +507 757-9250
+Service: PVC plumbing fittings, electrical wiring, zinc roofing sheets, stainless steel screws, marine paint, cement, hand tools.
+
+Entity: Materiales Bocas (Building Supplies Depot)
+Location: Isla Colón
+Phone: +507 757-9380
+Service: Lumber, concrete blocks, sand, gravel, rebar, water storage tanks, water pumps.
+
+================================================================================
+SECTION 7: BANKING, ATMS & UTILITIES
+================================================================================
+
+Entity: Banco Nacional de Panamá (Isla Colón Branch & 24/7 ATM)
+Location: Calle 3ra & Ave F, Bocas Town, Isla Colón
+Phone: +507 757-9230
+Service: Full banking branch, USD ATM cash withdrawals, international debit/credit cards, wire services, official teller desks.
+
+Entity: Independent Telered ATM (Duo2 Supermarket)
+Location: Calle 3ra, Bocas Town, Isla Colón
+Service: Secondary cash ATM machine dispensing USD bills for Visa, Mastercard, and Clave cards.
+
+Entity: Independent Telered ATM (Supermercado Alba)
+Location: Calle 1ra, Bocas Town, Isla Colón
+Service: Cash ATM withdrawal machine.
+
+Entity: Western Union Changuinola Office
+Location: Changuinola Centro, Bocas del Toro (Mainland)
+Phone: +507 758-6540
+Service: International cash wire transfer pickups and remittances (Note: No Western Union branch in Bocas Town; mainland pickup required).
+
+Entity: Naturgy Panamá (Oficina de Pago de Electricidad)
+Location: Calle 3ra, Bocas Town, Isla Colón
+Service: Commercial and residential electricity bill inquiries, payment processing, service connection requests.
+
+================================================================================
+SECTION 8: SUPERMARKETS & PROVISIONS
+================================================================================
+
+Entity: Supermercado Isla Colón
+Location: Calle 3ra, Bocas Town, Isla Colón
+Phone: +507 757-9100
+Service: Comprehensive supermarket, fresh meats, dairy, imported dry goods, household cleaners, bottled drinking water.
+
+Entity: Super Gourmet Deli & Specialty Market
+Location: Calle 3ra, Bocas Town, Isla Colón
+Phone: +507 757-9357
+Service: Specialty cheeses, artisanal bread, gluten-free items, organic wines, gourmet sandwiches, espresso coffee.
+
+Entity: Bocas Free Book Exchange & Community Center
+Location: Calle 2da, Bocas Town, Isla Colón
+Phone: +507 757-9000
+Service: Free multilingual book library, cultural events, community bulletin board.
+
+================================================================================
+GOOGLE NOTEBOOKLM EXTRACTION PROMPT INSTRUCTIONS
+================================================================================
+Copy and paste this document into a new notebook at: https://notebooklm.google.com
+
+Then ask Google NotebookLM:
+"Extract all local service providers, tradespeople, clinics, boat captains, and emergency services into a structured Markdown table with the following columns:
+| Provider / Entity Name | Category | Primary Phone / WhatsApp | Verified Street / Island Location | Exact Source Citation |"

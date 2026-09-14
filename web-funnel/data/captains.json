@@ -32,59 +32,166 @@
     "category_label_en": "Boat Captain & Water Taxi",
     "rating": 5.0,
     "verified": true,
-    "badge": "Hope Spot Certified",
-    "location": "Bocas del Toro (Isla Colón, Carenero, Bastimentos, Solarte)",
-    "hours": "Daily: ~6:00 AM – 7:00 PM • Night trips upon request",
-    "languages": "Español • English",
+    "badge": "Hope Spot Certified • Ngäbe Tours",
+    "certifications": [
+      "Licencia Oficial de Operador de Lanchas",
+      "Hope Spot Certified Captain"
+    ],
     "phone": "+507 6896-8680",
     "phone_raw": "+50768968680",
     "whatsapp_url": "https://wa.me/50768968680",
-    "description": "Capitán certificado Hope Spot (Ngabe Tours). Especialista en traslados entre islas, taxi marítimo seguro y tours marinos.",
-    "description_en": "Hope Spot Certified captain (Ngabe Tours). Specialist in island-to-island water taxi, private charters, and marine tours.",
+    "location": "Frente a Klika / New Store (Calle 1ra, Isla Colón) • Bastimentos, Bat Cave, Red Frog, Solarte",
+    "departure_dock": "Muelle frente a Klika (en el new store), Calle 1ra, Isla Colón",
+    "hours": "Daily: ~6:00 AM – 7:00 PM • Tours depart 10:00 AM • Custom trips upon request",
+    "languages": "Español • English",
+    "frequent_destinations": [
+      "Red Frog Beach",
+      "Bastimentos (Old Bank)",
+      "Bat Cave (Cueva de Murciélagos, Bastimentos)",
+      "Bambuda Lodge (Solarte)",
+      "Carenero",
+      "Isla Colón"
+    ],
+    "tour_offerings": [
+      {
+        "tour": "Cayo Zapatilla Excursion",
+        "price": "$40 per person",
+        "details": "Full day excursion to Cayo Zapatilla including snorkeling and island exploration"
+      },
+      {
+        "tour": "Sport Fishing Tour",
+        "price": "$350 (approx 2 persons)",
+        "details": "Coastal and island sport fishing expedition"
+      },
+      {
+        "tour": "Bat Cave Tour (Cueva de Murciélagos, Bastimentos)",
+        "details": "Subterranean cavern expedition on Bastimentos — top recommendation for rainy days"
+      },
+      {
+        "tour": "Snorkeling Tour",
+        "description": "Guided reef snorkeling in crystal clear waters"
+      }
+    ],
+    "water_taxi_routes": [
+      "Red Frog Beach",
+      "Bastimentos",
+      "Bambuda Lodge",
+      "Carenero",
+      "Isla Colón"
+    ],
+    "rainy_day_policy": "Tours a la Cueva de Murciélagos (Bat Cave en Bastimentos) para días lluviosos y rutas de aguas calmas adaptadas",
+    "rainy_day_policy_en": "Bat Cave tours on Bastimentos for rainy days and weather-adapted calm-water routes negotiated per group",
+    "description": "Capitán certificado Hope Spot (Ngabe Tours). Ubicado al frente de Klika (en el new store). Salidas diarias de tours a las 10:00 AM. Especialista en tours a Cayo Zapatilla ($40/persona con snorkel), pesca deportiva ($350 para aprox. 2 personas), expedición a la Cueva de Murciélagos (Bat Cave en Bastimentos, ideal para días lluviosos) y traslados frecuentes a Red Frog, Bastimentos, Bambuda Lodge y Carenero.",
+    "description_en": "Hope Spot Certified captain (Ngabe Tours). Docked in front of Klika (at the new store, Calle 1ra). Daily tour departures at 10:00 AM. Specialist in Cayo Zapatilla tours ($40/person with snorkeling), sport fishing ($350 for ~2 people), Bat Cave cavern tours on Bastimentos (ideal for rainy days), and fast transfers to Red Frog, Bastimentos, Bambuda Lodge, and Carenero.",
     "status": "approved"
   },
   {
     "id": "captain-50769014186",
-    "name": "Capt. Junnior Ortiz – Bocas Island Adventours",
-    "name_es": "Capt. Junnior Ortiz – Bocas Island Adventours",
-    "captain_name": "Capt. Junnior Ortiz",
-    "operator": "Bocas Island Adventours",
+    "name": "Capt. Junnior Ortiz – Bocas Islands Adventours",
+    "name_es": "Capt. Junnior Ortiz – Bocas Islands Adventours",
+    "captain_name": "Capt. Junnior Ortiz (Junior)",
+    "operator": "Bocas Islands Adventours",
     "category": "WATER_TAXI",
     "category_label": "Capitán de Lancha / Taxi Marítimo",
     "category_label_en": "Boat Captain & Water Taxi",
     "rating": 5.0,
     "verified": true,
-    "badge": "Hope Spot Certified",
-    "location": "Bocas del Toro (Isla Colón, Carenero, Bastimentos, Solarte)",
-    "hours": "Daily: ~6:00 AM – 7:00 PM • Night trips upon request",
-    "languages": "Español • English",
+    "badge": "Hope Spot Certified • Licensed Operator & Guide",
+    "certifications": [
+      "Guía General de Turismo Certificado en Panamá",
+      "Licencia Oficial de Operador de Lanchas",
+      "Hope Spot Certified Captain"
+    ],
+    "website": "https://bocasislandsadventours.com",
+    "email": "info@bocasislandsadventours.com",
     "phone": "+507 6901-4186",
     "phone_raw": "+50769014186",
     "whatsapp_url": "https://wa.me/50769014186",
-    "description": "Capitán certificado Hope Spot (Bocas Island Adventours). Especialista en traslados entre islas, taxi marítimo seguro y tours marinos.",
-    "description_en": "Hope Spot Certified captain (Bocas Island Adventours). Specialist in island-to-island water taxi, private charters, and marine tours.",
+    "location": "Muelle Secundario Panamá Sailing (Calle 1ra, Isla Colón) • Bastimentos, Carenero, Solarte",
+    "departure_dock": "Muelle secundario de Panamá Sailing (Partner con Capi Daniel)",
+    "hours": "Daily: ~6:00 AM – 7:00 PM • Night trips upon request",
+    "languages": "Español • English",
+    "frequent_destinations": [
+      "Boya de Vida",
+      "The Floating Bar",
+      "Panamá Sailing Dock",
+      "Isla Colón",
+      "Carenero",
+      "Bastimentos",
+      "Solarte"
+    ],
+    "tour_offerings": [
+      {
+        "tour": "Private Island Hopping",
+        "description": "Customized private island tours away from crowded tourist spots"
+      },
+      {
+        "tour": "Bioluminescence Tour",
+        "description": "Night boat excursion into glowing bioluminescent waters"
+      },
+      {
+        "tour": "Snorkeling Experience",
+        "description": "Personalized snorkeling spots far from crowds, gear included"
+      }
+    ],
+    "included_amenities": [
+      "Cooler with ice and drinking water",
+      "Daily food/lunch included",
+      "Full snorkeling equipment"
+    ],
+    "excluded_costs": "Entrance fees to private reserves/docks or National Parks",
+    "partners": [
+      {
+        "partner": "Air Panamá",
+        "role": "Authorized sales agent for airline flight tickets"
+      },
+      {
+        "partner": "Panamá Sailing / Capi Daniel",
+        "role": "Partner dock & secondary pier embarkation point"
+      },
+      {
+        "partner": "Tropical Arts, Ecolodges & Hostels",
+        "role": "Preferred lodging network and guest activity partners"
+      }
+    ],
+    "water_taxi_routes": [
+      "Boya de Vida (Buena Vida)",
+      "The Floating Bar",
+      "Muelle Secundario Panamá Sailing",
+      "Carenero",
+      "Bastimentos",
+      "Isla Colón"
+    ],
+    "description": "Equipo de capitanes con licencia de operador de lanchas. Junior Ortiz es Guía General de Turismo certificado en Panamá. Especialistas en tours privados lejos de aglomeraciones, bioluminiscencia y snorkeling. Embarques desde el muelle secundario de Panamá Sailing (partner con Capi Daniel). Incluye cooler con hielo y agua, alimentación y equipo de snorkel. Servicio de taxi para Boya de Vida y Floating Bar. Agentes autorizados de Air Panamá.",
+    "description_en": "Team of licensed boat captains. Junior Ortiz is a certified General Tourism Guide in Panama. Specializing in crowd-free private island tours, bioluminescence, and snorkeling. Embarkations from Panama Sailing secondary dock (partnered with Capi Daniel). Includes cooler with ice and water, daily lunch, and snorkel gear. Water taxi to Boya de Vida & Floating Bar. Authorized Air Panama ticket agents.",
     "status": "approved"
   },
   {
-    "id": "captain-50768754839",
-    "name": "Capt. Camilo Georget – Independent Captain",
-    "name_es": "Capt. Camilo Georget – Capitán Independiente",
+    "id": "captain-50768454839",
+    "name": "Capt. Camilo Georget – Boteros Unidos Bocatoreños",
+    "name_es": "Capt. Camilo Georget – Boteros Unidos Bocatoreños",
     "captain_name": "Capt. Camilo Georget",
-    "operator": "Independent",
+    "operator": "Boteros Unidos Bocatoreños",
     "category": "WATER_TAXI",
     "category_label": "Capitán de Lancha / Taxi Marítimo",
     "category_label_en": "Boat Captain & Water Taxi",
     "rating": 5.0,
     "verified": true,
-    "badge": "Hope Spot Certified",
-    "location": "Bocas del Toro (Isla Colón, Carenero, Bastimentos, Solarte)",
-    "hours": "Daily: ~6:00 AM – 7:00 PM • Night trips upon request",
+    "badge": "Hope Spot Certified • Boteros Unidos",
+    "certifications": [
+      "Licencia Oficial de Operador de Lanchas",
+      "Hope Spot Certified Captain"
+    ],
+    "phone": "+507 6845-4839",
+    "phone_raw": "+50768454839",
+    "whatsapp_url": "https://wa.me/50768454839",
+    "location": "Muelle Boteros Unidos Bocatoreños (Calle 1ra, Isla Colón) • Bastimentos, Carenero, Solarte",
+    "departure_dock": "Muelle de Boteros Unidos Bocatoreños, Calle 1ra, Isla Colón",
+    "hours": "Daily: ~6:00 AM – 7:00 PM • Salidas normales de tours 9:30 AM • Disponible con o sin lluvia",
     "languages": "Español • English",
-    "phone": "+507 6875-4839",
-    "phone_raw": "+50768754839",
-    "whatsapp_url": "https://wa.me/50768754839",
-    "description": "Capitán certificado Hope Spot. Especialista en traslados entre islas, taxi marítimo seguro y tours marinos.",
-    "description_en": "Hope Spot Certified captain. Specialist in island-to-island water taxi, private charters, and marine tours.",
+    "rainy_day_policy": "Operaciones activas con lluvia y sin lluvia (servicio 365 días al año)",
+    "description": "Capitán certificado Hope Spot (Boteros Unidos Bocatoreños). Salida siempre desde el muelle de Boteros Unidos Bocatoreños (Calle 1ra). Salidas normales de tours a las 9:30 AM. Disponibilidad garantizada con lluvia y sin lluvia. Especialista en traslados entre islas, taxi marítimo seguro y tours en el archipiélago.",
+    "description_en": "Hope Spot Certified captain (Boteros Unidos Bocatoreños). Embarking from Boteros Unidos Bocatoreños dock (Calle 1ra). Standard tour departures at 9:30 AM. Operating rain or shine (365 days a year). Specialist in island transfers, dependable water taxi, and archipelago tours.",
     "status": "approved"
   },
   {

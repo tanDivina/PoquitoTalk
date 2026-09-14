@@ -34,6 +34,8 @@ interface ConversationsScreenProps {
   onResetOnboarding?: () => void;
   savedTranslations?: TranslationItem[];
   onToggleSave?: (item: TranslationItem) => void;
+  route?: any;
+  navigation?: any;
 }
 
 export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
@@ -45,6 +47,8 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
   onResetOnboarding,
   savedTranslations = [],
   onToggleSave,
+  route,
+  navigation,
 }) => {
   const [threads, setThreads] = useState<ConversationThread[]>([]);
   const [activeThread, setActiveThread] = useState<ConversationThread | null>(null);
@@ -93,17 +97,19 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
       const data = await loadConversationThreads();
       if (!isMounted) return;
       setThreads(data);
-      if (Platform.OS === "web" && typeof window !== "undefined") {
-        const params = new URLSearchParams(window.location.search);
-        const threadModal = params.get("threadModal");
-        const targetThreadId = params.get("threadId");
-        if (threadModal === "true" && data.length > 0) {
-          const matched = targetThreadId ? data.find((t) => t.id === targetThreadId) : data[0];
-          if (matched) {
-            setActiveThread(matched);
-            setThreadModalVisible(true);
-          }
+
+      const targetId = route?.params?.threadId || (Platform.OS === "web" && typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("threadId") : null);
+      const shouldOpen = route?.params?.threadModal === "true" || (Platform.OS === "web" && typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("threadModal") === "true" : false);
+
+      if (targetId && data.length > 0) {
+        const matched = data.find((t) => t.id === targetId);
+        if (matched) {
+          setActiveThread(matched);
+          setThreadModalVisible(true);
         }
+      } else if (shouldOpen && data.length > 0) {
+        setActiveThread(data[0]);
+        setThreadModalVisible(true);
       }
     };
 
@@ -137,6 +143,21 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
       unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      (window as any).__openThreadModal = (id?: string) => {
+        const t = id ? threads.find((item) => item.id === id) : threads[0];
+        if (t) {
+          setActiveThread(t);
+          setThreadModalVisible(true);
+        }
+      };
+      (window as any).__closeThreadModal = () => {
+        setThreadModalVisible(false);
+      };
+    }
+  }, [threads]);
 
   const handleSelectThread = (thread: ConversationThread) => {
     setActiveThread(thread);
@@ -179,7 +200,7 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingBottom: 120 }]}>
+    <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingBottom: 150 }]}>
       <Header
         isPro={isPro}
         onOpenPaywall={onOpenPaywall}
@@ -192,7 +213,7 @@ export const ConversationsScreen: React.FC<ConversationsScreenProps> = ({
       <View style={styles.titleSection}>
         <View style={styles.titleRow}>
           <View>
-            <Text style={styles.title}>Conversations 💬</Text>
+            <Text style={styles.title}>Threads 💬</Text>
             <Text style={styles.subtitle}>2-Way WhatsApp threads with local Bocas services</Text>
           </View>
 

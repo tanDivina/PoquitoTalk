@@ -68,9 +68,11 @@
       />
     </g>
 
-    <!-- 6. Bold Proportionate Soundwave Broadcast Arcs -->
-    <path d="M 110 43 A 11 11 0 0 1 110 61" fill="none" stroke="#F59E0B" stroke-width="5.2" stroke-linecap="round" />
-    <path d="M 120 37 A 17 17 0 0 1 120 67" fill="none" stroke="#F59E0B" stroke-width="5.2" stroke-linecap="round" />
-    <path d="M 130 31 A 23 23 0 0 1 130 73" fill="none" stroke="#F59E0B" stroke-width="5.2" stroke-linecap="round" />
+    <!-- 6. Bold Proportionate Soundwave Broadcast Arcs (Shifted +10px right for clear beak breathing room) -->
+    <g transform="translate(10, 0)">
+      <path d="M 110 43 A 11 11 0 0 1 110 61" fill="none" stroke="#F59E0B" stroke-width="5.2" stroke-linecap="round" />
+      <path d="M 120 37 A 17 17 0 0 1 120 67" fill="none" stroke="#F59E0B" stroke-width="5.2" stroke-linecap="round" />
+      <path d="M 130 31 A 23 23 0 0 1 130 73" fill="none" stroke="#F59E0B" stroke-width="5.2" stroke-linecap="round" />
+    </g>
   </g>
 </svg>

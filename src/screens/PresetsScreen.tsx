@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
+import * as Sharing from 'expo-sharing';
 import { Colors } from '../theme/colors';
 import { Header } from '../components/Header';
 import { WhatsAppIcon } from '../components/WhatsAppIcon';
@@ -94,6 +95,12 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       quickBarRef.current?.scrollTo({ x: 0, animated: true });
     }
   };
+
+  useEffect(() => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      (window as any).__expandPresetCard = (id: string) => handleSelectCard(id);
+    }
+  }, [activeCardId]);
 
   const getPhraseSpanish = (phrase: PresetPhrase): string => {
     return phrase.output || phrase.input;
@@ -184,7 +191,7 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
     await sendTextToWhatsApp(spanish);
   };
 
-  // Send Voice Note to WhatsApp
+  // Send Voice Note to WhatsApp as native MP3 audio file
   const handleSendWhatsAppVoiceNote = async (phrase: PresetPhrase) => {
     const spanish = getPhraseSpanish(phrase);
     const phraseKey = phrase.id || phrase.title;
@@ -192,13 +199,24 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
       setSharingAudioId(phraseKey);
       const preferredGender = await getPreferredVoiceGender();
       const personaName = preferredGender === 'FEMALE' ? 'Female' : 'Male';
-      const audioUri = await resolvePresetAudioUri(phrase.id, spanish, personaName);
-      if (audioUri) {
+      let audioUri = await resolvePresetAudioUri(phrase.id, spanish, personaName);
+      if (!audioUri) {
+        audioUri = await generateGoogleGeminiAudio(spanish, personaName);
+      }
+
+      if (audioUri && (await Sharing.isAvailableAsync())) {
+        await Sharing.shareAsync(audioUri, {
+          mimeType: 'audio/mp3',
+          dialogTitle: 'Send Voice Note to WhatsApp',
+          UTI: 'public.mp3',
+        });
+      } else if (audioUri) {
         await shareVoiceNoteToWhatsApp(audioUri, 'Contact', spanish);
       } else {
         await sendTextToWhatsApp(spanish);
       }
     } catch (error) {
+      console.warn('Voice note share error:', error);
       await sendTextToWhatsApp(spanish);
     } finally {
       setSharingAudioId(null);
@@ -498,53 +516,71 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                                 { backgroundColor: '#FAF9F6', borderColor: '#E5E2DA' },
                               ]}
                             >
-                              <View style={styles.spanishBadge}>
-                                <Text style={styles.spanishBadgeText}>SPANISH</Text>
+                              {/* Upper Row: SPANISH badge + Listen & Edit actions */}
+                              <View style={styles.spanishHeaderRow}>
+                                <View style={styles.spanishBadge}>
+                                  <Text style={styles.spanishBadgeText}>SPANISH</Text>
+                                </View>
+
+                                <View style={styles.spanishUtilityActions}>
+                                  {/* Speech / Listen Audio button */}
+                                  <TouchableOpacity
+                                    style={[
+                                      styles.spanishPillBtn,
+                                      {
+                                        borderColor: isPlayingThis ? '#FCA5A5' : '#E2E8F0',
+                                        backgroundColor: isPlayingThis ? '#FEE2E2' : '#FFFFFF',
+                                      },
+                                    ]}
+                                    onPress={() => handlePlayPhraseAudio(phrase)}
+                                    activeOpacity={0.7}
+                                    hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
+                                    accessibilityLabel={isPlayingThis ? 'Stop audio' : 'Listen to Spanish audio'}
+                                  >
+                                    {isLoadingThis ? (
+                                      <ActivityIndicator size="small" color={isPlayingThis ? '#BA1A1A' : theme.accent} />
+                                    ) : isPlayingThis ? (
+                                      <Ionicons
+                                        name="stop-circle"
+                                        size={13}
+                                        color="#BA1A1A"
+                                      />
+                                    ) : (
+                                      <SpeakerIcon
+                                        size={13}
+                                        color={theme.accent}
+                                      />
+                                    )}
+                                    <Text
+                                      style={[
+                                        styles.spanishPillBtnText,
+                                        { color: isPlayingThis ? '#BA1A1A' : theme.accent },
+                                      ]}
+                                    >
+                                      {isPlayingThis ? 'Playing' : 'Listen'}
+                                    </Text>
+                                  </TouchableOpacity>
+
+                                  {/* Edit / Customize in Translate */}
+                                  <TouchableOpacity
+                                    style={[styles.spanishPillBtn, styles.spanishEditBtn]}
+                                    onPress={() => onSelectPhrasePrompt(phrase.input, preset.title)}
+                                    activeOpacity={0.7}
+                                    hitSlop={{ top: 8, bottom: 8, left: 6, right: 6 }}
+                                    accessibilityLabel="Customize phrase in Translate"
+                                  >
+                                    <Ionicons name="create-outline" size={13} color="#475569" />
+                                    <Text style={[styles.spanishPillBtnText, { color: '#475569' }]}>Edit</Text>
+                                  </TouchableOpacity>
+                                </View>
                               </View>
+
                               <Text style={styles.spanishText}>{currentSpanish}</Text>
                             </View>
 
-                            {/* Action Buttons Row */}
+                            {/* Action Buttons Row: Send Voice Note & Send Text */}
                             <View style={styles.actionRow}>
-                              {/* 1. Speaker Symbol ONLY */}
-                              <TouchableOpacity
-                                style={[
-                                  styles.speakerOnlyBtn,
-                                  {
-                                    borderColor: isPlayingThis ? '#FCA5A5' : theme.border,
-                                    backgroundColor: isPlayingThis ? '#FEE2E2' : theme.badgeBg,
-                                  },
-                                ]}
-                                onPress={() => handlePlayPhraseAudio(phrase)}
-                                activeOpacity={0.7}
-                              >
-                                {isLoadingThis ? (
-                                  <ActivityIndicator size="small" color={isPlayingThis ? '#BA1A1A' : theme.accent} />
-                                ) : isPlayingThis ? (
-                                  <Ionicons
-                                    name="stop-circle"
-                                    size={18}
-                                    color="#BA1A1A"
-                                  />
-                                ) : (
-                                  <SpeakerIcon
-                                    size={18}
-                                    color={theme.accent}
-                                  />
-                                )}
-                              </TouchableOpacity>
-
-                              {/* 2. Send Text to WhatsApp */}
-                              <TouchableOpacity
-                                style={[styles.actionBtn, styles.textWhatsappBtn]}
-                                onPress={() => handleSendWhatsAppText(phrase)}
-                                activeOpacity={0.7}
-                              >
-                                <WhatsAppIcon size={14} color="#047857" />
-                                <Text style={styles.textWhatsappBtnLabel}>Text</Text>
-                              </TouchableOpacity>
-
-                              {/* 3. Send Voice Note to WhatsApp */}
+                              {/* 1. Send Voice Note to WhatsApp */}
                               <TouchableOpacity
                                 style={[styles.actionBtn, styles.voiceWhatsappBtn]}
                                 onPress={() => handleSendWhatsAppVoiceNote(phrase)}
@@ -555,20 +591,24 @@ export const PresetsScreen: React.FC<PresetsScreenProps> = ({
                                   <ActivityIndicator size="small" color="#FFF" />
                                 ) : (
                                   <>
-                                    <WhatsAppIcon size={14} color="#FFFFFF" />
-                                    <Text style={styles.voiceWhatsappBtnLabel}>Voice</Text>
+                                    <WhatsAppIcon size={15} color="#FFFFFF" />
+                                    <Text style={styles.voiceWhatsappBtnLabel} numberOfLines={1}>
+                                      Send Voice Note
+                                    </Text>
                                   </>
                                 )}
                               </TouchableOpacity>
 
-                              {/* 4. Customize in Translate */}
+                              {/* 2. Send Text to WhatsApp */}
                               <TouchableOpacity
-                                style={[styles.actionBtn, styles.editBtn, { borderColor: theme.border }]}
-                                onPress={() => onSelectPhrasePrompt(phrase.input, preset.title)}
+                                style={[styles.actionBtn, styles.textWhatsappBtn]}
+                                onPress={() => handleSendWhatsAppText(phrase)}
                                 activeOpacity={0.7}
                               >
-                                <Ionicons name="create-outline" size={14} color={Colors.onSurfaceVariant} />
-                                <Text style={styles.editBtnText}>Edit</Text>
+                                <WhatsAppIcon size={15} color="#047857" />
+                                <Text style={styles.textWhatsappBtnLabel} numberOfLines={1}>
+                                  Send Text
+                                </Text>
                               </TouchableOpacity>
                             </View>
                           </View>
@@ -810,18 +850,58 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   spanishContainer: {
-    borderRadius: 10,
-    padding: 10,
+    borderRadius: 12,
+    padding: 11,
     borderWidth: 1,
     marginBottom: 10,
   },
+  spanishHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    gap: 6,
+    marginBottom: 8,
+  },
   spanishBadge: {
-    marginBottom: 4,
+    backgroundColor: '#E2E8F0',
+    paddingHorizontal: 6,
+    paddingVertical: 2.5,
+    borderRadius: 4,
   },
   spanishBadgeText: {
-    fontSize: 9.5,
+    fontSize: 9,
     fontWeight: '800',
     letterSpacing: 0.4,
+    color: '#475569',
+  },
+  spanishUtilityActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  spanishPillBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 3.5,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 1.5,
+    elevation: 1,
+  },
+  spanishEditBtn: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#E2E8F0',
+  },
+  spanishPillBtnText: {
+    fontSize: 11,
+    fontWeight: '700',
   },
   spanishText: {
     fontSize: 13.5,
@@ -832,57 +912,43 @@ const styles = StyleSheet.create({
   actionRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-  },
-  speakerOnlyBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    borderWidth: 1.2,
-    alignItems: 'center',
-    justifyContent: 'center',
+    gap: 8,
   },
   actionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 5,
-    paddingVertical: 7,
-    paddingHorizontal: 9,
-    borderRadius: 10,
+    gap: 6,
+    minHeight: 44,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+  },
+  voiceWhatsappBtn: {
+    backgroundColor: '#059669',
+    flex: 1.25,
+    shadowColor: '#059669',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  voiceWhatsappBtnLabel: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    letterSpacing: -0.2,
   },
   textWhatsappBtn: {
     backgroundColor: '#ECFDF5',
     borderWidth: 1.2,
     borderColor: '#A7F3D0',
-    flex: 1,
+    flex: 0.95,
   },
   textWhatsappBtnLabel: {
-    fontSize: 11.5,
+    fontSize: 12,
     fontWeight: '800',
     color: '#047857',
-  },
-  voiceWhatsappBtn: {
-    backgroundColor: '#059669',
-    flex: 1.1,
-  },
-  voiceWhatsappBtnLabel: {
-    fontSize: 11.5,
-    fontWeight: '800',
-    color: '#FFFFFF',
-  },
-  editBtn: {
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1,
-    flex: 0.85,
-  },
-  actionBtnText: {
-    fontSize: 11.5,
-    fontWeight: '700',
-  },
-  editBtnText: {
-    fontSize: 11.5,
-    fontWeight: '600',
-    color: Colors.onSurfaceVariant,
+    letterSpacing: -0.2,
   },
 });

@@ -16,6 +16,8 @@ export interface UserProfileData {
   photoUrl?: string;
   creditsBalance: number;
   isProSubscriber: boolean;
+  hasSeenPaidOnboarding?: boolean;
+  trialStartDate?: number;
   transactions: UserTransaction[];
 }
 
@@ -156,6 +158,17 @@ export async function setProSubscriber(isPro: boolean): Promise<UserProfileData>
   const updatedProfile: UserProfileData = {
     ...profile,
     isProSubscriber: isPro,
+    trialStartDate: isPro ? (profile.trialStartDate || Date.now()) : undefined,
+  };
+  await saveUserProfile(updatedProfile);
+  return updatedProfile;
+}
+
+export async function setHasSeenPaidOnboarding(seen: boolean): Promise<UserProfileData> {
+  const profile = await getUserProfile();
+  const updatedProfile: UserProfileData = {
+    ...profile,
+    hasSeenPaidOnboarding: seen,
   };
   await saveUserProfile(updatedProfile);
   return updatedProfile;

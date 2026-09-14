@@ -22,10 +22,16 @@ import { setProSubscriber } from '../services/userService';
 
 export type PaywallTier = 'ANNUAL_TRIAL' | 'MONTHLY' | 'TRAVEL_PASS' | 'CREDITS';
 
+export interface SoftPaywallSuccessDetails {
+  tier: PaywallTier;
+  packageName: string;
+  isTrial: boolean;
+}
+
 interface SoftOnboardingPaywallProps {
   visible: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (details?: SoftPaywallSuccessDetails) => void;
   userName?: string;
   mascotStyle?: 'walkie' | 'dance' | 'vector';
 }
@@ -64,25 +70,19 @@ export const SoftOnboardingPaywall: React.FC<SoftOnboardingPaywallProps> = ({
       await setProSubscriber(true);
       await revenueCat.purchaseProPackage();
       
-      if (Platform.OS === 'web' && typeof window !== 'undefined') {
-        window.alert('¡Bienvenido a PoquitoTalk! Your 7-day free trial is active. Enjoy unlimited voice notes and 2-way walkie-talkie!');
-        onSuccess();
-        onClose();
-      } else {
-        Alert.alert(
-          '¡Bienvenido a PoquitoTalk!',
-          'Your 7-day free trial has started. Enjoy unlimited voice notes and 2-way walkie-talkie!',
-          [
-            {
-              text: 'Start Exploring',
-              onPress: () => {
-                onSuccess();
-                onClose();
-              },
-            },
-          ]
-        );
-      }
+      const packageNames: Record<PaywallTier, string> = {
+        ANNUAL_TRIAL: 'Annual Explorer Pass',
+        MONTHLY: 'Monthly Resident Pass',
+        TRAVEL_PASS: '7-Day Travel Pass',
+        CREDITS: '50 Credits Pack',
+      };
+
+      onSuccess({
+        tier: selectedTier,
+        packageName: packageNames[selectedTier] || 'Annual Explorer Pass',
+        isTrial: selectedTier === 'ANNUAL_TRIAL',
+      });
+      onClose();
     } catch (error) {
       if (Platform.OS === 'web' && typeof window !== 'undefined') {
         window.alert('Purchase Note: Could not complete transaction at this time.');

@@ -17,6 +17,7 @@ import {
 import { deductCreditForWalkieTalkie } from '../services/userService';
 import { generateGoogleGeminiAudio, GOOGLE_SPANISH_VOICES } from '../services/googleVoice';
 import * as FileSystem from 'expo-file-system/legacy';
+import { getOrCreateThreadForContact, addMessageToThread } from '../services/conversations';
 
 interface DirectoryCardProps {
   provider: LocalServiceProvider;
@@ -124,6 +125,21 @@ export const DirectoryCard: React.FC<DirectoryCardProps> = React.memo(({ provide
     const defaultGreeting = '¡Buenas! Le escribo por PoquitoTalk para consultar sobre un servicio.';
     const message = translatedMessage || defaultGreeting;
     const url = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
+
+    // Auto-create/sync thread in Threads tab
+    getOrCreateThreadForContact({
+      name: provider.name,
+      category: provider.category,
+      whatsappNumber: provider.whatsappNumber,
+    }).then(async (thread) => {
+      await addMessageToThread(thread.id, {
+        sender: 'EXPAT',
+        textEnglish: translatedMessage ? 'Inquiry sent from Directory' : 'Hello! Reaching out via PoquitoTalk about your services.',
+        textSpanish: message,
+        personaName: 'Diego',
+        timestamp: Date.now(),
+      });
+    }).catch((err) => console.warn('Directory thread auto-create error:', err));
     
     // Arm post-contact check-in prompt if not yet vouched
     if (!hasVouched) {
@@ -267,6 +283,48 @@ export const DirectoryCard: React.FC<DirectoryCardProps> = React.memo(({ provide
             {isFavorite ? 'In Phone Book' : 'Phone Book'}
           </Text>
         </TouchableOpacity>
+
+        {/* 3. Provenance & Source Verification Badge */}
+        {provider.source ? (
+          <TouchableOpacity
+            style={styles.sourceBadge}
+            disabled={!provider.sourceUrl}
+            onPress={() => {
+              if (provider.sourceUrl) {
+                Linking.openURL(provider.sourceUrl).catch(() => {});
+              }
+            }}
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              name={
+                provider.source === 'google_maps'
+                  ? 'map-outline'
+                  : provider.source === 'official_registry'
+                  ? 'shield-checkmark-outline'
+                  : provider.source === 'facebook_group'
+                  ? 'logo-facebook'
+                  : 'checkmark-circle-outline'
+              }
+              size={10.5}
+              color="#047857"
+            />
+            <Text style={styles.sourceBadgeText}>
+              {provider.source === 'google_maps'
+                ? 'Google Maps'
+                : provider.source === 'official_registry'
+                ? 'Official'
+                : provider.source === 'facebook_group'
+                ? 'Facebook Group'
+                : provider.source === 'notebook_lm'
+                ? 'NotebookLM'
+                : 'Community'}
+            </Text>
+            {provider.sourceUrl ? (
+              <Ionicons name="open-outline" size={9.5} color="#047857" style={{ marginLeft: 1 }} />
+            ) : null}
+          </TouchableOpacity>
+        ) : null}
       </View>
 
       {/* 3. Full-width Gray Info Box: Notes / Description across 100% card width */}
@@ -600,6 +658,22 @@ const styles = StyleSheet.create({
   favoriteBadgeTextActive: {
     color: '#FFF',
     fontWeight: '800',
+  },
+  sourceBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3.5,
+    backgroundColor: '#ECFDF5',
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#A7F3D0',
+  },
+  sourceBadgeText: {
+    fontSize: 9.5,
+    fontWeight: '700',
+    color: '#047857',
   },
   notesContainer: {
     width: '100%',

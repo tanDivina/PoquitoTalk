@@ -12,7 +12,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   Share,
+  Linking,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 import * as Sharing from "expo-sharing";
@@ -44,9 +46,11 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
   onUpdateThread,
   savedTranslations = [],
 }) => {
+  const insets = useSafeAreaInsets();
   const [inputText, setInputText] = useState("");
   const [isSending, setIsSharing] = useState(false);
   const [playingMsgId, setPlayingMsgId] = useState<string | null>(null);
+  const [sharingMsgId, setSharingMsgId] = useState<string | null>(null);
 
   // Live polling for contractor replies while this thread is open
   useEffect(() => {
@@ -201,6 +205,7 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
 
   const handleShareToWhatsApp = async (msg: ThreadMessage) => {
     try {
+      setSharingMsgId(msg.id);
       const fileUri = await generateGoogleGeminiAudio(msg.textSpanish, msg.personaName || "Male");
       if (fileUri) {
         await Sharing.shareAsync(fileUri, {
@@ -211,19 +216,43 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
       }
     } catch (e) {
       Alert.alert("Share Error", "Could not share voice note to WhatsApp.");
+    } finally {
+      setSharingMsgId(null);
     }
   };
 
-  const handleShareRecommendation = async () => {
+  const handleShareThread = async () => {
     try {
-      const shareMsg = `🌴 Highly recommend ${thread.contactName} (${thread.category}) in Bocas del Toro!
-Arranged seamlessly with Spanish voice notes using PoquitoTalk.app 🇵🇦`;
+      const summaryLines = (thread.messages || []).map((m) => {
+        const who = m.sender === "EXPAT" ? "Me" : thread.contactName;
+        return `[${who}]: ${m.textSpanish || m.textEnglish}`;
+      });
+      const shareMsg = `💬 Conversation with ${thread.contactName} (${thread.category}) via PoquitoTalk:\n\n${summaryLines.join("\n\n")}`;
       await Share.share({
         message: shareMsg,
-        title: `Recommend ${thread.contactName}`,
+        title: `Conversation with ${thread.contactName}`,
       });
     } catch (e) {
-      console.warn("Recommendation share error:", e);
+      console.warn("Share error:", e);
+    }
+  };
+
+  const handleOpenWhatsApp = async () => {
+    const phone = thread.whatsappNumber;
+    if (phone) {
+      const cleanPhone = phone.replace(/[^0-9]/g, "");
+      const waUrl = `https://wa.me/${cleanPhone}`;
+      const canOpen = await Linking.canOpenURL(waUrl);
+      if (canOpen) {
+        await Linking.openURL(waUrl);
+      } else {
+        await Linking.openURL(`whatsapp://send?phone=${cleanPhone}`);
+      }
+    } else {
+      Alert.alert(
+        "WhatsApp Contact",
+        `No direct WhatsApp number is stored for ${thread.contactName}. You can add one in Phone Book or send voice notes directly to WhatsApp from this thread.`
+      );
     }
   };
 
@@ -265,7 +294,7 @@ Arranged seamlessly with Spanish voice notes using PoquitoTalk.app 🇵🇦`;
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         {/* Header with Service Contact Info */}
-        <View style={styles.header}>
+        <View style={[styles.header, { paddingTop: Math.max(insets.top, 16) }]}>
           <TouchableOpacity onPress={onClose} style={styles.backBtn}>
             <Ionicons name="arrow-back" size={24} color={Colors.onBackground} />
           </TouchableOpacity>
@@ -284,19 +313,31 @@ Arranged seamlessly with Spanish voice notes using PoquitoTalk.app 🇵🇦`;
           </View>
 
           <View style={styles.headerActionsRow}>
-            {/* Growth Loop 4: Service Proof & Recommendation Card Share */}
+            {/* Share Conversation Transcript */}
             <TouchableOpacity
-              onPress={handleShareRecommendation}
+              onPress={handleShareThread}
               style={styles.recommendBtn}
+              accessibilityLabel="Share conversation"
             >
               <Ionicons name="share-social-outline" size={18} color={Colors.secondary} />
             </TouchableOpacity>
 
+            {/* Direct WhatsApp Chat */}
             <TouchableOpacity
-              onPress={handleImportIncomingVoiceNote}
+              onPress={handleOpenWhatsApp}
               style={styles.importVoiceBtn}
+              accessibilityLabel="Open WhatsApp"
             >
               <WhatsAppIcon size={16} color={Colors.whatsapp} />
+            </TouchableOpacity>
+
+            {/* Import incoming voice note file */}
+            <TouchableOpacity
+              onPress={handleImportIncomingVoiceNote}
+              style={[styles.importVoiceBtn, { backgroundColor: Colors.surfaceContainerHigh || "#F0EDE6" }]}
+              accessibilityLabel="Attach audio note"
+            >
+              <Ionicons name="attach-outline" size={18} color={Colors.onSurfaceVariant || "#5C4E3A"} />
             </TouchableOpacity>
           </View>
         </View>
@@ -350,9 +391,19 @@ Arranged seamlessly with Spanish voice notes using PoquitoTalk.app 🇵🇦`;
                       <TouchableOpacity
                         style={styles.msgWhatsAppBtn}
                         onPress={() => handleShareToWhatsApp(msg)}
+                        disabled={sharingMsgId === msg.id}
+                        activeOpacity={0.7}
                       >
-                        <WhatsAppIcon size={14} color="#FFF" />
-                        <Text style={styles.msgWhatsAppText}>Send Voice Note</Text>
+                        {sharingMsgId === msg.id ? (
+                          <ActivityIndicator size="small" color="#FFFFFF" />
+                        ) : (
+                          <>
+                            <WhatsAppIcon size={15} color="#FFFFFF" />
+                            <Text style={styles.msgWhatsAppText} numberOfLines={1}>
+                              Send Voice Note
+                            </Text>
+                          </>
+                        )}
                       </TouchableOpacity>
                     )}
                   </View>
@@ -407,10 +458,10 @@ Arranged seamlessly with Spanish voice notes using PoquitoTalk.app 🇵🇦`;
         )}
 
         {/* Bottom Input Area */}
-        <View style={styles.inputBar}>
+        <View style={[styles.inputBar, { paddingBottom: Math.max(insets.bottom, 12) }]}>
           <TextInput
             style={styles.textInput}
-            placeholder={`Message ${thread.contactName} in English...`}
+            placeholder="Message in English..."
             placeholderTextColor={Colors.outline}
             value={inputText}
             onChangeText={setInputText}
@@ -562,7 +613,7 @@ const styles = StyleSheet.create({
     gap: 4,
     backgroundColor: Colors.secondaryContainer,
     paddingHorizontal: 10,
-    paddingVertical: 6,
+    paddingVertical: 8,
     borderRadius: 12,
   },
   msgActionText: {
@@ -573,16 +624,23 @@ const styles = StyleSheet.create({
   msgWhatsAppBtn: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     gap: 6,
-    backgroundColor: Colors.whatsapp,
+    backgroundColor: "#059669",
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 8,
     borderRadius: 12,
+    shadowColor: "#059669",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
   },
   msgWhatsAppText: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: "800",
-    color: "#FFF",
+    color: "#FFFFFF",
+    letterSpacing: -0.2,
   },
   templatesTray: {
     backgroundColor: "#FFFDF5",

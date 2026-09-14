@@ -19,6 +19,11 @@ expo-env.d.ts
 *.key
 *.mobileprovision
 *.aab
+*.apk
+
+# Python
+__pycache__/
+*.py[cod]
 
 # Metro
 .metro-health-check*
@@ -52,6 +57,13 @@ yarn-error.*
 
 # Temporary video render caches & intermediate frame dumps
 temp_*
+scratch_*
+assets/videos/
+poquitotalk_tiktok_*.mp4
+.layers/
+.claude/
+.mcp.json
+.agents/skills/layers/
 vox_build/
 vox_natural_build/
 vox_v2_build/

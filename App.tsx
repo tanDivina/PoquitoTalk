@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, Platform, Linking, Alert, TouchableOpacity, Text } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaProvider, useSafeAreaInsets, initialWindowMetrics } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { Colors } from './src/theme/colors';
@@ -14,6 +14,7 @@ import { PhoneBookScreen } from './src/screens/PhoneBookScreen';
 import { OnboardingScreen } from './src/screens/OnboardingScreen';
 import { SplashScreen } from './src/screens/SplashScreen';
 import { PaywallModal } from './src/components/PaywallModal';
+import { PaidUserOnboardingModal } from './src/components/PaidUserOnboardingModal';
 import { SavedTranslationsModal } from './src/components/SavedTranslationsModal';
 import { SettingsModal } from './src/components/SettingsModal';
 import { RestorePurchasesModal } from './src/components/RestorePurchasesModal';
@@ -47,7 +48,11 @@ function MainAppTabs({
   setIsPro,
 }: any) {
   const insets = useSafeAreaInsets();
-  const dynamicBottom = Math.max(insets.bottom + 12, Platform.OS === 'android' ? 24 : 20);
+  const dynamicBottom = Platform.select({
+    ios: Math.max(insets.bottom + 8, 20),
+    android: Math.max(insets.bottom > 0 ? insets.bottom + 12 : 48, 44),
+    default: 20,
+  });
 
   const [savedModalVisible, setSavedModalVisible] = useState(() => {
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
@@ -62,6 +67,27 @@ function MainAppTabs({
     return false;
   });
   const [restoreModalVisible, setRestoreModalVisible] = useState(false);
+  const [paidOnboardingDetails, setPaidOnboardingDetails] = useState<{
+    visible: boolean;
+    packageName: string;
+    isTrial: boolean;
+  }>(() => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search).get('paidOnboarding');
+      if (p === 'true') {
+        return {
+          visible: true,
+          packageName: 'Annual Explorer Pass',
+          isTrial: true,
+        };
+      }
+    }
+    return {
+      visible: false,
+      packageName: 'Annual Explorer Pass',
+      isTrial: true,
+    };
+  });
   const [totalUnreadThreads, setTotalUnreadThreads] = useState(0);
   const [incomingNotification, setIncomingNotification] = useState<{
     threadId: string;
@@ -82,6 +108,19 @@ function MainAppTabs({
     };
 
     updateUnread();
+
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      (window as any).__openSettings = () => setSettingsModalVisible(true);
+      (window as any).__closeSettings = () => setSettingsModalVisible(false);
+      (window as any).__openPaidOnboarding = () =>
+        setPaidOnboardingDetails({
+          visible: true,
+          packageName: 'Annual Explorer Pass',
+          isTrial: true,
+        });
+      (window as any).__closePaidOnboarding = () =>
+        setPaidOnboardingDetails((prev) => ({ ...prev, visible: false }));
+    }
 
     const pollInterval = setInterval(async () => {
       const res = await syncAllThreadsWithServer();
@@ -182,8 +221,8 @@ function MainAppTabs({
           })}
           screenOptions={{
             headerShown: false,
-            tabBarActiveTintColor: Colors.secondary,
-            tabBarInactiveTintColor: Colors.outline,
+            tabBarActiveTintColor: '#964824',
+            tabBarInactiveTintColor: '#8A7D70',
             tabBarStyle: [styles.tabBar, { bottom: dynamicBottom }],
             tabBarItemStyle: styles.tabBarItem,
             tabBarLabelStyle: styles.tabBarLabel,
@@ -337,6 +376,16 @@ function MainAppTabs({
           setSettingsModalVisible(false);
           setTimeout(() => setPaywallVisible(true), 250);
         }}
+        onOpenPaidOnboarding={() => {
+          setSettingsModalVisible(false);
+          setTimeout(() => {
+            setPaidOnboardingDetails({
+              visible: true,
+              packageName: 'Annual Explorer Pass',
+              isTrial: true,
+            });
+          }, 250);
+        }}
         onOpenRestore={() => {
           setSettingsModalVisible(false);
           setTimeout(() => setRestoreModalVisible(true), 250);
@@ -351,10 +400,33 @@ function MainAppTabs({
       <PaywallModal
         visible={paywallVisible}
         onClose={() => setPaywallVisible(false)}
-        onSuccess={() => setIsPro(true)}
+        onSuccess={(details) => {
+          setIsPro(true);
+          setPaywallVisible(false);
+          setPaidOnboardingDetails({
+            visible: true,
+            packageName: details?.packageName || 'Annual Explorer Pass',
+            isTrial: details?.isTrial ?? true,
+          });
+        }}
         onOpenRestore={() => {
           setPaywallVisible(false);
           setTimeout(() => setRestoreModalVisible(true), 250);
+        }}
+      />
+
+      {/* Post-Purchase Value & Activation Modal (RevenueCat App Aftercare) */}
+      <PaidUserOnboardingModal
+        visible={paidOnboardingDetails.visible}
+        onClose={() => setPaidOnboardingDetails((prev) => ({ ...prev, visible: false }))}
+        planName={paidOnboardingDetails.packageName}
+        isTrial={paidOnboardingDetails.isTrial}
+        onStartAction={() => {
+          setActivePresetPrompt('¡Buenas! ¿A qué hora sale la lancha para Isla Colón?');
+          setActivePresetCategory('Boat Captains & Water Taxis');
+          if (navigationRef.isReady()) {
+            (navigationRef as any).navigate('Translate');
+          }
         }}
       />
 
@@ -464,6 +536,11 @@ export default function App() {
       revenueCat.isProSubscriber().then((status) => setIsPro(status));
     });
 
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      (window as any).__openPaywall = () => setPaywallVisible(true);
+      (window as any).__closePaywall = () => setPaywallVisible(false);
+    }
+
     // Deep Link Claim Listener
     const processDeepLink = async (url: string | null) => {
       if (!url) return;
@@ -510,7 +587,7 @@ export default function App() {
   }, []);
 
   return (
-    <SafeAreaProvider style={styles.mainContainer}>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics} style={styles.mainContainer}>
       <StatusBar style="dark" />
       {showOnboarding ? (
         <OnboardingScreen onComplete={handleCompleteOnboarding} />

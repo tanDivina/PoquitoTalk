@@ -32,9 +32,14 @@ export const Header: React.FC<HeaderProps> = ({
       <View style={styles.brandContainer}>
         <AnimatedParrotMascot size={38} isAnimating={true} bubblePlacement="bottom" />
         <View style={styles.titleInfoBox}>
-          <Text style={styles.title} numberOfLines={1}>
-            Poquito<Text style={styles.titleTalk}>Talk</Text>
-          </Text>
+          <View style={styles.titleRow}>
+            <Text style={styles.titlePoquito} numberOfLines={1}>
+              Poquito
+            </Text>
+            <Text style={styles.titleTalk} numberOfLines={1}>
+              Talk
+            </Text>
+          </View>
           <Text style={styles.subtitle} numberOfLines={1}>
             Bocas del Toro 🇵🇦
           </Text>
@@ -94,15 +99,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  title: {
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexShrink: 0,
+  },
+  titlePoquito: {
     fontSize: 18,
     fontWeight: '800',
     color: Colors.onBackground,
     letterSpacing: -0.2,
-    flexShrink: 0,
   },
   titleTalk: {
+    fontSize: 18,
+    fontWeight: '800',
     color: Colors.secondary, // Warm Terracotta Brown (#964824)
+    letterSpacing: -0.2,
   },
   subtitle: {
     fontSize: 11,

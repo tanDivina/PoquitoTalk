@@ -40,6 +40,7 @@ export const DEFAULT_PRESET_THREADS: ConversationThread[] = [
     contactName: 'Carlos (A/C Repair)',
     category: 'A/C Repair',
     avatarIcon: 'snow-outline',
+    whatsappNumber: '+507 6885-8607',
     lastUpdated: Date.now() - 3600000,
     messages: [
       {
@@ -54,7 +55,7 @@ export const DEFAULT_PRESET_THREADS: ConversationThread[] = [
         id: 'msg_2',
         sender: 'SERVICE_PROVIDER',
         textEnglish: 'Hello! I can drop by today at 3:00 PM. Please confirm your location on Isla Colón.',
-        textSpanish: '¡Buenas! Puedo pasar a revisar el aire hoy a las 3:00 PM. ¿Me confirma su ubicación en Isla Colón?',
+        textSpanish: '¡Buenas! Puedo pasar a revisar el aire hoy a las 3 de la tarde. ¿Me confirma su ubicación en Isla Colón?',
         timestamp: Date.now() - 1800000,
       },
     ],
@@ -65,6 +66,7 @@ export const DEFAULT_PRESET_THREADS: ConversationThread[] = [
     contactName: 'Captain Juan (Water Taxi)',
     category: 'Boat / Water Taxi',
     avatarIcon: 'boat-outline',
+    whatsappNumber: '+507 6712-3456',
     lastUpdated: Date.now() - 86400000,
     messages: [
       {
@@ -117,6 +119,27 @@ export async function loadConversationThreads(): Promise<ConversationThread[]> {
       const content = await FileSystem.readAsStringAsync(filePath);
       const parsed = JSON.parse(content);
       if (Array.isArray(parsed) && parsed.length > 0) {
+        // Auto-migrate legacy "3:00 PM" string and missing WhatsApp numbers on existing stored threads
+        let mutated = false;
+        parsed.forEach((t: ConversationThread) => {
+          if (t.id === 'thread_ac_carlos' && !t.whatsappNumber) {
+            t.whatsappNumber = '+507 6885-8607';
+            mutated = true;
+          }
+          if (t.id === 'thread_boat_juan' && !t.whatsappNumber) {
+            t.whatsappNumber = '+507 6712-3456';
+            mutated = true;
+          }
+          t.messages.forEach((m: ThreadMessage) => {
+            if (m.textSpanish && m.textSpanish.includes('3:00 PM')) {
+              m.textSpanish = m.textSpanish.replace(/3:00\s*PM/g, '3 de la tarde');
+              mutated = true;
+            }
+          });
+        });
+        if (mutated) {
+          await saveConversationThreads(parsed);
+        }
         cachedThreads = parsed;
         return parsed;
       }

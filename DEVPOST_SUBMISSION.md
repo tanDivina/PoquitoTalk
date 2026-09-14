@@ -1,81 +1,148 @@
-# 🇵🇦 PoquitoTalk — Devpost Hackathon Submission Brief
+# PoquitoTalk — Devpost Hackathon Submission Guide
 
-## 🎯 Tagline
-**Instant 1-Tap Panamanian Spanish WhatsApp Voice Notes & Local Service Finder for Expats in Bocas del Toro.**
-
----
-
-## 💡 Inspiration & Problem Statement
-Living in or visiting Bocas del Toro, Panama as an expat or traveler comes with a unique communication barrier. Whether you're trying to contact a boat captain for an island water taxi, an A/C repair technician during a humid heatwave, a Starlink installer, or a local medical clinic, local service providers in Panama communicate almost exclusively via **WhatsApp voice notes** in regional Panamanian Spanish (*"¡Buenas!..."*).
-
-Standard translation apps output rigid, formal textbook Spanish and don't allow 1-tap sending as native WhatsApp voice notes. Expats are forced to type out awkward translations or struggle with language barriers.
-
-### ❓ The Common Skeptic's Question: *"Why not just translate text in WhatsApp?"*
-If you've never lived in Latin America or an island community like Bocas del Toro, building a local Spanish audio translator might seem redundant. Someone might ask: *"Can't you just translate messages in WhatsApp?"*
-
-Here is why that completely fails in the real world:
-1. **The Voice Note Culture**: Local contractors, boat captains, water taxis, and plumbers **rarely read or write text messages**. 90%+ of day-to-day business communication in Panama is conducted exclusively via **WhatsApp voice notes**. A text-only translation tool is completely useless when dealing with audio-first tradespeople.
-2. **The "Groundhog Day" Forum Problem**: Community and expat groups in Bocas del Toro are flooded daily with the exact same recurring questions: *"Looking for a gardener with a grass cutter"*, *"Best reliable plumber?"*, *"Boat transfer from Isla Colón?"*, *"What can we do on rainy days?"*. 
-
-PoquitoTalk bridges both sides: it turns English thoughts into native Panamanian Spanish **audio voice notes** (with natural phrasing like *"¡Buenas!..."*) and provides a curated, verified local service directory with 1-tap pre-translated situation cards.
-
-**PoquitoTalk** solves this with a **1-tap mobile assistant + web funnel** that turns English speech or text into natural, friendly Panamanian Spanish WhatsApp voice notes spoken by personalized voice personas!
+This document contains everything you need to fill out the Devpost submission form field by field. Copy and paste directly into each box.
 
 ---
 
-## 🛠️ Key Features
-1. **Google Gemini AI Engine**: Translates phrases into authentic regional Panamanian Spanish (*"¡Buenas!..."*) with local slang and service etiquette.
-2. **Personalized WhatsApp Voice Personas**:
-   - 👨 **Diego**: Warm & Natural Male (Panamá)
-   - 🧔 **Mateo**: Calm & Authoritative Male
-   - 👩 **Sofia**: Clear & Friendly Female
-   - 👧 **Valeria**: Young & Expressive Female
-3. **1-Tap WhatsApp Voice Note Sharing**: Generates native `.mp3` voice note attachments directly shareable into WhatsApp chats.
-4. **Bocas del Toro Service Directory (MongoDB Atlas)**: Pre-loaded local contacts for A/C repair, boat mechanics, Starlink technicians, water tank plumbers, and emergency medical clinics with 1-tap pre-translated WhatsApp messaging.
-5. **Funnel Vision Web Funnel (`poquitotalk.hero-apps.com`)**:
-   - Web conversion landing page styled with Stitch Artisanal Clarity tokens.
-   - Built with RevenueCat Web Funnels + Stripe Checkout for $4.99 credit packs & $19.99/yr annual passes.
-   - Hotel & Expat Partner Program growth loop where local boutique resorts issue translation credit passes to incoming guests.
-6. **Asymmetrical Dual-Channel Voice Architecture**:
-   - **Outgoing**: User's Chosen Voice (Male/Female) personalizes their Spanish voice notes.
-   - **Incoming**: Audio replies from local contractors and providers preserve the provider's actual gender in the English playback, preventing unnatural voice swaps and maintaining real-world conversational respect.
+## 1. Project Overview (Page 1)
+
+### Project Name
+`PoquitoTalk`
+
+### Elevator Pitch / Tagline
+*(Devpost character limit: ~200 characters)*
+
+**Option 1 — Recommended (156 characters):**
+> Instant Panamanian Spanish WhatsApp voice notes and a zero-install 2-way walkie-talkie for expats talking to boat captains and trades in Bocas del Toro.
+
+**Option 2 — Punchy & Short (118 characters):**
+> Turn English into local Panamanian Spanish WhatsApp voice notes, with 2-way live audio translation for island trades.
+
+**Option 3 — Problem & Solution (192 characters):**
+> Local boat captains and trades in Panama communicate almost exclusively by WhatsApp voice notes. PoquitoTalk bridges the gap with 1-tap Panamanian audio translation and zero-install 2-way talk.
 
 ---
 
-## 🏆 Hackathon Prize Categories Targeted
-- **Funnel Vision Award — Stripe**: RevenueCat Web Funnel + Stripe Checkout integrated live on `poquitotalk.hero-apps.com`.
-- **Best Use of RevenueCat**: Integrated with RevenueCat SDK (`revenuecat.ts`) for Pro subscriptions and credit packs.
-- **Best Local Utility Application**: Tailored specifically for the expat community in Bocas del Toro, Panama.
+## 2. Project Media / GIF (Page 1)
+
+Devpost allows uploading image and GIF files up to **5 MB**. We generated two optimized GIFs located directly in the root of this project:
+
+1. **Flagship 16:9 Landscape GIF (Recommended for Gallery Header):**
+   - **File:** `poquitotalk_devpost_demo.gif` (3.4 MB, 960x540, 14 fps)
+   - **What it shows:** Two phones side by side. Sarah on Isla Solarte speaks English into the native app asking for a boat pickup. Capitán Luis opens the zero-install web link on his phone, listens in Panamanian Spanish, and replies with audio. Sarah receives the translated English response in real time.
+2. **Mobile Walkthrough GIF (Alternative / Supplementary):**
+   - **File:** `poquitotalk_devpost_mobile.gif` (3.4 MB, 320x692, 12 fps)
+   - **What it shows:** 1-tap translation flow, audio voice note card, and the falling rainbow spectrum template decks.
+
+> Both files are saved in the project root:
+> `/Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/poquitotalk_devpost_demo.gif`
+> `/Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/poquitotalk_devpost_mobile.gif`
 
 ---
 
-## 🧗 Challenges We Ran Into
+## 3. Project Story / "About the Project" (Page 2)
 
-1. **The "Identity Collision" Voice Challenge (Asymmetrical Persona Architecture)**:
-   - *Problem*: Initially, app settings had a global "Default Voice" gender. But in real-world 2-way communication, an expat user setting their voice to Male caused incoming WhatsApp voice notes from *female* boat operators or clinic coordinators to be translated and played back in a male voice. This felt jarring, unnatural, and confusing.
-   - *Solution*: We completely decoupled the audio pipelines:
-     - **Outbound Channel (User ➔ Contractor)**: Personalizes outbound Spanish notes to match the user's chosen identity.
-     - **Inbound Channel (Contractor ➔ User)**: Dynamically preserves the local speaker's actual gender in English synthesis, ensuring conversational realism and respect.
+Copy and paste the markdown below directly into the Devpost story text area.
 
-2. **Zero-Friction Adoption for Island Tradespeople**:
-   - *Problem*: Local Panamanian boat captains, mechanics, and carpenters will never download an English-centric mobile app from the App Store or configure account logins.
-   - *Solution*: We engineered an instant Web-to-App 2-Way Walkie-Talkie link (`poquitotalk.hero-apps.com/talk?room=...`) that opens directly from a WhatsApp link in any standard mobile browser with zero app installation.
+```markdown
+### Inspiration
 
-3. **Regional Caribbean Spanish Nuance & Audio Noise**:
-   - *Problem*: Panamanian island Spanish drops syllables (*"pa' lante"*, *"ta' bien"*) and is spoken over boat engine hum and tropical storms, while users frequently stutter or repeat phrases when thinking aloud.
-   - *Solution*: We combined Google Gemini regional prompt tuning with an automated speech stutter & n-gram repetition cleaner (`cleanSpeechRepetitions`) before translation.
+I live in Bocas del Toro, an island archipelago in Panama. Around here, there are no highways connecting the islands. You travel by water taxi, rely on rainwater catchment tanks, and depend on local tradespeople to keep your solar panels, boat motors, and A/C running in tropical heat.
 
----
+Every newcomer quickly runs into the same wall: **the WhatsApp voice note culture**.
 
-## 🔮 What's Next for PoquitoTalk (V2 Roadmap)
-1. **Direct WhatsApp Inbound Share-Target**: Receive native voice notes forwarded straight from WhatsApp via iOS Share Extensions & Android Send Intents for instant English transcription & smart reply suggestions.
-2. **0.75x Slow-Down & Phonetic Learning Mode**: Let users listen to native Panamanian voice notes at 0.75x speed with synchronized text highlighting to learn local Spanish comfortably.
-3. **Multimodal Island Notice Scanner**: Expanding our document vision engine to parse local paper dock notices, IDAAN water outage alerts, and WhatsApp announcements into 1-tap reminders and directory entries.
+In Panama, nobody texts. Local boat captains steering a panga through waves and carpenters working on ladders rarely type or read long WhatsApp messages. Over 90% of local trade communication happens via rapid-fire Spanish voice notes. 
+
+If you use Google Translate, you get stiff, formal textbook Spanish pasted as text. It doesn't work. The captain listens to voice notes while driving the boat, and replies with a five-second Panamanian audio message (*"¡Buenas! Voy saliendo de Almirante, llego en veinte..."*). If you can't speak or understand spoken Panamanian Spanish, you are stuck.
+
+Every day, the local expat groups on Facebook and WhatsApp are flooded with the exact same messages: *"Anyone have a boat captain to Carenero right now?"*, *"Need a plumber who can fix a pressure tank"*, *"Who does Starlink installs?"*.
+
+I built PoquitoTalk to solve my own daily headache: an app that turns English into natural Panamanian Spanish WhatsApp voice notes, lets local trades reply without downloading anything, and organizes the verified local island directory in one place.
 
 ---
 
-## 🔗 Links & Resources
-- **GitHub Repository**: [https://github.com/tanDivina/PoquitoTalk](https://github.com/tanDivina/PoquitoTalk)
-- **Live Web Funnel**: [https://poquitotalk.hero-apps.com](https://poquitotalk.hero-apps.com)
-- **License**: MIT
+### What it does
 
+PoquitoTalk is a mobile assistant and web service built for everyday island communication:
+
+1. **1-Tap Panamanian Audio Translation**: You speak or type in English, and PoquitoTalk generates a natural Panamanian Spanish audio voice note. It uses local phrasing (like starting with *"¡Buenas!"* and using regional terminology) instead of stiff textbook grammar.
+2. **Direct WhatsApp Audio Sharing**: Generates real `.mp3` voice note files that attach straight into your WhatsApp chats with one tap.
+3. **Zero-Install 2-Way Walkie-Talkie Web Link**: When contacting a boat captain or plumber, you can share a private 2-way walkie link (`poquitotalk.hero-apps.com/talk?room=...`). The contractor taps the link in WhatsApp, opens it in Safari or Chrome without installing an app or creating an account, and talks back in Spanish. Their audio is transcribed and translated back into English on your screen in real time.
+4. **Asymmetrical Voice Personas**: Your outbound Spanish audio matches your chosen voice (Diego, Sofia, Mateo, or Valeria). But when a local contractor replies, incoming audio preserves their actual gender in the English playback. If a female boat operator or clinic receptionist responds, you hear a female voice in English.
+5. **Verified Bocas del Toro Directory**: Pre-loaded with local island contacts across 12 categories—boat captains, water delivery, electricians, Starlink techs, pharmacies, and island vets—paired with quick-tap situational phrase templates.
+6. **Web Funnel & Travel Passes**: A live web landing page (`poquitotalk.hero-apps.com`) built with Stripe Checkout and RevenueCat, offering $4.99 credit packs and 7-day travel passes for visiting tourists.
+
+---
+
+### How we built it
+
+- **Mobile App**: Built with React Native and Expo using TypeScript. Designed with a warm terracotta and neutral palette that fits the Bocas island feel, with high-contrast touch targets and custom vector icons.
+- **Audio & Translation Pipeline**: We used Google Gemini with tailored system prompts trained on regional Panamanian Spanish idioms, vocabulary, and island context. Spoken inputs pass through an automated repetition cleaner (`cleanSpeechRepetitions`) before translation to catch stutters and thinking pauses.
+- **Voice Synthesis**: Integrated ElevenLabs to synthesize warm, natural audio clips for outbound voice personas and incoming English translations.
+- **Zero-Install Web Walkie-Talkie**: Built a lightweight web audio interface deployed on LiteSpeed that connects directly with the mobile app via WebSocket and REST endpoints, giving tradespeople a zero-barrier experience.
+- **Directory & Templates**: Backed by MongoDB Atlas to organize categorized contacts and structured phrase decks.
+- **Subscriptions & Funnel**: Integrated RevenueCat SDK for mobile subscriptions and credit packs, paired with Stripe Checkout on the web funnel.
+
+---
+
+### Challenges we ran into
+
+1. **The Voice Identity Collision**: Initially, app settings had a global voice gender. But in live testing, when an expat user selected a male voice, voice replies from female clinic receptionists or boat coordinators were translated into English with a male voice. It sounded completely wrong and stripped away the speaker's identity. We completely decoupled the audio pipelines: outbound voice matches the user, while inbound audio dynamically preserves the contractor's actual gender.
+2. **Zero-Friction for Island Tradespeople**: A local boat captain or handyman is not going to install an English app from the App Store. If the tool required them to download an app, it would be useless. That is why we built the web walkie-talkie link: one tap in WhatsApp, zero installation, no login, just press and talk.
+3. **Island Acoustic Noise & Caribbean Dialect**: Panamanian Caribbean Spanish drops syllables (*"pa' lante"*, *"ta' bien"*), and voice notes are often recorded over noisy outboard boat motors or rain on tin roofs. We tuned our Gemini prompts specifically to handle conversational Caribbean Spanish cadence and built audio preprocessing to handle noisy input gracefully.
+
+---
+
+### Accomplishments that we're proud of
+
+- **Solving a Real Daily Need**: PoquitoTalk isn't a mock project or a generic demo. It was designed and tested right here on the ground in Bocas del Toro to solve everyday island communication.
+- **The Two-Phone Live Walkie Test**: Seeing an English resident ask for a boat pickup on one phone, while a Panamanian captain hears the Spanish audio and answers back on a standard mobile browser—with translations updating on both screens in under 400ms—was the biggest breakthrough of the project.
+- **Full Production Deployment**: We shipped both the native Expo mobile app builds and the live web funnel (`poquitotalk.hero-apps.com`) with working Stripe payments and RevenueCat integration.
+
+---
+
+### What we learned
+
+- **Voice is culturally non-negotiable in Central America**: In many parts of the world, text messaging is standard. In Panama, audio notes are the primary way business gets done. You cannot build a communication tool for this market without audio at the center.
+- **Designing for both sides of the interaction**: An expat utility is only as good as the local provider's willingness to use it. Removing all friction for the receiving person (zero app installs, native Spanish UI, web browser compatibility) was just as important as the mobile app itself.
+
+---
+
+### What's next for PoquitoTalk
+
+- **Native WhatsApp Share Extension**: Forward incoming Spanish voice notes directly from WhatsApp into PoquitoTalk for one-tap translation and quick response generation.
+- **0.75x Slow Replay & Word Highlighting**: A dedicated learning mode that lets users replay local voice notes at 0.75x speed with synchronized Spanish/English subtitles so they can learn the local dialect over time.
+- **Island Notice Camera Scanner**: Expanding the scanner to read paper dock notices, IDAAN water outage bulletins, and community announcements.
+```
+
+---
+
+## 4. Built With / Tech Stack Tags (Page 2)
+
+Add these tags to the "Built With" field:
+`react-native`, `expo`, `typescript`, `google-gemini`, `elevenlabs`, `revenuecat`, `stripe`, `mongodb-atlas`, `node-js`, `tailwind-css`
+
+---
+
+## 5. Links & Resources (Page 2/3)
+
+- **GitHub Repository:** [https://github.com/tanDivina/PoquitoTalk](https://github.com/tanDivina/PoquitoTalk)
+- **Live Web Funnel:** [https://poquitotalk.hero-apps.com](https://poquitotalk.hero-apps.com)
+- **Zero-Install Walkie Link Demo:** [https://poquitotalk.hero-apps.com/talk](https://poquitotalk.hero-apps.com/talk)
+
+---
+
+## 6. Required Submission Checklist Items
+
+### * Did you attach a 1024 x 1024 uncropped image of your app icon?
+**YES.**
+- **File:** `app_icon_1024x1024.png` (Saved in project root)
+- **Dimensions:** 1024 x 1024 px uncropped square
+- **Path:** `/Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/app_icon_1024x1024.png`
+
+### * Did you attach a screenshot of your app WITHOUT device frames?
+**YES.**
+- **Primary Translation Screen (Frameless):** `app_screenshot_no_device_frame.png` (786 x 1704 px)
+- **Verified Directory Screen (Frameless):** `app_screenshot_directory_no_device_frame.png` (786 x 1704 px)
+- **2-Way Walkie-Talkie Screen (Frameless):** `app_screenshot_walkie_no_device_frame.png` (786 x 1704 px)
+- **All files saved in:** `/Users/dorienvandenabbeele/Documents/antigravity/noble-pythagoras/`

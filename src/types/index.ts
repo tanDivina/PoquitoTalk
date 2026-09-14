@@ -66,11 +66,42 @@ export interface LocalServiceProvider {
   isSponsored?: boolean;
   adSpotlightText?: string;
   googleMapsQuery?: string;
-  serviceType?: 'service' | 'atm' | 'bank' | 'western_union' | 'punto_pago' | 'utility' | 'doctor_clinic' | 'pharmacy_prescriptions' | 'vet_pet' | 'taxi_land' | 'dining_groceries';
+  serviceType?:
+    | 'service'
+    | 'atm'
+    | 'bank'
+    | 'western_union'
+    | 'punto_pago'
+    | 'utility'
+    | 'doctor_clinic'
+    | 'pharmacy_prescriptions'
+    | 'vet_pet'
+    | 'taxi_land'
+    | 'dining_groceries'
+    | 'restaurant_dining'
+    | 'hotel_lodging'
+    | 'hardware_supplies'
+    | 'car_rental';
   customTone?: PanamaTone;
   nominatedBy?: string;
   communityNotes?: string[];
   vouchCount?: number;
+
+  // Provenance & Audit Trail
+  source?: 'google_maps' | 'official_registry' | 'notebook_lm' | 'community_vouched' | 'facebook_group';
+  sourceUrl?: string;
+  sourcePlaceId?: string;
+  verifiedDate?: string;
+
+  // Extended Database Profile Fields
+  certifications?: string[];
+  departureDock?: string;
+  tourOfferings?: { tour: string; price?: string; details?: string; description?: string }[];
+  includedAmenities?: string[];
+  partners?: { partner: string; role: string }[];
+  frequentDestinations?: string[];
+  rainyDayPolicy?: string;
+  email?: string;
 }
 
 export interface UserSubscription {

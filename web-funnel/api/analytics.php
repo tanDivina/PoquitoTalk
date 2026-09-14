@@ -97,6 +97,7 @@ $deviceCounts = ['mobile' => 0, 'desktop' => 0, 'tablet' => 0];
 $osCounts = [];
 $browserCounts = [];
 $countryCounts = [];
+$clickCounts = [];
 
 foreach ($filteredEvents as $ev) {
     $evName = $ev['event'] ?? 'pageview';
@@ -133,6 +134,23 @@ foreach ($filteredEvents as $ev) {
 
     $ctry = $ev['country'] ?? 'PA';
     $countryCounts[$ctry] = ($countryCounts[$ctry] ?? 0) + 1;
+
+    // Granular UI Click & Action Aggregation
+    if ($evName === 'ui_click' || $evName === 'whatsapp_click' || $evName === 'call_click' || $evName === 'download_click' || !empty($ev['data']['action'])) {
+        $data = $ev['data'] ?? [];
+        $btnText = trim($data['text'] ?? ($data['label'] ?? ''));
+        $btnAction = trim($data['action'] ?? $evName);
+        $btnSection = trim($data['section'] ?? '');
+
+        $label = !empty($btnText) ? $btnText : (!empty($btnAction) ? $btnAction : $evName);
+        if (mb_strlen($label) > 40) {
+            $label = mb_substr($label, 0, 37) . '...';
+        }
+        if ($btnSection && $btnSection !== 'page' && $btnSection !== 'body') {
+            $label .= " [{$btnSection}]";
+        }
+        $clickCounts[$label] = ($clickCounts[$label] ?? 0) + 1;
+    }
 }
 
 $totalUniqueVisitors = count($uniqueVisitorsSet);
@@ -154,6 +172,7 @@ arsort($sourceCounts);
 arsort($osCounts);
 arsort($countryCounts);
 arsort($eventCounts);
+arsort($clickCounts);
 
 // Daily timeline array
 $timeline = [];
@@ -647,31 +666,78 @@ if ($isProofAction) {
 // DEFAULT: JSON OVERVIEW API RESPONSE
 // -------------------------------------------------------------
 header('Content-Type: application/json; charset=utf-8');
-echo json_encode([
+
+$overviewStats = [
+    'total_pageviews' => $totalPageviews,
+    'unique_visitors' => $totalUniqueVisitors,
+    'total_sessions' => $totalSessions,
+    'unique_sessions' => $totalSessions,
+    'waitlist_submissions' => $waitlistConversions,
+    'waitlist_conversions' => $waitlistConversions,
+    'contractors_count' => $contractorCount,
+    'conversion_rate' => $conversionRate,
+    'waitlist_conversion_rate' => $conversionRate . '%',
+    'whatsapp_outbound_clicks' => $whatsappClicks,
+    'whatsapp_clicks' => $whatsappClicks,
+    'voice_demo_plays' => $voiceDemoPlays,
+    'call_clicks' => $eventCounts['call_click'] ?? 0,
+    'tone_switches' => $toneSwitches,
+    'directory_searches' => $directorySearches,
+    'pages_per_visitor' => $totalUniqueVisitors > 0 ? round($totalPageviews / $totalUniqueVisitors, 2) : 1
+];
+
+$referrerList = [];
+foreach ($sourceCounts as $src => $cnt) {
+    $referrerList[] = ['source' => $src, 'count' => $cnt, 'unique_visitors' => $cnt];
+}
+$pagesList = [];
+foreach ($pageCounts as $p => $cnt) {
+    $pagesList[] = ['path' => $p, 'count' => $cnt];
+}
+$devicesList = [];
+foreach ($deviceCounts as $d => $cnt) {
+    $devicesList[] = ['device' => $d, 'count' => $cnt];
+}
+$osList = [];
+foreach ($osCounts as $o => $cnt) {
+    $osList[] = ['os' => $o, 'count' => $cnt];
+}
+$countriesList = [];
+foreach ($countryCounts as $c => $cnt) {
+    $countriesList[] = ['country' => $c, 'count' => $cnt];
+}
+$clicksList = [];
+foreach ($clickCounts as $lbl => $cnt) {
+    $clicksList[] = ['label' => $lbl, 'count' => $cnt];
+}
+
+$payload = [
     'success' => true,
     'range' => $range,
-    'stats' => [
-        'total_pageviews' => $totalPageviews,
-        'unique_visitors' => $totalUniqueVisitors,
-        'unique_sessions' => $totalSessions,
-        'waitlist_conversions' => $waitlistConversions,
-        'contractors_count' => $contractorCount,
-        'conversion_rate' => $conversionRate,
-        'whatsapp_clicks' => $whatsappClicks,
-        'voice_demo_plays' => $voiceDemoPlays,
-        'tone_switches' => $toneSwitches,
-        'directory_searches' => $directorySearches,
-        'pages_per_visitor' => $totalUniqueVisitors > 0 ? round($totalPageviews / $totalUniqueVisitors, 2) : 1
-    ],
+    'stats' => $overviewStats,
+    'overview' => $overviewStats,
     'breakdowns' => [
         'sources' => $sourceCounts,
-        'pages' => $pageCounts,
-        'devices' => $deviceCounts,
-        'os' => $osCounts,
-        'countries' => $countryCounts,
-        'events' => $eventCounts
+        'referrers' => $referrerList,
+        'pages' => $pagesList,
+        'page_counts' => $pageCounts,
+        'devices' => $devicesList,
+        'device_counts' => $deviceCounts,
+        'os' => $osList,
+        'os_counts' => $osCounts,
+        'countries' => $countriesList,
+        'country_counts' => $countryCounts,
+        'events' => $eventCounts,
+        'clicks' => $clicksList,
+        'click_counts' => $clickCounts
     ],
     'timeline' => $timeline,
     'recent_events' => array_slice(array_reverse($filteredEvents), 0, 50),
+    'live_stream' => array_slice(array_reverse($filteredEvents), 0, 50),
     'generated_at' => date('c')
-], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+];
+
+// Top-level wrap for nested data compatibility
+$payload['data'] = $payload;
+
+echo json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

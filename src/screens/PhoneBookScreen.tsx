@@ -29,6 +29,7 @@ import {
   subscribePhoneBookChanged,
   mapDirectoryCategoryToPhoneBook,
 } from '../services/storage';
+import { getOrCreateThreadForContact } from '../services/conversations';
 
 interface PhoneBookScreenProps {
   isPro?: boolean;
@@ -36,6 +37,7 @@ interface PhoneBookScreenProps {
   onOpenSaved?: () => void;
   onOpenSettings?: () => void;
   savedCount?: number;
+  navigation?: any;
 }
 
 const PHONEBOOK_CATEGORIES = [
@@ -128,6 +130,22 @@ export const PhoneBookScreen: React.FC<PhoneBookScreenProps> = ({
         },
       ]
     );
+  };
+
+  const handleOpenThread = async (contact: PhoneBookContact) => {
+    await recordRecentContact(contact.id);
+    try {
+      const thread = await getOrCreateThreadForContact({
+        name: contact.name,
+        category: getCategoryDisplayLabel(contact.category),
+        whatsappNumber: contact.phoneNumber,
+      });
+      if (navigation) {
+        (navigation as any).navigate('Conversations', { threadId: thread.id, threadModal: 'true' });
+      }
+    } catch (e) {
+      console.warn('Error opening thread for contact:', e);
+    }
   };
 
   const handleWhatsApp = async (contact: PhoneBookContact) => {
@@ -425,11 +443,20 @@ export const PhoneBookScreen: React.FC<PhoneBookScreenProps> = ({
                 {/* Card Actions Row */}
                 <View style={styles.cardActionsRow}>
                   <TouchableOpacity
+                    style={styles.threadBtn}
+                    onPress={() => handleOpenThread(contact)}
+                    activeOpacity={0.8}
+                  >
+                    <Ionicons name="chatbubbles" size={13} color="#FFF" />
+                    <Text style={styles.threadBtnText}>Thread</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
                     style={styles.whatsAppBtn}
                     onPress={() => handleWhatsApp(contact)}
                     activeOpacity={0.8}
                   >
-                    <WhatsAppIcon size={14} color="#FFF" />
+                    <WhatsAppIcon size={13} color="#FFF" />
                     <Text style={styles.whatsAppBtnText}>WhatsApp</Text>
                   </TouchableOpacity>
 
@@ -438,7 +465,7 @@ export const PhoneBookScreen: React.FC<PhoneBookScreenProps> = ({
                     onPress={() => handleCall(contact)}
                     activeOpacity={0.8}
                   >
-                    <Ionicons name="call" size={14} color="#0F172A" />
+                    <Ionicons name="call" size={13} color="#0F172A" />
                     <Text style={styles.callBtnText}>Call</Text>
                   </TouchableOpacity>
 
@@ -803,6 +830,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     marginTop: 12,
+  },
+  threadBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+    backgroundColor: '#0D9488',
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  threadBtnText: {
+    color: '#FFF',
+    fontSize: 12,
+    fontWeight: '700',
   },
   whatsAppBtn: {
     flex: 1,

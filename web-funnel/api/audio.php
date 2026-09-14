@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $jsonData = json_decode($rawInput, true) ?? [];
 
     $text = trim($_POST['text'] ?? $jsonData['text'] ?? '');
-    $voice = trim($_POST['voice'] ?? $jsonData['voice'] ?? 'valeria');
+    $voice = trim($_POST['voice'] ?? $jsonData['voice'] ?? 'sofia');
     $room = trim($_POST['room'] ?? $jsonData['room'] ?? $jsonData['roomId'] ?? '');
     $contractor = trim($_POST['contractor'] ?? $jsonData['contractor'] ?? $jsonData['contractorName'] ?? '');
     $sender = trim($_POST['sender'] ?? $jsonData['sender'] ?? $jsonData['clientName'] ?? '');

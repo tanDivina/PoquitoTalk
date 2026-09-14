@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>PoquitoTalk – WhatsApp Verification Protocol</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: #FAF8F5;
+            color: #1A1208;
+            margin: 0;
+            padding: 30px;
+        }
+        .header {
+            max-width: 1200px;
+            margin: 0 auto 30px;
+            background: #FFFFFF;
+            padding: 24px 32px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(150,72,36,0.12);
+        }
+        h1 {
+            margin: 0 0 8px;
+            font-size: 26px;
+            font-weight: 900;
+            color: #964824;
+        }
+        p {
+            margin: 0;
+            color: #5C4E3A;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .table-wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border-radius: 20px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.05);
+            border: 1px solid rgba(150,72,36,0.12);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th {
+            background: #F4EFEA;
+            padding: 16px 20px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6B5E4D;
+            border-bottom: 2px solid rgba(150,72,36,0.15);
+        }
+        td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #F0EAE1;
+            vertical-align: middle;
+        }
+        tr:hover {
+            background-color: #FCFBF9;
+        }
+        .checked-row {
+            background-color: #F0FDF4 !important;
+            opacity: 0.7;
+        }
+        .btn-wa {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #25D366;
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 9px 16px;
+            border-radius: 999px;
+            box-shadow: 0 4px 12px rgba(37,211,102,0.3);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .btn-wa:hover {
+            background: #20BA5A;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(37,211,102,0.4);
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .badge-contractors { background: #FEF3C7; color: #92400E; }
+        .badge-ac_repair { background: #D1FAE5; color: #065F46; }
+        .badge-land_taxi { background: #CFFAFE; color: #155E75; }
+        .badge-water_taxi { background: #E0F2FE; color: #075985; }
+        .badge-vet { background: #FAE8FF; color: #86198F; }
+        .badge-community { background: #EDE9FE; color: #5B21B6; }
+    </style>
+    <script>
+        function markChecked(rowId, isChecked) {
+            const row = document.getElementById(rowId);
+            if (isChecked) {
+                row.classList.add('checked-row');
+            } else {
+                row.classList.remove('checked-row');
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>PoquitoTalk Bocas – WhatsApp Verification Protocol</h1>
+        <p>Clicking <strong>Send Verification Ping</strong> opens WhatsApp directly with a respectful, pre-filled community verification inquiry in Spanish. Once they reply confirming their trade and island coverage, check off the row.</p>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 40px; text-align: center;">#</th>
+                    <th>Business / Tradesman</th>
+                    <th style="width: 140px;">Category</th>
+                    <th style="width: 160px;">Phone (WhatsApp)</th>
+                    <th style="width: 220px; text-align: center;">1-Click Outreach</th>
+                    <th style="width: 60px; text-align: center;">Confirmed</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr class="contractor-row" id="row-fb_alex_acosta_carpentry">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">1</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Alex Acosta Carpintería & Ebanistería</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Almirante & Bocas del Toro Archipelago Delivery</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Custom carpentry, fine furniture, marine wood cabinetry, doors, framing, and wood restoration with delivery across Isla Colón and outer islands.</div>
+            </td>
+            <td>
+                <span class="badge badge-contractors">CONTRACTORS</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6501-4007
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50765014007?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20construcci%C3%B3n%2C%20carpinter%C3%ADa%20o%20reparaciones%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_alex_acosta_carpentry', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_nicolas_maranda_locksmith">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">2</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Nicolas Maranda Cerrajería (Keypad Locksmith & Security)</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Bocas Town, Isla Colón & Outer Islands</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Keypad smart lock installation, deadbolts, high-security marine lock replacement, emergency lockout assistance, and property key re-coding.</div>
+            </td>
+            <td>
+                <span class="badge badge-contractors">CONTRACTORS</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6606-6892
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50766066892?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20construcci%C3%B3n%2C%20carpinter%C3%ADa%20o%20reparaciones%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_nicolas_maranda_locksmith', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_boatyard_astillero_almirante">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">3</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">The Boatyard Astillero Almirante (Marine Carpentry & Hull Repairs)</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Almirante & Bocas del Toro Marine Basin</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Professional marine boatyard. Fiberglass repair, marine woodwork, hull bottom anti-fouling painting, structural dock timbering, and mechanical haul-out services.</div>
+            </td>
+            <td>
+                <span class="badge badge-contractors">CONTRACTORS</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6616-6000
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50766166000?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20construcci%C3%B3n%2C%20carpinter%C3%ADa%20o%20reparaciones%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_boatyard_astillero_almirante', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_china_ruiz_engines">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">4</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">China Ruiz Taller Mecánico & Hidrolavadoras (Pressure Washers & Motors)</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Bocas Town, Isla Colón</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Small engine mechanics, gas generator maintenance, high-pressure washer diagnostics, water pump repair, and outdoor power tool servicing.</div>
+            </td>
+            <td>
+                <span class="badge badge-ac_repair">AC_REPAIR</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6333-4117
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50763334117?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20reparaci%C3%B3n%20el%C3%A9ctrica%2C%20aire%20acondicionado%20o%20l%C3%ADnea%20blanca%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_china_ruiz_engines', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_mike_metalwork_railings">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">5</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Mike Herrería & Soldadura (Metalwork & Security Railings)</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Isla Colón & Archipelago</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Custom marine-grade metal fabrication, balcony security railings, stainless steel dock gates, window bars, structural roof frames, and MIG/TIG welding.</div>
+            </td>
+            <td>
+                <span class="badge badge-contractors">CONTRACTORS</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6722-3049
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50767223049?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20construcci%C3%B3n%2C%20carpinter%C3%ADa%20o%20reparaciones%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_mike_metalwork_railings', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_cesar_aponte_electrical">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">6</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Ing. Cesar Aponte Servicios Eléctricos (Certified Electrician)</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Bocas Town & Outer Islands</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Certified electrical engineering. Residential wiring, breaker panel upgrades, whole-house voltage surge protectors, solar inverter connections, and ground fault safety.</div>
+            </td>
+            <td>
+                <span class="badge badge-ac_repair">AC_REPAIR</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6520-0570
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50765200570?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20reparaci%C3%B3n%20el%C3%A9ctrica%2C%20aire%20acondicionado%20o%20l%C3%ADnea%20blanca%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_cesar_aponte_electrical', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_friends_crew_construction">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">7</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Construcción & Remodelación Friends Crew</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Isla Colón, Carenero & Bastimentos</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">General home building, wood and concrete framing, deck construction, zinc roof leak repairs, drywall, painting, and island renovation projects.</div>
+            </td>
+            <td>
+                <span class="badge badge-contractors">CONTRACTORS</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6346-9596
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50763469596?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20construcci%C3%B3n%2C%20carpinter%C3%ADa%20o%20reparaciones%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_friends_crew_construction', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_melencio_thomas_carpentry">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">8</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Melencio Thomas Carpintería & Pintura</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Bocas del Toro</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Traditional island carpenter and painter. Custom deck building, stair repair, wood window restoration, exterior weatherproofing, and interior painting.</div>
+            </td>
+            <td>
+                <span class="badge badge-contractors">CONTRACTORS</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6372-5460
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50763725460?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20construcci%C3%B3n%2C%20carpinter%C3%ADa%20o%20reparaciones%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_melencio_thomas_carpentry', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_construfuturo_renova">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">9</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">ConstruFuturo Renova Bocas</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Bocas Town, Isla Colón</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Turnkey residential remodels, structural carpentry, bathroom retiling, kitchen upgrades, dock extensions, and waterproofing.</div>
+            </td>
+            <td>
+                <span class="badge badge-contractors">CONTRACTORS</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6989-9693
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50769899693?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20construcci%C3%B3n%2C%20carpinter%C3%ADa%20o%20reparaciones%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_construfuturo_renova', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_heyner_vincent_masonry_tile">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">10</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Heyner Vincent (Mampostería, Baldosas y Cielorraso)</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Isla Colón & Archipelago</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Specialist in porcelain and ceramic tile laying, concrete slab foundations, masonry block walls, suspended PVC ceilings, and exterior stucco finishes.</div>
+            </td>
+            <td>
+                <span class="badge badge-contractors">CONTRACTORS</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6381-0246
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50763810246?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20construcci%C3%B3n%2C%20carpinter%C3%ADa%20o%20reparaciones%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_heyner_vincent_masonry_tile', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_luis_jose_woodworking">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">11</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Luis José Ebanistería y Muebles Finos</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Bocas Town, Isla Colón</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Master cabinetmaker. Solid local hardwood dining tables, beds, kitchen cabinets, boat teak woodwork refinishing, and marine varnish application.</div>
+            </td>
+            <td>
+                <span class="badge badge-contractors">CONTRACTORS</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6713-7310
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50767137310?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20construcci%C3%B3n%2C%20carpinter%C3%ADa%20o%20reparaciones%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_luis_jose_woodworking', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_bocas_painter_weatherproofing">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">12</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Bocas Pintor Profesional & Impermeabilización</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Isla Colón, Carenero, Bastimentos</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">High-durability marine weatherproofing, elastomeric roof coatings, mildew-resistant exterior house painting, and interior finish work.</div>
+            </td>
+            <td>
+                <span class="badge badge-contractors">CONTRACTORS</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6250-5805
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50762505805?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20construcci%C3%B3n%2C%20carpinter%C3%ADa%20o%20reparaciones%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_bocas_painter_weatherproofing', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_kadir_construction_permits">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">13</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Kadir Construction & Permisos de Construcción</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Bocas del Toro</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Construction management, municipal permit coordination, site clearing, foundation pouring, and crew supervision across Isla Colón.</div>
+            </td>
+            <td>
+                <span class="badge badge-contractors">CONTRACTORS</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6901-5901
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50769015901?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20construcci%C3%B3n%2C%20carpinter%C3%ADa%20o%20reparaciones%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_kadir_construction_permits', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_bocas_ebikes_repairs">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">14</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Bocas Ebikes & Scooters (Taller de Reparación y Alquiler)</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Calle 3ra, Bocas Town, Isla Colón</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Electric bicycle and e-scooter maintenance, battery diagnostics, flat tire changes, disc brake adjustments, and daily/weekly rentals.</div>
+            </td>
+            <td>
+                <span class="badge badge-land_taxi">LAND_TAXI</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6561-0593
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50765610593?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20transporte%20terrestre%20o%20traslados%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_bocas_ebikes_repairs', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_bocas_reparacion_linea_blanca">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">15</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Bocas Reparación de Línea Blanca y Refrigeración</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Bocas Town & Outer Islands</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Refrigeration and household appliance repair. Split A/C unit tune-ups, washing machine belt/motor repairs, gas stove servicing, and thermostat replacement.</div>
+            </td>
+            <td>
+                <span class="badge badge-ac_repair">AC_REPAIR</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6670-2288
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50766702288?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20reparaci%C3%B3n%20el%C3%A9ctrica%2C%20aire%20acondicionado%20o%20l%C3%ADnea%20blanca%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_bocas_reparacion_linea_blanca', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_tool_guy_rentals">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">16</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Tool Guy Bocas (Alquiler de Herramientas y Equipos)</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Bocas Town, Isla Colón</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Daily/weekly tool rentals for contractors and DIY owners. Chainsaws, demo hammers, pressure washers, power drills, ladders, and scaffolding.</div>
+            </td>
+            <td>
+                <span class="badge badge-contractors">CONTRACTORS</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6634-5476
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50766345476?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20construcci%C3%B3n%2C%20carpinter%C3%ADa%20o%20reparaciones%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_tool_guy_rentals', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_prospero_carpentry_docks">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">17</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Prospero Carpintería y Muelles (Marine Woodwork)</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Isla Colón & Outer Islands</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Overwater dock construction, piling reinforcement, seawall bracing, tropical hardwood decks, and heavy timber framing.</div>
+            </td>
+            <td>
+                <span class="badge badge-contractors">CONTRACTORS</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6779-3866
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50767793866?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20construcci%C3%B3n%2C%20carpinter%C3%ADa%20o%20reparaciones%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_prospero_carpentry_docks', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_marina_solarte_storage">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">18</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Marina Solarte Boat Storage & Slips</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Isla Solarte, Bocas del Toro</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Protected boat moorings, covered dry rack storage, dinghy dock access, fresh water wash-down, and 24/7 security on Isla Solarte.</div>
+            </td>
+            <td>
+                <span class="badge badge-water_taxi">WATER_TAXI</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6565-1324
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50765651324?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20servicios%20mar%C3%ADtimos%20o%20atraque%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_marina_solarte_storage', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_bocas_island_express_freight">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">19</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Bocas Island Express (Transporte de Carga Marítima y Logística)</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Almirante Ferry Docks & Isla Colón</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Heavy freight logistics and inter-island transport. Delivery of construction supplies, appliances, furniture, and palleted goods from Almirante to all islands.</div>
+            </td>
+            <td>
+                <span class="badge badge-land_taxi">LAND_TAXI</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6717-7938
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50767177938?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20transporte%20terrestre%20o%20traslados%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_bocas_island_express_freight', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_caribe_shuttle_bocas">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">20</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Caribe Shuttle Bocas (Transporte Terrestre Puerto Viejo / San José)</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Calle 3ra (Main St), Bocas Town</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Daily door-to-door ground shuttle transfers connecting Bocas del Toro with Costa Rica (Puerto Viejo, Cahuita, San José) including border assistance.</div>
+            </td>
+            <td>
+                <span class="badge badge-land_taxi">LAND_TAXI</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6537-0405
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50765370405?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20transporte%20terrestre%20o%20traslados%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_caribe_shuttle_bocas', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_airport_city_transfer_van">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">21</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Bocas Airport City Transfer & Private Vans</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Aeropuerto Bocas del Toro (BOC), Isla Colón</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Private passenger van transfers across Isla Colón: Bocas Town, Playa Bluff, Boca del Drago, and Starfish Beach.</div>
+            </td>
+            <td>
+                <span class="badge badge-land_taxi">LAND_TAXI</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6916-9577
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50769169577?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20transporte%20terrestre%20o%20traslados%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_airport_city_transfer_van', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_papa_gato_animal_clinic">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">22</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Papá Gato Animal Welfare Clinic</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Calle 1ra, Bocas Town, Isla Colón</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Non-profit veterinary clinic dedicated to dog and cat welfare, subsidized spay & neuter campaigns, pet vaccinations, and emergency medical triage.</div>
+            </td>
+            <td>
+                <span class="badge badge-vet">VET</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6952-5151
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50769525151?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20atenci%C3%B3n%20y%20bienestar%20animal%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_papa_gato_animal_clinic', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_bocas_animal_shelter_rescue">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">23</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Bocas Animal Shelter & Rescue (Refugio de Animales)</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Isla Colón, Bocas del Toro</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Animal rehabilitation and rescue sanctuary. Foster coordination, stray emergency rescue, pet adoption, and animal welfare advocacy.</div>
+            </td>
+            <td>
+                <span class="badge badge-vet">VET</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6542-0902
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50765420902?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20atenci%C3%B3n%20y%20bienestar%20animal%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_bocas_animal_shelter_rescue', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_finca_panda_coffee_ecotourism">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">24</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Finca Panda Specialty Coffee & Agro-Tourism</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Dolphin Bay, Isla San Cristóbal</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Sustainable agro-forestry farm and eco-stay on Isla San Cristóbal. Artisanal coffee production, permaculture workshops, and botanical trail visits.</div>
+            </td>
+            <td>
+                <span class="badge badge-community">COMMUNITY</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6872-6143
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50768726143?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20proyectos%20y%20actividades%20comunitarias%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_finca_panda_coffee_ecotourism', this.checked)">
+            </td>
+        </tr>
+        
+        <tr class="contractor-row" id="row-fb_give_and_surf_ngo">
+            <td style="text-align: center; font-weight: 700; color: #8C7853;">25</td>
+            <td>
+                <div style="font-weight: 800; font-size: 16px; color: #1A1208;">Give & Surf NGO (Educación y Apoyo Comunitario Indígena)</div>
+                <div style="font-size: 12.5px; color: #6B7280; margin-top: 3px;">📍 Bahía Honda (Isla Bastimentos) & Isla San Cristóbal</div>
+                <div style="font-size: 12px; color: #4B5563; margin-top: 4px; line-height: 1.35;">Grassroots non-profit providing preschool education, youth surf therapy, adult computer literacy, and community development for indigenous Ngäbe communities.</div>
+            </td>
+            <td>
+                <span class="badge badge-community">COMMUNITY</span>
+            </td>
+            <td style="font-family: monospace; font-size: 14px; font-weight: 600; color: #1F2937;">
+                +507 6955-6804
+            </td>
+            <td style="text-align: center;">
+                <a href="https://wa.me/50769556804?text=%C2%A1Hola%21%20Un%20cordial%20saludo.%20Le%20escribo%20desde%20el%20directorio%20comunitario%20PoquitoTalk%20Bocas.%20Encontramos%20su%20contacto%20en%20la%20comunidad%20local%20y%20quer%C3%ADamos%20confirmar%20si%20actualmente%20se%20encuentra%20disponible%20y%20brindando%20servicios%20de%20proyectos%20y%20actividades%20comunitarias%20para%20nuevos%20clientes%20en%20las%20islas.%20%C2%A1Muchas%20gracias%21" target="_blank" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Send Verification Ping
+                </a>
+            </td>
+            <td style="text-align: center;">
+                <input type="checkbox" style="transform: scale(1.4); cursor: pointer;" onchange="markChecked('row-fb_give_and_surf_ngo', this.checked)">
+            </td>
+        </tr>
+        
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -34,7 +34,7 @@
   <meta name="twitter:description" content="Genera notas de voz amables en español panameño listas para enviar por WhatsApp en 1-tap." />
   <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/twitter_card.png?v=1.2.0" />
 
-  <link rel="stylesheet" href="../style.css?v=6.2.0" />
+  <link rel="stylesheet" href="../style.css?v=6.3.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
 
@@ -155,7 +155,7 @@
       <div class="hero-actions">
         <a href="/es/directorio.html" class="btn-hero-primary">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          <span>Abrir Directorio Bocas</span>
+          <span>Explorar Proveedores de Servicios</span>
           <span class="arrow">→</span>
         </a>
         <a href="#app-video" class="btn-hero-secondary">
@@ -380,6 +380,7 @@
           <a href="/es/contratistas.html" class="dir-secondary-cta">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
             <span>¿Eres un profesional o técnico? Regístrate Gratis</span>
+            <span class="arrow">→</span>
           </a>
         </div>
       </div>
@@ -430,8 +431,8 @@
         </div>
 
         <div class="video-device-frame">
-          <video controls playsinline preload="metadata" poster="../real_app_screenshot.png?v=2.2.0" style="width: 100%; border-radius: 26px;">
-            <source src="../walkthrough_demo.mp4?v=3.0.0" type="video/mp4" />
+          <video controls playsinline preload="metadata" poster="../video_poster.png?v=3.1.0" style="width: 100%; border-radius: 26px;">
+            <source src="../walkthrough_demo.mp4?v=7.1.0" type="video/mp4" />
             Tu navegador no soporta el elemento de video.
           </video>
         </div>
@@ -524,29 +525,26 @@
           <!-- 3. Tarjeta de Resultado en Español -->
           <div id="result-box" class="result-box" style="display: block;">
             <div class="result-header">
-              <div class="dialect-tone-control-group">
-                <span class="tone-control-label">Tono del dialecto:</span>
-                <div class="dialect-segmented-switch">
-                  <div class="tooltip-wrapper">
-                    <button type="button" class="segmented-btn active" data-tone="poquito" onclick="setPoquitoTone('poquito')">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                      <span>Poquito</span>
-                    </button>
-                    <div class="tone-tooltip">
-                      <p>Calidez panameña natural: frases amables, educadas y respetuosas (ej., <em>"¡Buenas!", "¿Podría venir a revisarlo?"</em>).</p>
-                    </div>
-                  </div>
-
-                  <div class="tooltip-wrapper">
-                    <button type="button" class="segmented-btn" data-tone="full_panameno" onclick="setPoquitoTone('full_panameno')">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                      <span>Full panameño</span>
-                    </button>
-                    <div class="tone-tooltip">
-                      <p>Dialecto auténtico local: expresiones cotidianas y jerga panameña (ej., <em>"¡Qué xopa!", "al tiro"</em>).</p>
-                    </div>
-                  </div>
+              <!-- Selector de Identidad de Voz -->
+              <div class="generator-voice-group">
+                <span class="control-label">Identidad de voz:</span>
+                <div class="voice-pills-container">
+                  <button type="button" class="voice-pill-btn active" data-voice="Diego" onclick="selectDemoVoice('Diego', this)" title="Diego: Voz masculina panameña natural">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span>Diego (Hombre)</span>
+                  </button>
+                  <button type="button" class="voice-pill-btn" data-voice="Sofia" onclick="selectDemoVoice('Sofia', this)" title="Sofia: Voz femenina panameña natural">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span>Sofia (Mujer)</span>
+                  </button>
                 </div>
+              </div>
+
+              <div class="generator-voice-badge">
+                <span style="font-size: 11.5px; font-weight: 700; color: #047857; background: #ECFDF5; border: 1px solid #A7F3D0; padding: 5px 12px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  Acento Panameño Natural
+                </span>
               </div>
             </div>
 
@@ -749,8 +747,8 @@
           </button>
           <div class="faq-answer">
             <p><strong>¡Sí!</strong> Todos los usuarios con cualquier plan de pago (Paquete de 50 Créditos, Pase de Viaje de 7 Días, Pase Mensual de Residente o Pase Anual de Explorador) pueden desactivar la firma automáticamente con 1 solo toque en la app.<br><br>
-            <strong>Cómo desactivarla automáticamente:</strong> Abre la aplicación PoquitoTalk, toca el icono de <strong>Configuración (⚙️)</strong> en la parte superior derecha y desactiva la opción <strong>Firma "Enviado con PoquitoTalk"</strong>. Tus mensajes se enviarán limpios sin pie de página.<br><br>
-            <strong>Para usuarios gratuitos:</strong> Siempre puedes borrar o editar manualmente la línea de firma directamente en WhatsApp antes de presionar enviar. De todas formas, ¡agradecemos de corazón a todos los que mantienen la firma y nos ayudan a correr la voz sobre PoquitoTalk en toda nuestra comunidad de Panamá! 🌴</p>
+            <strong>Cómo desactivarla automáticamente:</strong> Abre la aplicación PoquitoTalk, toca el icono de <strong>Configuración</strong> en la parte superior derecha y desactiva la opción <strong>Firma "Enviado con PoquitoTalk"</strong>. Tus mensajes se enviarán limpios sin pie de página.<br><br>
+            <strong>Para usuarios gratuitos:</strong> Siempre puedes borrar o editar manualmente la línea de firma directamente en WhatsApp antes de presionar enviar. De todas formas, ¡agradecemos de corazón a todos los que mantienen la firma y nos ayudan a correr la voz sobre PoquitoTalk en toda nuestra comunidad de Panamá!</p>
           </div>
         </div>
 
@@ -980,7 +978,7 @@
     </div>
   </aside>
 
-  <script src="../tracker.js?v=1.0.0" defer></script>
-  <script src="../script.js?v=5.9.0"></script>
+  <script src="../tracker.js?v=2.0.0" defer></script>
+  <script src="../script.js?v=6.1.1"></script>
 </body>
 </html>

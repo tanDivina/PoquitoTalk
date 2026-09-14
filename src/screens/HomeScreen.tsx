@@ -84,6 +84,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       const p = new URLSearchParams(window.location.search);
       if (p.get('prompt')) return decodeURIComponent(p.get('prompt') || '');
+      if (p.get('translated') === 'true') {
+        return "Hello friend, do you have a boat available to take us from Bocas Town to Isla Solarte today at 2:00 PM?";
+      }
       if (p.get('demo') === 'walkie') {
         const sender = p.get('walkieSender') || 'Contractor';
         return `Hi ${sender}! Are you available to pick us up at Taxi 25 dock in Bocas Town around 4:00 PM and take us back to Isla Solarte?`;
@@ -95,6 +98,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       const p = new URLSearchParams(window.location.search);
       if (p.get('output')) return decodeURIComponent(p.get('output') || '');
+      if (p.get('translated') === 'true') {
+        return "¡Hola amigo! ¿Tiene lancha disponible para llevarnos desde Bocas Town hasta Isla Solarte hoy a las 2:00 PM?";
+      }
       if (p.get('demo') === 'walkie') {
         const sender = p.get('walkieSender') || 'Contractor';
         return `¡Hola ${sender}! ¿Está disponible para recogernos en el muelle de Taxi 25 en Bocas Town como a las cuatro de la tarde y llevarnos de vuelta a Isla Solarte?`;
@@ -173,7 +179,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   } | null>(() => {
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       const p = new URLSearchParams(window.location.search);
-      if (p.get('walkieActive') === 'true' || p.get('incoming') === 'true') {
+      if (p.get('walkieActive') === 'true') {
         return {
           roomId: 'bocas-channel-8291',
           shareUrl: 'https://poquitotalk.hero-apps.com/talk?room=bocas-channel-8291',
@@ -197,11 +203,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       const p = new URLSearchParams(window.location.search);
       if (p.get('incoming') === 'true') {
-        const sender = p.get('walkieSender') || 'Contractor';
+        const sender = p.get('walkieSender') || 'Capitán Luis';
         return {
           id: 'msg_981',
-          esText: '¡Buenas tardes doña Sarah! Sí, claro que sí, a las cuatro en punto estoy amarrado en Taxi 25 esperándolos en la lancha. ¡Nos vemos allá!',
-          enText: 'Good afternoon Mrs. Sarah! Yes, of course, at four sharp I will be tied up at Taxi 25 waiting for you in the boat. See you there!',
+          esText: p.get('esText') || '¡Buenas tardes! Sí, claro, tengo la lancha lista en el muelle principal. El viaje a Solarte son $10.',
+          enText: p.get('enText') || 'Good afternoon! Yes, of course, I have the boat ready at the main dock. The trip to Solarte is $10.',
           senderName: sender,
           time: '04:01 PM',
         };
@@ -291,6 +297,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   useEffect(() => {
     const unsubscribe = walkieTalkieService.subscribeSession((session) => {
       if (!session) {
+        if (Platform.OS === 'web' && typeof window !== 'undefined') {
+          const p = new URLSearchParams(window.location.search);
+          if (p.get('incoming') === 'true' || p.get('walkieActive') === 'true') {
+            return;
+          }
+        }
         setActiveWalkieSession(null);
         setIncomingWalkieMessage(null);
         setWalkieMessages([]);
@@ -861,7 +873,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     // Simulate live listening to WhatsApp speaker playback
     setTimeout(() => {
       setIsListening(false);
-      const incomingSpanishVoice = "¡Buenas! Puedo pasar a revisar el aire acondicionado hoy a las 3:00 PM. ¿Me confirma su ubicación en Isla Colón?";
+      const incomingSpanishVoice = "¡Buenas! Puedo pasar a revisar el aire acondicionado hoy a las 3 de la tarde. ¿Me confirma su ubicación en Isla Colón?";
       setInputText(incomingSpanishVoice);
       handleTranslateText(incomingSpanishVoice, 'es', 'en');
     }, 2500);
@@ -1040,13 +1052,31 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                     ) : null}
 
                     {spanishText ? (
-                      <View style={styles.channelBubbleSpanishBox}>
-                        <Text style={styles.channelBubbleSpanishLabel}>
-                          {isExpat ? 'TRANSMITTED TO CONTRACTOR (SPANISH):' : 'SPOKEN BY CONTRACTOR (SPANISH):'}
-                        </Text>
-                        <Text style={styles.channelBubbleSpanishText}>
-                          "{spanishText}"
-                        </Text>
+                      <View style={[styles.channelBubbleSpanishBox, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}>
+                        <View style={{ flex: 1, paddingRight: 8 }}>
+                          <Text style={styles.channelBubbleSpanishLabel}>
+                            {isExpat ? 'TRANSMITTED TO CONTRACTOR (SPANISH):' : 'SPOKEN BY CONTRACTOR (SPANISH):'}
+                          </Text>
+                          <Text style={styles.channelBubbleSpanishText}>
+                            "{spanishText}"
+                          </Text>
+                        </View>
+                        {msg.audioData || spanishText ? (
+                          <TouchableOpacity
+                            style={{
+                              width: 32,
+                              height: 32,
+                              borderRadius: 16,
+                              backgroundColor: '#047857',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                            onPress={() => handlePlayWalkieOriginal(msg.audioData, spanishText)}
+                            activeOpacity={0.8}
+                          >
+                            <Ionicons name="play" size={14} color="#FFFFFF" style={{ marginLeft: 2 }} />
+                          </TouchableOpacity>
+                        ) : null}
                       </View>
                     ) : null}
 
@@ -1060,17 +1090,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                         >
                           <SpeakerIcon size={15} color="#047857" />
                           <Text style={styles.channelAudioBtnText}>Listen in English</Text>
-                        </TouchableOpacity>
-                      ) : null}
-
-                      {msg.audioData ? (
-                        <TouchableOpacity
-                          style={[styles.channelAudioBtn, { backgroundColor: '#F1F5F9', borderColor: '#CBD5E1' }]}
-                          onPress={() => handlePlayWalkieOriginal(msg.audioData, spanishText)}
-                          activeOpacity={0.8}
-                        >
-                          <Ionicons name="play" size={13} color="#475569" />
-                          <Text style={[styles.channelAudioBtnText, { color: '#475569' }]}>Original Audio</Text>
                         </TouchableOpacity>
                       ) : null}
 
@@ -1258,14 +1277,99 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </View>
           )}
 
+          {/* Incoming Contractor Voice Note Card (Devpost Frameless Showcase & Live Walkie Feature) */}
+          {incomingWalkieMessage && (
+            <View style={styles.incomingWalkieCard}>
+              <View style={styles.incomingWalkieHeader}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flex: 1 }}>
+                  <View style={styles.liveIndicatorDot} />
+                  <Text style={styles.incomingWalkieTag}>
+                    {`VOICE MESSAGE FROM ${incomingWalkieMessage.senderName ? incomingWalkieMessage.senderName.toUpperCase() : 'CONTRACTOR'}`}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => setIncomingWalkieMessage(null)}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                >
+                  <Ionicons name="close-circle" size={20} color="#047857" />
+                </TouchableOpacity>
+              </View>
+
+              {/* Avatar + English Translation Row */}
+              <View style={styles.incomingWalkieTopRow}>
+                <PoquitoAvatar state="talkie-rx" size={52} />
+                <View style={{ flex: 1, marginLeft: 12 }}>
+                  <Text style={styles.incomingWalkiePrimaryEnText}>
+                    "{incomingWalkieMessage.enText}"
+                  </Text>
+                </View>
+              </View>
+
+              {/* Wider Spanish Voice Note Box shifted to the left, taking up more space with a clean round play button on the right */}
+              <View style={styles.incomingWalkieEsBox}>
+                <View style={{ flex: 1, paddingRight: 10 }}>
+                  <Text style={styles.incomingWalkieEsTag}>Spanish Voice Note:</Text>
+                  <Text style={styles.incomingWalkieSecondaryEsText}>
+                    "{incomingWalkieMessage.esText}"
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  style={styles.incomingEsPlayCircleBtn}
+                  onPress={() => {
+                    if (incomingWalkieMessage.esText) {
+                      handlePlayWalkieOriginal(incomingWalkieMessage.audioData, incomingWalkieMessage.esText);
+                    }
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name="play" size={17} color="#FFFFFF" style={{ marginLeft: 2 }} />
+                </TouchableOpacity>
+              </View>
+
+              {/* Action Buttons Row: Only 2 Buttons (Listen in English & Reply in English), fitting on 1 line */}
+              <View style={styles.incomingAudioBtnRow}>
+                <TouchableOpacity
+                  style={styles.incomingListenEnBtn}
+                  onPress={() => {
+                    if (incomingWalkieMessage.enText) {
+                      handlePlayWalkieEnglish(incomingWalkieMessage.enText);
+                    }
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name="volume-high" size={17} color="#FFFFFF" />
+                  <Text style={styles.incomingListenEnBtnText}>Listen in English</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.incomingReplyEnBtn}
+                  onPress={() => {
+                    if (inputRef.current) {
+                      inputRef.current.focus();
+                    }
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name="chatbubble-ellipses" size={16} color="#FFFFFF" />
+                  <Text style={styles.incomingReplyEnBtnText}>Reply in English</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+
           {/* Primary Translation Input Card */}
           <View style={styles.inputCard}>
             <TextInput
               ref={inputRef}
-              style={styles.textInput}
+              style={[
+                styles.textInput,
+                inputText.length > 50 && { minHeight: 68 },
+                Platform.OS === 'web' && ({ outlineStyle: 'none' } as any),
+              ]}
               placeholder="What would you like to say in Spanish?"
               placeholderTextColor={Colors.outline}
               multiline
+              numberOfLines={3}
               value={inputText}
               onChangeText={(text) => {
                 setInputText(text);
@@ -1493,7 +1597,7 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 20,
     paddingTop: 10,
-    paddingBottom: 110,
+    paddingBottom: 150,
   },
   categoryBadgeRow: {
     flexDirection: 'row',
@@ -1669,8 +1773,8 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 14.5,
     color: Colors.onBackground,
-    minHeight: 38,
-    lineHeight: 20,
+    minHeight: 64,
+    lineHeight: 21,
     paddingTop: 2,
     paddingBottom: 2,
     textAlignVertical: 'top',
@@ -2060,20 +2164,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAF8F5',
     borderRadius: 24,
     padding: 16,
-    marginVertical: 12,
+    marginBottom: 16,
     borderWidth: 1.5,
     borderColor: '#047857',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 4,
   },
   incomingWalkieHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginBottom: 10,
+    justifyContent: 'space-between',
+    marginBottom: 12,
   },
   liveIndicatorDot: {
     width: 8,
@@ -2087,51 +2191,105 @@ const styles = StyleSheet.create({
     color: '#047857',
     letterSpacing: 0.5,
   },
-  incomingWalkieBody: {
+  incomingWalkieTopRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    marginBottom: 12,
   },
   incomingWalkiePrimaryEnText: {
-    fontSize: 15.5,
+    fontSize: 15,
     fontWeight: '800',
     color: '#064E3B',
     lineHeight: 21,
-    marginBottom: 6,
   },
   incomingWalkieEsBox: {
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: '#D1FAE5',
-    borderRadius: 12,
-    padding: 8,
-    marginTop: 2,
+    borderRadius: 16,
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 4,
+    elevation: 1,
   },
   incomingWalkieEsTag: {
-    fontSize: 9.5,
+    fontSize: 10,
     fontWeight: '800',
     color: '#059669',
-    marginBottom: 2,
+    marginBottom: 3,
     textTransform: 'uppercase',
+    letterSpacing: 0.4,
   },
   incomingWalkieSecondaryEsText: {
     fontSize: 12.5,
     fontWeight: '500',
-    color: '#475569',
-    lineHeight: 17,
+    color: '#334155',
+    lineHeight: 18,
     fontStyle: 'italic',
   },
-  incomingPlayBtn: {
+  incomingEsPlayCircleBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: '#047857',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#047857',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  incomingAudioBtnRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  incomingListenEnBtn: {
+    flex: 1,
+    height: 42,
+    backgroundColor: '#0284C7',
+    borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#047857',
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    borderRadius: 14,
+    paddingHorizontal: 8,
+    shadowColor: '#0284C7',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  incomingPlayBtnText: {
-    fontSize: 12,
+  incomingListenEnBtnText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  incomingReplyEnBtn: {
+    flex: 1,
+    height: 42,
+    backgroundColor: '#059669',
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingHorizontal: 8,
+    shadowColor: '#059669',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  incomingReplyEnBtnText: {
+    fontSize: 13,
     fontWeight: '700',
     color: '#FFFFFF',
   },
