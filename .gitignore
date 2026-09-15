@@ -73,4 +73,10 @@ vox_keyframes_v2/
 vox_natural_audio/
 vox_v2_audio/
 vox_aoede_audio/
+web-funnel/data_private/
+*.mp4
+*.mp3
+*.aiff
+*.pdf
+
 

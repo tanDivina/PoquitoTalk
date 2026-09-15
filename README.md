@@ -1,11 +1,9 @@
 # 🇵🇦 PoquitoTalk — Real-Time Voice Translation & WhatsApp Assistant
 
 > **Built for RevenueCat Shipaton 2026** ($150,000+ Prize Pool)  
-> *Targeting Categories*: **Best Mobile App** • **Funnel Vision Award — Stripe** ($15k–$100k)
+> *Targeting Categories*: **Best Mobile App** • **Funnel Vision Award — Stripe** ($15k–$100k) • **Growth Award — Layers** ($15,000 + Times Square Billboard)
 
-PoquitoTalk bridges the communication gap between English-speaking expats/travelers and local Panamanian service providers (plumbers, boat mechanics, A/C technicians, Starlink installers, doctors, and landlords) in **Bocas del Toro, Panama 🇵🇦**.
-
-Instead of awkward Google Translate text that locals ignore, PoquitoTalk generates **polite, authentic 1-tap WhatsApp voice notes** powered by **Google Gemini AI** and **Panamanian Spanish voice synthesis**.
+For English-speaking homeowners, boaters, and expats living off-grid in Bocas del Toro who are stranded at 11pm when an off-grid solar inverter fails, a rainwater catchment pump blows, or an outboard motor dies mid-channel, PoquitoTalk solves the Panamanian contractor communication crisis. Clumsy Google Translate text messages get left on 'Read' by local tradesmen who communicate exclusively via voice notes. PoquitoTalk generates instant, culturally respectful WhatsApp voice messages synthesized in authentic Panamanian Spanish, turning frantic emergency repairs into polite, localized audio that boat captains, electricians, and plumbers actually prioritize and answer.
 
 ---
 

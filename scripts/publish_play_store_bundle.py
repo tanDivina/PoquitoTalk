@@ -7,16 +7,19 @@ using the Google Play Developer Publishing API v3.
 import os
 import sys
 import argparse
+import socket
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
+
+socket.setdefaulttimeout(600)
 
 KEY_PATH = '/Users/dorienvandenabbeele/Downloads/gsc_key.json'
 PACKAGE_NAME = 'com.heroapps.poquitotalk'
 
 DEFAULT_RELEASE_NOTES = """• Authentic Panamanian Spanish voice note translator with 1-tap WhatsApp dispatch.
-• Hyper-local Bocas del Toro contractor & service directory.
-• 100% offline emergency audio presets."""
+• Expanded Bocas del Toro verified island directory & contractor listings.
+• Separated emergency presets (medical, pharmacy & dental) and offline audio clips."""
 
 def publish_bundle(aab_path, track='internal', release_notes=DEFAULT_RELEASE_NOTES):
     if not os.path.exists(aab_path):
@@ -44,17 +47,23 @@ def publish_bundle(aab_path, track='internal', release_notes=DEFAULT_RELEASE_NOT
 
     try:
         # 2. Upload the AAB bundle
-        print(f"Uploading AAB bundle (this may take a minute)...")
+        print(f"Uploading AAB bundle ({file_size_mb:.2f} MB)...")
         media = MediaFileUpload(
             aab_path,
             mimetype='application/octet-stream',
+            chunksize=2 * 1024 * 1024,
             resumable=True
         )
-        bundle_res = service.edits().bundles().upload(
+        request = service.edits().bundles().upload(
             packageName=PACKAGE_NAME,
             editId=edit_id,
             media_body=media
-        ).execute()
+        )
+        bundle_res = None
+        while bundle_res is None:
+            status, bundle_res = request.next_chunk()
+            if status:
+                print(f"  Uploading: {int(status.progress() * 100)}% ({status.resumable_progress / (1024*1024):.1f} MB)...")
 
         version_code = bundle_res['versionCode']
         sha256 = bundle_res.get('sha256', 'N/A')
@@ -65,7 +74,7 @@ def publish_bundle(aab_path, track='internal', release_notes=DEFAULT_RELEASE_NOT
         # 3. Create or update the release in the target track
         print(f"Assigning bundle to track '{track}'...")
         release_obj = {
-            'name': f"Release {version_code} (v1.5.3)",
+            'name': f"Release {version_code} (v1.5.4)",
             'versionCodes': [str(version_code)],
             'status': 'completed',
             'releaseNotes': [

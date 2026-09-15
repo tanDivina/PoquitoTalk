@@ -28,6 +28,7 @@ import {
   subscribeToThreadUpdates,
 } from './src/services/conversations';
 import { revenueCat } from './src/services/revenuecat';
+import { layersService } from './src/services/layersService';
 import { handleIncomingClaimDeepLink } from './src/services/deepLinks';
 import { walkieTalkieService } from './src/services/walkieTalkie';
 
@@ -403,6 +404,10 @@ function MainAppTabs({
         onSuccess={(details) => {
           setIsPro(true);
           setPaywallVisible(false);
+          layersService.track('purchase_success', {
+            product_id: details?.packageName || 'Annual Explorer Pass',
+            is_trial: details?.isTrial ?? true,
+          });
           setPaidOnboardingDetails({
             visible: true,
             packageName: details?.packageName || 'Annual Explorer Pass',
@@ -535,6 +540,9 @@ export default function App() {
     revenueCat.initialize().then(() => {
       revenueCat.isProSubscriber().then((status) => setIsPro(status));
     });
+
+    // Initialize Layers Growth SDK
+    layersService.init();
 
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       (window as any).__openPaywall = () => setPaywallVisible(true);

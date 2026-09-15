@@ -2,7 +2,7 @@
   "expo": {
     "name": "PoquitoTalk",
     "slug": "poquitotalk",
-    "version": "1.5.3",
+    "version": "1.5.4",
     "sdkVersion": "57.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,7 +13,7 @@
     },
     "android": {
       "package": "com.heroapps.poquitotalk",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -22,6 +22,9 @@
       },
       "permissions": [
         "RECORD_AUDIO"
+      ],
+      "blockedPermissions": [
+        "com.google.android.gms.permission.AD_ID"
       ],
       "predictiveBackGestureEnabled": false,
       "intentFilters": [
@@ -50,7 +53,15 @@
     "plugins": [
       "expo-sharing",
       "expo-status-bar",
-      "expo-audio"
+      "expo-audio",
+      [
+        "@layers/expo",
+        {
+          "ios": {
+            "attUsageDescription": "Helps measure voice translation improvements and community app growth."
+          }
+        }
+      ]
     ]
   }
 }

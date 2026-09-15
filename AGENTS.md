@@ -97,6 +97,10 @@ If Expo Go outputs *"The installed version of Expo Go is for SDK XX. The project
   - Speech bubble is elevated to head/crest level (`bottom: 175px - 185px; left: 210px; padding: 16px 24px; border-radius: 26px; border: 2.8px solid rgba(5,150,105,0.30);`).
   - Pointer tail points directly towards Poquito's face/beak (`top: 70% - 75%`).
 
+## 14. OFFICIAL POQUITO MASCOT ONLY — STRICT BAN ON 3-HAIR VERSION
+- **RULE**: Always use the official Poquito character asset (`src/assets/poquito_front_talking_v2_clean_256.webp`, `src/assets/poquito_clean.svg`, or `src/assets/poquito_idle_perch_1_7_256.webp`).
+- **PROHIBITION**: Poquito strictly has **TWO** smooth, naturally curved crest feathers. **NEVER** use the obsolete or unofficial variant with 3 spiky upright hairs. Delete or mark any 3-hair assets as obsolete.
+
 <!-- stripe-projects-cli managed:agents-md:start -->
 ## Stripe Projects CLI
 

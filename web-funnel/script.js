@@ -1218,23 +1218,6 @@ async function loadDynamicContractorsToDirectory() {
       )
     );
 
-    const gardeningOnes = dynamicOnes.filter(c => {
-      const tradeLabel = c.category_label || '';
-      return (c.category && (c.category.includes('GARDEN') || c.category.includes('PLANT') || c.category.includes('JARDIN'))) ||
-             /jard[ií]n|planta|vivero|garden|plant|landscap/i.test(tradeLabel) ||
-             /jard[ií]n|planta|vivero|garden|plant/i.test(c.name || '') ||
-             /jard[ií]n|planta|vivero|garden|plant|chapeo/i.test(c.description || '');
-    });
-
-    const gardeningCountEl = document.getElementById('gardening-count');
-    if (gardeningCountEl) gardeningCountEl.textContent = gardeningOnes.length;
-
-    const countEl = document.getElementById('contractors-count');
-    if (countEl) countEl.textContent = dynamicOnes.length;
-
-    const totalCountEl = document.getElementById('total-count');
-    if (totalCountEl) totalCountEl.textContent = 80 + dynamicOnes.length;
-
     // Find the first boat captain card to insert contractors before the long captain list
     const firstCaptain = document.querySelector('.dir-card[data-cat="WATER_TAXI"]');
 
@@ -1245,29 +1228,59 @@ async function loadDynamicContractorsToDirectory() {
       const card = document.createElement('div');
       card.className = 'dir-card';
       
-      const tradeLabel = c.category_label || (isSpanish ? 'Contratista Verificado' : 'Verified Contractor');
       const isGardening = (c.category && (c.category.includes('GARDEN') || c.category.includes('PLANT') || c.category.includes('JARDIN'))) ||
-                          (tradeLabel && /jard[ií]n|planta|vivero|garden|plant|landscap/i.test(tradeLabel)) ||
+                          /jard[ií]n|planta|vivero|garden|plant|landscap/i.test(c.category_label || '') ||
                           (c.name && /jard[ií]n|planta|vivero|garden|plant/i.test(c.name)) ||
                           (c.description && /jard[ií]n|planta|vivero|garden|plant|chapeo/i.test(c.description));
 
-      const isTaxiLand = (c.category && (c.category.includes('TAXI') || c.category.includes('RENTAL') || c.category.includes('CAR'))) ||
-                         (tradeLabel && /car|taxi|rental|auto|utv|4x4|transport/i.test(tradeLabel)) ||
-                         (c.name && /car|rental|taxi|utv/i.test(c.name)) ||
-                         (c.description && /car|rental|taxi|utv|4x4/i.test(c.description));
+      const isTaxiLand = (c.category && (c.category.includes('TAXI') || c.category.includes('RENTAL') || c.category.includes('CAR') || c.category === 'TRANSPORT')) ||
+                         /car|taxi|rental|auto|utv|4x4|transport/i.test(c.category_label || '') ||
+                         (c.name && /car|rental|taxi|utv|bike|scooter/i.test(c.name)) ||
+                         (c.description && /car|rental|taxi|utv|4x4|scooter|bike/i.test(c.description));
 
-      let cardCat = 'CONTRACTORS';
-      if (isGardening) {
+      let cardCat = c.category || 'CONTRACTORS';
+      let tradeLabel = isSpanish ? (c.category_label || 'Servicio Verificado') : (c.category_label_en || c.category_label || 'Verified Service');
+
+      if (c.category === 'HOTEL') {
+        cardCat = 'HOTEL';
+        tradeLabel = isSpanish ? 'Hoteles y Hospedaje' : 'Hotels & Lodging';
+      } else if (c.category === 'RESTAURANT') {
+        cardCat = 'RESTAURANT';
+        tradeLabel = isSpanish ? 'Restaurante y Café' : 'Restaurant & Dining';
+      } else if (c.category === 'HARDWARE') {
+        cardCat = 'HARDWARE';
+        tradeLabel = isSpanish ? 'Ferretería y Materiales' : 'Hardware & Supplies';
+      } else if (c.category === 'MEDICAL') {
+        cardCat = 'MEDICAL';
+        tradeLabel = isSpanish ? 'Atención Médica y Farmacia' : 'Medical & Pharmacy';
+      } else if (c.category === 'MECHANIC') {
+        cardCat = 'MECHANIC';
+        tradeLabel = isSpanish ? 'Taller y Motores Marinos' : 'Marine & Auto Repair';
+      } else if (c.category === 'SUPERMARKET') {
+        cardCat = 'RESTAURANT';
+        tradeLabel = isSpanish ? 'Supermercado y Abastos' : 'Supermarket & Groceries';
+      } else if (c.category === 'MARINE') {
+        cardCat = 'WATER_TAXI';
+        tradeLabel = isSpanish ? 'Buceo y Actividades Marinas' : 'Diving & Marine Services';
+      } else if (c.category === 'TRANSPORT') {
+        cardCat = 'TAXI_LAND';
+        tradeLabel = isSpanish ? 'Alquiler de Vehículos y Transporte' : 'Vehicle Rentals & Transport';
+      } else if (c.category === 'VET') {
+        cardCat = 'MEDICAL';
+        tradeLabel = isSpanish ? 'Veterinaria y Cuidado Animal' : 'Veterinary & Animal Care';
+      } else if (isGardening) {
         cardCat = 'GARDENING';
+        tradeLabel = isSpanish ? 'Jardinería y Viveros' : 'Gardening & Plants';
       } else if (isTaxiLand) {
         cardCat = 'TAXI_LAND';
+        tradeLabel = isSpanish ? 'Transporte Terrestre' : 'Land Transport';
       }
 
       card.setAttribute('data-cat', cardCat);
       card.setAttribute('data-zone', locMeta.zone);
       card.setAttribute('data-subloc', locMeta.subLocs);
       card.id = c.id;
-      const verifiedTag = isSpanish ? 'Profesional Verificado' : 'Verified Pro';
+      const verifiedTag = isSpanish ? 'Verificado' : 'Verified';
       const languagesText = isSpanish ? `Idiomas: ${c.languages || 'Español'}` : `Languages: ${c.languages || 'Español'}`;
       const waButtonText = 'WhatsApp';
       const callButtonText = isSpanish ? 'Llamar' : 'Call';
@@ -1279,6 +1292,17 @@ async function loadDynamicContractorsToDirectory() {
         : `<span style="color: #047857; font-weight: 700; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ${verifiedTag}
            </span>`;
+
+      // Clean description and extract Google score/reviews
+      let rawDesc = (isSpanish && c.description_es ? c.description_es : (c.description || ''));
+      let scoreMatch = rawDesc.match(/([0-9]\.[0-9])\(([0-9,]+)\)/);
+      let ratingVal = c.rating || (scoreMatch ? parseFloat(scoreMatch[1]) : null);
+      let reviewCount = c.review_count || (scoreMatch ? scoreMatch[2] : null);
+
+      let cleanDesc = rawDesc
+        .replace(/^Verified local establishment in Bocas del Toro\.?\s*/i, '')
+        .replace(/[0-9]\.[0-9]\([0-9,]+\)\s*(•\s*)?/, '')
+        .trim();
 
       card.innerHTML = `
         <div>
@@ -1292,7 +1316,19 @@ async function loadDynamicContractorsToDirectory() {
             </div>
           </div>
           <h2 class="dir-title">${escapeHTML(c.name)}</h2>
-          ${c.description && c.description !== 'N/A' ? `<p class="dir-notes">${escapeHTML(c.description)}</p>` : ''}
+          ${ratingVal && reviewCount ? `
+          <div class="dir-rating-row" style="display: flex; align-items: center; gap: 6px; margin: 4px 0 8px 0; font-size: 13px;">
+            <span style="display: inline-flex; align-items: center; gap: 4px; font-weight: 700; color: #B45309;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="#F59E0B" stroke="#D97706" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              ${typeof ratingVal === 'number' ? ratingVal.toFixed(1) : ratingVal}
+            </span>
+            ${c.map_url ? `
+            <a href="${c.map_url}" target="_blank" rel="noopener noreferrer" style="color: #64748B; text-decoration: underline; font-weight: 500; font-size: 12.5px; display: inline-flex; align-items: center; gap: 3px;" title="${isSpanish ? 'Ver reseñas en Google Maps' : 'View reviews on Google Maps'}">
+              <span>(${reviewCount} ${isSpanish ? 'reseñas en Google' : 'Google reviews'})</span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>` : `<span style="color: #64748B; font-size: 12.5px;">(${reviewCount} ${isSpanish ? 'reseñas' : 'reviews'})</span>`}
+          </div>` : ''}
+          ${cleanDesc && cleanDesc !== 'N/A' ? `<p class="dir-notes">${escapeHTML(cleanDesc)}</p>` : ''}
           <div class="dir-info-row">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             <span>${escapeHTML(c.location || 'Bocas del Toro')} • ${languagesText}</span>
@@ -1324,6 +1360,11 @@ async function loadDynamicContractorsToDirectory() {
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             <span>${isSpanish ? 'Sitio Web' : 'Website'}</span>
           </a>` : ''}
+          ${c.map_url ? `
+          <a href="${c.map_url}" target="_blank" rel="noopener noreferrer" class="dir-action-pill btn-action-map">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>${isSpanish ? 'Ver en Mapa' : 'View on Map'}</span>
+          </a>` : ''}
         </div>
       `;
 
@@ -1335,6 +1376,7 @@ async function loadDynamicContractorsToDirectory() {
     });
 
     applyVouchesToDOM();
+    updateDirectoryCategoryCounts();
     if (typeof filterDirectory === 'function') filterDirectory();
   } catch (e) {
     console.warn('Could not load dynamic contractors:', e);
@@ -1463,17 +1505,25 @@ function filterDirectory() {
     // 1. Category Filter Match
     let matchesCat = (activeCat === 'ALL' || cat === activeCat);
     if (activeCat === 'CONTRACTORS') {
-      matchesCat = (cat === 'CONTRACTORS' || (!['WATER_TAXI', 'BANKING', 'GARDENING', 'COMMUNITY', 'TAXI_LAND', 'MECHANIC', 'MEDICAL', 'HARDWARE', 'SHUTTLE'].includes(cat) && /electric|aire|ac|refrig|plumb|plomer|construc|carpint/i.test(text)));
+      matchesCat = (cat === 'CONTRACTORS' || cat === 'AC_REPAIR' || cat === 'PLUMBING' || cat === 'STARLINK' || (!['WATER_TAXI', 'BANKING', 'GARDENING', 'COMMUNITY', 'TAXI_LAND', 'MECHANIC', 'MEDICAL', 'HARDWARE', 'SHUTTLE', 'HOTEL', 'RESTAURANT', 'SUPERMARKET', 'MARINE', 'VET', 'TRANSPORT'].includes(cat) && /electric|aire|ac|refrig|plumb|plomer|construc|carpint|solar|starlink/i.test(text)));
     } else if (activeCat === 'TAXI_LAND') {
-      matchesCat = (cat === 'TAXI_LAND' || /taxi|colectivo|driver|chofer|chófer|piquera/i.test(text));
+      matchesCat = (cat === 'TAXI_LAND' || cat === 'LAND_TAXI' || cat === 'TRANSPORT' || /taxi|colectivo|driver|chofer|chófer|piquera|scooter|rental|e-bike|ebike|bicicleta/i.test(text));
+    } else if (activeCat === 'WATER_TAXI') {
+      matchesCat = (cat === 'WATER_TAXI' || cat === 'MARINE' || (!['HARDWARE', 'HOTEL', 'RESTAURANT'].includes(cat) && /lancha|capit[aá]n|water taxi|bote|dive|buceo/i.test(text)));
+    } else if (activeCat === 'HOTEL') {
+      matchesCat = (cat === 'HOTEL' || /hotel|resort|hostel|suites|lodge|hospedaje|guesthouse/i.test(text));
+    } else if (activeCat === 'RESTAURANT') {
+      matchesCat = (cat === 'RESTAURANT' || cat === 'SUPERMARKET' || /restaurant|restaurante|cafe|café|bistro|bar|pizza|bakery|panader|supermercado|super market/i.test(text));
     } else if (activeCat === 'MECHANIC') {
       matchesCat = (cat === 'MECHANIC' || /mecanic|mecánic|outboard|fuera de borda|taller|motor|golf cart/i.test(text));
     } else if (activeCat === 'MEDICAL') {
-      matchesCat = (cat === 'MEDICAL' || /hospital|clinic|clínica|doctor|medic|médic|farmacia|pharmacy/i.test(text));
+      matchesCat = (cat === 'MEDICAL' || cat === 'VET' || /hospital|clinic|clínica|doctor|medic|médic|farmacia|pharmacy|dentist|veterinar/i.test(text));
     } else if (activeCat === 'HARDWARE') {
       matchesCat = (cat === 'HARDWARE' || /ferreter|hardware|materiales/i.test(text));
+    } else if (activeCat === 'BANKING') {
+      matchesCat = (cat === 'BANKING' || /banco|bank|atm|cajero|western union/i.test(text));
     } else if (activeCat === 'SHUTTLE') {
-      matchesCat = (cat === 'SHUTTLE' || /shuttle|frontera|border|costa rica|guabito/i.test(text));
+      matchesCat = (cat === 'SHUTTLE' || /shuttle|frontera|border|costa rica/i.test(text));
     } else if (activeCat === 'GARDENING') {
       matchesCat = (cat === 'GARDENING' || cat.includes('GARDEN') || cat.includes('PLANT') || cat.includes('JARDIN') || /jard[ií]n|planta|vivero|garden|plant|landscap|chapeo/i.test(text));
     } else if (activeCat === 'COMMUNITY') {
@@ -1633,10 +1683,82 @@ function highlightTargetFromHash() {
   }, 200);
 }
 
+function updateDirectoryCategoryCounts() {
+  const cards = document.querySelectorAll('.directory-grid .dir-card');
+  if (!cards || cards.length === 0) return;
+
+  const counts = {
+    total: cards.length,
+    water_taxi: 0,
+    taxi_land: 0,
+    contractors: 0,
+    hotel: 0,
+    restaurant: 0,
+    mechanic: 0,
+    medical: 0,
+    hardware: 0,
+    banking: 0,
+    shuttle: 0,
+    gardening: 0,
+    community: 0
+  };
+
+  cards.forEach(card => {
+    const cat = card.getAttribute('data-cat') || '';
+    const text = card.innerText.toLowerCase();
+
+    if (cat === 'WATER_TAXI' || cat === 'MARINE' || (!['HARDWARE', 'HOTEL', 'RESTAURANT'].includes(cat) && /lancha|capit[aá]n|water taxi|bote|dive|buceo/i.test(text))) {
+      counts.water_taxi++;
+    } else if (cat === 'HOTEL' || /hotel|resort|hostel|suites|lodge|hospedaje|guesthouse/i.test(text)) {
+      counts.hotel++;
+    } else if (cat === 'RESTAURANT' || cat === 'SUPERMARKET' || /restaurant|restaurante|cafe|café|bistro|bar|pizza|bakery|panader|supermercado|super market/i.test(text)) {
+      counts.restaurant++;
+    } else if (cat === 'HARDWARE' || /ferreter|hardware|materiales/i.test(text)) {
+      counts.hardware++;
+    } else if (cat === 'TAXI_LAND' || cat === 'LAND_TAXI' || cat === 'TRANSPORT' || /taxi|colectivo|driver|chofer|chófer|piquera|scooter|rental|e-bike|ebike|bicicleta/i.test(text)) {
+      counts.taxi_land++;
+    } else if (cat === 'BANKING' || /banco|bank|atm|cajero|western union/i.test(text)) {
+      counts.banking++;
+    } else if (cat === 'MEDICAL' || cat === 'VET' || /hospital|clinic|clínica|doctor|medic|médic|farmacia|pharmacy|dentist|veterinar/i.test(text)) {
+      counts.medical++;
+    } else if (cat === 'MECHANIC' || /mecanic|mecánic|outboard|fuera de borda|taller|motor|golf cart/i.test(text)) {
+      counts.mechanic++;
+    } else if (cat === 'SHUTTLE' || /shuttle|frontera|border|costa rica/i.test(text)) {
+      counts.shuttle++;
+    } else if (cat === 'GARDENING' || cat.includes('GARDEN') || cat.includes('PLANT') || cat.includes('JARDIN') || /jard[ií]n|planta|vivero|garden|plant|landscap|chapeo/i.test(text)) {
+      counts.gardening++;
+    } else if (cat === 'COMMUNITY' || /book|libro|exchange|intercambio|cultura|community/i.test(text)) {
+      counts.community++;
+    } else if (cat === 'CONTRACTORS' || cat === 'AC_REPAIR' || cat === 'PLUMBING' || cat === 'STARLINK' || (!['WATER_TAXI', 'BANKING', 'GARDENING', 'COMMUNITY', 'TAXI_LAND', 'MECHANIC', 'MEDICAL', 'HARDWARE', 'SHUTTLE', 'HOTEL', 'RESTAURANT', 'SUPERMARKET', 'MARINE', 'VET', 'TRANSPORT'].includes(cat) && /electric|aire|ac|refrig|plumb|plomer|construc|carpint|solar|starlink/i.test(text))) {
+      counts.contractors++;
+    }
+  });
+
+  const setEl = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  };
+
+  setEl('total-count', counts.total);
+  setEl('water-taxi-count', counts.water_taxi);
+  setEl('taxi-land-count', counts.taxi_land);
+  setEl('contractors-count', counts.contractors);
+  setEl('hotel-count', counts.hotel);
+  setEl('restaurant-count', counts.restaurant);
+  setEl('mechanic-count', counts.mechanic);
+  setEl('medical-count', counts.medical);
+  setEl('hardware-count', counts.hardware);
+  setEl('banking-count', counts.banking);
+  setEl('shuttle-count', counts.shuttle);
+  setEl('gardening-count', counts.gardening);
+  setEl('community-count', counts.community);
+}
+
 // Auto-run on DOM ready
 if (typeof window !== 'undefined') {
   window.addEventListener('DOMContentLoaded', () => {
     loadCommunityVouches();
+    updateDirectoryCategoryCounts();
     loadDynamicContractorsToDirectory();
     initDirectoryFromURL();
     highlightTargetFromHash();

@@ -209,17 +209,52 @@ Routes: Isla Colón Main Public Dock to Old Bank Bastimentos.
 
 ================================================================================
 SECTION 4: LAND TRANSPORTATION, TAXIS & VEHICLE RENTALS
-================================================================================
+===============================================================================
 
 Entity: Piquera de Radio Taxis Isla Colón (Sindicato 28 de Noviembre)
-Location: Calle 1ra, Bocas Town, Isla Colón
-Phone: +507 757-9005
+Location: Calle 1ra & Parque Simón Bolívar, Bocas Town, Isla Colón
+Phone: +507 757-9260 / +507 757-9005
 Service: Official island land taxi dispatch, pickups for Bocas Town, Big Creek, Paunch Beach, Bluff Beach, and Boca del Drago.
 
+Entity: Onesimo (Taxi Isla Colón)
+Location: Isla Colón
+Phone/WhatsApp: +507 6413-4471
+Service: Land taxi pickups across Bocas Town, airport transfers, Playa Paunch, Bluff Beach, and Boca del Drago.
+
+Entity: Cesar Bill (Taxi Isla Colón)
+Location: Isla Colón
+Phone/WhatsApp: +507 6463-3788
+Service: Land taxi service, airport transfers, hotel luggage assistance, Bluff Beach and Drago transport.
+
+Entity: Kike (Taxi Isla Colón)
+Location: Isla Colón
+Phone/WhatsApp: +507 6748-4083
+Service: Isla Colón taxi runs, town errands, surf transport to Paunch and Bluff, Starfish Beach runs.
+
+Entity: William (Taxi Isla Colón)
+Location: Isla Colón
+Phone/WhatsApp: +507 6662-1967
+Service: Airport pickups, Bocas Town service, hotel transfers, Paunch & Bluff tours.
+
+Entity: Alexis (Taxi Isla Colón)
+Location: Isla Colón
+Phone/WhatsApp: +507 6515-6506
+Service: Direct land taxi on Isla Colón, airport connections, local town rides, northern beach runs.
+
+Entity: Ariel (Taxi Isla Colón)
+Location: Isla Colón
+Phone/WhatsApp: +507 6322-5830
+Service: Trusted island taxi driver, airport greeting, town pickups, Bluff Beach and Boca del Drago excursions.
+
+Entity: Cristian (Taxi Isla Colón)
+Location: Isla Colón
+Phone/WhatsApp: +507 6707-8566
+Service: Scheduled airport transfers, town runs, surf transport to Paunch, Bluff & Drago trips.
+
 Entity: Bocas Car Rental & UTV Off-Road
-Location: Calle 1ra, Isla Colón
-Phone/WhatsApp: +507 6948-2210
-Service: 4x4 UTV and ATV rentals, rugged vehicles for Bluff Beach road, airport transfers, golf cart rentals.
+Location: Av. H Norte (Near El Último Refugio), Bocas Town, Isla Colón
+Phone/WhatsApp: +507 6860-0808
+Service: 4x4 passenger cars (5, 6, 8 pax), UTV rentals, island transfers.
 
 Entity: Bocas Island Express & Logistics
 Location: Isla Colón & Almirante mainland port
@@ -235,30 +270,30 @@ Service: Off-road UTV rentals, jungle trail guides to Bluff Beach and northern b
 SECTION 5: TRADES, WATER SYSTEMS, SOLAR, ELECTRICAL & CONTRACTORS
 ================================================================================
 
-Entity: Scott Solutions (Off-Grid Solar & Battery Systems)
+Entity: Scott Solutions Bocas (UK-Qualified Electrical & Solar)
 Location: Isla Colón & Archipelago Outreach (Solarte, Bastimentos)
-WhatsApp: +507 6480-1290
-Service: Off-grid solar installations, Victron inverter programming, lithium battery bank maintenance, solar panel cleaning & diagnostic checks.
+WhatsApp: +507 6904-8615
+Service: Electrical installations to European standards, whole home surge & lightning protection, earth rods for independent earthing systems, ring circuits, off-grid solar, Starlink setup & electrical safety evaluations.
 
 Entity: Luis Ángel Herrera Palacio (A/C & Commercial Refrigeration)
-Location: Calle 4ta, Bocas Town, Isla Colón
-WhatsApp: +507 6522-8144
+Location: Isla Colón / Bocas Town
+WhatsApp: +507 6605-1612
 Service: Mini-split air conditioning installation, R410A refrigerant gas refills, compressor repair, walk-in commercial restaurant freezer maintenance.
 
 Entity: Solarte Soil Works & Tropical Landscaping
 Location: Isla Solarte & Archipelago Deliveries
-WhatsApp: +507 6711-4092
-Service: Organic topsoil delivery, tropical compost, heavy lawn mowing (chapeo), coconut palm maintenance, drainage ditch clearing.
+WhatsApp: +507 6562-9220
+Service: Soil management, fruit tree care and pruning, 100% natural practices focused on enhancing soil health through microbiology, tropical compost, and landscaping.
 
-Entity: Abner Shalém Pineda Baker (General Contractor & Docks)
-Location: Isla Colón & Carenero
-WhatsApp: +507 6649-3301
-Service: Overwater dock construction, seawall pilings, wood framing, hardwood deck repairs, home renovations.
+Entity: Abner Shalém Pineda Baker (General Contractor & Handyman)
+Location: Isla Colón / Bocas Town
+WhatsApp: +507 6404-0523
+Service: Property maintenance, structural repairs, painting, landscaping, woodwork, custom carpentry, and general contracting for homes and hotels.
 
 Entity: Reg Soldadura y Herrería (Metal Welding & Gates)
-Location: Isla Colón
-WhatsApp: +507 6830-1152
-Service: Structural steel welding, custom marine aluminum gates, security window bars, rust treatment.
+Location: Isla Colón / Bocas Town
+WhatsApp: +507 6597-1099
+Service: Structural steel welding, remanufacturing car parts, bicycle racks, security anti-theft doors and windows, farm four-wheelers, marine dock brackets.
 
 Entity: Alex Acosta Carpentry & Fine Woodworking
 Location: Almirante & Bocas Archipelago
@@ -270,9 +305,9 @@ Location: Isla Colón & Archipelago
 WhatsApp: +507 6606-6892
 Service: Keypad lock installations, deadbolt re-keying, marine stainless padlocks, emergency lock opening.
 
-Entity: Starlink & Off-Grid Wi-Fi Technical Services
+Entity: Scott Solutions Bocas (Starlink & Wi-Fi Off-Grid Technical Services)
 Location: Bocas del Toro Archipelago
-WhatsApp: +507 6480-1290
+WhatsApp: +507 6904-8615
 Service: Starlink dish rooftop mounting, lightning surge arresters, mesh Wi-Fi network routing across island properties and overwater docks.
 
 Entity: Heyner Vincent (Masonry, Tiling & Ceilings)
@@ -289,15 +324,20 @@ Service: Freshwater plumbing maintenance, rainwater cistern connections, PVC pip
 SECTION 6: HARDWARE STORES (FERRETERÍAS) & BUILDING SUPPLIES
 ================================================================================
 
-Entity: Ferretería Isla Colón
+Entity: Ferretería La Muralla (Ferrecentro Muralla)
+Location: Calle principal hacia el Puerto, Media Milla, Almirante
+Phone/WhatsApp: +507 6702-0077
+Service: Established hardware and construction depot on the road to the ferry docks in Almirante. Plumbing, electrical supplies, cement, roofing sheets, tools, and marine hardware.
+
+Entity: Ferreterias Almirante
+Location: Ruta Rambála - Almirante, Entrada de Almirante
+Phone: +507 758-3913
+Service: Heavy construction supplies, lumber, concrete blocks, sand, gravel, rebar, water tanks, and plumbing fittings.
+
+Entity: Ferremax Bocas, S.A.
 Location: Calle 3ra & Ave G, Bocas Town, Isla Colón
 Phone: +507 757-9250
-Service: PVC plumbing fittings, electrical wiring, zinc roofing sheets, stainless steel screws, marine paint, cement, hand tools.
-
-Entity: Materiales Bocas (Building Supplies Depot)
-Location: Isla Colón
-Phone: +507 757-9380
-Service: Lumber, concrete blocks, sand, gravel, rebar, water storage tanks, water pumps.
+Service: Island hardware store, stainless marine screws, paint, PVC pipe fittings, electrical supplies, hand and power tools.
 
 ================================================================================
 SECTION 7: BANKING, ATMS & UTILITIES

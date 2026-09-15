@@ -5,6 +5,8 @@
   "dependencies": {
     "@expo/metro-runtime": "~57.0.15",
     "@expo/vector-icons": "^15.0.3",
+    "@layers/expo": "^3.3.0",
+    "@layers/react-native": "^3.3.0",
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/native": "^7.0.0",
     "expo": "~57.0.19",
@@ -17,6 +19,7 @@
     "expo-sharing": "~57.0.17",
     "expo-speech": "~57.0.2",
     "expo-status-bar": "~57.0.1",
+    "expo-tracking-transparency": "^57.0.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
