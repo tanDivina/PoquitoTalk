@@ -46,7 +46,12 @@ CLIPS = OUT / "clips"
 FPS = 30
 W, H = 1920, 1080
 FONT = ROOT / "videos/ugc-proper-series/fonts/Lexend-Bold.ttf"
-MUSIC = ROOT / "scripts/promo_bg_music.aac"
+# scripts/promo_bg_music.aac and soundtrack_recreated_*.aac contain a baked-in English VO
+# ("Terrified of sending voice messages…") — never use them as a music bed.
+MUSIC_FALLBACK = ROOT / "temp_vox_audio/bgm_raw.wav"
+MUSIC_PROMPT = ("Warm upbeat Caribbean island acoustic track: nylon-string acoustic guitar strumming, light hand "
+                "percussion and shaker, gentle bass, sunny and human, 100 BPM, strong downbeat at the start, "
+                "instrumental only, no vocals")
 MASCOT = ROOT / "src/assets/poquito_front_talking_v2_clean_256.webp"
 
 KLING = {
@@ -65,12 +70,13 @@ SFX = {
     "settle": ROOT / "brag-output/sfx/cta_settle.ogg",
 }
 
-# Voice IDs match scripts/generate_sarah_luis_tracks.py:
-#   outgoing = user's chosen (female) voice; incoming = contractor's real gender (male) in both languages.
+# The app's own personas (src/services/elevenLabsVoice.ts ELEVENLABS_PERSONAS):
+SOFIA = "cgSgspJ2msm6clMCkdW9"  # Female — the user's chosen outgoing voice
+DIEGO = "JBFqnCBsd6RMkjVDRZzb"  # Male — Ricardo is male, so his reply stays male in English too (Rule 11)
 LINES = {
-    "out_es": ("¡Buenas! Se me fue el agua. ¿Me puede chequear la bomba hoy?", "21m00Tcm4TlvDq8ikWAM"),
-    "reply_es": ("¡Dale! Paso a las dos.", "ErXwobaYiN019PkySvjV"),
-    "reply_en": ("Sure! I'll come by at two.", "JBFqnCBsd6RMkjVDRZzb"),
+    "out_es": ("¡Buenas! Se me fue el agua. ¿Me puede chequear la bomba hoy?", SOFIA),
+    "reply_es": ("¡Dale! Paso a las dos.", DIEGO),
+    "reply_en": ("Sure! I'll come by at two.", DIEGO),
 }
 OUT_EN_TEXT = "The water stopped. Can you check the pump today?"
 SFX_PROMPTS = {
@@ -82,8 +88,8 @@ SFX_PROMPTS = {
 
 # ---- Timeline (seconds). UI shot lengths are derived from audio durations in plan(). ----
 KLING_SHOTS = [  # (key, clip, source in-point, duration, headline, text y)
-    ("A", "panga", 0.6, 1.30, "NO ROADS.", H - 250),
-    ("B", "aerial", 1.2, 1.10, "JUST BOATS.", H - 250),
+    ("A", "panga", 0.6, 1.20, "NO ROADS.", H - 250),
+    ("B", "aerial", 1.2, 1.00, "JUST BOATS.", H - 250),
     ("C", "dry_tap", 0.2, 1.05, "THEN THE WATER STOPS.", H - 250),
     # D (UI) sits here
     ("E", "plumber", 1.0, 1.00, "OUT HERE, EVERYONE TALKS.", H - 230),
@@ -124,8 +130,9 @@ def build_audio(regen):
         r = requests.post(f"https://api.elevenlabs.io/v1/text-to-speech/{voice}",
                           headers={"xi-api-key": key, "Content-Type": "application/json", "Accept": "audio/mpeg"},
                           json={"text": text, "model_id": "eleven_multilingual_v2",
-                                "voice_settings": {"stability": 0.5, "similarity_boost": 0.85, "style": 0.15,
-                                                   "use_speaker_boost": True, "speed": 1.08}},
+                                # Same settings the app sends.
+                                "voice_settings": {"stability": 0.45, "similarity_boost": 0.85, "style": 0.20,
+                                                   "use_speaker_boost": True}},
                           timeout=60)
         r.raise_for_status()
         path.write_bytes(r.content)
@@ -157,6 +164,37 @@ def build_audio(regen):
              "silenceremove=start_periods=1:start_threshold=-45dB,areverse,aresample=44100",
              "-ac", "2", dst])
     return {n: duration(AUDIO / f"{n}_trim.wav") for n in LINES}
+
+
+def build_music(regen):
+    path = AUDIO / "music_bed.mp3"
+    if not path.exists() or regen:
+        key = api_key()
+        r = requests.post("https://api.elevenlabs.io/v1/music",
+                          headers={"xi-api-key": key or "", "Content-Type": "application/json"},
+                          json={"prompt": MUSIC_PROMPT, "music_length_ms": 12000, "force_instrumental": True},
+                          timeout=180)
+        if r.status_code != 200:
+            print(f"  music generation failed ({r.status_code}); using {MUSIC_FALLBACK.relative_to(ROOT)}")
+            return MUSIC_FALLBACK
+        path.write_bytes(r.content)
+        print(f"  generated {path.name}")
+    return path
+
+
+def assert_no_speech(path, seconds):
+    """Refuse a music bed with a voice in it (Whisper logprob > -1.0 means real words, not music hallucination)."""
+    if not shutil.which("whisper"):
+        print("  whisper not installed — skipping music speech check")
+        return
+    probe = OUT / "music_probe.wav"
+    run(["ffmpeg", "-v", "error", "-y", "-i", path, "-t", seconds, "-ac", 1, "-ar", 16000, probe])
+    subprocess.run(["whisper", probe, "--model", "base", "--output_dir", OUT, "--output_format", "json",
+                    "--fp16", "False"], capture_output=True, check=True)
+    segs = json.loads((OUT / "music_probe.json").read_text())["segments"]
+    speech = [s for s in segs if s["avg_logprob"] > -1.0 and s["no_speech_prob"] < 0.5]
+    if speech:
+        sys.exit(f"Music bed {path} contains speech: {speech[0]['text']!r} — pick another bed.")
 
 
 def synth_sfx(name, secs, path):
@@ -447,7 +485,7 @@ def plan(durs):
     return t, starts, lens, total, order + [("Hs", H_len)]
 
 
-def mix(t, s, total):
+def mix(t, s, total, music):
     cues = [  # (file, absolute start seconds, volume)
         (AUDIO / "sfx_engine.mp3", s["A"], 1.0),
         (AUDIO / "sfx_dry_tap.mp3", s["C"] + 0.10, 1.0),
@@ -478,7 +516,7 @@ def mix(t, s, total):
         labels.append(f"[c{i}]")
     voices = "".join(labels)
     m = len(cues)
-    inputs += ["-i", MUSIC]
+    inputs += ["-i", music]
     music_ms = int(round(s["E"] * 1000))
     chains.append(f"{voices}amix=inputs={m}:normalize=0,asplit=2[fx][key]")
     chains.append(f"[{m}:a]aresample=44100,volume=0.32,afade=t=in:st=0:d=0.25,adelay={music_ms}|{music_ms}[mus]")
@@ -525,7 +563,9 @@ def main():
     if not args.skip_ui:
         render_ui(t, lens)
     print("4/5 audio mix")
-    wav, cues = mix(t, starts, total)
+    music = build_music(args.regen_audio)
+    assert_no_speech(music, total - starts["E"])
+    wav, cues = mix(t, starts, total, music)
     print("5/5 assemble")
     final, sheet = assemble(order, wav, total)
 
