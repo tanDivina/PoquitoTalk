@@ -1159,7 +1159,10 @@ html {
 
 .footer-links {
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 18px;
+  max-width: 100%;
 }
 
 .footer-links a {
@@ -1851,6 +1854,253 @@ input::placeholder {
   line-height: 1.5 !important;
 }
 
+/* Live Google Play Badge & Pulse Dot */
+.playstore-badge.live-badge {
+  background: rgba(4, 120, 87, 0.12);
+  border-color: rgba(4, 120, 87, 0.35);
+  color: #047857;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.pulse-dot-green {
+  width: 8px;
+  height: 8px;
+  background-color: #10B981;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulseGreen 2s infinite;
+}
+
+@keyframes pulseGreen {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+/* Primary Google Play Download Button */
+.btn-playstore-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: #111827;
+  color: #FFFFFF !important;
+  text-decoration: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 18px;
+  padding: 14px 28px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 24px;
+}
+
+.btn-playstore-download:hover {
+  background: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.btn-playstore-download .playstore-btn-svg {
+  flex-shrink: 0;
+}
+
+.btn-playstore-download .playstore-btn-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.15;
+}
+
+.btn-playstore-download .playstore-btn-sub {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: rgba(255, 255, 255, 0.75);
+  text-transform: uppercase;
+}
+
+.btn-playstore-download .playstore-btn-main {
+  font-family: 'Lexend', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.3px;
+}
+
+.btn-playstore-download .arrow {
+  color: #10B981;
+  font-size: 18px;
+  font-weight: 800;
+  margin-left: 6px;
+  transition: transform 0.25s ease;
+}
+
+.btn-playstore-download:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* Priority Website Links Grid */
+.app-priority-web-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  width: 100%;
+  max-width: 640px;
+  margin-bottom: 24px;
+}
+
+.priority-web-link {
+  background: #FBF9F5;
+  border: 1.5px solid rgba(150, 72, 36, 0.14);
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #1A1A1E;
+  font-weight: 700;
+  font-size: 13.5px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.priority-web-link:hover {
+  background: #FFFFFF;
+  border-color: #047857;
+  color: #047857;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(4, 120, 87, 0.12);
+}
+
+.priority-web-link svg {
+  flex-shrink: 0;
+  stroke: #047857;
+}
+
+.priority-web-link .arrow {
+  margin-left: auto;
+  font-size: 14px;
+  color: #7E766D;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.priority-web-link:hover .arrow {
+  transform: translateX(3px);
+  color: #047857;
+}
+
+/* Future Plans Newsletter Subcard */
+.newsletter-subcard {
+  width: 100%;
+  max-width: 640px;
+  background: rgba(4, 120, 87, 0.04);
+  border: 1.5px dashed rgba(4, 120, 87, 0.28);
+  border-radius: 20px;
+  padding: 22px 24px;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.newsletter-subcard .newsletter-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #047857;
+  font-family: 'Lexend', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.newsletter-subcard .newsletter-desc {
+  font-size: 13.5px;
+  color: #4D463E;
+  line-height: 1.5;
+  margin: 0 0 14px 0;
+}
+
+.newsletter-form {
+  width: 100%;
+}
+
+.newsletter-input-group {
+  display: flex;
+  gap: 8px;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 14px;
+  padding: 4px 6px;
+  transition: border-color 0.25s ease;
+}
+
+.newsletter-input-group:focus-within {
+  border-color: #047857;
+  box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.12);
+}
+
+.newsletter-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 14px;
+  color: #1A1A1E;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+}
+
+.btn-newsletter-submit {
+  background: #047857;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-family: 'Lexend', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-newsletter-submit:hover {
+  background: #065F46;
+}
+
+.btn-newsletter-submit:hover .arrow {
+  transform: translateX(3px);
+}
+
+.newsletter-success-box {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #047857;
+  font-weight: 700;
+  font-size: 14px;
+}
+
 @media (max-width: 768px) {
   .navbar {
     position: sticky;
@@ -1951,6 +2201,45 @@ input::placeholder {
     padding: 14px 20px;
     font-size: 15px;
   }
+
+  .btn-playstore-download {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+    box-sizing: border-box;
+  }
+
+  .app-priority-web-links {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .newsletter-subcard {
+    padding: 18px 16px;
+  }
+
+  .newsletter-input-group {
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    padding: 0;
+    gap: 8px;
+  }
+
+  .newsletter-input {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 16px;
+  }
+
+  .btn-newsletter-submit {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 18px;
+    font-size: 14.5px;
+  }
 }
 
 /* Cross-Promotional Header Banner */
@@ -1997,6 +2286,7 @@ input::placeholder {
 .contractor-section {
   padding: 60px 0 90px;
   background: var(--bg-cream);
+  overflow-x: clip;
 }
 
 .contractor-header {
@@ -2226,6 +2516,356 @@ input::placeholder {
     padding: 8px 14px;
     font-size: 13px;
   }
+}
+
+/* Portal Category Bar & Form Navigation */
+.portal-tabs-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.portal-tab-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #FFFFFF;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-charcoal);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.portal-tab-chip:hover {
+  border-color: #047857;
+  color: #047857;
+  transform: translateY(-1px);
+}
+
+.portal-tab-chip.active {
+  background: #047857;
+  border-color: #047857;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(4, 120, 87, 0.25);
+}
+
+.portal-tab-chip svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .portal-tabs-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 6px 4px 12px;
+    margin: 0 0 20px 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .portal-tabs-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .portal-tab-chip {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+/* Captain Portal Theme (Ocean Blue - Rule 12) */
+.theme-captain .portal-tab-chip.active {
+  background: #0284C7;
+  border-color: #0284C7;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28);
+}
+.theme-captain .btn-contractor-submit {
+  background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.28);
+}
+.theme-captain .btn-contractor-submit:hover {
+  filter: brightness(1.08);
+}
+.theme-captain .contractor-input:focus,
+.theme-captain .contractor-select:focus,
+.theme-captain .contractor-textarea:focus {
+  border-color: #0284C7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+.theme-captain .file-upload-dropzone:hover,
+.theme-captain .file-upload-dropzone.dragover {
+  border-color: #0284C7;
+  background: rgba(2, 132, 199, 0.04);
+}
+.theme-captain .file-upload-dropzone .upload-icon {
+  background: rgba(2, 132, 199, 0.1);
+  color: #0284C7;
+}
+
+/* Route Pricing & Trajets Flexible Customizer */
+.route-pricing-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.route-pricing-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 18px;
+  background: #FFFFFF;
+  border: 1.5px solid var(--card-border);
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+.route-pricing-card:hover {
+  border-color: #0284C7;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
+}
+
+.route-pricing-card.inactive {
+  opacity: 0.55;
+  background: var(--surface-container);
+  border-color: var(--card-border);
+}
+
+.route-pricing-card.inactive .route-price-input-wrap {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.route-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.route-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--text-charcoal);
+  user-select: none;
+  flex: 1;
+}
+
+.route-toggle-label input[type="checkbox"] {
+  accent-color: #0284C7;
+  width: 19px;
+  height: 19px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.route-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(2, 132, 199, 0.09);
+  color: #0284C7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.route-title-text {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-charcoal);
+  line-height: 1.3;
+}
+
+.route-price-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.route-price-input-wrap {
+  display: inline-flex;
+  align-items: center;
+  background: var(--surface-container);
+  border: 1.5px solid var(--card-border);
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--text-charcoal);
+  transition: all 0.2s ease;
+}
+
+.route-price-input-wrap:focus-within {
+  border-color: #0284C7;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.route-price-input {
+  width: 52px;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 15px;
+  color: #0284C7;
+  text-align: center;
+  outline: none;
+  padding: 4px 0;
+}
+
+.route-unit {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Custom Input with Suffix (e.g. max passenger capacity) */
+.input-with-suffix {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-with-suffix .contractor-input {
+  padding-right: 120px;
+}
+
+.input-with-suffix .input-suffix {
+  position: absolute;
+  right: 16px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .route-pricing-card {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .route-title-text {
+    font-size: 13px;
+  }
+  .route-price-input {
+    width: 44px;
+    font-size: 14px;
+  }
+  .route-unit {
+    font-size: 11px;
+  }
+}
+
+/* File Upload & Menu Dropzone */
+.file-upload-dropzone {
+  border: 2px dashed var(--card-border-focus);
+  border-radius: 18px;
+  background: var(--surface-container);
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.file-upload-dropzone:hover,
+.file-upload-dropzone.dragover {
+  border-color: #047857;
+  background: rgba(4, 120, 87, 0.05);
+}
+
+.file-upload-dropzone .upload-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(4, 120, 87, 0.1);
+  color: #047857;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.file-upload-dropzone .upload-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-charcoal);
+}
+
+.file-upload-dropzone .upload-subtext {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.file-upload-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.file-preview-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.file-preview-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFFFF;
+  border: 1px solid var(--card-border);
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--text-charcoal);
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.file-preview-chip .file-remove-btn {
+  background: none;
+  border: none;
+  color: var(--danger);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
 }
 
 

@@ -9,6 +9,8 @@
   - 7-Day Free Trial offer with annual plan highlight ($29.99/yr, Save 58%) and monthly anchor ($5.99/mo).
   - Clear `✕` dismiss button ("Explore Free First") to prevent drop-offs.
   - Apple StoreKit & RevenueCat subscription bindings with restore purchase link.
+  - "Listen & Echo" 10-second pronunciation practice coached by Poquito, the parrot mascot, using Diego/Sofia voices.
+  - 1-tap WhatsApp voice note decode from iOS Share Sheet and Android Share Intent — user long-presses a Spanish voice note in WhatsApp → Share → PoquitoTalk auto-decodes it to English.
   - Designed in PoquitoTalk's signature warm cream, terracotta, and Panama sage green theme.
 - [ ] **Review & App Store / Play Store Submission Assets**: Final build packaging and store screenshot exports.
 

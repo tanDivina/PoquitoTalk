@@ -16,7 +16,13 @@ import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { WhatsAppIcon } from '../components/WhatsAppIcon';
 import { SpeakerIcon } from '../components/SpeakerIcon';
 import { Colors } from '../theme/colors';
-import { GOOGLE_SPANISH_VOICES, VoiceOption } from '../services/googleVoice';
+import {
+  GOOGLE_SPANISH_VOICES,
+  VoiceOption,
+  generateGoogleGeminiAudio,
+  playGoogleAudioFile,
+  stopAllAudioPlayback,
+} from '../services/googleVoice';
 import { AnimatedParrotMascot } from '../components/AnimatedParrotMascot';
 import { SoftOnboardingPaywall } from '../components/SoftOnboardingPaywall';
 import { UserPersona } from '../types';
@@ -79,12 +85,49 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
   const [userName, setUserName] = useState(initialName);
   const [selectedVoice, setSelectedVoice] = useState<VoiceOption>(GOOGLE_SPANISH_VOICES[0]);
   const [persona, setPersona] = useState<UserPersona>('expat');
+  const [previewingGender, setPreviewingGender] = useState<'MALE' | 'FEMALE' | null>(null);
   const [showSoftPaywall, setShowSoftPaywall] = useState(() => {
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       return new URLSearchParams(window.location.search).get('softPaywall') === 'true';
     }
     return false;
   });
+
+  const handlePlayVoicePreview = async (gender: 'MALE' | 'FEMALE') => {
+    try {
+      if (previewingGender === gender) {
+        setPreviewingGender(null);
+        await stopAllAudioPlayback();
+        return;
+      }
+
+      await stopAllAudioPlayback();
+      setPreviewingGender(gender);
+
+      const previewText = gender === 'MALE'
+        ? '¡Buenas! Con Diego tu voz suena clara y natural en Bocas del Toro.'
+        : '¡Buenas! Con Sofía tu voz suena clara y amigable en Bocas del Toro.';
+
+      const voiceOpt = GOOGLE_SPANISH_VOICES.find((v) => v.gender === gender) || GOOGLE_SPANISH_VOICES[0];
+      const audioUri = await generateGoogleGeminiAudio(previewText, gender === 'MALE' ? 'Male' : 'Female');
+
+      if (audioUri) {
+        const sound = await playGoogleAudioFile(audioUri, voiceOpt);
+        if (sound) {
+          sound.setOnPlaybackStatusUpdate((status) => {
+            if (status.isLoaded && status.didJustFinish) {
+              setPreviewingGender(null);
+              sound.unloadAsync();
+            }
+          });
+        }
+      } else {
+        setPreviewingGender(null);
+      }
+    } catch (e) {
+      setPreviewingGender(null);
+    }
+  };
 
   const insets = useSafeAreaInsets();
   const topPadding = Math.max(insets.top + 16, Platform.OS === 'android' ? (StatusBar.currentHeight || 24) + 20 : 44);
@@ -284,6 +327,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
               <View style={styles.voiceToggleBox}>
                 {GOOGLE_SPANISH_VOICES.map((v) => {
                   const isSelected = selectedVoice.gender === v.gender;
+                  const isPreviewing = previewingGender === v.gender;
                   return (
                     <TouchableOpacity
                       key={v.id}
@@ -292,8 +336,27 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
                       activeOpacity={0.8}
                     >
                       <Text style={[styles.voiceTabText, isSelected && styles.voiceTabTextActive]}>
-                        {v.gender === 'MALE' ? '♂ Male Voice' : '♀ Female Voice'}
+                        {v.gender === 'MALE' ? '♂ Diego' : '♀ Sofia'}
                       </Text>
+                      <TouchableOpacity
+                        style={[
+                          styles.voicePreviewBtn,
+                          isSelected && styles.voicePreviewBtnActive,
+                          isPreviewing && styles.voicePreviewBtnPlaying,
+                        ]}
+                        onPress={(e) => {
+                          e.stopPropagation();
+                          handlePlayVoicePreview(v.gender);
+                        }}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                        accessibilityLabel={`Preview ${v.name} voice`}
+                      >
+                        <Ionicons
+                          name={isPreviewing ? 'stop-circle' : 'volume-high'}
+                          size={15}
+                          color={isPreviewing ? '#FFFFFF' : isSelected ? '#059669' : '#8C8276'}
+                        />
+                      </TouchableOpacity>
                     </TouchableOpacity>
                   );
                 })}
@@ -617,10 +680,30 @@ const styles = StyleSheet.create({
   },
   voiceTab: {
     flex: 1,
+    flexDirection: 'row',
     paddingVertical: 10,
+    paddingHorizontal: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 8,
     borderRadius: 10,
+  },
+  voicePreviewBtn: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  voicePreviewBtnActive: {
+    backgroundColor: '#ECFDF5',
+    borderWidth: 1,
+    borderColor: '#A7F3D0',
+  },
+  voicePreviewBtnPlaying: {
+    backgroundColor: '#EF4444',
+    borderColor: '#DC2626',
   },
   voiceTabActive: {
     backgroundColor: '#FFFFFF',

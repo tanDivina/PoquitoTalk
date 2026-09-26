@@ -768,6 +768,7 @@
       <button class="tab-btn" onclick="switchTab('claims')">Listing Claims & Cédulas (<span id="tab-count-claims">0</span>)</button>
       <button class="tab-btn" onclick="switchTab('waitlist')">Play Store Waitlist (<span id="tab-count-waitlist">0</span>)</button>
       <button class="tab-btn" onclick="switchTab('analytics')">📊 Analytics & Proof (<span id="tab-count-analytics">0</span>)</button>
+      <button class="tab-btn" onclick="switchTab('whatsapp-ingest')">⚡ WhatsApp Ingest</button>
     </div>
 
     <!-- List Containers -->
@@ -778,6 +779,88 @@
     <div id="list-claims" class="card-list" style="display: none;"></div>
     <div id="list-waitlist" class="card-list" style="display: none;"></div>
     <div id="list-analytics" class="card-list" style="display: none;"></div>
+
+    <!-- WhatsApp Quick-Ingest Interface -->
+    <div id="list-whatsapp-ingest" class="card-list" style="display: none; flex-direction: column; gap: 20px; max-width: 900px; margin: 0 auto; width: 100%;">
+      <div style="background: var(--surface-card); border: 1px solid var(--card-border); border-radius: 20px; padding: 28px; box-shadow: var(--shadow-card);">
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(37, 211, 102, 0.15); display: flex; align-items: center; justify-content: center; color: var(--whatsapp-green); flex-shrink: 0;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          </div>
+          <div>
+            <h2 style="font-family: 'Lexend', sans-serif; font-size: 20px; font-weight: 800;">WhatsApp Raw Message Quick-Ingest</h2>
+            <p style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">Paste the raw WhatsApp text or voice note transcript from a boat captain or restaurant. The parser auto-extracts rates, phone numbers, docks, and specs so you can approve in 1 click.</p>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+          <label style="font-size: 12px; font-weight: 800; color: var(--text-charcoal); letter-spacing: 0.5px;">RAW WHATSAPP MESSAGE TEXT</label>
+          <textarea id="raw-wa-text" rows="4" placeholder="e.g. Hola Dorien, soy Marcos, capitán de lancha 'La Reina', salgo de Taxi 25. Cobro $2 a Carenero, $5 a Bastimentos, $8 a Red Frog. Tours a Zapatilla $35/persona. Cel 6789-1234. Lancha con techo para 14 personas con chalecos y hielera." style="width: 100%; padding: 12px 16px; border: 1px solid var(--card-border); border-radius: 12px; font-family: inherit; font-size: 15px; outline: none;"></textarea>
+          
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <select id="raw-wa-category" style="padding: 10px 16px; border: 1px solid var(--card-border); border-radius: 10px; font-family: inherit; font-weight: 700; background: var(--surface-container); outline: none;">
+              <option value="CAPTAINS">🚤 Boat Captain / Water Taxi</option>
+              <option value="RESTAURANTS">🍽️ Restaurant / Dining</option>
+              <option value="HOTELS">🏨 Hotel / Eco-Lodge</option>
+              <option value="ACTIVITIES">🏄 Tours & Surf</option>
+              <option value="CONTRACTORS">🔧 Trade / Contractor</option>
+            </select>
+            <button onclick="parseRawWhatsAppMessage()" style="padding: 10px 20px; background: #047857; color: #FFFFFF; border: none; border-radius: 10px; font-family: 'Lexend', sans-serif; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+              ⚡ Parse Message & Auto-Fill
+            </button>
+            <label style="padding: 10px 16px; background: var(--surface-container); border: 1px solid var(--card-border); border-radius: 10px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+              <span>Upload Voice Note (.opus/.ogg/.m4a)</span>
+              <input type="file" id="wa-audio-upload" accept="audio/*,.opus,.ogg,.m4a,.mp3" onchange="transcribeAndParseAudioFile(this)" style="display: none;" />
+            </label>
+            <button id="btn-mic-dictate" onclick="toggleMicDictation()" style="padding: 10px 16px; background: var(--surface-container); border: 1px solid var(--card-border); border-radius: 10px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 14px;">
+              🎙️ Dictate Speech
+            </button>
+          </div>
+          <div id="audio-transcribe-status" style="display: none; font-size: 13px; color: #047857; font-weight: 600;">
+            ⏳ Transcribing audio voice note...
+          </div>
+        </div>
+      </div>
+
+      <!-- Auto-Filled Structured Card -->
+      <div id="parsed-wa-result" style="display: none; background: var(--surface-card); border: 1px solid #047857; border-radius: 20px; padding: 28px; box-shadow: 0 8px 30px rgba(4, 120, 87, 0.08);">
+        <h3 style="font-family: 'Lexend', sans-serif; font-size: 18px; font-weight: 800; color: #047857; margin-bottom: 16px;">Extracted Structured Provider Profile</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div>
+            <label style="font-size: 11px; font-weight: 800; color: var(--text-muted);">NAME / BOAT NAME</label>
+            <input type="text" id="ingest-name" style="width: 100%; padding: 10px 14px; border: 1px solid var(--card-border); border-radius: 10px; font-family: inherit; font-weight: 700;" />
+          </div>
+          <div>
+            <label style="font-size: 11px; font-weight: 800; color: var(--text-muted);">WHATSAPP PHONE</label>
+            <input type="text" id="ingest-phone" style="width: 100%; padding: 10px 14px; border: 1px solid var(--card-border); border-radius: 10px; font-family: inherit; font-weight: 700;" />
+          </div>
+          <div>
+            <label style="font-size: 11px; font-weight: 800; color: var(--text-muted);">PRIMARY DOCK / LOCATION</label>
+            <input type="text" id="ingest-location" style="width: 100%; padding: 10px 14px; border: 1px solid var(--card-border); border-radius: 10px; font-family: inherit;" />
+          </div>
+          <div>
+            <label style="font-size: 11px; font-weight: 800; color: var(--text-muted);">CATEGORY</label>
+            <input type="text" id="ingest-category" style="width: 100%; padding: 10px 14px; border: 1px solid var(--card-border); border-radius: 10px; font-family: inherit; font-weight: 700;" />
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <label style="font-size: 11px; font-weight: 800; color: var(--text-muted);">RATES & SERVICE SUMMARY</label>
+            <textarea id="ingest-notes" rows="3" style="width: 100%; padding: 10px 14px; border: 1px solid var(--card-border); border-radius: 10px; font-family: inherit;"></textarea>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 20px;">
+          <button onclick="submitDirectAddProvider()" style="flex: 1; padding: 14px; background: #047857; color: #FFFFFF; border: none; border-radius: 12px; font-family: 'Lexend', sans-serif; font-weight: 800; cursor: pointer;">
+            ✅ Save & Approve Directly to Directory
+          </button>
+          <button onclick="document.getElementById('parsed-wa-result').style.display = 'none';" style="padding: 14px 20px; background: var(--surface-container); border: 1px solid var(--card-border); border-radius: 12px; font-weight: 700; cursor: pointer;">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
 
   </main>
 
@@ -941,7 +1024,7 @@
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.card-list').forEach(l => l.style.display = 'none');
 
-      const tabs = ['pending', 'approved', 'referrals', 'rejected', 'claims', 'waitlist', 'analytics'];
+      const tabs = ['pending', 'approved', 'referrals', 'rejected', 'claims', 'waitlist', 'analytics', 'whatsapp-ingest'];
       const targetBtn = document.querySelectorAll('.tab-btn')[tabs.indexOf(tab)];
       if (targetBtn) targetBtn.classList.add('active');
 
@@ -952,6 +1035,248 @@
         loadAnalyticsData(currentAnalyticsRange || 'all');
       }
     }
+
+    function parseRawWhatsAppMessage() {
+      const raw = document.getElementById('raw-wa-text').value.trim();
+      const defaultCategory = document.getElementById('raw-wa-category').value;
+      if (!raw) {
+        showToast('Please paste a WhatsApp message first.');
+        return;
+      }
+
+      // Phone Extraction (Panama numbers: 6xxx-xxxx, +507..., or raw 8 digits)
+      let phone = '';
+      const phoneMatch = raw.match(/(?:\+?507\s?)?(?:6|7|8)\d{3}[-\s]?\d{4}/);
+      if (phoneMatch) {
+        phone = phoneMatch[0].replace(/\s+/g, ' ');
+      }
+
+      // Name Extraction (Look for "soy Marcos", "capitán Marcos", "nombre es...", "lancha...", or first line)
+      let name = '';
+      const namePatterns = [
+        /(?:soy|me llamo|capit[aá]n)\s+([A-Za-zÁÉÍÓÚáéíóúñ\s]{2,25})/i,
+        /lancha\s+['"]?([A-Za-zÁÉÍÓÚáéíóúñ\s]{2,25})['"]?/i,
+        /restaurante\s+['"]?([A-Za-zÁÉÍÓÚáéíóúñ\s]{2,25})['"]?/i
+      ];
+      for (const p of namePatterns) {
+        const m = raw.match(p);
+        if (m && m[1]) {
+          name = m[1].trim();
+          break;
+        }
+      }
+      if (!name) {
+        name = raw.split(/[.,\n]/)[0].substring(0, 30).trim();
+      }
+
+      // Location / Dock Extraction
+      let location = 'Isla Colón / Bocas Town';
+      const locKeywords = [
+        { key: /taxi\s*25/i, loc: 'Taxi 25 Dock (Bocas Town)' },
+        { key: /bocas\s*marine/i, loc: 'Bocas Marine / Under the Hill' },
+        { key: /carenero/i, loc: 'Isla Carenero' },
+        { key: /bastimentos|old\s*bank/i, loc: 'Isla Bastimentos (Old Bank)' },
+        { key: /red\s*frog/i, loc: 'Red Frog Beach' },
+        { key: /almirante/i, loc: 'Almirante Port Dock' },
+        { key: /bluff/i, loc: 'Playa Bluff' },
+        { key: /paunch/i, loc: 'Playa Paunch' },
+        { key: /solarte/i, loc: 'Isla Solarte' }
+      ];
+      for (const l of locKeywords) {
+        if (l.key.test(raw)) {
+          location = l.loc;
+          break;
+        }
+      }
+
+      // Rates & Specs Extraction
+      let specs = [];
+      const capacityMatch = raw.match(/(\d{1,2})\s*(?:personas|pax|pasajeros)/i);
+      if (capacityMatch) specs.push(`Capacidad: ${capacityMatch[1]} personas`);
+      if (/techo|toldo|sombra|canopy/i.test(raw)) specs.push('Con toldo/techo');
+      if (/chaleco/i.test(raw)) specs.push('Chalecos salvavidas');
+      if (/hielera/i.test(raw)) specs.push('Hielera');
+      if (/snorkel/i.test(raw)) specs.push('Snorkel');
+
+      // Detect rates
+      const ratesMatches = raw.match(/\$\d+(?:\s*(?:a|por|pp|\/persona)?\s*[A-Za-zÁÉÍÓÚáéíóúñ\s]+)?/g) || [];
+      
+      let summary = raw;
+      if (specs.length > 0 || ratesMatches.length > 0) {
+        summary = `${specs.join(' • ')}\nTarifas: ${ratesMatches.join(', ')}\n\nNota original: "${raw}"`;
+      }
+
+      // Populate Result Form
+      document.getElementById('ingest-name').value = name;
+      document.getElementById('ingest-phone').value = phone || '+507 ';
+      document.getElementById('ingest-location').value = location;
+      document.getElementById('ingest-category').value = defaultCategory;
+      document.getElementById('ingest-notes').value = summary.trim();
+
+      document.getElementById('parsed-wa-result').style.display = 'block';
+      showToast('Extracted WhatsApp fields! Review and click Save.');
+    }
+
+    async function submitDirectAddProvider() {
+      const name = document.getElementById('ingest-name').value.trim();
+      const phone = document.getElementById('ingest-phone').value.trim();
+      const location = document.getElementById('ingest-location').value.trim();
+      const category = document.getElementById('ingest-category').value.trim();
+      const notes = document.getElementById('ingest-notes').value.trim();
+
+      if (!name || !phone) {
+        alert('Please ensure Name and Phone number are provided.');
+        return;
+      }
+
+      try {
+        const resp = await fetch('api/admin.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Admin-Key': adminSecretKey || 'poquito2026!bocas'
+          },
+          body: JSON.stringify({
+            action: 'direct_add',
+            BusinessName: name,
+            WhatsAppPhone: phone,
+            PrimaryLocation: location,
+            TradeCategory: category,
+            ServiceSummary: notes
+          })
+        });
+
+        const res = await resp.json();
+        if (res.success) {
+          showToast(`✅ ${name} saved and published to Live Directory!`);
+          document.getElementById('parsed-wa-result').style.display = 'none';
+          document.getElementById('raw-wa-text').value = '';
+          fetchAdminData();
+          switchTab('approved');
+        } else {
+          alert('Error saving provider: ' + (res.error || 'Server error'));
+        }
+      } catch (err) {
+        console.error('Save error:', err);
+        alert('Connection error saving provider.');
+      }
+    }
+
+    async function transcribeAndParseAudioFile(fileInput) {
+      if (!fileInput.files || fileInput.files.length === 0) return;
+      const file = fileInput.files[0];
+      const statusEl = document.getElementById('audio-transcribe-status');
+      if (statusEl) {
+        statusEl.style.display = 'block';
+        statusEl.textContent = `⏳ Transcribing audio file "${file.name}"...`;
+      }
+
+      const formData = new FormData();
+      formData.append('audio', file);
+      formData.append('lang', 'es');
+
+      try {
+        const resp = await fetch('api/transcribe.php', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await resp.json();
+        if (data.success && data.text) {
+          document.getElementById('raw-wa-text').value = data.text;
+          if (statusEl) {
+            statusEl.textContent = `✅ Transcribed (${data.source || 'STT'}): "${data.text.substring(0, 60)}..."`;
+          }
+          parseRawWhatsAppMessage();
+        } else {
+          alert('Transcription failed: ' + (data.error || 'Could not decode audio'));
+          if (statusEl) statusEl.style.display = 'none';
+        }
+      } catch (err) {
+        console.error('Audio transcribe error:', err);
+        alert('Network error while transcribing audio.');
+        if (statusEl) statusEl.style.display = 'none';
+      }
+    }
+
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+
+    async function toggleMicDictation() {
+      const btn = document.getElementById('btn-mic-dictate');
+      const statusEl = document.getElementById('audio-transcribe-status');
+
+      if (!isRecording) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+          mediaRecorder.ondataavailable = e => {
+            if (e.data.size > 0) audioChunks.push(e.data);
+          };
+          mediaRecorder.onstop = async () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            stream.getTracks().forEach(t => t.stop());
+            
+            if (statusEl) {
+              statusEl.style.display = 'block';
+              statusEl.textContent = '⏳ Processing dictated voice note...';
+            }
+
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'dictation.webm');
+            formData.append('lang', 'es');
+
+            try {
+              const resp = await fetch('api/transcribe.php', {
+                method: 'POST',
+                body: formData
+              });
+              const data = await resp.json();
+              if (data.success && data.text) {
+                document.getElementById('raw-wa-text').value = data.text;
+                if (statusEl) {
+                  statusEl.textContent = `✅ Transcribed: "${data.text.substring(0, 60)}..."`;
+                }
+                parseRawWhatsAppMessage();
+              } else {
+                alert('Dictation failed: ' + (data.error || 'Server error'));
+                if (statusEl) statusEl.style.display = 'none';
+              }
+            } catch (err) {
+              console.error('Dictation error:', err);
+              if (statusEl) statusEl.style.display = 'none';
+            }
+          };
+
+          mediaRecorder.start();
+          isRecording = true;
+          if (btn) {
+            btn.style.background = '#DC2626';
+            btn.style.color = '#FFFFFF';
+            btn.textContent = '⏹️ Stop Recording';
+          }
+          if (statusEl) {
+            statusEl.style.display = 'block';
+            statusEl.textContent = '🔴 Recording... speak naturally in Spanish or English.';
+          }
+        } catch (err) {
+          console.error('Microphone access denied:', err);
+          alert('Could not access microphone. Please grant browser permissions.');
+        }
+      } else {
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+          mediaRecorder.stop();
+        }
+        isRecording = false;
+        if (btn) {
+          btn.style.background = 'var(--surface-container)';
+          btn.style.color = 'inherit';
+          btn.textContent = '🎙️ Dictate Speech';
+        }
+      }
+    }
+
 
     let currentAnalyticsRange = 'all';
     let cachedAnalytics = null;

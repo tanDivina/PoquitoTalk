@@ -245,6 +245,19 @@ export async function addMessageToThread(
     timestamp: message.timestamp || Date.now(),
   };
 
+  // Prevent duplicate message entry
+  const alreadyExists = targetThread.messages.some((m) => {
+    if (fullMessage.id && m.id === fullMessage.id) return true;
+    const sameSender = m.sender === fullMessage.sender;
+    const sameText = (m.textSpanish || '').trim() === (fullMessage.textSpanish || '').trim();
+    const timeDiff = Math.abs((m.timestamp || 0) - (fullMessage.timestamp || 0));
+    return sameSender && sameText && timeDiff < 5000;
+  });
+
+  if (alreadyExists) {
+    return targetThread;
+  }
+
   targetThread.messages.push(fullMessage);
   targetThread.lastUpdated = fullMessage.timestamp;
 

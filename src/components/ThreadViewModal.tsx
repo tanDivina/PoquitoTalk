@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Modal,
   View,
@@ -19,6 +19,7 @@ import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 import * as Sharing from "expo-sharing";
 import * as DocumentPicker from "expo-document-picker";
+import * as Speech from "expo-speech";
 import { Colors } from "../theme/colors";
 import { ConversationThread, ThreadMessage } from "../services/conversations";
 import { getCategoryUnifiedMeta } from "../services/presets";
@@ -36,6 +37,8 @@ interface ThreadViewModalProps {
   thread: ConversationThread | null;
   onClose: () => void;
   onUpdateThread: (updatedThread: ConversationThread) => void;
+  onDeleteThread?: (threadId: string) => void;
+  savedTemplates?: TranslationItem[];
   savedTranslations?: TranslationItem[];
 }
 
@@ -44,13 +47,35 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
   thread,
   onClose,
   onUpdateThread,
+  onDeleteThread,
+  savedTemplates = [],
   savedTranslations = [],
 }) => {
   const insets = useSafeAreaInsets();
   const [inputText, setInputText] = useState("");
   const [isSending, setIsSharing] = useState(false);
   const [playingMsgId, setPlayingMsgId] = useState<string | null>(null);
+  const [playingEnglishMsgId, setPlayingEnglishMsgId] = useState<string | null>(null);
   const [sharingMsgId, setSharingMsgId] = useState<string | null>(null);
+
+  // Memoized deduplication of thread messages for rendering
+  const displayMessages = useMemo(() => {
+    if (!thread?.messages || !Array.isArray(thread.messages)) return [];
+    const seenIds = new Set<string>();
+    const seenContent = new Set<string>();
+    const deduped: ThreadMessage[] = [];
+
+    for (const msg of thread.messages) {
+      if (msg.id && seenIds.has(msg.id)) continue;
+      const contentKey = `${msg.sender}_${msg.textSpanish || msg.textEnglish}_${Math.floor((msg.timestamp || 0) / 4000)}`;
+      if (seenContent.has(contentKey)) continue;
+
+      if (msg.id) seenIds.add(msg.id);
+      seenContent.add(contentKey);
+      deduped.push(msg);
+    }
+    return deduped;
+  }, [thread?.messages]);
 
   // Live polling for contractor replies while this thread is open
   useEffect(() => {
@@ -115,6 +140,15 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
       clearInterval(pollInterval);
     };
   }, [visible, thread?.roomId, thread?.messages?.length]);
+
+  useEffect(() => {
+    if (!visible) {
+      Speech.stop();
+      stopAllAudioPlayback();
+      setPlayingMsgId(null);
+      setPlayingEnglishMsgId(null);
+    }
+  }, [visible]);
 
   if (!visible || !thread) return null;
 
@@ -200,6 +234,30 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
       }
     } catch (e) {
       setPlayingMsgId(null);
+    }
+  };
+
+  const handlePlayEnglishMessageAudio = async (msg: ThreadMessage) => {
+    try {
+      if (playingEnglishMsgId === msg.id) {
+        setPlayingEnglishMsgId(null);
+        Speech.stop();
+        return;
+      }
+
+      await stopAllAudioPlayback();
+      setPlayingMsgId(null);
+      setPlayingEnglishMsgId(msg.id);
+
+      Speech.speak(msg.textEnglish, {
+        language: "en-US",
+        pitch: 1.0,
+        rate: 0.95,
+        onDone: () => setPlayingEnglishMsgId(null),
+        onError: () => setPlayingEnglishMsgId(null),
+      });
+    } catch (e) {
+      setPlayingEnglishMsgId(null);
     }
   };
 
@@ -348,7 +406,7 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
           contentContainerStyle={styles.timeline}
           ref={(ref) => ref?.scrollToEnd({ animated: true })}
         >
-          {(thread?.messages || []).map((msg) => {
+          {displayMessages.map((msg) => {
             const isExpat = msg.sender === "EXPAT";
             return (
               <View
@@ -386,6 +444,33 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
                         {msg.audioUri ? "Listen Audio" : "Listen"}
                       </Text>
                     </TouchableOpacity>
+
+                    {!isExpat && msg.textEnglish ? (
+                      <TouchableOpacity
+                        style={[
+                          styles.msgActionBtn,
+                          styles.msgEnglishActionBtn,
+                          playingEnglishMsgId === msg.id && styles.msgEnglishActionBtnActive,
+                        ]}
+                        onPress={() => handlePlayEnglishMessageAudio(msg)}
+                        activeOpacity={0.7}
+                      >
+                        <Ionicons
+                          name={playingEnglishMsgId === msg.id ? "stop-circle" : "volume-high"}
+                          size={17}
+                          color={playingEnglishMsgId === msg.id ? "#FFFFFF" : "#047857"}
+                        />
+                        <Text
+                          style={[
+                            styles.msgActionText,
+                            { color: "#047857" },
+                            playingEnglishMsgId === msg.id && { color: "#FFFFFF" },
+                          ]}
+                        >
+                          {playingEnglishMsgId === msg.id ? "Stop" : "Listen English"}
+                        </Text>
+                      </TouchableOpacity>
+                    ) : null}
 
                     {isExpat && (
                       <TouchableOpacity
@@ -620,6 +705,15 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "700",
     color: Colors.secondary,
+  },
+  msgEnglishActionBtn: {
+    backgroundColor: "#ECFDF5",
+    borderWidth: 1,
+    borderColor: "#A7F3D0",
+  },
+  msgEnglishActionBtnActive: {
+    backgroundColor: "#059669",
+    borderColor: "#059669",
   },
   msgWhatsAppBtn: {
     flexDirection: "row",

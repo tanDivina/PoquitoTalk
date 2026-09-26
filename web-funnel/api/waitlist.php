@@ -28,7 +28,7 @@ $type = isset($data['Type']) ? trim($data['Type']) : (isset($data['type']) ? tri
 $email = isset($data['Email']) ? trim($data['Email']) : (isset($data['email']) ? trim($data['email']) : '');
 $language = isset($data['Language']) ? trim($data['Language']) : 'en-US';
 
-if ($type === 'playstore' && (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL))) {
+if (($type === 'playstore' || $type === 'newsletter') && (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL))) {
     http_response_code(400);
     echo json_encode(['success' => false, 'error' => 'Valid email address required']);
     exit;
@@ -103,7 +103,7 @@ if ($type === 'contractor') {
     ];
 } else {
     $entry = [
-        'id' => uniqid('waitlist_'),
+        'id' => uniqid(($type === 'newsletter' ? 'newsletter_' : 'waitlist_')),
         'type' => $type,
         'email' => $email,
         'language' => $language,

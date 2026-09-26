@@ -100,6 +100,33 @@ If Expo Go outputs *"The installed version of Expo Go is for SDK XX. The project
 ## 14. OFFICIAL POQUITO MASCOT ONLY — STRICT BAN ON 3-HAIR VERSION
 - **RULE**: Always use the official Poquito character asset (`src/assets/poquito_front_talking_v2_clean_256.webp`, `src/assets/poquito_clean.svg`, or `src/assets/poquito_idle_perch_1_7_256.webp`).
 - **PROHIBITION**: Poquito strictly has **TWO** smooth, naturally curved crest feathers. **NEVER** use the obsolete or unofficial variant with 3 spiky upright hairs. Delete or mark any 3-hair assets as obsolete.
+## 15. TIKTOK PHOTO CAROUSEL & SAFE ZONE SPECIFICATIONS
+- **Preferred Soundtrack**: **`TROPICAL (Acoustic)` by Baiano** (warm, authentic island acoustic vibes that complement Bocas del Toro content).
+- **Top Safe Zone & Padding**:
+  - TikTok's mobile interface renders a persistent top search bar, `Following | For You` tabs, and live icons across the top ~140px – 180px.
+  - When creating or cropping slides for TikTok Photo Mode carousels, always enforce generous top clearance (shift badges, titles, and step counters downward by at least 160px – 180px or crop from top) so native search overlays never obstruct headlines or badges.
+- **Bottom Safe Zone**: Leave at least 260px – 300px clear at the bottom for the creator handle (`@dorienvibecodes`), multi-line caption, and revolving audio ticker.
+- **Right Margin Safe Zone**: Keep text and critical card edges at least 90px away from the right edge to avoid clash with the vertical action rail (Like, Comment, Bookmark, Share icons).
+
+## 16. HIGH-RETENTION 16:9 WIDESCREEN COMMERCIAL PRODUCTION RECIPE
+- **Pacing & Format**:
+  - Format: 16:9 horizontal widescreen (1920×1080, 30fps).
+  - Pacing: Rapid ~1.9s shot duration per cut (total ~20–22s duration, 10–12 shots total).
+  - Narrative Arc: Hook (Paradise) ➔ Crisis (Water/Utility Stop) ➔ Reality (Formal Spanish Fails) ➔ Local Reality (Island Spanish) ➔ Solution (No Robotic Voice / App Waveform) ➔ Action (Expat Speaks English) ➔ WhatsApp Dispatch ➔ Offline Directory ➔ Live Walkie-Talkie ➔ Climax (Panga Boat) ➔ Outro CTA (Poquito).
+- **Strict Ban on Robotic Voiceovers**:
+  - Rely on an upbeat, driving acoustic soundtrack and synchronized in-frame kinetic typography.
+  - Never use robotic TTS or awkward AI voiceovers with unnatural cadence.
+- **Photorealistic Keyframes (Nano Banana)**:
+  - Generate base keyframes using Google native `generate_image` (Nano Banana) with strict geographical and cultural accuracy (authentic Bocas panga with captain at tiller, realistic kitchen sink, legible Spanish textbook).
+- **Smooth Cinematic Motion (Kling / Wan I2V)**:
+  - Animate keyframes via `fal-ai/kling-video/v1/standard/image-to-video` (or Wan 2.1) with 5s duration at 16:9, using subtle, grounded prompt instructions (no exaggerated warp).
+- **Dynamic Beachy UI Cards (Playwright + Headless Chromium)**:
+  - Render animated UI moments (waveforms, WhatsApp playback, directory stacks, live walkie status) via Playwright at 1920×1080.
+  - Strictly use the beachy aesthetic: `#FAF8F5` sand background, `#FFFFFF` pure white cards, `#059669` emerald, `#964824` terracotta, and the official 2-crest Poquito mascot (Rule 14).
+- **Conforming & Kinetic Typography (FFmpeg)**:
+  - Text: `Lexend-Bold` at 84px, pure white with heavy drop shadow (`shadowcolor=black@0.85:shadowx=4:shadowy=5`) and black stroke border (`borderw=4:bordercolor=black@0.65`).
+  - Face Clearance: Automatically apply vertical offset (`y_offset = +220px` to `+240px`) on shots featuring characters so faces are never obscured.
+  - Mux with stereo AAC soundtrack (`-shortest`).
 
 <!-- stripe-projects-cli managed:agents-md:start -->
 ## Stripe Projects CLI

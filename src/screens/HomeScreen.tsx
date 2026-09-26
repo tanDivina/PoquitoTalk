@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,8 @@ import {
   Keyboard,
   Alert,
   Platform,
+  AppState,
+  AppStateStatus,
 } from 'react-native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { WhatsAppIcon } from '../components/WhatsAppIcon';
@@ -26,6 +28,7 @@ import { VoiceQualityModal } from '../components/VoiceQualityModal';
 import { VoiceNoteDecoderModal } from '../components/VoiceNoteDecoderModal';
 import { DocumentScannerModal } from '../components/DocumentScannerModal';
 import { WalkieExplainerModal } from '../components/WalkieExplainerModal';
+import { PostWhatsAppModal } from '../components/PostWhatsAppModal';
 import { MicButton } from '../components/MicButton';
 import { AnimatedParrotMascot } from '../components/AnimatedParrotMascot';
 import { PoquitoAvatar } from '../components/PoquitoAvatar';
@@ -36,6 +39,12 @@ import { walkieTalkieService } from '../services/walkieTalkie';
 import { shareWalkieTalkieToWhatsApp } from '../services/deepLinks';
 import { startVoiceRecording, stopVoiceRecording, transcribeAudioFile, cleanSpeechRepetitions, normalizeBocasTerminology } from '../services/transcriptionService';
 import { getPreferredVoiceGender } from '../services/storage';
+import {
+  scheduleReturnNotification,
+  cancelReturnNotification,
+  setupAndroidNotificationChannel,
+} from '../services/notificationService';
+import * as Notifications from 'expo-notifications';
 
 function formatExpatFacingSenderName(rawName?: string | null): string {
   if (!rawName) return 'Contractor';
@@ -219,24 +228,26 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       const p = new URLSearchParams(window.location.search);
       if (p.get('walkieActive') === 'true' || p.get('incoming') === 'true') {
-        const sender = p.get('walkieSender') || 'Contractor';
-        return [
-          {
-            id: 'msg_1',
-            sender: 'expat',
-            esText: `¡Hola ${sender}! ¿Está disponible para recogernos en el muelle de Taxi 25 en Bocas Town como a las cuatro de la tarde y llevarnos de vuelta a Isla Solarte?`,
-            enText: `Hi ${sender}! Are you available to pick us up at Taxi 25 dock in Bocas Town around 4:00 PM and take us back to Isla Solarte?`,
-            timestamp: Date.now() - 120000,
-          },
-          {
-            id: 'msg_2',
-            sender: 'contractor',
-            senderName: sender,
-            esText: '¡Buenas tardes doña Sarah! Sí, claro que sí, a las cuatro en punto estoy amarrado en Taxi 25 esperándolos en la lancha. ¡Nos vemos allá!',
-            enText: 'Good afternoon Mrs. Sarah! Yes, of course, at four sharp I will be tied up at Taxi 25 waiting for you in the boat. See you there!',
-            timestamp: Date.now() - 30000,
-          },
-        ];
+        const sender = p.get('walkieSender') || 'Capitán Luis';
+        const m1 = {
+          id: 'msg_1',
+          sender: 'expat',
+          esText: `¡Hola ${sender}! ¿Está disponible para recogernos en el muelle de Taxi 25 en Bocas Town como a las cuatro de la tarde y llevarnos de vuelta a Isla Solarte?`,
+          enText: `Hi ${sender}! Are you available to pick us up at Taxi 25 dock in Bocas Town around 4:00 PM and take us back to Isla Solarte?`,
+          timestamp: Date.now() - 120000,
+        };
+        const m2 = {
+          id: 'msg_2',
+          sender: 'contractor',
+          senderName: sender,
+          esText: '¡Buenas tardes doña Sarah! Sí, claro que sí, a las cuatro en punto estoy amarrado en Taxi 25 esperándolos en la lancha. ¡Nos vemos allá!',
+          enText: 'Good afternoon Mrs. Sarah! Yes, of course, at four sharp I will be tied up at Taxi 25 waiting for you in the boat. See you there!',
+          timestamp: Date.now() - 30000,
+        };
+        if (p.get('walkieDuplicate') === 'true') {
+          return [m1, { ...m1, id: 'msg_1_dup' }, m2, { ...m2, id: 'msg_2_dup' }];
+        }
+        return [m1, m2];
       }
     }
     return [];
@@ -313,6 +324,108 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     return unsubscribe;
   }, []);
 
+  // Memoized deduplication of walkie messages for the live message stream
+  const displayWalkieMessages = useMemo(() => {
+    if (!walkieMessages || !Array.isArray(walkieMessages)) return [];
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      if (new URLSearchParams(window.location.search).get('walkieDuplicate') === 'true') {
+        return walkieMessages;
+      }
+    }
+    const seenIds = new Set<string>();
+    const seenContent = new Set<string>();
+    const deduped: any[] = [];
+
+    for (const msg of walkieMessages) {
+      if (msg.id && seenIds.has(msg.id)) continue;
+      const contentKey = `${msg.sender}_${msg.esText || msg.spanishText || msg.text || ''}_${Math.floor((msg.timestamp || 0) / 4000)}`;
+      if (seenContent.has(contentKey)) continue;
+
+      if (msg.id) seenIds.add(msg.id);
+      seenContent.add(contentKey);
+      deduped.push(msg);
+    }
+    return deduped;
+  }, [walkieMessages]);
+
+  // Post-WhatsApp Modal State & Navigation Handoff
+  const [showPostWhatsAppModal, setShowPostWhatsAppModal] = useState(() => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('postWhatsApp') === 'true';
+    }
+    return false;
+  });
+  const [postWhatsAppRecipient, setPostWhatsAppRecipient] = useState<string | undefined>(() => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('recipient') || 'Capitán Luis';
+    }
+    return undefined;
+  });
+  const [postWhatsAppDispatchType, setPostWhatsAppDispatchType] = useState<'voice_note' | 'text'>('voice_note');
+  const pendingPostWhatsAppRef = useRef(false);
+
+  // Setup Android notification channel & listen for notification taps
+  useEffect(() => {
+    setupAndroidNotificationChannel();
+
+    if (Platform.OS !== 'web') {
+      const responseSubscription = Notifications.addNotificationResponseReceivedListener((response) => {
+        const data = response.notification.request.content.data;
+        if (data && data.type === 'whatsapp_return') {
+          if (data.isWalkieChannel && data.walkieRoomId) {
+            setIsChannelMinimized(false);
+          } else {
+            setShowPostWhatsAppModal(true);
+          }
+        }
+      });
+
+      return () => {
+        responseSubscription.remove();
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleAppStateChange = (nextAppState: AppStateStatus) => {
+      if (nextAppState === 'active') {
+        // App is back in foreground -> cancel any pending return notification banner
+        cancelReturnNotification();
+
+        if (pendingPostWhatsAppRef.current) {
+          pendingPostWhatsAppRef.current = false;
+          setShowPostWhatsAppModal(true);
+        }
+      }
+    };
+
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  const handleDispatchedToWhatsApp = useCallback((contactName?: string, dispatchType?: 'voice_note' | 'text') => {
+    setPostWhatsAppRecipient(contactName);
+    setPostWhatsAppDispatchType(dispatchType || 'voice_note');
+    pendingPostWhatsAppRef.current = true;
+
+    // Schedule Android floating heads-up banner over WhatsApp in 12 seconds
+    scheduleReturnNotification({
+      recipientName: contactName,
+      isWalkieChannel: !!activeWalkieSession,
+      walkieRoomId: activeWalkieSession?.roomId,
+      delaySeconds: 12,
+    });
+
+    setTimeout(() => {
+      if (pendingPostWhatsAppRef.current) {
+        pendingPostWhatsAppRef.current = false;
+        setShowPostWhatsAppModal(true);
+      }
+    }, 1200);
+  }, [activeWalkieSession]);
+
   // Poll for live Walkie-Talkie messages from server when a session is active
   useEffect(() => {
     if (!activeWalkieSession) {
@@ -330,7 +443,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             setWalkieMessages((prev) => {
               const combined = [...prev];
               data.messages.forEach((m: any) => {
-                if (!combined.some((c) => c.id === m.id)) {
+                const isDuplicate = combined.some((c) =>
+                  c.id === m.id ||
+                  (c.sender === m.sender &&
+                   c.esText === m.esText &&
+                   Math.abs((c.timestamp || 0) - (m.timestamp || 0)) < 5000)
+                );
+                if (!isDuplicate) {
                   combined.push(m);
                 }
               });
@@ -408,6 +527,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           {
             text: 'Share on WhatsApp',
             onPress: () => {
+              handleDispatchedToWhatsApp('Amigo', 'text');
               shareWalkieTalkieToWhatsApp(
                 session.shareUrl,
                 'Amigo',
@@ -575,7 +695,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         );
         if (sentMsg) {
           setWalkieMessages((prev) => {
-            if (!prev.some((m) => m.id === sentMsg.id)) {
+            const alreadyExists = prev.some((m) =>
+              m.id === sentMsg.id ||
+              (m.sender === sentMsg.sender &&
+               m.esText === sentMsg.esText &&
+               Math.abs((m.timestamp || 0) - (sentMsg.timestamp || 0)) < 5000)
+            );
+            if (!alreadyExists) {
               return [...prev, sentMsg];
             }
             return prev;
@@ -653,7 +779,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       );
       if (sentMsg) {
         setWalkieMessages((prev) => {
-          if (!prev.some((m) => m.id === sentMsg.id)) {
+          const alreadyExists = prev.some((m) =>
+            m.id === sentMsg.id ||
+            (m.sender === sentMsg.sender &&
+             m.esText === sentMsg.esText &&
+             Math.abs((m.timestamp || 0) - (sentMsg.timestamp || 0)) < 5000)
+          );
+          if (!alreadyExists) {
             return [...prev, sentMsg];
           }
           return prev;
@@ -704,7 +836,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
       if (sentMsg) {
         setWalkieMessages((prev) => {
-          if (!prev.some((m) => m.id === sentMsg.id)) {
+          const alreadyExists = prev.some((m) =>
+            m.id === sentMsg.id ||
+            (m.sender === sentMsg.sender &&
+             m.esText === sentMsg.esText &&
+             Math.abs((m.timestamp || 0) - (sentMsg.timestamp || 0)) < 5000)
+          );
+          if (!alreadyExists) {
             return [...prev, sentMsg];
           }
           return prev;
@@ -969,12 +1107,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
             <TouchableOpacity
               style={styles.channelWhatsAppShareBtn}
-              onPress={() => shareWalkieTalkieToWhatsApp(
-                activeWalkieSession.shareUrl,
-                formatExpatFacingSenderName(incomingWalkieSender),
-                activeWalkieSession.topicEs,
-                activeWalkieSession.topicEn
-              )}
+              onPress={() => {
+                const recipient = formatExpatFacingSenderName(incomingWalkieSender);
+                handleDispatchedToWhatsApp(recipient, 'text');
+                shareWalkieTalkieToWhatsApp(
+                  activeWalkieSession.shareUrl,
+                  recipient,
+                  activeWalkieSession.topicEs,
+                  activeWalkieSession.topicEn
+                );
+              }}
               activeOpacity={0.85}
             >
               <WhatsAppIcon size={18} color="#FFFFFF" />
@@ -985,10 +1127,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           {/* Live Conversation Stream */}
           <View style={styles.channelStreamContainer}>
             <Text style={styles.channelStreamHeading}>
-              LIVE MESSAGES {walkieMessages.length > 0 ? `(${walkieMessages.length})` : ''}
+              LIVE MESSAGES {displayWalkieMessages.length > 0 ? `(${displayWalkieMessages.length})` : ''}
             </Text>
 
-            {walkieMessages.length === 0 ? (
+            {displayWalkieMessages.length === 0 ? (
               <View style={styles.channelEmptyFeed}>
                 <Ionicons name="radio-outline" size={32} color="#94A3B8" />
                 <Text style={styles.channelEmptyFeedText}>
@@ -996,7 +1138,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 </Text>
               </View>
             ) : (
-              walkieMessages.map((msg, idx) => {
+              displayWalkieMessages.map((msg, idx) => {
                 const isExpat = msg.sender === 'expat';
                 const senderDisplay = isExpat ? 'You (Client)' : formatExpatFacingSenderName(msg.senderName || incomingWalkieSender);
                 const primaryEnglish = msg.enText || msg.cleanedEnglishText || msg.englishText;
@@ -1479,6 +1621,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 setInputText(prompt);
                 handleTranslateText(prompt, 'en', 'es');
               }}
+              onDispatchedToWhatsApp={handleDispatchedToWhatsApp}
             />
           )}
 
@@ -1579,6 +1722,23 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       <DocumentScannerModal
         visible={showDocScannerModal}
         onClose={() => setShowDocScannerModal(false)}
+      />
+
+      {/* Post-WhatsApp Handoff Modal */}
+      <PostWhatsAppModal
+        visible={showPostWhatsAppModal}
+        onClose={() => setShowPostWhatsAppModal(false)}
+        contactName={postWhatsAppRecipient}
+        dispatchType={postWhatsAppDispatchType}
+        walkieRoomId={activeWalkieSession?.roomId}
+        onOpenDecoder={() => setShowVoiceDecoderModal(true)}
+        onOpenWalkieChannel={() => {
+          if (activeWalkieSession) {
+            setIsChannelMinimized(false);
+          } else {
+            setShowWalkieExplainer(true);
+          }
+        }}
       />
     </ScrollView>
   </View>

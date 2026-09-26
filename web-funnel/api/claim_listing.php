@@ -161,14 +161,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'SubmittedAt' => date('r')
     ];
 
-    @file_get_contents('https://formsubmit.co/ajax/support@hero-apps.com', false, stream_context_create([
-        'http' => [
-            'method' => 'POST',
-            'header' => "Content-Type: application/json\r\nAccept: application/json\r\n",
-            'content' => json_encode($emailPayload),
-            'timeout' => 3
-        ]
-    ]));
+    // 1. FormSubmit dispatch with mandatory Origin & Referer headers
+    $ch = curl_init('https://formsubmit.co/ajax/support@hero-apps.com');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($emailPayload));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'Origin: https://poquitotalk.hero-apps.com',
+        'Referer: https://poquitotalk.hero-apps.com/'
+    ]);
+    curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 6);
+    @curl_exec($ch);
+    @curl_close($ch);
+
+    // 2. Direct native server mail notification (guaranteed delivery)
+    $mailSubject = "[PoquitoTalk Claim] New Listing Update: {$providerName}";
+    $mailBody = "New listing claim/update request received on PoquitoTalk:\n\n"
+        . "Provider ID: {$providerId}\n"
+        . "Provider Name: {$providerName}\n"
+        . "Verification: {$verificationMethod}\n"
+        . "Claimant Name: {$claimantName}\n"
+        . "Phone: " . ($newPhone ?: $currentPhone) . "\n"
+        . "Requested Changes: " . json_encode($requestedChanges, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n"
+        . "Submitted: " . date('r') . "\n";
+    $mailHeaders = "From: PoquitoTalk <support@hero-apps.com>\r\n"
+        . "Cc: Dorien.vda@gmail.com\r\n"
+        . "X-Mailer: PHP/" . phpversion();
+    @mail('support@hero-apps.com', $mailSubject, $mailBody, $mailHeaders, '-f support@hero-apps.com');
 
     echo json_encode([
         'success' => true,

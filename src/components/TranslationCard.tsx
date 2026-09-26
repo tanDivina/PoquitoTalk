@@ -48,6 +48,7 @@ interface TranslationCardProps {
   onStartWalkie?: (spanishText: string, englishText: string) => void;
   onPlayingChange?: (isPlaying: boolean) => void;
   showSponsor?: boolean;
+  onDispatchedToWhatsApp?: (contactName?: string, dispatchType?: 'voice_note' | 'text') => void;
 }
 
 export const TranslationCard: React.FC<TranslationCardProps> = ({
@@ -63,13 +64,19 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
   onStartWalkie,
   onPlayingChange,
   showSponsor = false,
+  onDispatchedToWhatsApp,
 }) => {
   const [selectedVoice, setSelectedVoice] = useState<VoiceOption>(initialVoice || GOOGLE_SPANISH_VOICES[0]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const [isSharingVoice, setIsSharingVoice] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [showDispatchModal, setShowDispatchModal] = useState(false);
+  const [showDispatchModal, setShowDispatchModal] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('dispatch') === 'true';
+    }
+    return false;
+  });
   const [dispatchType, setDispatchType] = useState<'voice_note' | 'text'>('voice_note');
   const [preparedAudioUri, setPreparedAudioUri] = useState<string | null>(null);
   const contextualSponsor = showSponsor ? getMatchingProviderForCategory(category) : undefined;
@@ -478,6 +485,11 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
         englishText={inputText}
         dispatchType={dispatchType}
         presetCategory={category}
+        onDispatched={(contactName, type) => {
+          if (onDispatchedToWhatsApp) {
+            onDispatchedToWhatsApp(contactName, type);
+          }
+        }}
       />
     </View>
   );

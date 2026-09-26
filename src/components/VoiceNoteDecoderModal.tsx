@@ -38,8 +38,33 @@ export const VoiceNoteDecoderModal: React.FC<VoiceNoteDecoderModalProps> = ({
   onNavigateToPresets,
 }) => {
   const [isDecoding, setIsDecoding] = useState<boolean>(false);
-  const [result, setResult] = useState<VoiceNoteDecodeResult | null>(null);
+  const [result, setResult] = useState<VoiceNoteDecodeResult | null>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get('decoderSample') === 'true') {
+        return {
+          senderContext: 'Boat Captain / Water Taxi Driver',
+          spanishTranscription: '¡Buenas jefe! Ya voy saliendo del muelle central de Bocas Town con la lancha. Llego a Carenero en unos diez minutos con los tanques de agua.',
+          englishMeaning: 'Captain Mingo is letting you know he just left the main Bocas Town dock in his boat and will arrive at your dock in Carenero in about 10 minutes with the water tanks.',
+          suggestedReplies: [
+            {
+              tone: 'Confirm & Wait',
+              spanish: '¡Excelente Capitán! Acá lo estoy esperando en el muelle de madera.',
+              english: 'Excellent Captain! I am waiting for you here at the wooden dock.',
+            },
+            {
+              tone: 'Ask Total Price',
+              spanish: 'Perfecto amigo, ¿cuánto sería el total del viaje y el flete de los tanques?',
+              english: 'Perfect my friend, how much is the total for the trip and freight of the tanks?',
+            },
+          ],
+        };
+      }
+    }
+    return null;
+  });
   const [isPlayingIncoming, setIsPlayingIncoming] = useState<boolean>(false);
+  const [isPlayingEnglish, setIsPlayingEnglish] = useState<boolean>(false);
   const [currentSpeed, setCurrentSpeed] = useState<'0.75x' | '1.0x'>('0.75x');
 
   useEffect(() => {
@@ -56,8 +81,29 @@ export const VoiceNoteDecoderModal: React.FC<VoiceNoteDecoderModalProps> = ({
     } else {
       Speech.stop();
       setIsPlayingIncoming(false);
+      setIsPlayingEnglish(false);
     }
   }, [visible, initialAudioText]);
+
+  const handlePlayEnglishAudio = (englishText: string) => {
+    if (isPlayingEnglish) {
+      Speech.stop();
+      setIsPlayingEnglish(false);
+      return;
+    }
+
+    Speech.stop();
+    setIsPlayingIncoming(false);
+    setIsPlayingEnglish(true);
+
+    Speech.speak(englishText, {
+      language: 'en-US',
+      pitch: 1.0,
+      rate: 0.92,
+      onDone: () => setIsPlayingEnglish(false),
+      onError: () => setIsPlayingEnglish(false),
+    });
+  };
 
   const handleDecodeDirectText = async (text: string) => {
     setIsDecoding(true);
@@ -224,14 +270,33 @@ export const VoiceNoteDecoderModal: React.FC<VoiceNoteDecoderModalProps> = ({
                   </View>
                   <Text style={styles.englishMeaningText}>{result.englishMeaning}</Text>
 
-                  <TouchableOpacity
-                    style={styles.copyBtn}
-                    onPress={() => handleCopyEnglishMeaning(result.englishMeaning)}
-                    activeOpacity={0.78}
-                  >
-                    <Ionicons name="copy-outline" size={14} color="#64748B" />
-                    <Text style={styles.copyBtnText}>Copy English Meaning</Text>
-                  </TouchableOpacity>
+                  <View style={styles.englishActionsRow}>
+                    {!(typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('hideAudioBtn') === 'true') && (
+                      <TouchableOpacity
+                        style={[styles.playEnglishBtn, isPlayingEnglish && styles.playEnglishBtnActive]}
+                        onPress={() => handlePlayEnglishAudio(result.englishMeaning)}
+                        activeOpacity={0.8}
+                      >
+                        <Ionicons
+                          name={isPlayingEnglish ? 'stop-circle' : 'volume-high'}
+                          size={15}
+                          color={isPlayingEnglish ? '#FFFFFF' : '#92400E'}
+                        />
+                        <Text style={[styles.playEnglishBtnText, isPlayingEnglish && styles.playEnglishBtnTextActive]}>
+                          {isPlayingEnglish ? 'Stop' : 'Listen English'}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+
+                    <TouchableOpacity
+                      style={styles.copyBtn}
+                      onPress={() => handleCopyEnglishMeaning(result.englishMeaning)}
+                      activeOpacity={0.78}
+                    >
+                      <Ionicons name="copy-outline" size={14} color="#92400E" />
+                      <Text style={styles.copyBtnText}>Copy</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
 
                 {/* Follow-Up / Reset Actions */}
@@ -650,19 +715,48 @@ const styles = StyleSheet.create({
     color: '#334155',
     lineHeight: 20,
   },
+  englishActionsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 10,
+  },
+  playEnglishBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 7,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    backgroundColor: '#FEF3C7',
+    borderWidth: 1,
+    borderColor: '#FDE68A',
+  },
+  playEnglishBtnActive: {
+    backgroundColor: '#D97706',
+    borderColor: '#D97706',
+  },
+  playEnglishBtnText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#92400E',
+  },
+  playEnglishBtnTextActive: {
+    color: '#FFFFFF',
+  },
   copyBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    alignSelf: 'flex-start',
-    marginTop: 10,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    backgroundColor: '#FEF3C7',
+    paddingVertical: 7,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#FDE68A',
   },
   copyBtnText: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '700',
     color: '#92400E',
   },

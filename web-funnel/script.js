@@ -221,12 +221,6 @@ function scrollToPlayStoreWaitlist(e) {
   const target = document.getElementById('playstore');
   if (target) {
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    setTimeout(() => {
-      const emailInput = document.getElementById('playstore-email-en') || document.querySelector('.playstore-input');
-      if (emailInput) {
-        emailInput.focus();
-      }
-    }, 550);
   }
 }
 
@@ -701,6 +695,74 @@ async function submitPlayStoreSignup(e, formId) {
   if (successBox) successBox.style.display = 'flex';
 }
 
+// Future Plans Newsletter Sign-up Handler (FormSubmit.co AJAX + Server Storage + LocalStorage)
+async function submitNewsletterSignup(e, formId) {
+  e.preventDefault();
+  const isSpanish = formId.endsWith('-es');
+  const emailInput = document.getElementById(isSpanish ? 'newsletter-email-es' : 'newsletter-email-en');
+  const submitBtn = document.getElementById(isSpanish ? 'newsletter-btn-es' : 'newsletter-btn-en');
+  const successBox = document.getElementById(isSpanish ? 'newsletter-success-es' : 'newsletter-success-en');
+  const formElement = document.getElementById(formId);
+
+  const email = emailInput ? emailInput.value.trim() : '';
+  if (!email || !email.includes('@')) return;
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span>${isSpanish ? 'Suscribiendo...' : 'Subscribing...'}</span>`;
+  }
+
+  const payload = {
+    _subject: `[PoquitoTalk Newsletter] New Future Plans Subscriber`,
+    Email: email,
+    Source: 'PoquitoTalk Web Funnel - Future Plans',
+    Language: isSpanish ? 'Spanish (es-PA)' : 'English (en-US)',
+    SubmittedAt: new Date().toLocaleString('en-US', { timeZone: 'America/Panama' }),
+    PageURL: window.location.href,
+    _captcha: 'false'
+  };
+
+  try {
+    await fetch('https://formsubmit.co/ajax/support@hero-apps.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {
+    console.warn('FormSubmit dispatch error:', err);
+  }
+
+  // Dispatch to server database
+  try {
+    const apiPath = window.location.pathname.includes('/es/') ? '../api/waitlist.php' : 'api/waitlist.php';
+    await fetch(apiPath, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...payload, Type: 'newsletter' })
+    });
+  } catch (err) {
+    console.warn('Server API newsletter error:', err);
+  }
+
+  // Cache locally
+  try {
+    const history = JSON.parse(localStorage.getItem('poquitotalk_newsletter_subscribers') || '[]');
+    history.unshift({ ...payload, timestamp: Date.now() });
+    localStorage.setItem('poquitotalk_newsletter_subscribers', JSON.stringify(history));
+  } catch (e) {}
+
+  // Track event
+  if (window.PoquitoTracker) {
+    window.PoquitoTracker.track('newsletter_submit', {
+      language: isSpanish ? 'es' : 'en',
+      form: formId
+    });
+  }
+
+  if (formElement) formElement.style.display = 'none';
+  if (successBox) successBox.style.display = 'flex';
+}
+
 // Contractor Registration Handler (FormSubmit.co AJAX + Server Storage + LocalStorage)
 async function submitContractorRegistration(e, formId) {
   e.preventDefault();
@@ -781,6 +843,161 @@ async function submitContractorRegistration(e, formId) {
   if (formElement) formElement.style.display = 'none';
   if (successBox) successBox.style.display = 'flex';
 }
+
+// Toggle route pricing card active/inactive state
+function toggleRouteActive(checkbox) {
+  const card = checkbox.closest('.route-pricing-card');
+  if (!card) return;
+  if (checkbox.checked) {
+    card.classList.remove('inactive');
+  } else {
+    card.classList.add('inactive');
+  }
+}
+
+// Dedicated Multi-Category Onboarding Handler (Restaurants, Captains, Hotels, Activities)
+async function submitDedicatedOnboarding(e, formId, type) {
+  e.preventDefault();
+  const form = document.getElementById(formId);
+  if (!form) return;
+
+  const isSpanish = formId.endsWith('-es') || window.location.pathname.includes('/es/');
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const successBox = document.getElementById(`${formId}-success`);
+  
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.dataset.originalHtml = submitBtn.innerHTML;
+    submitBtn.innerHTML = `<span>${isSpanish ? 'Enviando información...' : 'Submitting profile...'}</span>`;
+  }
+
+  const formData = new FormData(form);
+  formData.set('type', type);
+  formData.set('SubmittedAt', new Date().toLocaleString('en-US', { timeZone: 'America/Panama' }));
+
+  // Collect multi-checkbox values into comma-separated strings
+  const checkboxGroups = ['dietary', 'languages', 'amenities', 'tours', 'gear', 'payment', 'days_open'];
+  checkboxGroups.forEach(group => {
+    const checked = Array.from(form.querySelectorAll(`input[name="${group}[]"]:checked`)).map(c => c.value);
+    if (checked.length > 0) {
+      formData.set(group, checked.join(', '));
+    }
+  });
+
+  // Collect flexible route & tour custom pricing
+  const dynamicRoutes = [];
+  form.querySelectorAll('.route-pricing-card').forEach(card => {
+    const check = card.querySelector('input.route-toggle');
+    if (check && check.checked) {
+      const name = card.dataset.routeName || '';
+      const priceInput = card.querySelector('input.route-price-input');
+      const unit = card.dataset.unit || '/pp';
+      const priceVal = priceInput ? priceInput.value.trim() : '';
+      if (priceVal) {
+        dynamicRoutes.push(`${name} ($${priceVal}${unit})`);
+      } else if (name) {
+        dynamicRoutes.push(name);
+      }
+    }
+  });
+  if (dynamicRoutes.length > 0) {
+    formData.set('routes_and_rates', dynamicRoutes.join(', '));
+    const existingTours = formData.get('tours');
+    if (existingTours) {
+      formData.set('tours', existingTours + ', ' + dynamicRoutes.join(', '));
+    } else {
+      formData.set('tours', dynamicRoutes.join(', '));
+    }
+  }
+
+  // Client-side FormSubmit.co dispatch (parallel notification)
+  try {
+    const fsPayload = {
+      _subject: `[PoquitoTalk Onboarding] New ${type.toUpperCase()}: ${formData.get('business_name') || 'Local Provider'}`,
+      Type: type,
+      BusinessName: formData.get('business_name') || 'N/A',
+      Phone: formData.get('phone') || 'N/A',
+      Location: formData.get('location') || 'N/A',
+      Email: formData.get('email') || 'N/A',
+      Website: formData.get('website') || 'N/A',
+      Hours: formData.get('hours') || 'N/A',
+      Details: formData.get('notes') || 'N/A',
+      SubmittedAt: new Date().toLocaleString('en-US', { timeZone: 'America/Panama' }),
+      PageURL: window.location.href,
+      _captcha: 'false'
+    };
+    fetch('https://formsubmit.co/ajax/support@hero-apps.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(fsPayload)
+    }).catch(function(e) { console.warn('FormSubmit client warning:', e); });
+  } catch (fsErr) {}
+
+  const apiPath = window.location.pathname.includes('/es/') ? '../api/onboard.php' : 'api/onboard.php';
+
+  try {
+    const resp = await fetch(apiPath, {
+      method: 'POST',
+      body: formData
+    });
+    const result = await resp.json();
+    if (result.success) {
+      form.style.display = 'none';
+      if (successBox) successBox.style.display = 'flex';
+      try {
+        const stored = JSON.parse(localStorage.getItem('poquito_onboarding_history') || '[]');
+        stored.unshift({ type, id: result.id, date: Date.now() });
+        localStorage.setItem('poquito_onboarding_history', JSON.stringify(stored));
+      } catch (err) {}
+    } else {
+      alert(result.error || (isSpanish ? 'Error al enviar el formulario.' : 'Error submitting registration.'));
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = submitBtn.dataset.originalHtml;
+      }
+    }
+  } catch (err) {
+    console.error('Onboarding submission failed:', err);
+    form.style.display = 'none';
+    if (successBox) successBox.style.display = 'flex';
+  }
+}
+
+// File dropzone & preview listener helper
+function setupFileUploadDropzone(dropzoneId, inputId, previewListId) {
+  const dropzone = document.getElementById(dropzoneId);
+  const input = document.getElementById(inputId);
+  const previewList = document.getElementById(previewListId);
+  if (!dropzone || !input || !previewList) return;
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropzone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropzone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+    });
+  });
+
+  input.addEventListener('change', () => {
+    previewList.innerHTML = '';
+    Array.from(input.files).forEach(file => {
+      const chip = document.createElement('div');
+      chip.className = 'file-preview-chip';
+      chip.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        <span>${file.name} (${Math.round(file.size / 1024)} KB)</span>
+      `;
+      previewList.appendChild(chip);
+    });
+  });
+}
+
 
 
 

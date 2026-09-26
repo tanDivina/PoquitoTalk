@@ -22,11 +22,18 @@ import {
   recordRecentContact,
   syncDirectoryFavorite,
   subscribePhoneBookChanged,
+  getPreferredVoiceGender,
 } from '../services/storage';
 import { INITIAL_BOCAS_DIRECTORY } from '../services/directory';
 import { shareVoiceNoteToWhatsApp, sendTextToWhatsApp } from '../services/sharing';
 import { getOrCreateThreadForContact, addMessageToThread } from '../services/conversations';
 import { getUserProfile } from '../services/userService';
+import {
+  generateGoogleGeminiAudio,
+  playGoogleAudioFile,
+  stopAllAudioPlayback,
+  GOOGLE_SPANISH_VOICES,
+} from '../services/googleVoice';
 import { AddContactModal } from './AddContactModal';
 import { ImportContactsModal } from './ImportContactsModal';
 
@@ -38,7 +45,7 @@ interface RecipientDispatchModalProps {
   englishText?: string;
   dispatchType: 'voice_note' | 'text';
   presetCategory?: string;
-  onDispatched?: () => void;
+  onDispatched?: (contactName?: string, dispatchType?: 'voice_note' | 'text') => void;
 }
 
 export const RecipientDispatchModal: React.FC<RecipientDispatchModalProps> = ({
@@ -57,6 +64,55 @@ export const RecipientDispatchModal: React.FC<RecipientDispatchModalProps> = ({
   const [sendingRecipientId, setSendingRecipientId] = useState<string | null>(null);
   const [showAddContactModal, setShowAddContactModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [isPlayingPreview, setIsPlayingPreview] = useState(false);
+
+  // Stop playback when modal closes
+  useEffect(() => {
+    if (!visible) {
+      stopAllAudioPlayback();
+      setIsPlayingPreview(false);
+    }
+  }, [visible]);
+
+  const handleTogglePreviewAudio = async () => {
+    try {
+      if (isPlayingPreview) {
+        setIsPlayingPreview(false);
+        await stopAllAudioPlayback();
+        return;
+      }
+
+      setIsPlayingPreview(true);
+      let uriToPlay = audioUri;
+      if (!uriToPlay && spanishText) {
+        const preferredGender = await getPreferredVoiceGender();
+        uriToPlay = await generateGoogleGeminiAudio(spanishText, preferredGender === 'FEMALE' ? 'Female' : 'Male');
+      }
+
+      if (uriToPlay) {
+        const sound = await playGoogleAudioFile(uriToPlay, GOOGLE_SPANISH_VOICES[0]);
+        if (sound) {
+          sound.setOnPlaybackStatusUpdate((status: any) => {
+            if (status.isLoaded && status.didJustFinish) {
+              setIsPlayingPreview(false);
+              sound.unloadAsync();
+            }
+          });
+        } else {
+          setIsPlayingPreview(false);
+        }
+      } else {
+        const SpeechModule = require('expo-speech');
+        SpeechModule.speak(spanishText, {
+          language: 'es-US',
+          onDone: () => setIsPlayingPreview(false),
+          onError: () => setIsPlayingPreview(false),
+        });
+      }
+    } catch (e) {
+      setIsPlayingPreview(false);
+    }
+  };
 
   const isSending = sendingRecipientId !== null;
 
@@ -172,7 +228,7 @@ export const RecipientDispatchModal: React.FC<RecipientDispatchModalProps> = ({
         await sendTextToWhatsApp(spanishText, contact.whatsappNumber);
       }
 
-      if (onDispatched) onDispatched();
+      if (onDispatched) onDispatched(contact.name, dispatchType);
       onClose();
     } catch (e) {
       console.warn('Dispatch failed:', e);
@@ -231,7 +287,7 @@ export const RecipientDispatchModal: React.FC<RecipientDispatchModalProps> = ({
         await sendTextToWhatsApp(spanishText, phone);
       }
 
-      if (onDispatched) onDispatched();
+      if (onDispatched) onDispatched(provider.name, dispatchType);
       onClose();
     } catch (e) {
       console.warn('Dispatch failed:', e);
@@ -290,7 +346,7 @@ export const RecipientDispatchModal: React.FC<RecipientDispatchModalProps> = ({
       } else {
         await sendTextToWhatsApp(spanishText);
       }
-      if (onDispatched) onDispatched();
+      if (onDispatched) onDispatched('WhatsApp Contact', dispatchType);
       onClose();
     } finally {
       setSendingRecipientId(null);
@@ -315,9 +371,28 @@ export const RecipientDispatchModal: React.FC<RecipientDispatchModalProps> = ({
                 <Text style={styles.title}>
                   {dispatchType === 'voice_note' ? 'Send Voice Note (MP3)' : 'Send Spanish Text'}
                 </Text>
-                <Text style={styles.subtitle} numberOfLines={1}>
-                  "{spanishText}"
-                </Text>
+                <View style={styles.headerSubtitleRow}>
+                  <Text style={styles.subtitle} numberOfLines={1}>
+                    "{spanishText}"
+                  </Text>
+                  {!(typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('hideAudioPreview') === 'true') && (
+                    <TouchableOpacity
+                      style={[styles.listenPreviewBtn, isPlayingPreview && styles.listenPreviewBtnActive]}
+                      onPress={handleTogglePreviewAudio}
+                      activeOpacity={0.8}
+                      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    >
+                      <Ionicons
+                        name={isPlayingPreview ? 'stop-circle' : 'volume-high'}
+                        size={14}
+                        color={isPlayingPreview ? '#FFFFFF' : Colors.tertiary}
+                      />
+                      <Text style={[styles.listenPreviewBtnText, isPlayingPreview && styles.listenPreviewBtnTextActive]}>
+                        {isPlayingPreview ? 'Stop' : 'Listen'}
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
             </View>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -724,7 +799,37 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
     color: Colors.onSurfaceVariant,
-    marginTop: 2,
+    flex: 1,
+    marginRight: 6,
+  },
+  headerSubtitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 4,
+  },
+  listenPreviewBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#F1F5F9',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(15, 118, 110, 0.25)',
+  },
+  listenPreviewBtnActive: {
+    backgroundColor: Colors.tertiary,
+    borderColor: Colors.tertiary,
+  },
+  listenPreviewBtnText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: Colors.tertiary,
+  },
+  listenPreviewBtnTextActive: {
+    color: '#FFFFFF',
   },
   closeButton: {
     padding: 6,

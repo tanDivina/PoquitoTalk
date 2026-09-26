@@ -17,9 +17,9 @@ socket.setdefaulttimeout(600)
 KEY_PATH = '/Users/dorienvandenabbeele/Downloads/gsc_key.json'
 PACKAGE_NAME = 'com.heroapps.poquitotalk'
 
-DEFAULT_RELEASE_NOTES = """• Authentic Panamanian Spanish voice note translator with 1-tap WhatsApp dispatch.
-• Expanded Bocas del Toro verified island directory & contractor listings.
-• Separated emergency presets (medical, pharmacy & dental) and offline audio clips."""
+DEFAULT_RELEASE_NOTES = """• Added "Listen English" voice playback for incoming contractor message translations in conversation threads.
+• Added interactive voice preview audio sampling for Diego and Sofia personas.
+• Verified offline Bocas del Toro island directory and contractor WhatsApp shortcuts."""
 
 def publish_bundle(aab_path, track='internal', release_notes=DEFAULT_RELEASE_NOTES):
     if not os.path.exists(aab_path):
@@ -74,7 +74,7 @@ def publish_bundle(aab_path, track='internal', release_notes=DEFAULT_RELEASE_NOT
         # 3. Create or update the release in the target track
         print(f"Assigning bundle to track '{track}'...")
         release_obj = {
-            'name': f"Release {version_code} (v1.5.4)",
+            'name': f"Release {version_code} (v1.5.5)",
             'versionCodes': [str(version_code)],
             'status': 'completed',
             'releaseNotes': [

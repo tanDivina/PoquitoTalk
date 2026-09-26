@@ -21,7 +21,7 @@
   <meta property="og:title" content="PoquitoTalk • Notas de Voz de WhatsApp para Panamá 🇵🇦" />
   <meta property="og:description" content="Comunícate fácilmente con servicios locales en Bocas del Toro. Impulsado por IA de Voz Panameña de Alta Fidelidad." />
   <meta property="og:url" content="https://poquitotalk.hero-apps.com/es/" />
-  <meta property="og:image" content="https://poquitotalk.hero-apps.com/twitter_card.png?v=1.2.0" />
+  <meta property="og:image" content="https://poquitotalk.hero-apps.com/twitter_card.png?v=3.0.0" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="es_PA" />
@@ -32,9 +32,9 @@
   <meta name="twitter:creator" content="@DorienVibecodes" />
   <meta name="twitter:title" content="PoquitoTalk • Notas de Voz de WhatsApp para Panamá" />
   <meta name="twitter:description" content="Genera notas de voz amables en español panameño listas para enviar por WhatsApp en 1-tap." />
-  <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/twitter_card.png?v=1.2.0" />
+  <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/twitter_card.png?v=3.0.0" />
 
-  <link rel="stylesheet" href="../style.css?v=6.3.0" />
+  <link rel="stylesheet" href="../style.css?v=6.4.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
 
@@ -124,7 +124,7 @@
         <a href="#featured-directory" class="nav-link">Servicios Locales</a>
         <a href="#app-video" class="nav-link">Video Demo</a>
         <a href="#demo" class="nav-link">Generador en Vivo</a>
-        <a href="#playstore" class="nav-link">Google Play</a>
+        <a href="#playstore" class="nav-link" style="color: #047857; font-weight: 700;">Google Play (App)</a>
         <a href="#pricing" class="btn-primary-nav">Comenzar <span class="arrow">→</span></a>
       </nav>
     </div>
@@ -146,12 +146,17 @@
         Sin complicaciones al enviar mensajes a tu plomero, arrendador, mecánico o técnico de aire acondicionado. PoquitoTalk genera notas de voz educadas y naturales en español de Panamá.
       </p>
 
-      <!-- Prominent Hero Directory Hook -->
-      <div class="hero-directory-hook">
+      <!-- Prominent Hero Directory & App Live Hooks -->
+      <div class="hero-directory-hook" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
         <a href="/es/directorio.html" class="hero-directory-pill">
           <span class="pulse-dot"></span>
           <span>¿Buscas un profesional local? Explora <strong>80+ Capitanes y Contratistas Verificados en Bocas</strong></span>
           <span class="arrow">→</span>
+        </a>
+        <a href="https://play.google.com/store/apps/details?id=com.heroapps.poquitotalk" target="_blank" rel="noopener" class="hero-directory-pill" style="background: rgba(4, 120, 87, 0.08); border-color: rgba(4, 120, 87, 0.3); color: #047857;">
+          <span class="pulse-dot-green"></span>
+          <span>App Android: <strong>Ya Disponible en Google Play</strong></span>
+          <span class="arrow">↗</span>
         </a>
       </div>
 
@@ -424,8 +429,14 @@
           </div>
 
           <div class="video-actions" style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px;">
-            <a href="#playstore" class="btn-hero-primary">
-              Lista de Espera en Google Play <span class="arrow">→</span>
+            <a href="https://play.google.com/store/apps/details?id=com.heroapps.poquitotalk" target="_blank" rel="noopener" class="btn-hero-primary" style="background: #111827; border: 1.5px solid rgba(255,255,255,0.2);">
+              <svg width="18" height="18" viewBox="0 0 512 512" fill="none" style="margin-right: 6px; vertical-align: middle;">
+                <path d="M 68 52 C 58 58 52 70 52 84 L 52 428 C 52 442 58 454 68 460 L 256 256 Z" fill="#00D2FF"/>
+                <path d="M 256 256 L 332 180 L 82 40 C 77 37 72 36 68 37 L 256 256 Z" fill="#00F076"/>
+                <path d="M 256 256 L 68 475 C 72 476 77 475 82 472 L 332 332 L 256 256 Z" fill="#FF3A44"/>
+                <path d="M 332 180 L 418 228 C 434 238 434 274 418 284 L 332 332 L 256 256 Z" fill="#FFC107"/>
+              </svg>
+              <span>Descargar en Google Play</span> <span class="arrow">→</span>
             </a>
             <a href="#demo" class="btn-hero-secondary">
               Probar Audio
@@ -571,7 +582,7 @@
     </div>
   </section>
 
-  <!-- Section: Google Play Store Waitlist -->
+  <!-- Section: Google Play Store Live -->
   <section id="playstore" class="playstore-section" aria-label="Sección Google Play Store">
     <div class="container">
       <div class="playstore-card">
@@ -580,36 +591,69 @@
         </div>
         
         <div class="playstore-content">
-          <div class="playstore-badge">
-            <svg width="14" height="14" viewBox="0 0 512 512" fill="none" style="margin-right: 4px; vertical-align: middle;">
+          <div class="playstore-badge live-badge">
+            <span class="pulse-dot-green"></span>
+            App Oficial Android • ¡Ya Disponible en Google Play! 🇵🇦
+          </div>
+          <h2>¡PoquitoTalk ya está Disponible en Google Play!</h2>
+          <p>Descarga la app oficial para Android ahora. Lleva notas de voz en español panameño con 1-tap, 18 categorías sin conexión, decodificador de audios de WhatsApp y contactos locales verificados a donde vayas en Bocas del Toro.</p>
+
+          <!-- Primary App Download CTA -->
+          <a href="https://play.google.com/store/apps/details?id=com.heroapps.poquitotalk" target="_blank" rel="noopener" class="btn-playstore-download" aria-label="Descargar PoquitoTalk en Google Play">
+            <svg class="playstore-btn-svg" width="30" height="30" viewBox="0 0 512 512" fill="none">
               <path d="M 68 52 C 58 58 52 70 52 84 L 52 428 C 52 442 58 454 68 460 L 256 256 Z" fill="#00D2FF"/>
               <path d="M 256 256 L 332 180 L 82 40 C 77 37 72 36 68 37 L 256 256 Z" fill="#00F076"/>
               <path d="M 256 256 L 68 475 C 72 476 77 475 82 472 L 332 332 L 256 256 Z" fill="#FF3A44"/>
               <path d="M 332 180 L 418 228 C 434 238 434 274 418 284 L 332 332 L 256 256 Z" fill="#FFC107"/>
             </svg>
-            Lanzamiento en Google Play Próximamente
-          </div>
-          <h2>¡Recibe una Notificación cuando Estemos en Google Play!</h2>
-          <p>Sé el primero en Bocas del Toro (Panamá) en descargar la app oficial para Android. Deja tu correo a continuación para recibir acceso VIP al lanzamiento y créditos de regalo.</p>
-          
-          <form id="playstore-form-es" class="playstore-form" onsubmit="submitPlayStoreSignup(event, 'playstore-form-es')">
-            <div class="playstore-input-group">
-              <input type="email" id="playstore-email-es" required placeholder="Tu correo electrónico..." class="playstore-input" />
-              <button type="submit" id="playstore-btn-es" class="btn-playstore-submit">
-                <span>Notificarme</span>
-                <span class="arrow">→</span>
-              </button>
+            <div class="playstore-btn-text">
+              <span class="playstore-btn-sub">DISPONIBLE EN</span>
+              <span class="playstore-btn-main">Google Play</span>
             </div>
-            <p class="playstore-disclaimer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: text-bottom;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Respetamos tu privacidad. Cero spam: solo 1 correo cuando la app esté disponible en la tienda.</p>
-          </form>
+            <span class="arrow">→</span>
+          </a>
 
-          <div id="playstore-success-es" class="playstore-success-box" style="display: none;">
-            <div class="success-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <!-- Priority Website Feature Links -->
+          <div class="app-priority-web-links">
+            <a href="/es/directorio.html" class="priority-web-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              <span>80+ Directorio Local</span>
+              <span class="arrow">→</span>
+            </a>
+            <a href="#demo" class="priority-web-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Generador de Voz</span>
+              <span class="arrow">→</span>
+            </a>
+            <a href="#pricing" class="priority-web-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              <span>Pases y Créditos</span>
+              <span class="arrow">→</span>
+            </a>
+          </div>
+
+          <!-- Future Plans Newsletter Subcard -->
+          <div class="newsletter-subcard">
+            <div class="newsletter-header">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <span>Recibe Actualizaciones y Planes Futuros</span>
             </div>
-            <div class="success-text">
-              <p class="playstore-success-title" style="font-weight: 700; font-size: 16px; color: #047857; margin: 0 0 4px 0;">¡Estás en la Lista VIP de Google Play!</p>
-              <p>Hemos reservado tu lugar. Te enviaremos el enlace directo de descarga a tu correo en cuanto PoquitoTalk esté disponible en Google Play Store.</p>
+            <p class="newsletter-desc">¿Quieres enterarte cuando lancemos la versión para iPhone/iOS o agreguemos nuevos paquetes de frases y servicios? Suscríbete para recibir noticias del proyecto.</p>
+
+            <form id="newsletter-form-es" class="newsletter-form" aria-label="Boletín de Noticias" onsubmit="submitNewsletterSignup(event, 'newsletter-form-es')">
+              <div class="newsletter-input-group">
+                <input type="email" id="newsletter-email-es" required placeholder="Tu correo electrónico..." class="newsletter-input" />
+                <button type="submit" id="newsletter-btn-es" class="btn-newsletter-submit">
+                  <span>Suscribirse</span>
+                  <span class="arrow">→</span>
+                </button>
+              </div>
+              <p class="playstore-disclaimer" style="margin-top: 8px !important; font-size: 12px !important;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: text-bottom;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Cero spam. Puedes darte de baja en 1 clic cuando quieras.</p>
+            </form>
+
+            <div id="newsletter-success-es" class="newsletter-success-box" style="display: none; margin-top: 10px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span>¡Listo! Te has suscrito para recibir las novedades y anuncios de iOS.</span>
             </div>
           </div>
         </div>
@@ -982,6 +1026,6 @@
   </aside>
 
   <script src="../tracker.js?v=2.0.0" defer></script>
-  <script src="../script.js?v=6.1.1"></script>
+  <script src="../script.js?v=6.4.0"></script>
 </body>
 </html>

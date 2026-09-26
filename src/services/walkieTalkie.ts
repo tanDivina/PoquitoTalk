@@ -82,25 +82,6 @@ class WalkieTalkieService {
     const cleanTopicEn = (topicEn || (cleanTopicEs !== topic ? topic : '') || '').trim();
     const shareUrl = `https://poquitotalk.hero-apps.com/talk?r=${roomId}${nameParam}`;
 
-    const initialMessages: WalkieMessage[] = [];
-    if (cleanTopicEs.length > 0) {
-      initialMessages.push({
-        id: `msg_init_${Date.now()}`,
-        roomId,
-        sender: 'expat',
-        senderName: isKnownName ? clientName!.trim() : 'un cliente',
-        rawText: cleanTopicEn || cleanTopicEs,
-        cleanedEnglishText: cleanTopicEn || cleanTopicEs,
-        spanishText: cleanTopicEs,
-        esText: cleanTopicEs,
-        enText: cleanTopicEn || cleanTopicEs,
-        audioData: initialAudioBase64,
-        audioBase64: initialAudioBase64,
-        timestamp: Date.now(),
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-    }
-
     this.activeSession = {
       roomId,
       clientName: isKnownName ? clientName!.trim() : 'un cliente',
@@ -114,11 +95,11 @@ class WalkieTalkieService {
       expiresAt: null,
       turnCount: 0,
       lastActivityAt: Date.now(),
-      messages: initialMessages,
-      lastMessage: initialMessages[0]
+      messages: [],
+      lastMessage: undefined
     };
 
-    // If initial topic/message exists, sync it to the server room immediately with audio
+    // If initial topic/message exists, sync it to the server room immediately with audio as the single canonical message
     if (cleanTopicEs.length > 0) {
       this.sendExpatMessage(
         roomId,
@@ -235,7 +216,15 @@ class WalkieTalkieService {
 
   public addMessage(msg: WalkieMessage): void {
     if (!this.activeSession) return;
-    const exists = this.activeSession.messages.some(m => m.id === msg.id);
+    const exists = this.activeSession.messages.some((m) => {
+      if (m.id === msg.id) return true;
+      const sameSender = (m.sender || '').toLowerCase() === (msg.sender || '').toLowerCase();
+      const textA = (m.esText || m.spanishText || m.rawText || '').trim();
+      const textB = (msg.esText || msg.spanishText || msg.rawText || '').trim();
+      const sameText = textA === textB && textA.length > 0;
+      const timeDiff = Math.abs((m.timestamp || 0) - (msg.timestamp || 0));
+      return sameSender && sameText && timeDiff < 6000;
+    });
     if (!exists) {
       this.activeSession.messages.push(msg);
       this.activeSession.lastMessage = msg;

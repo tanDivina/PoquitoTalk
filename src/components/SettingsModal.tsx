@@ -28,6 +28,12 @@ import {
   getUserPersona,
   setUserPersona,
 } from '../services/storage';
+import {
+  generateGoogleGeminiAudio,
+  playGoogleAudioFile,
+  stopAllAudioPlayback,
+  GOOGLE_SPANISH_VOICES,
+} from '../services/googleVoice';
 import { getUserProfile } from '../services/userService';
 import { UserPersona } from '../types';
 
@@ -57,6 +63,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [voiceGender, setVoiceGender] = useState<'MALE' | 'FEMALE'>('MALE');
   const [persona, setPersona] = useState<UserPersona>('expat');
   const [isPayingUser, setIsPayingUser] = useState(false);
+  const [previewingGender, setPreviewingGender] = useState<'MALE' | 'FEMALE' | null>(null);
 
   useEffect(() => {
     if (visible) {
@@ -72,8 +79,47 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           false
         );
       });
+    } else {
+      stopAllAudioPlayback();
+      setPreviewingGender(null);
     }
   }, [visible, isPro]);
+
+  const handlePlayVoicePreview = async (gender: 'MALE' | 'FEMALE') => {
+    try {
+      if (previewingGender === gender) {
+        setPreviewingGender(null);
+        await stopAllAudioPlayback();
+        return;
+      }
+
+      await stopAllAudioPlayback();
+      setPreviewingGender(gender);
+
+      const previewText = gender === 'MALE'
+        ? '¡Buenas! Con Diego tu voz suena clara y natural en Bocas del Toro.'
+        : '¡Buenas! Con Sofía tu voz suena clara y amigable en Bocas del Toro.';
+
+      const voiceOpt = GOOGLE_SPANISH_VOICES.find((v) => v.gender === gender) || GOOGLE_SPANISH_VOICES[0];
+      const audioUri = await generateGoogleGeminiAudio(previewText, gender === 'MALE' ? 'Male' : 'Female');
+
+      if (audioUri) {
+        const sound = await playGoogleAudioFile(audioUri, voiceOpt);
+        if (sound) {
+          sound.setOnPlaybackStatusUpdate((status) => {
+            if (status.isLoaded && status.didJustFinish) {
+              setPreviewingGender(null);
+              sound.unloadAsync();
+            }
+          });
+        }
+      } else {
+        setPreviewingGender(null);
+      }
+    } catch (e) {
+      setPreviewingGender(null);
+    }
+  };
 
   const handleToggleSignature = async (value: boolean) => {
     if (!isPayingUser && !value) {
@@ -201,10 +247,28 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   }}
                   activeOpacity={0.8}
                 >
-                  <Text style={[styles.genderSymbol, voiceGender === 'MALE' && styles.genderSymbolActive]}>♂</Text>
-                  <Text style={[styles.genderText, voiceGender === 'MALE' && styles.genderTextActive]}>
-                    Diego (Male)
-                  </Text>
+                  <View style={styles.genderBtnMain}>
+                    <Text style={[styles.genderSymbol, voiceGender === 'MALE' && styles.genderSymbolActive]}>♂</Text>
+                    <Text style={[styles.genderText, voiceGender === 'MALE' && styles.genderTextActive]}>
+                      Diego (Male)
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    style={[
+                      styles.genderPreviewBtn,
+                      voiceGender === 'MALE' && styles.genderPreviewBtnActiveOnCard,
+                      previewingGender === 'MALE' && styles.genderPreviewBtnPlaying,
+                    ]}
+                    onPress={() => handlePlayVoicePreview('MALE')}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    accessibilityLabel="Listen to Diego voice preview"
+                  >
+                    <Ionicons
+                      name={previewingGender === 'MALE' ? 'stop-circle' : 'volume-high'}
+                      size={16}
+                      color={previewingGender === 'MALE' || voiceGender === 'MALE' ? '#FFFFFF' : '#059669'}
+                    />
+                  </TouchableOpacity>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -215,10 +279,28 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   }}
                   activeOpacity={0.8}
                 >
-                  <Text style={[styles.genderSymbol, voiceGender === 'FEMALE' && styles.genderSymbolActive]}>♀</Text>
-                  <Text style={[styles.genderText, voiceGender === 'FEMALE' && styles.genderTextActive]}>
-                    Sofia (Female)
-                  </Text>
+                  <View style={styles.genderBtnMain}>
+                    <Text style={[styles.genderSymbol, voiceGender === 'FEMALE' && styles.genderSymbolActive]}>♀</Text>
+                    <Text style={[styles.genderText, voiceGender === 'FEMALE' && styles.genderTextActive]}>
+                      Sofia (Female)
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    style={[
+                      styles.genderPreviewBtn,
+                      voiceGender === 'FEMALE' && styles.genderPreviewBtnActiveOnCard,
+                      previewingGender === 'FEMALE' && styles.genderPreviewBtnPlaying,
+                    ]}
+                    onPress={() => handlePlayVoicePreview('FEMALE')}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    accessibilityLabel="Listen to Sofia voice preview"
+                  >
+                    <Ionicons
+                      name={previewingGender === 'FEMALE' ? 'stop-circle' : 'volume-high'}
+                      size={16}
+                      color={previewingGender === 'FEMALE' || voiceGender === 'FEMALE' ? '#FFFFFF' : '#059669'}
+                    />
+                  </TouchableOpacity>
                 </TouchableOpacity>
               </View>
             </View>
@@ -715,13 +797,36 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
     backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
     borderColor: '#E2E8F0',
     borderRadius: 12,
-    paddingVertical: 12,
+    paddingVertical: 10,
+  },
+  genderBtnMain: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  genderPreviewBtn: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#F0FDF4',
+    borderWidth: 1,
+    borderColor: '#A7F3D0',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  genderPreviewBtnActiveOnCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    borderColor: 'rgba(255, 255, 255, 0.4)',
+  },
+  genderPreviewBtnPlaying: {
+    backgroundColor: '#EF4444',
+    borderColor: '#DC2626',
   },
   genderOptionBtnActive: {
     backgroundColor: '#059669',
@@ -736,7 +841,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   genderText: {
-    fontSize: 14,
+    fontSize: 13.5,
     fontWeight: '700',
     color: Colors.onBackground,
   },

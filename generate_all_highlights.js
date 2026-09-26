@@ -34,7 +34,7 @@ const slides = [
             Panamanian WhatsApp Voice Note
           </div>
           <div style="font-size:27px; color:#14532D; font-weight:700; line-height:1.45;">
-            "¡Buenas, amigo! ¿Cómo está? Mire, tengo el aire goteando agua en la sala. ¿Tendrá un tiempito hoy?"
+            "¡Buenas, amigo! ¿Cómo está? Mire, tengo el aire goteando agua en la sala. ¿Tendrías chance hoy para revisarlo?"
           </div>
           <div style="font-size:18px; font-weight:700; color:#059669; margin-top:16px;">
             ✨ Quick, respectful & island contractors listen on the go.

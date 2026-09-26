@@ -163,13 +163,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = strtolower(trim($input['action'] ?? ''));
     $contractorId = trim($input['id'] ?? '');
 
+    $contractors = loadJson($contractorsFile);
+
+    // Direct Add (Fast WhatsApp Quick Ingest)
+    if ($action === 'direct_add') {
+        $name = trim($input['BusinessName'] ?? ($input['name'] ?? 'Local Provider'));
+        $phone = trim($input['WhatsAppPhone'] ?? ($input['phone'] ?? ''));
+        $category = trim($input['TradeCategory'] ?? ($input['category'] ?? 'CAPTAINS'));
+        $location = trim($input['PrimaryLocation'] ?? ($input['location'] ?? 'Bocas Town'));
+        $notes = trim($input['ServiceSummary'] ?? ($input['notes'] ?? ''));
+
+        // Normalize Panama Phone
+        $digits = preg_replace('/[^0-9]/', '', $phone);
+        if (strlen($digits) === 8 && ($digits[0] === '6' || $digits[0] === '7' || $digits[0] === '8')) {
+            $phone = '+507 ' . substr($digits, 0, 4) . '-' . substr($digits, 4);
+        } elseif (strlen($digits) === 11 && substr($digits, 0, 3) === '507') {
+            $local = substr($digits, 3);
+            $phone = '+507 ' . substr($local, 0, 4) . '-' . substr($local, 4);
+        }
+
+        $newEntry = [
+            'id' => 'direct_' . strtolower(substr($category, 0, 4)) . '_' . substr(md5(uniqid(rand(), true)), 0, 8),
+            'type' => strtolower($category),
+            'BusinessName' => $name,
+            'TradeCategory' => $category,
+            'PrimaryLocation' => $location,
+            'WhatsAppPhone' => $phone,
+            'Email' => trim($input['Email'] ?? 'N/A'),
+            'Website' => trim($input['Website'] ?? ''),
+            'website' => trim($input['Website'] ?? ''),
+            'ServiceSummary' => $notes,
+            'status' => 'approved',
+            'verified' => true,
+            'rating' => 5.0,
+            'SubmittedAt' => date('Y-m-d H:i:s T'),
+            'approved_at' => date('c'),
+            'created_at' => date('c'),
+            'source' => 'whatsapp_quick_ingest',
+            'ip' => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'
+        ];
+
+        array_unshift($contractors, $newEntry);
+        saveJson($contractorsFile, $contractors);
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Provider saved and published directly to live directory!',
+            'entry' => $newEntry
+        ]);
+        exit;
+    }
+
     if (empty($action) || empty($contractorId)) {
         http_response_code(400);
         echo json_encode(['success' => false, 'error' => 'Missing action or contractor id']);
         exit;
     }
 
-    $contractors = loadJson($contractorsFile);
     $foundIndex = -1;
 
     foreach ($contractors as $i => $c) {

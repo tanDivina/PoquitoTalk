@@ -410,21 +410,89 @@ export const INITIAL_BOCAS_DIRECTORY: LocalServiceProvider[] = [
     verifiedDate: "2026-09-12",
   },
   {
+    id: "captain-50765559954",
+    region: "bocas_del_toro",
+    category: "water_taxi",
+    serviceType: "service",
+    name: "Kawi Voyage – Island Charters & Tours",
+    whatsappNumber: "+507 6555-9954",
+    phoneNumber: "+507 6555-9954",
+    address: "Isla Colón / Bocas Town (Carenero, Bastimentos, Solarte, Zapatilla)",
+    hours: "Daily: ~6:00 AM – 7:00 PM • Custom charter & night trips upon request",
+    rating: 5.0,
+    verified: true,
+    notes: "10 years experience in ecotourism in Bocas del Toro. Island-to-island water taxi, private charters, and 20+ guided tours: Cayo Zapatilla full day tour, Bat Cave & Bahía Honda, native village chocolate tour, sport fishing, bioluminescence, and coral restoration snorkeling.",
+    source: "official_registry",
+    sourceUrl: "https://poquitotalk.hero-apps.com/captains.html",
+    verifiedDate: "2026-09-24",
+    certifications: [
+      "Verified Captain & Tour Operator",
+      "10 Years Ecotourism Experience"
+    ],
+    frequentDestinations: ["Isla Colón", "Carenero", "Bastimentos", "Solarte", "Cayo Zapatilla", "Bahía Honda"],
+    tourOfferings: [
+      { tour: "Cayo Zapatilla Full Day Excursion", details: "Island exploration with reef snorkeling" },
+      { tour: "Bioluminescence Night Tour", details: "Night water excursion experiencing natural marine bioluminescence" },
+      { tour: "Bahía Honda & Bat Cave", details: "Subterranean cavern expedition through calm island waterways" },
+      { tour: "Native Village Chocolate Tour", details: "Indigenous cultural and organic cacao plantation tour" },
+      { tour: "Coral Restoration & Snorkeling", details: "Guided reef snorkeling with coral conservation focus" },
+      { tour: "Sport Fishing Trip", details: "Coastal and reef fishing with native Bocas fishermen" }
+    ],
+  },
+  {
     id: "captain-50767450876",
     region: "bocas_del_toro",
     category: "water_taxi",
     serviceType: "service",
-    name: "Capt. Justo Raul Pineda \u2013 Independent Captain",
+    name: "Capt. Justo Pineda Hawkins (Papito) – Papito's Nature Tours",
     whatsappNumber: "+507 6745-0876",
     phoneNumber: "+507 6745-0876",
-    address: "Bocas del Toro (Isla Col\u00f3n, Carenero, Bastimentos, Solarte)",
-    hours: "Daily: ~6:00 AM \u2013 7:00 PM \u2022 Night trips upon request",
+    address: "Dolphin Bay, Isla San Cristóbal • Pickups at Isla Colón (3R Mall), Carenero, Bastimentos, Solarte",
+    departureDock: "Muelle 3R Mall (Isla Colón) / Muelle Dolphin Bay (Isla San Cristóbal)",
+    hours: "Daily: ~6:00 AM – 7:00 PM • Custom private day charters & night trips upon request",
     rating: 5.0,
     verified: true,
-    notes: "Hope Spot Certified captain. Specialist in island-to-island water taxi, private charters, and marine tours.",
+    notes: "Native Bocas boat captain & licensed wildlife guide. Operator of Papito's Nature Tours. Specializing in ethical private charters: responsible dolphin watching in Dolphin Bay, guided hikes in the Sloth Forest Sanctuary (Finca Montezuma, Isla San Cristóbal), West Indian manatee expeditions in San San Pond Sak, strawberry poison dart frogs, and island-to-island water transfers.",
     source: "official_registry",
-    sourceUrl: "https://missionblue.org/hope-spots/bocas-del-toro-hope-spot/",
-    verifiedDate: "2026-09-12",
+    sourceUrl: "https://bocasnaturetours.com",
+    verifiedDate: "2026-09-25",
+    certifications: [
+      "Licencia Oficial de Capitán de Lanchas",
+      "Hope Spot Certified Captain",
+      "Ecotourism Wildlife Specialist"
+    ],
+    frequentDestinations: [
+      "Dolphin Bay (Bahía de los Delfines)",
+      "Finca Montezuma / Sloth Sanctuary (San Cristóbal)",
+      "San San Pond Sak (Manatee Reserve)",
+      "Isla Colón (3R Mall Dock)",
+      "Isla Carenero",
+      "Isla Bastimentos (Old Bank)",
+      "Isla Solarte",
+      "Cayo Zapatilla"
+    ],
+    tourOfferings: [
+      {
+        tour: "Dolphin Bay & Sloth Forest Sanctuary Tour",
+        details: "Responsible ethical dolphin watching in Dolphin Bay followed by guided native wildlife hike in the Sloth Forest Sanctuary at Finca Montezuma on Isla San Cristóbal"
+      },
+      {
+        tour: "San San Pond Sak Manatee Wetland Expedition",
+        details: "Navigating protected coastal wetlands to spot wild West Indian manatees and tropical river wildlife"
+      },
+      {
+        tour: "Poison Dart Frog & Birding Photo Charter",
+        details: "Specialized eco-tour tracking strawberry poison dart frogs (Oophaga pumilio) and Bocas canopy birds"
+      },
+      {
+        tour: "Cayo Zapatilla & Coral Reef Snorkeling",
+        details: "Private custom charter to the outer Zapatilla cays with pristine coral reef snorkeling"
+      },
+      {
+        tour: "Island-to-Island Private Water Transfers",
+        details: "Safe, shaded private transfers between Bocas Town, Carenero, Bastimentos, and villa docks"
+      }
+    ],
   },
   {
     id: "captain-50768968680",
