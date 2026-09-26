@@ -471,6 +471,9 @@ def mix(t, s, total):
         if i == 0:  # engine: hard stop on the dry-tap cut, lowpass on the aerial shot
             extra = (f",atrim=0:{engine_len:.3f},volume=volume='if(gte(t,{s['B'] - s['A']:.3f}),0.6,1)':eval=frame,"
                      f"afade=t=out:st={engine_len - 0.04:.3f}:d=0.04")
+        elif i == 1:  # dry tap: hard cut before WhatsApp UI whoosh (shot D)
+            tap_len = max(0.4, (s["D"] - s["C"]) - 0.15)
+            extra = f",atrim=0:{tap_len:.3f},afade=t=out:st={tap_len - 0.08:.3f}:d=0.08"
         chains.append(f"[{i}:a]aresample=44100,aformat=channel_layouts=stereo{extra},volume={vol},adelay={ms}|{ms}[c{i}]")
         labels.append(f"[c{i}]")
     voices = "".join(labels)
@@ -478,8 +481,8 @@ def mix(t, s, total):
     inputs += ["-i", MUSIC]
     music_ms = int(round(s["E"] * 1000))
     chains.append(f"{voices}amix=inputs={m}:normalize=0,asplit=2[fx][key]")
-    chains.append(f"[{m}:a]aresample=44100,volume=0.42,afade=t=in:st=0:d=0.03,adelay={music_ms}|{music_ms}[mus]")
-    chains.append("[mus][key]sidechaincompress=threshold=0.04:ratio=6:attack=15:release=250[duck]")
+    chains.append(f"[{m}:a]aresample=44100,volume=0.32,afade=t=in:st=0:d=0.25,adelay={music_ms}|{music_ms}[mus]")
+    chains.append("[mus][key]sidechaincompress=threshold=0.12:ratio=3:attack=30:release=450[duck]")
     chains.append(f"[fx][duck]amix=inputs=2:normalize=0,afade=t=out:st={total - 0.35:.3f}:d=0.35,"
                   f"atrim=0:{total:.3f},loudnorm=I=-14:TP=-1.5:LRA=9[aout]")
     wav = OUT / "hook_mix.wav"
