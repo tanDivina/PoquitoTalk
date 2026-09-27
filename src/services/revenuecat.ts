@@ -1,9 +1,9 @@
 // RevenueCat Integration Service for PoquitoTalk
 // Manages Pro Subscriptions, Entitlements, Paywalls, and Free Usage Limits
 
-import Purchases, { CustomerInfo, PurchasesOffering } from 'react-native-purchases';
+import Purchases, { CustomerInfo, PurchasesOffering, PurchasesPackage } from 'react-native-purchases';
 import { Platform } from 'react-native';
-import { getUserProfile, setProSubscriber } from './userService';
+import { getUserProfile, setProSubscriber, addCredits } from './userService';
 
 // RevenueCat Public App-Specific API Keys (Stripe Projects: dorien@rankbeacon.dev)
 const REVENUECAT_STRIPE_API_KEY = 'strp_oRCQHGzTOCydzvQECdMeNnbVXTI';
@@ -126,6 +126,12 @@ class RevenueCatService {
           }
 
           const { customerInfo } = await Purchases.purchasePackage(pkg);
+
+          if (tier === 'CREDITS') {
+            await addCredits(50, 'PURCHASE', 'Purchased 50 Poquito Credits Pack', 'PURCHASE_APP');
+            return { success: true };
+          }
+
           const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined' ||
                         typeof customerInfo.entitlements.active['unlimited_translations'] !== 'undefined';
           if (isPro) {
@@ -135,7 +141,7 @@ class RevenueCatService {
           return { success: false, userCancelled: false, errorMessage: 'Subscription confirmed, entitlement is updating.' };
         } else {
           console.warn('[RevenueCat] No available packages found in current offering.');
-          return { success: false, userCancelled: false, errorMessage: 'Store offerings are currently loading. Please try again in a moment.' };
+          return { success: false, userCancelled: false, errorMessage: 'Store offerings are coming soon or currently updating.' };
         }
       } catch (error: any) {
         const userCancelled = !!error?.userCancelled;

@@ -74,7 +74,7 @@ def publish_bundle(aab_path, track='internal', release_notes=DEFAULT_RELEASE_NOT
         # 3. Create or update the release in the target track
         print(f"Assigning bundle to track '{track}'...")
         release_obj = {
-            'name': f"Release {version_code} (v1.5.8)",
+            'name': f"Release {version_code} (v1.5.9)",
             'versionCodes': [str(version_code)],
             'status': 'completed',
             'releaseNotes': [
