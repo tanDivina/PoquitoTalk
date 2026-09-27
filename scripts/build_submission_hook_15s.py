@@ -192,7 +192,10 @@ def assert_no_speech(path, seconds):
     subprocess.run(["whisper", probe, "--model", "base", "--output_dir", OUT, "--output_format", "json",
                     "--fp16", "False"], capture_output=True, check=True)
     segs = json.loads((OUT / "music_probe.json").read_text())["segments"]
-    speech = [s for s in segs if s["avg_logprob"] > -1.0 and s["no_speech_prob"] < 0.5]
+    import re
+    labels = {"", "music", "musica", "música", "instrumental", "applause"}  # Whisper's soundtrack captions
+    speech = [s for s in segs if s["avg_logprob"] > -1.0 and s["no_speech_prob"] < 0.5
+              and re.sub(r"[^a-záéíóúñ ]", "", s["text"].lower()).strip() not in labels]
     if speech:
         sys.exit(f"Music bed {path} contains speech: {speech[0]['text']!r} — pick another bed.")
 
