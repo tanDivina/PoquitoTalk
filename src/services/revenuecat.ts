@@ -7,6 +7,7 @@ import { getUserProfile, setProSubscriber } from './userService';
 
 // RevenueCat Public App-Specific API Keys (Stripe Projects: dorien@rankbeacon.dev)
 const REVENUECAT_STRIPE_API_KEY = 'strp_oRCQHGzTOCydzvQECdMeNnbVXTI';
+const REVENUECAT_ANDROID_API_KEY = 'goog_AlpDvQBZbuFjLWDnWAAVexYDMQz';
 
 export interface SubscriptionState {
   isPro: boolean;
@@ -31,18 +32,21 @@ class RevenueCatService {
     if (this.isInitialized) return;
 
     try {
-      if (Platform.OS === 'web') {
+      if (Platform.OS === 'android') {
+        Purchases.configure({ apiKey: REVENUECAT_ANDROID_API_KEY });
+        this.isPurchasesConfigured = true;
+        this.currentCustomerInfo = await Purchases.getCustomerInfo();
+        console.log('[RevenueCat] Initialized successfully for Android Google Play');
+      } else if (Platform.OS === 'web') {
         Purchases.configure({ apiKey: REVENUECAT_STRIPE_API_KEY });
         this.isPurchasesConfigured = true;
         this.currentCustomerInfo = await Purchases.getCustomerInfo();
-        console.log('RevenueCat initialized successfully with Stripe Projects account');
+        console.log('[RevenueCat] Initialized successfully with Stripe Projects account');
       } else {
-        // Native mobile platforms require their respective platform public keys (goog_ / appl_)
-        // When not yet configured with Google Play Billing products, run safely in sandbox mode
-        console.log('[RevenueCat] Mobile sandbox mode active — skipping invalid web key');
+        console.log('[RevenueCat] Platform initialization skipped for', Platform.OS);
       }
     } catch (error) {
-      console.warn('RevenueCat initialization running in Sandbox/Demo mode:', error);
+      console.warn('[RevenueCat] Initialization warning:', error);
     } finally {
       this.isInitialized = true;
     }
@@ -67,12 +71,10 @@ class RevenueCatService {
         const customerInfo = await Purchases.getCustomerInfo();
         const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined' ||
                       typeof customerInfo.entitlements.active['unlimited_translations'] !== 'undefined';
-        if (isPro) {
-          await setProSubscriber(true);
-          return true;
-        }
+        await setProSubscriber(isPro);
+        return isPro;
       } catch (error) {
-        // Fallback to local profile
+        // Fallback to local profile on network offline
       }
     }
     try {
@@ -103,16 +105,24 @@ class RevenueCatService {
         if (offerings && offerings.availablePackages.length > 0) {
           const pkg = offerings.availablePackages[0];
           const { customerInfo } = await Purchases.purchasePackage(pkg);
-          const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined';
-          if (isPro) await setProSubscriber(true);
-          return isPro;
+          const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined' ||
+                        typeof customerInfo.entitlements.active['unlimited_translations'] !== 'undefined';
+          if (isPro) {
+            await setProSubscriber(true);
+            return true;
+          }
+          return false;
+        } else {
+          console.warn('[RevenueCat] No available packages found in current offering.');
+          return false;
         }
       } catch (error) {
-        console.warn('Purchase simulation:', error);
+        console.warn('[RevenueCat] Purchase error or cancelled by user:', error);
+        return false;
       }
     }
-    await setProSubscriber(true);
-    return true; // Return true for sandbox demo approval
+    console.warn('[RevenueCat] Purchases not configured on this device/platform.');
+    return false;
   }
 
   async restorePurchases(): Promise<boolean> {
@@ -121,20 +131,14 @@ class RevenueCatService {
         const customerInfo = await Purchases.restorePurchases();
         const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined' ||
                       typeof customerInfo.entitlements.active['unlimited_translations'] !== 'undefined';
-        if (isPro) {
-          await setProSubscriber(true);
-          return true;
-        }
+        await setProSubscriber(isPro);
+        return isPro;
       } catch (error) {
-        console.warn('Restore error:', error);
+        console.warn('[RevenueCat] Restore error:', error);
+        return false;
       }
     }
-    try {
-      const profile = await getUserProfile();
-      return !!profile.isProSubscriber;
-    } catch (e) {
-      return false;
-    }
+    return false;
   }
 }
 

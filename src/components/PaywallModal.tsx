@@ -51,7 +51,6 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   const handleSubscribe = async () => {
     setLoading(true);
     try {
-      await setProSubscriber(true);
       const success = await revenueCat.purchaseProPackage();
       if (success) {
         const packageNames: Record<PlanTier, string> = {

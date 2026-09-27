@@ -67,22 +67,22 @@ export const SoftOnboardingPaywall: React.FC<SoftOnboardingPaywallProps> = ({
   const handleSubscribe = async () => {
     setLoading(true);
     try {
-      await setProSubscriber(true);
-      await revenueCat.purchaseProPackage();
-      
-      const packageNames: Record<PaywallTier, string> = {
-        ANNUAL_TRIAL: 'Annual Explorer Pass',
-        MONTHLY: 'Monthly Resident Pass',
-        TRAVEL_PASS: '7-Day Travel Pass',
-        CREDITS: '50 Credits Pack',
-      };
+      const success = await revenueCat.purchaseProPackage();
+      if (success) {
+        const packageNames: Record<PaywallTier, string> = {
+          ANNUAL_TRIAL: 'Annual Explorer Pass',
+          MONTHLY: 'Monthly Resident Pass',
+          TRAVEL_PASS: '7-Day Travel Pass',
+          CREDITS: '50 Credits Pack',
+        };
 
-      onSuccess({
-        tier: selectedTier,
-        packageName: packageNames[selectedTier] || 'Annual Explorer Pass',
-        isTrial: selectedTier === 'ANNUAL_TRIAL',
-      });
-      onClose();
+        onSuccess({
+          tier: selectedTier,
+          packageName: packageNames[selectedTier] || 'Annual Explorer Pass',
+          isTrial: selectedTier === 'ANNUAL_TRIAL',
+        });
+        onClose();
+      }
     } catch (error) {
       if (Platform.OS === 'web' && typeof window !== 'undefined') {
         window.alert('Purchase Note: Could not complete transaction at this time.');
