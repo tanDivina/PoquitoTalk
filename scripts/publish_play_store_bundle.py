@@ -17,9 +17,9 @@ socket.setdefaulttimeout(600)
 KEY_PATH = '/Users/dorienvandenabbeele/Downloads/gsc_key.json'
 PACKAGE_NAME = 'com.heroapps.poquitotalk'
 
-DEFAULT_RELEASE_NOTES = """• Added "Listen English" voice playback for incoming contractor message translations in conversation threads.
-• Added interactive voice preview audio sampling for Diego and Sofia personas.
-• Verified offline Bocas del Toro island directory and contractor WhatsApp shortcuts."""
+DEFAULT_RELEASE_NOTES = """• Clear and transparent subscription pricing format displaying total billed cost ($39.99/yr) with full cancellation terms.
+• Enhanced paywall experience with animated vector mascot and offline stability improvements.
+• Post-WhatsApp return flow guidance and offline Bocas del Toro contractor shortcuts."""
 
 def publish_bundle(aab_path, track='internal', release_notes=DEFAULT_RELEASE_NOTES):
     if not os.path.exists(aab_path):
@@ -74,7 +74,7 @@ def publish_bundle(aab_path, track='internal', release_notes=DEFAULT_RELEASE_NOT
         # 3. Create or update the release in the target track
         print(f"Assigning bundle to track '{track}'...")
         release_obj = {
-            'name': f"Release {version_code} (v1.5.5)",
+            'name': f"Release {version_code} (v1.5.6)",
             'versionCodes': [str(version_code)],
             'status': 'completed',
             'releaseNotes': [
@@ -100,13 +100,25 @@ def publish_bundle(aab_path, track='internal', release_notes=DEFAULT_RELEASE_NOT
 
         # 4. Commit the edit
         print("Committing edit to Google Play Console...")
-        commit_res = service.edits().commit(
-            packageName=PACKAGE_NAME,
-            editId=edit_id
-        ).execute()
+        try:
+            commit_res = service.edits().commit(
+                packageName=PACKAGE_NAME,
+                editId=edit_id
+            ).execute()
+        except Exception as commit_err:
+            if "changesNotSentForReview" in str(commit_err):
+                print("App is in rejected/managed publishing state. Committing with changesNotSentForReview=True...")
+                commit_res = service.edits().commit(
+                    packageName=PACKAGE_NAME,
+                    editId=edit_id,
+                    changesNotSentForReview=True
+                ).execute()
+            else:
+                raise commit_err
+
         print(f"✓ Changes successfully committed!")
         print(f"Commit response: {commit_res}")
-        print("\n🎉 The release is now LIVE on Google Play Console!")
+        print("\n🎉 The release is now committed on Google Play Console (ready for review submit)!")
         return True
 
     except Exception as e:

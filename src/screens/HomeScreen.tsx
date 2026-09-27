@@ -366,23 +366,33 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
   // Setup Android notification channel & listen for notification taps
   useEffect(() => {
-    setupAndroidNotificationChannel();
+    try {
+      setupAndroidNotificationChannel();
+    } catch (e) {
+      console.warn('Channel setup notice:', e);
+    }
 
     if (Platform.OS !== 'web') {
-      const responseSubscription = Notifications.addNotificationResponseReceivedListener((response) => {
-        const data = response.notification.request.content.data;
-        if (data && data.type === 'whatsapp_return') {
-          if (data.isWalkieChannel && data.walkieRoomId) {
-            setIsChannelMinimized(false);
-          } else {
-            setShowPostWhatsAppModal(true);
+      try {
+        const responseSubscription = Notifications.addNotificationResponseReceivedListener((response) => {
+          const data = response?.notification?.request?.content?.data;
+          if (data && data.type === 'whatsapp_return') {
+            if (data.isWalkieChannel && data.walkieRoomId) {
+              setIsChannelMinimized(false);
+            } else {
+              setShowPostWhatsAppModal(true);
+            }
           }
-        }
-      });
+        });
 
-      return () => {
-        responseSubscription.remove();
-      };
+        return () => {
+          try {
+            responseSubscription?.remove();
+          } catch (e) {}
+        };
+      } catch (e) {
+        console.warn('Notifications listener setup notice:', e);
+      }
     }
   }, []);
 

@@ -150,11 +150,7 @@ export const SoftOnboardingPaywall: React.FC<SoftOnboardingPaywallProps> = ({
 
         <View style={styles.heroSection}>
           <View style={styles.mascotWrapper}>
-            <Image
-              source={require('../assets/poquito_talk_58_73_160.webp')}
-              style={styles.bigMascotImg}
-              resizeMode="contain"
-            />
+            <AnimatedParrotMascot size={78} isDancing={true} showSoundwaves={false} />
           </View>
 
           <Text style={styles.mainTitle} adjustsFontSizeToFit numberOfLines={1}>
@@ -232,10 +228,10 @@ export const SoftOnboardingPaywall: React.FC<SoftOnboardingPaywallProps> = ({
 
               <View style={styles.priceColumn}>
                 <View style={styles.priceRow}>
-                  <Text style={styles.priceAmount}>$3.33</Text>
-                  <Text style={styles.pricePeriod}> / mo</Text>
+                  <Text style={styles.priceAmount}>$39.99</Text>
+                  <Text style={styles.pricePeriod}> / yr</Text>
                 </View>
-                <Text style={styles.priceSubText}>$39.99/yr • Save 66%</Text>
+                <Text style={styles.priceSubText}>Just $3.33/mo • Save 66%</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -341,6 +337,13 @@ export const SoftOnboardingPaywall: React.FC<SoftOnboardingPaywallProps> = ({
               </View>
             )}
           </TouchableOpacity>
+
+          <Text style={styles.billingDisclosureText}>
+            {selectedTier === 'ANNUAL_TRIAL' && '7 days free, then $39.99/year. Cancel anytime in Google Play.'}
+            {selectedTier === 'MONTHLY' && 'Billed $9.99 monthly. Cancel anytime in Google Play.'}
+            {selectedTier === 'TRAVEL_PASS' && 'One-time charge of $4.99. Does not auto-renew.'}
+            {selectedTier === 'CREDITS' && 'One-time charge of $4.99. Credits never expire.'}
+          </Text>
 
           <TouchableOpacity onPress={onClose} activeOpacity={0.7} style={styles.freeForeverBtn}>
             <Text style={styles.freeForeverText}>Try it first</Text>
@@ -707,6 +710,15 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     color: '#FFF',
     letterSpacing: 0.2,
+  },
+  billingDisclosureText: {
+    fontSize: 10.2,
+    fontWeight: '600',
+    color: '#6B5E51',
+    textAlign: 'center',
+    marginTop: -1,
+    marginBottom: 0,
+    paddingHorizontal: 8,
   },
   freeForeverBtn: {
     paddingVertical: 2,

@@ -4,6 +4,7 @@
 import { LayersReactNative, connectRevenueCat } from "@layers/expo";
 import Purchases from "react-native-purchases";
 import { Platform } from "react-native";
+import { revenueCat } from "./revenuecat";
 
 export const LAYERS_APP_ID = "app_14732857b75e24a0";
 export const LAYERS_INGEST_HOST = "https://in.layers.com";
@@ -26,14 +27,24 @@ class LayersGrowthService {
       this.isInitialized = true;
       console.log("Layers Growth SDK initialized successfully with App ID:", LAYERS_APP_ID);
 
-      // Connect RevenueCat for automated subscription & checkout attribution
-      if (Purchases) {
+      // Connect RevenueCat only if Purchases was successfully initialized
+      if (Purchases && revenueCat.isConfigured()) {
         try {
           const purchasesAdapter = {
-            addCustomerInfoUpdateListener: (listener: any) => Purchases.addCustomerInfoUpdateListener(listener),
+            addCustomerInfoUpdateListener: (listener: any) => {
+              try {
+                return Purchases.addCustomerInfoUpdateListener(listener);
+              } catch (e) {
+                console.warn("Layers: addCustomerInfoUpdateListener error:", e);
+              }
+            },
             getCustomerInfo: async () => {
-              const info = await Purchases.getCustomerInfo();
-              return { customerInfo: info as any };
+              try {
+                const info = await Purchases.getCustomerInfo();
+                return { customerInfo: info as any };
+              } catch (e) {
+                return { customerInfo: null as any };
+              }
             },
           };
           connectRevenueCat({ sdk: this.layersClient as any }, purchasesAdapter as any);

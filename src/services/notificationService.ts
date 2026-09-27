@@ -2,16 +2,20 @@ import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 
 // Configure notification behavior when app is in foreground or background
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldShowBanner: true,
-    shouldShowList: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    priority: Notifications.AndroidNotificationPriority.MAX,
-  }),
-});
+try {
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldShowBanner: true,
+      shouldShowList: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      priority: Notifications.AndroidNotificationPriority.MAX,
+    }),
+  });
+} catch (e) {
+  console.warn('[NotificationService] setNotificationHandler notice:', e);
+}
 
 let isChannelConfigured = false;
 let activeReminderNotificationId: string | null = null;

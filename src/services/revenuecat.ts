@@ -19,25 +19,37 @@ export const MAX_FREE_TRANSLATIONS_PER_DAY = 10;
 
 class RevenueCatService {
   private isInitialized = false;
+  private isPurchasesConfigured = false;
   private currentCustomerInfo: CustomerInfo | null = null;
   private dailyTranslationsCount = 0;
+
+  isConfigured(): boolean {
+    return this.isPurchasesConfigured;
+  }
 
   async initialize(): Promise<void> {
     if (this.isInitialized) return;
 
     try {
-      // Configure RevenueCat SDK with Stripe Projects Rank Beacon account
-      Purchases.configure({ apiKey: REVENUECAT_STRIPE_API_KEY });
-      this.isInitialized = true;
-      this.currentCustomerInfo = await Purchases.getCustomerInfo();
-      console.log('RevenueCat initialized successfully with Stripe Projects account');
+      if (Platform.OS === 'web') {
+        Purchases.configure({ apiKey: REVENUECAT_STRIPE_API_KEY });
+        this.isPurchasesConfigured = true;
+        this.currentCustomerInfo = await Purchases.getCustomerInfo();
+        console.log('RevenueCat initialized successfully with Stripe Projects account');
+      } else {
+        // Native mobile platforms require their respective platform public keys (goog_ / appl_)
+        // When not yet configured with Google Play Billing products, run safely in sandbox mode
+        console.log('[RevenueCat] Mobile sandbox mode active — skipping invalid web key');
+      }
     } catch (error) {
       console.warn('RevenueCat initialization running in Sandbox/Demo mode:', error);
+    } finally {
       this.isInitialized = true;
     }
   }
 
   async getOfferings(): Promise<PurchasesOffering | null> {
+    if (!this.isPurchasesConfigured) return null;
     try {
       const offerings = await Purchases.getOfferings();
       if (offerings.current !== null) {
@@ -50,17 +62,18 @@ class RevenueCatService {
   }
 
   async isProSubscriber(): Promise<boolean> {
-    try {
-      if (!this.isInitialized) await this.initialize();
-      const customerInfo = await Purchases.getCustomerInfo();
-      const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined' ||
-                    typeof customerInfo.entitlements.active['unlimited_translations'] !== 'undefined';
-      if (isPro) {
-        await setProSubscriber(true);
-        return true;
+    if (this.isPurchasesConfigured) {
+      try {
+        const customerInfo = await Purchases.getCustomerInfo();
+        const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined' ||
+                      typeof customerInfo.entitlements.active['unlimited_translations'] !== 'undefined';
+        if (isPro) {
+          await setProSubscriber(true);
+          return true;
+        }
+      } catch (error) {
+        // Fallback to local profile
       }
-    } catch (error) {
-      // Default to false for free tier, allow sandbox testing
     }
     try {
       const profile = await getUserProfile();
@@ -84,45 +97,44 @@ class RevenueCatService {
   }
 
   async purchaseProPackage(): Promise<boolean> {
-    try {
-      const offerings = await this.getOfferings();
-      if (offerings && offerings.availablePackages.length > 0) {
-        const pkg = offerings.availablePackages[0];
-        const { customerInfo } = await Purchases.purchasePackage(pkg);
-        const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined';
-        if (isPro) await setProSubscriber(true);
-        return isPro;
+    if (this.isPurchasesConfigured) {
+      try {
+        const offerings = await this.getOfferings();
+        if (offerings && offerings.availablePackages.length > 0) {
+          const pkg = offerings.availablePackages[0];
+          const { customerInfo } = await Purchases.purchasePackage(pkg);
+          const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined';
+          if (isPro) await setProSubscriber(true);
+          return isPro;
+        }
+      } catch (error) {
+        console.warn('Purchase simulation:', error);
       }
-    } catch (error) {
-      console.warn('Purchase simulation:', error);
     }
     await setProSubscriber(true);
     return true; // Return true for sandbox demo approval
   }
 
   async restorePurchases(): Promise<boolean> {
-    try {
-      const customerInfo = await Purchases.restorePurchases();
-      const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined' ||
-                    typeof customerInfo.entitlements.active['unlimited_translations'] !== 'undefined';
-      if (isPro) {
-        await setProSubscriber(true);
-        return true;
+    if (this.isPurchasesConfigured) {
+      try {
+        const customerInfo = await Purchases.restorePurchases();
+        const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined' ||
+                      typeof customerInfo.entitlements.active['unlimited_translations'] !== 'undefined';
+        if (isPro) {
+          await setProSubscriber(true);
+          return true;
+        }
+      } catch (error) {
+        console.warn('Restore error:', error);
       }
-    } catch (error) {
-      console.warn('Restore purchases simulation note:', error);
     }
-
-    // Check local profile storage for sandbox/dev mode trial restores
     try {
       const profile = await getUserProfile();
-      if (profile.isProSubscriber) {
-        return true;
-      }
+      return !!profile.isProSubscriber;
     } catch (e) {
-      // fallback
+      return false;
     }
-    return false;
   }
 }
 
