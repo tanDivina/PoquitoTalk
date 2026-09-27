@@ -63,7 +63,8 @@
             "attUsageDescription": "Helps measure voice translation improvements and community app growth."
           }
         }
-      ]
+      ],
+      "expo-asset"
     ]
   }
 }

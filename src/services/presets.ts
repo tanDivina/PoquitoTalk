@@ -52,7 +52,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Water Taxis',
         title: 'Carenero / Bastimentos Shuttle',
         input: 'Hello, how much is the boat ride per person from Bocas Town to Carenero / Old Bank?',
-        output: '¡Hola! ¿A cuánto está el pasaje por persona en lancha desde Bocas Town hasta Carenero u Old Bank?',
+        output: '¡Hola! ¿Me puede decir a cuánto está el pasaje por persona en lancha desde Bocas Town hasta Carenero u Old Bank?',
         fullPanamenoOutput: '¡Buenas! ¿Cuánto cobra por cabeza pa cruzar a Carenero o a Old Bank en Bastimentos?',
       },
       {
@@ -126,7 +126,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Island Taxis',
         title: 'Airport Transfer Pickup',
         input: 'Hello, what is your rate for an airport pickup transfer in Bocas Town?',
-        output: '¡Hola! ¿Cuánto me cobra por recogerme en el aeropuerto de Bocas Town?',
+        output: '¡Hola! ¿Me puede decir cuánto me cobra por recogerme en el aeropuerto de Bocas Town?',
         fullPanamenoOutput: '¡Buenas! ¿Cuánto me sale que me busque en el aeropuerto de Bocas?',
       },
       {
@@ -135,7 +135,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Island Taxis',
         title: 'Daily Driver Hire Quote',
         input: 'Hi, how much do you charge for half-day driver service around Isla Colón?',
-        output: '¡Buenas! ¿Cuánto me cobraría por el servicio de chofer por medio día para recorrer Isla Colón?',
+        output: '¡Buenas! ¿Me podría decir cuánto me cobraría por el servicio de chofer por medio día para recorrer Isla Colón?',
         fullPanamenoOutput: '¡Buenas compa! ¿En cuánto me deja el taxi por medio día pa dar vueltas por la isla?',
       },
       {
@@ -189,7 +189,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Border Runs',
         title: 'Taxi to Almirante / Sixaola',
         input: 'Hello, what is the private taxi fare from Almirante boat docks directly to the Sixaola border crossing?',
-        output: '¡Hola! ¿Cuánto cuesta el taxi privado desde los muelles de Almirante directo hasta el cruce fronterizo de Sixaola?',
+        output: '¡Hola! ¿Me puede decir cuánto cuesta el taxi privado desde los muelles de Almirante directo hasta el cruce fronterizo de Sixaola?',
         fullPanamenoOutput: '¡Buenas compa! ¿Cuánto me sale un taxi directo desde el muelle de Almirante hasta la frontera en Sixaola?',
       },
       {
@@ -244,7 +244,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Water Trucks & Cisterns',
         title: 'Cistern Low / Water Refill',
         input: 'Hello, our cistern is almost empty due to dry weather. How much for 1,000 gallons delivered?',
-        output: '¡Buenas! Nuestra reserva de agua está casi vacía por la sequía. ¿Cuánto cobran por mil galones puestos?',
+        output: '¡Buenas! Nuestra reserva de agua está casi vacía por la sequía. ¿Me puede decir cuánto cobran por mil galones puestos?',
         fullPanamenoOutput: '¡Buenas! Se nos está secando el tanque de agua con este sol. ¿A cuánto sale el viaje de mil galones?',
       },
       {
@@ -418,7 +418,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Soil & Nurseries',
         title: 'Black Soil & Compost Delivery',
         input: 'Hello! How much is a yard or sack of rich black garden soil and organic compost delivered to our dock or home?',
-        output: '¡Hola! ¿A cuánto tiene la yarda o saco de tierra negra abonada y compost orgánico con entrega a nuestro muelle o casa?',
+        output: '¡Hola! ¿Me puede decir a cuánto tiene la yarda o saco de tierra negra abonada y compost orgánico con entrega a nuestro muelle o casa?',
         fullPanamenoOutput: '¡Buenas! ¿A cómo me sale el saco de tierra negra abonada puesta acá en el muelle?',
       },
       {
@@ -629,7 +629,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Yappy & Punto Pago',
         title: 'Phone Number / Name for Yappy',
         input: 'Hello! What is your registered phone number or business name in Yappy so I can transfer the payment?',
-        output: '¡Hola! ¿A qué número de teléfono o nombre comercial le transfiero el pago por Yappy?',
+        output: '¡Hola! ¿Me puede pasar su número de teléfono o nombre comercial de Yappy para transferirle el pago?',
         fullPanamenoOutput: '¡Buenas! ¿A qué número de celular te paso el Yappy?',
       },
       {
@@ -656,7 +656,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Yappy & Punto Pago',
         title: 'Punto Pago Kiosk Machine',
         input: 'Hi! Where is the nearest working Punto Pago machine to recharge cell phone data or pay Naturgy electric bills?',
-        output: '¡Buenas! ¿Dónde queda la máquina de Punto Pago más cercana que esté funcionando para recargas o pagar la luz?',
+        output: '¡Buenas! ¿Sabe dónde queda la máquina de Punto Pago más cercana que esté funcionando para recargas o pagar la luz?',
         fullPanamenoOutput: '¡Buenas! ¿Dónde hay un quiosco de Punto Pago que sirva pa meterle saldo al cel y pagar Naturgy?',
       },
     ],
@@ -839,7 +839,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Emergency Vet',
         title: 'Cane Toad / Poisoning Emergency',
         input: 'Urgent: My dog just bit a poisonous cane toad (sapo gigante) and is foaming at the mouth. What immediate steps should I take?',
-        output: '¡Urgente! Mi perro mordió un sapo venenoso y está botando espuma por el hocico. ¿Qué primeros auxilios le aplico ya?',
+        output: '¡Urgente! Mi perro mordió un sapo venenoso y está botando espuma por el hocico. ¿Me puede decir qué primeros auxilios le aplico ya?',
         fullPanamenoOutput: '¡Auxilio doc! El perro mordió un sapo y tiene espuma en la boca. ¿Cómo le lavo la boca y qué le inyecto?',
       },
       {
@@ -913,7 +913,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Surf & Weather',
         title: 'Surf Swell, Wave Report & Tides',
         input: 'Hi! How is the surf swell breaking at Paunch, Bluff, or Carenero point today, and when is high tide?',
-        output: '¡Buenas! ¿Cómo están reventando las olas en Paunch, Bluff o la punta de Carenero hoy, y a qué hora es marea alta?',
+        output: '¡Buenas! ¿Me puede decir cómo están reventando las olas en Paunch, Bluff o la punta de Carenero hoy, y a qué hora es marea alta?',
         fullPanamenoOutput: '¡Xopá tablistas! ¿Cómo está la ola en Paunch y Carenero hoy? ¿A qué hora sube la marea?',
       },
       {
@@ -931,7 +931,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Island Info',
         title: 'Garbage Collection Boat Schedule',
         input: 'Hi! What days and times does the municipal garbage boat or truck pass by our neighborhood dock for collection?',
-        output: '¡Buenas! ¿Qué días y a qué horas pasa la lancha o el camión recolector de basura por nuestro muelle?',
+        output: '¡Buenas! ¿Sabe qué días y a qué horas pasa la lancha o el camión recolector de basura por nuestro muelle?',
         fullPanamenoOutput: '¡Buenas vecinos! ¿Qué días pasa la lancha de la basura por este sector pa sacar las bolsas?',
       },
       {
@@ -940,7 +940,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Island Info',
         title: 'Local Farmers Market & Produce',
         input: 'Hello! When and where does the local organic farmers market take place in Bocas Town or Old Bank?',
-        output: '¡Hola! ¿Cuándo y en qué lugar se realiza el mercado orgánico de productores agrícolas locales en Bocas Town u Old Bank?',
+        output: '¡Hola! ¿Sabe cuándo y en qué lugar se realiza el mercado orgánico de productores agrícolas locales en Bocas Town u Old Bank?',
         fullPanamenoOutput: '¡Buenas! ¿Cuándo ponen la feria del mercado artesanal y de frutas frescas por acá?',
       },
     ],

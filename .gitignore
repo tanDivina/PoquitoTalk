@@ -80,3 +80,15 @@ web-funnel/data_private/
 *.pdf
 
 
+
+# Preset re-voicing work files (takes, reports) and pre-intonation backups
+build_revoice/
+assets/audio/presets_backup_pre_intonation/
+
+# Offline preset clips must ship with the app (scripts/build_offline_presets.py)
+!assets/audio/offline/
+!assets/audio/offline/*.mp3
+
+# Marketing video build outputs (regenerable, large)
+comedy_skits_build/
+instagram_reels_build/

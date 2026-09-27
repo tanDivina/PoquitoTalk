@@ -1,5 +1,7 @@
 import * as FileSystem from 'expo-file-system/legacy';
+import { Asset } from 'expo-asset';
 import { generateGoogleGeminiAudio } from './googleVoice';
+import { BUNDLED_PRESET_AUDIO } from './bundledPresetAudio';
 import PRESET_TEXT_MAP_DATA from './presetTextMap.json';
 
 const SERVER_CDN_BASE = 'https://poquitotalk.hero-apps.com/audio/presets';
@@ -32,9 +34,10 @@ function normalizeForLookup(text: string): string {
 /**
  * Resolves high-fidelity audio for preset phrases.
  * Exclusively uses Diego (Male) and Sofia (Female).
- * Priority 1: Instant local disk cache hit (< 5ms, 0 network, $0 cost).
- * Priority 2: Pre-rendered audio from CDN server (poquitotalk.hero-apps.com) - $0 ElevenLabs cost!
- * Priority 3: Fallback on-demand generation via generateGoogleGeminiAudio (and cache locally).
+ * Priority 1: Clip bundled inside the app (works offline from the first launch).
+ * Priority 2: Previously downloaded copy in persistent storage (0 network).
+ * Priority 3: Pre-rendered audio from CDN server (poquitotalk.hero-apps.com) - $0 ElevenLabs cost!
+ * Priority 4: Fallback on-demand generation via generateGoogleGeminiAudio (and cache locally).
  */
 export async function resolvePresetAudioUri(
   phraseId: string | undefined,
@@ -54,9 +57,24 @@ export async function resolvePresetAudioUri(
   if (canonicalId) {
     const resolvedId = PRESET_AUDIO_ALIASES[canonicalId] || canonicalId;
     const filename = `${personaKey}_${resolvedId}.mp3`;
-    const localUri = `${FileSystem.cacheDirectory}poquito_preset_${filename}`;
+    // documentDirectory, not cacheDirectory: the OS may purge caches under storage pressure
+    const localUri = `${FileSystem.documentDirectory}poquito_preset_${filename}`;
 
-    // 1. Check local persistent disk cache
+    // 1. Clip bundled with the app (scripts/build_offline_presets.py) — no network needed
+    const bundled = BUNDLED_PRESET_AUDIO[`${personaKey}_${resolvedId}`];
+    if (bundled) {
+      try {
+        const asset = Asset.fromModule(bundled);
+        await asset.downloadAsync(); // copies out of the app package; offline-safe
+        if (asset.localUri) {
+          return asset.localUri;
+        }
+      } catch (e) {
+        // Fall through to the downloaded copy / CDN
+      }
+    }
+
+    // 2. Check local persistent disk copy
     try {
       const info = await FileSystem.getInfoAsync(localUri);
       if (info.exists && info.size && info.size > 1000) {
@@ -66,7 +84,7 @@ export async function resolvePresetAudioUri(
       // Ignore cache check errors
     }
 
-    // 2. Fetch pre-rendered audio from LiteSpeed CDN server (0 ElevenLabs cost!)
+    // 3. Fetch pre-rendered audio from LiteSpeed CDN server (0 ElevenLabs cost!)
     const remoteUrl = `${SERVER_CDN_BASE}/${filename}`;
     try {
       const downloadResult = await FileSystem.downloadAsync(remoteUrl, localUri);
@@ -81,6 +99,6 @@ export async function resolvePresetAudioUri(
     }
   }
 
-  // 3. Fallback to on-demand generation (with deterministic disk caching)
+  // 4. Fallback to on-demand generation (with deterministic disk caching)
   return await generateGoogleGeminiAudio(text, isMale ? 'Male' : 'Female');
 }
