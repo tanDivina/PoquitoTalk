@@ -51,8 +51,8 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   const handleSubscribe = async () => {
     setLoading(true);
     try {
-      const success = await revenueCat.purchaseProPackage();
-      if (success) {
+      const result = await revenueCat.purchaseProPackage(selectedTier);
+      if (result.success) {
         const packageNames: Record<PlanTier, string> = {
           ANNUAL_TRIAL: 'Annual Explorer Pass',
           MONTHLY: 'Monthly Resident Pass',
@@ -65,12 +65,18 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
           isTrial: selectedTier === 'ANNUAL_TRIAL',
         });
         onClose();
+      } else if (!result.userCancelled) {
+        if (Platform.OS === 'web' && typeof window !== 'undefined') {
+          window.alert(result.errorMessage || 'Unable to complete transaction at this time.');
+        } else {
+          Alert.alert('Store Notice', result.errorMessage || 'Unable to connect to Google Play store. Please check your connection or try again.');
+        }
       }
-    } catch (error) {
+    } catch (error: any) {
       if (Platform.OS === 'web' && typeof window !== 'undefined') {
         window.alert('Purchase Note: Unable to complete transaction at this time.');
       } else {
-        Alert.alert('Purchase Note', 'Unable to complete transaction at this time.');
+        Alert.alert('Purchase Note', error?.message || 'Unable to complete transaction at this time.');
       }
     } finally {
       setLoading(false);
@@ -210,34 +216,36 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
                     <Text style={styles.priceAmount}>$4.99</Text>
                     <Text style={styles.pricePeriod}> / 7 days</Text>
                   </View>
-                  <Text style={styles.priceSubTextMuted}>Non-renewing</Text>
+                  <Text style={styles.priceSubTextMuted}>Prepaid • Non-renewing</Text>
                 </View>
               </View>
             </TouchableOpacity>
 
-            {/* Plan 4: 50 Poquito Credits Pack */}
-            <TouchableOpacity
-              style={[styles.pricingCard, selectedTier === 'CREDITS' && styles.pricingCardSelected]}
-              onPress={() => setSelectedTier('CREDITS')}
-              activeOpacity={0.85}
-            >
-              <View style={styles.cardHeaderRow}>
-                <View style={[styles.radioCircle, selectedTier === 'CREDITS' && styles.radioCircleActive]}>
-                  {selectedTier === 'CREDITS' && <View style={styles.radioInnerDot} />}
-                </View>
-                <View style={styles.planInfoColumn}>
-                  <Text style={styles.planTitle}>50 Credits Pack</Text>
-                  <Text style={styles.planSubtitle}>50 Voice Notes • 10 Live Sessions</Text>
-                </View>
-                <View style={styles.priceColumn}>
-                  <View style={styles.priceRow}>
-                    <Text style={styles.priceAmount}>$4.99</Text>
-                    <Text style={styles.pricePeriod}> once</Text>
+            {/* Plan 4: 50 Poquito Credits Pack (Web Only) */}
+            {Platform.OS === 'web' && (
+              <TouchableOpacity
+                style={[styles.pricingCard, selectedTier === 'CREDITS' && styles.pricingCardSelected]}
+                onPress={() => setSelectedTier('CREDITS')}
+                activeOpacity={0.85}
+              >
+                <View style={styles.cardHeaderRow}>
+                  <View style={[styles.radioCircle, selectedTier === 'CREDITS' && styles.radioCircleActive]}>
+                    {selectedTier === 'CREDITS' && <View style={styles.radioInnerDot} />}
                   </View>
-                  <Text style={styles.priceSubTextEmerald}>Never expires</Text>
+                  <View style={styles.planInfoColumn}>
+                    <Text style={styles.planTitle}>50 Credits Pack</Text>
+                    <Text style={styles.planSubtitle}>50 Voice Notes • 10 Live Sessions</Text>
+                  </View>
+                  <View style={styles.priceColumn}>
+                    <View style={styles.priceRow}>
+                      <Text style={styles.priceAmount}>$4.99</Text>
+                      <Text style={styles.pricePeriod}> once</Text>
+                    </View>
+                    <Text style={styles.priceSubTextEmerald}>Never expires</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* Action Button */}
@@ -265,7 +273,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
           <Text style={styles.billingDisclosureText}>
             {selectedTier === 'ANNUAL_TRIAL' && '7 days free, then $39.99/year. Cancel anytime in Google Play.'}
             {selectedTier === 'MONTHLY' && 'Billed $9.99 monthly. Cancel anytime in Google Play.'}
-            {selectedTier === 'TRAVEL_PASS' && 'One-time charge of $4.99. Does not auto-renew.'}
+            {selectedTier === 'TRAVEL_PASS' && 'Prepaid 7-day access for $4.99. Does not auto-renew. Top up anytime.'}
             {selectedTier === 'CREDITS' && 'One-time charge of $4.99. Credits never expire.'}
           </Text>
 

@@ -98,31 +98,57 @@ class RevenueCatService {
     return this.dailyTranslationsCount < MAX_FREE_TRANSLATIONS_PER_DAY;
   }
 
-  async purchaseProPackage(): Promise<boolean> {
+  async purchaseProPackage(tier?: string): Promise<{ success: boolean; userCancelled?: boolean; errorMessage?: string }> {
     if (this.isPurchasesConfigured) {
       try {
         const offerings = await this.getOfferings();
         if (offerings && offerings.availablePackages.length > 0) {
-          const pkg = offerings.availablePackages[0];
+          let pkg: PurchasesPackage | undefined;
+          if (tier === 'MONTHLY') {
+            pkg = offerings.availablePackages.find(p => p.identifier === '$rc_monthly' || p.packageType === 'MONTHLY');
+          } else if (tier === 'TRAVEL_PASS') {
+            pkg = offerings.availablePackages.find(p => p.identifier === '$rc_weekly' || p.packageType === 'WEEKLY');
+          } else if (tier === 'ANNUAL_TRIAL') {
+            pkg = offerings.availablePackages.find(p => p.identifier === '$rc_annual' || p.packageType === 'ANNUAL');
+          } else if (tier === 'CREDITS') {
+            pkg = offerings.availablePackages.find(p => p.identifier === 'credits_50' || p.identifier === '$rc_custom');
+          } else {
+            pkg = offerings.availablePackages[0];
+          }
+
+          if (!pkg) {
+            console.warn(`[RevenueCat] Selected tier '${tier}' is not currently available in this offering.`);
+            return {
+              success: false,
+              userCancelled: false,
+              errorMessage: `The selected plan is currently syncing with the store. Please select another plan or try again shortly.`,
+            };
+          }
+
           const { customerInfo } = await Purchases.purchasePackage(pkg);
           const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined' ||
                         typeof customerInfo.entitlements.active['unlimited_translations'] !== 'undefined';
           if (isPro) {
             await setProSubscriber(true);
-            return true;
+            return { success: true };
           }
-          return false;
+          return { success: false, userCancelled: false, errorMessage: 'Subscription confirmed, entitlement is updating.' };
         } else {
           console.warn('[RevenueCat] No available packages found in current offering.');
-          return false;
+          return { success: false, userCancelled: false, errorMessage: 'Store offerings are currently loading. Please try again in a moment.' };
         }
-      } catch (error) {
-        console.warn('[RevenueCat] Purchase error or cancelled by user:', error);
-        return false;
+      } catch (error: any) {
+        const userCancelled = !!error?.userCancelled;
+        console.warn('[RevenueCat] Purchase error or cancelled:', error);
+        return {
+          success: false,
+          userCancelled,
+          errorMessage: userCancelled ? undefined : (error?.message || 'Transaction could not be completed.'),
+        };
       }
     }
     console.warn('[RevenueCat] Purchases not configured on this device/platform.');
-    return false;
+    return { success: false, userCancelled: false, errorMessage: 'In-app billing is only available on supported mobile devices.' };
   }
 
   async restorePurchases(): Promise<boolean> {
