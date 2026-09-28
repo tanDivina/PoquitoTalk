@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How PoquitoTalk Turns English Into Panamanian Spanish Voice Notes • PoquitoTalk</title>
+  <meta name="description" content="The real architecture behind PoquitoTalk: layered speech-to-text, a phrase map plus Panamanian dialect rules, ElevenLabs voices, and a zero-install walkie-talkie page that runs on plain PHP." />
+  
+  <link rel="icon" type="image/svg+xml" href="../logo.svg" />
+  <link rel="alternate icon" type="image/png" href="../favicon.png" />
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="PoquitoTalk Engineering & Growth" />
+  <meta property="og:title" content="How PoquitoTalk Turns English Into Panamanian Spanish Voice Notes • PoquitoTalk" />
+  <meta property="og:description" content="The real architecture behind PoquitoTalk: layered speech-to-text, a phrase map plus Panamanian dialect rules, ElevenLabs voices, and a zero-install walkie-talkie page that runs on plain PHP." />
+  <meta property="og:image" content="https://poquitotalk.hero-apps.com/logo_v6_og.png" />
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@DorienVibecodes" />
+  <meta name="twitter:creator" content="@DorienVibecodes" />
+  <meta name="twitter:title" content="How PoquitoTalk Turns English Into Panamanian Spanish Voice Notes • PoquitoTalk" />
+  <meta name="twitter:description" content="The real architecture behind PoquitoTalk: layered speech-to-text, a phrase map plus Panamanian dialect rules, ElevenLabs voices, and a zero-install walkie-talkie page that runs on plain PHP." />
+  <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/logo_v6_og.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="article.css?v=1.0.5" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="article-nav">
+    <div class="nav-container">
+      <div class="nav-left">
+        <a href="index.html" class="brand-link" aria-label="PoquitoTalk Articles">
+          <img src="../logo.svg" width="34" height="34" alt="PoquitoTalk Logo" />
+          <span class="brand-wordmark">Poquito<span class="brand-talk">Talk</span></span>
+        </a>
+        <span class="nav-separator">/</span>
+        <a href="index.html" class="nav-back-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          All Articles
+        </a>
+      </div>
+      <div class="nav-right-actions">
+        <a href="../index.html" class="btn-app-link" style="background: transparent; color: var(--terracotta); border-color: var(--border-light);">
+          App Home
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Article Body -->
+  <main class="article-shell">
+    <article>
+      <header class="article-header">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+          <div class="article-category-badge">Engineering • Architecture</div>
+        </div>
+        <h1 class="article-title">How PoquitoTalk Turns English Into Panamanian Spanish Voice Notes</h1>
+        
+        <div class="article-meta-row">
+          <a href="https://x.com/DorienVibecodes" target="_blank" rel="noopener" class="author-pill">
+            <img src="../favicon.png" alt="Dorien" class="author-avatar" onerror="this.src='../logo.svg'" />
+            <span>Dorien Van den Abbeele</span>
+            <span class="author-handle">@DorienVibecodes</span>
+          </a>
+          <span class="meta-divider">•</span>
+          <span>8 min read</span>
+          <span class="meta-divider">•</span>
+          <span>Updated Sep 28, 2026</span>
+        </div>
+      </header>
+
+      <div class="article-content">
+<div class="article-media-container"><img src="logo_v6_og.png" alt="PoquitoTalk logo" /><div class="article-media-caption">PoquitoTalk, built in Bocas del Toro, Panama</div></div>
+<p class="article-update-note" style="background: rgba(5, 150, 105, 0.08); border-left: 4px solid #059669; border-radius: 10px; padding: 14px 18px; font-size: 15.5px;"><strong>Updated Sep 28, 2026.</strong> An earlier version of this post described the architecture I planned in the first week (an on-device Gemma model, Firestore, WebSockets). This version describes what actually shipped in v1.5.10 on Google Play.</p>
+
+<h2>The problem: WhatsApp voice notes</h2>
+<p>In Bocas del Toro, almost everything runs on WhatsApp: the water taxi, the plumber, the A/C technician, the landlord. And a lot of it happens in voice notes, not text. Local workers often don't read long messages; they listen.</p>
+<p>For expats who only have textbook Spanish, that is hard. Translation apps give you formal Spanish text, and then you still have to read it out loud into your phone. PoquitoTalk skips that step: you type or say what you need in English, and it sends a natural Panamanian Spanish voice note to WhatsApp.</p>
+<p>The second half is the reply. Most two-way translation apps expect both people to install the app. A boat captain at the tiller is not going to do that, so the contractor side had to work from a link in a browser.</p>
+
+<h2>What the system looks like</h2>
+<p>There are three parts, and none of them need a database server:</p>
+<ol>
+<li><strong>The mobile app</strong>: Expo SDK 57 and React Native 0.86, published on Google Play.</li>
+<li><strong>The contractor page</strong>: a single HTML page at <code>/talk</code> that the contractor opens from a WhatsApp link. No install, no account.</li>
+<li><strong>A small PHP API</strong> on the same shared LiteSpeed hosting as the website. It proxies translation and speech-to-text, stores voice notes as files, and keeps each walkie-talkie room as a JSON file.</li>
+</ol>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">TEXT</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class="diagram-ascii"><code>Expat&#x27;s phone (Expo app)                    Contractor&#x27;s phone (any browser)
+┌──────────────────────────┐                ┌──────────────────────────────┐
+│ 1. Speak or type English │                │ /talk?r=room_xxxx            │
+│ 2. Speech-to-text        │                │ Hold to talk (MediaRecorder) │
+│ 3. Translate + Panama    │                └──────────────┬───────────────┘
+│    dialect rules         │                               │
+│ 4. Spanish voice (TTS)   │                               │
+│ 5. Share to WhatsApp  ───┼── link ──────────────────────▶│
+└────────────┬─────────────┘                               │
+             │           poll every 2.5 s                  │
+             ▼                                             ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│ PHP API on shared LiteSpeed hosting (poquitotalk.hero-apps.com/api)   │
+│ translate.php · transcribe.php · audio.php · walkie.php               │
+│ Rooms = JSON files · voice notes = audio files on disk                │
+└───────────────────────────────────────────────────────────────────────┘</code></pre>
+</div>
+
+<h2>Step 1: Speech-to-text with fallbacks</h2>
+<p>Island internet is unreliable and every speech API has bad days, so transcription tries up to four engines in order and stops at the first one that works:</p>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">typescript</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class=""><code>// src/services/transcriptionService.ts (simplified)
+// 1. ElevenLabs Scribe (scribe_v1)
+// 2. Groq Whisper (whisper-large-v3), if a key is set
+// 3. OpenAI Whisper (whisper-1), if a key is set
+// 4. Own PHP proxy: /api/transcribe.php
+// 5. Give up and let the user type
+
+const BOCAS_WHISPER_PROMPT =
+  &quot;Bocas del Toro, Isla Colón, Bastimentos, Carenero, Isla Solarte, &quot; +
+  &quot;Red Frog, Old Bank, Playa Bluff, Bocas Town, lancha, muelle Taxi 25, &quot; +
+  &quot;capitán, dólares, WhatsApp&quot;;</code></pre>
+</div>
+<p>The prompt lists local place names and island words like <em>lancha</em> and <em>muelle</em>, so the engine expects them instead of guessing. After transcription, two small cleanup steps run: one removes stutters and repeats ("I, I need the the boat"), and one normalizes local place names.</p>
+
+<h2>Step 2: Translation with a phrase map and dialect rules</h2>
+<p>The first plan was an on-device LLM; the translation file is still called <code>gemma.ts</code>. What shipped is simpler and more predictable for short service messages:</p>
+<ol>
+<li><strong>A hand-written phrase map</strong> of about 85 common island requests (water pressure, Starlink outages, table reservations, plants for the garden), each with a natural Panamanian version.</li>
+<li><strong>Language direction detection</strong>, so an English sentence never gets "translated" from Spanish to English by accident.</li>
+<li><strong>Machine translation with fallbacks</strong>: MyMemory first, then my own PHP proxy, then Google Translate.</li>
+<li><strong>Panamanian dialect rules</strong> that run on every result. Generic Spanish says <em>barco</em> or <em>taxi acuático</em>; in Bocas everyone says <em>lancha</em>.</li>
+</ol>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">typescript</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class=""><code>// src/services/gemma.ts: polishPanamaSpanish() (excerpt)
+text = text.replace(/\bel\s+barco\b/gi, &#x27;la lancha&#x27;);
+text = text.replace(/\btaxi\s+acuático\b/gi, &#x27;lancha&#x27;);
+text = text.replace(/\bwater\s+taxi\b/gi, &#x27;lancha&#x27;);
+text = text.replace(/\bwater truck\b/gi, &#x27;camión cisterna&#x27;);
+text = text.replace(/\bwater tank\b/gi, &#x27;tanque de reserva&#x27;);</code></pre>
+</div>
+<p>If every online service fails, a small local fallback still returns something usable, so the user is never left with an empty screen.</p>
+
+<h2>Step 3: A voice that sounds like a person</h2>
+<p>Spanish text becomes audio with <strong>ElevenLabs</strong> (<code>eleven_multilingual_v2</code>) in one of two voices: <strong>Diego</strong> (male) or <strong>Sofia</strong> (female). The user picks the voice that matches them. If ElevenLabs is unavailable, Google Cloud Text-to-Speech takes over.</p>
+<p>The ready-made phrases in the Presets tab don't call any API at all. Their audio is generated once and served as files (over 300 clips on the server, plus a set bundled in the app), so the most common requests play instantly, even on a weak connection.</p>
+
+<h2>Step 4: A walkie-talkie the contractor can use without installing anything</h2>
+<p>When the expat starts a live conversation, the app creates a room ID and a link like <code>poquitotalk.hero-apps.com/talk?r=room_…</code>, which goes out in WhatsApp. The contractor taps it and gets one big hold-to-talk button in their browser, recorded with the standard <code>MediaRecorder</code> API.</p>
+<p>There are no WebSockets. Both sides post messages to <code>walkie.php</code> and poll for new ones every 2.5 seconds:</p>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">javascript</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class=""><code>// talk.html: the contractor&#x27;s side
+async function pollServerMessages() {
+  const res = await fetch(
+    `/api/walkie.php?action=poll&amp;room=${encodeURIComponent(roomId)}&amp;since=${lastPollTimestamp}`
+  );
+  // ...append new messages, play incoming audio
+}
+setInterval(pollServerMessages, 2500);</code></pre>
+</div>
+<p>On cheap shared hosting, polling is the boring option that works. Each room is a JSON file; each voice note is an audio file next to it.</p>
+<p>Because live sessions cost real API money, they have limits. A session only starts counting when the first voice message is sent (opening the link does nothing), and then:</p>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">typescript</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class=""><code>// src/services/walkieTalkie.ts
+const SESSION_MAX_DURATION_MS = 15 * 60 * 1000;     // 15 minutes max active session
+const SESSION_INACTIVITY_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes silence auto-close
+const SESSION_MAX_TURNS = 15;                        // 15 voice exchanges per session</code></pre>
+</div>
+
+<h2>Pricing that covers the API costs</h2>
+<p>Every voice note costs money to generate, so nothing is truly unlimited without a plan behind it. The current plans on Google Play:</p>
+<div class="table-wrapper"><table>
+<thead><tr><th>Plan</th><th>Price</th><th>What you get</th></tr></thead>
+<tbody>
+<tr><td>Annual Explorer Pass</td><td>$39.99 / year (7 days free)</td><td>Unlimited voice notes and live sessions</td></tr>
+<tr><td>Monthly Resident Pass</td><td>$9.99 / month</td><td>Unlimited voice notes and live sessions</td></tr>
+<tr><td>7-Day Travel Pass</td><td>$4.99, non-renewing</td><td>100 voice notes and 20 live sessions</td></tr>
+<tr><td>50 Credits Pack</td><td>$4.99 once, never expires</td><td>50 voice notes or 10 live sessions (1 live session = 5 credits)</td></tr>
+</tbody>
+</table></div>
+<p>Subscriptions run through <strong>RevenueCat</strong>. The credits pack is also sold on a web funnel through <strong>Stripe</strong>, and web purchases are redeemed in the app through RevenueCat.</p>
+
+<h2>Small detail: WhatsApp link previews</h2>
+<p>WhatsApp caches link preview images for days. When I updated the logo, old previews kept showing up. The fix is a version number on the image URL:</p>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">html</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class=""><code>&lt;meta property=&quot;og:image&quot; content=&quot;https://poquitotalk.hero-apps.com/logo_v6_og.png?v=1.0.4&quot; /&gt;</code></pre>
+</div>
+
+<h2>Tech stack</h2>
+<ul>
+<li><strong>App</strong>: Expo SDK 57, React Native 0.86, expo-audio.</li>
+<li><strong>Speech-to-text</strong>: ElevenLabs Scribe, with Groq Whisper, OpenAI Whisper and a PHP proxy as fallbacks.</li>
+<li><strong>Translation</strong>: phrase map, MyMemory, Google Translate, and custom Panamanian dialect rules.</li>
+<li><strong>Voices</strong>: ElevenLabs (Diego, Sofia), with Google Cloud Text-to-Speech as fallback.</li>
+<li><strong>Backend</strong>: plain PHP on Namecheap LiteSpeed hosting. No database server.</li>
+<li><strong>Payments</strong>: RevenueCat, Google Play Billing, Stripe.</li>
+</ul>
+
+<h2>What I'd tell other builders</h2>
+<ol>
+<li><strong>Ship the boring version.</strong> I planned an LLM, a cloud database and WebSockets. A phrase map, dialect rules, JSON files and polling shipped instead, and they work.</li>
+<li><strong>Design for the person on the other end.</strong> The contractor never installs anything. That one decision shaped the whole walkie-talkie.</li>
+<li><strong>Always have a fallback.</strong> On an island with spotty internet, every external API in this app has a second or third option behind it.</li>
+</ol>
+<p><em>Follow the build on X: <a href="https://x.com/DorienVibecodes" target="_blank" rel="noopener">@DorienVibecodes</a></em></p>
+      </div>
+
+      <!-- Author Bio Footer Box -->
+      <div class="author-bio-card">
+        <img src="../logo.svg" alt="Dorien Van den Abbeele" class="bio-avatar" />
+        <div class="bio-content">
+          <h4>Written by Dorien Van den Abbeele</h4>
+          <p class="bio-text">Solo developer building <strong>PoquitoTalk</strong> in Bocas del Toro, Panama. Sharing real-world lessons in mobile monetization, voice AI engineering, and product distribution in public.</p>
+          <div class="bio-links">
+            <a href="https://x.com/DorienVibecodes" target="_blank" rel="noopener" style="color: #964824; text-decoration: none;">Follow on X (@DorienVibecodes) →</a>
+            <a href="../index.html" style="color: #059669; text-decoration: none;">Try PoquitoTalk Web Demo →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prev / Next Navigation -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-subtle); gap: 16px; flex-wrap: wrap;">
+        <a href="reddit-epiphany.html" class="nav-back-link">← Prev: Reddit Epiphany</a>
+        <a href="mastering-local-spanish.html" class="btn-app-link" style="background: transparent; color: var(--terracotta); border: 1.5px solid var(--border-light);">Next: Mastering Local Spanish in Bocas →</a>
+      </div>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="article-footer">
+    <p>© 2026 PoquitoTalk • Built in Bocas del Toro, Panamá 🇵🇦 • <a href="index.html">Articles Directory</a> • <a href="../privacy.html">Privacy</a></p>
+  </footer>
+
+  <script src="clipboard-helper.js"></script>
+</body>
+</html>

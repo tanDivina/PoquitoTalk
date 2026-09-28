@@ -126,3 +126,13 @@ cd android
 # Output bundle:
 # android/app/build/outputs/bundle/release/app-release.aab
 ```
+
+---
+
+## 5. ✅ Pre-Release Regression Checks (from community feedback)
+
+Run these on a real device before every production submission that touches billing:
+
+- [ ] **Clean reinstall + restore** (tip from @gemmeinhq): delete the app, reinstall, sign in with the same Google Play account and tap **Restore Purchases**. Confirm Pro / credits come back. This path rarely gets retested after purchase-flow changes.
+- [ ] **Store listing matches the build** (tip from @KindnessCFdn): if the paywall or pricing layout changed, make sure no Play listing screenshot still shows the old version, or the reviewer sees the same violation again.
+- [ ] **Don't edit the listing during review**: once a build is in review, leave the store listing alone. Edits can restart the review clock.
