@@ -566,10 +566,6 @@ export default function App() {
               creditsGranted: rcResult.creditsGranted,
               isPro: rcResult.isPro,
             });
-            Alert.alert(
-              '¡Wepa! Purchase Redeemed 🎉',
-              `Your ${rcResult.packageName || 'purchase'} is now unlocked and ready!`
-            );
           } else {
             Alert.alert(
               'Redemption Notice',

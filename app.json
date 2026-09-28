@@ -13,7 +13,7 @@
     },
     "android": {
       "package": "com.heroapps.poquitotalk",
-      "versionCode": 11,
+      "versionCode": 12,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",

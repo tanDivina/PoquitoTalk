@@ -273,7 +273,7 @@ class RevenueCatService {
             handled: true,
             success: false,
             resultType: 'PURCHASE_BELONGS_TO_OTHER_USER',
-            message: 'This purchase belongs to another user account. Please check your login credentials.',
+            message: "This purchase was already activated on another phone. Email support@hero-apps.com and we'll help.",
           };
         }
 
