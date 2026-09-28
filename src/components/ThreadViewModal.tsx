@@ -23,6 +23,8 @@ import * as Speech from "expo-speech";
 import { Colors } from "../theme/colors";
 import { ConversationThread, ThreadMessage } from "../services/conversations";
 import { getCategoryUnifiedMeta } from "../services/presets";
+import { speakIncomingEnglish } from "../services/incomingVoice";
+import { resolveSpeakerGender, SpeakerGender } from "../utils/speakerGender";
 import { translateWithGemma } from "../services/gemma";
 import {
   generateGoogleGeminiAudio,
@@ -154,6 +156,26 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
 
   const meta = getCategoryUnifiedMeta(thread.category);
 
+  // Incoming English plays in a voice matching this contact (guessed from the name,
+  // one tap to change). The contractor never has to set anything.
+  const speakerGender = resolveSpeakerGender(thread.speakerGender, thread.contactName);
+  const isGenderGuessed = !thread.speakerGender;
+  const SPEAKER_GENDER_LABEL: Record<SpeakerGender, string> = {
+    MALE: "Male voice",
+    FEMALE: "Female voice",
+    NEUTRAL: "Neutral voice",
+  };
+  const SPEAKER_GENDER_ICON: Record<SpeakerGender, string> = {
+    MALE: "male",
+    FEMALE: "female",
+    NEUTRAL: "person-outline",
+  };
+  const handleCycleSpeakerGender = () => {
+    const next: SpeakerGender =
+      speakerGender === "MALE" ? "FEMALE" : speakerGender === "FEMALE" ? "NEUTRAL" : "MALE";
+    onUpdateThread({ ...thread, speakerGender: next });
+  };
+
   const handleSendMessage = async () => {
     if (!inputText.trim()) return;
 
@@ -249,9 +271,9 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
       setPlayingMsgId(null);
       setPlayingEnglishMsgId(msg.id);
 
-      Speech.speak(msg.textEnglish, {
-        language: "en-US",
-        pitch: 1.0,
+      // Contractor messages use the contractor's voice; the expat's own messages stay neutral
+      const voiceGender = msg.sender === "SERVICE_PROVIDER" ? speakerGender : "NEUTRAL";
+      await speakIncomingEnglish(msg.textEnglish, voiceGender, {
         rate: 0.95,
         onDone: () => setPlayingEnglishMsgId(null),
         onError: () => setPlayingEnglishMsgId(null),
@@ -367,6 +389,18 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
               <View style={[styles.categoryPill, { backgroundColor: meta.badgeBg, borderColor: meta.border }]}>
                 <Text style={[styles.categoryBadge, { color: meta.color }]}>{thread.category}</Text>
               </View>
+              <TouchableOpacity
+                onPress={handleCycleSpeakerGender}
+                style={styles.speakerGenderChip}
+                accessibilityRole="button"
+                accessibilityLabel={`Their replies play in a ${SPEAKER_GENDER_LABEL[speakerGender].toLowerCase()}${isGenderGuessed ? ", guessed from the name" : ""}. Tap to change.`}
+              >
+                <Ionicons name={SPEAKER_GENDER_ICON[speakerGender] as any} size={11} color={Colors.onSurfaceVariant} />
+                <Text style={styles.speakerGenderText}>
+                  {SPEAKER_GENDER_LABEL[speakerGender]}
+                  {isGenderGuessed && speakerGender !== "NEUTRAL" ? " · from name" : ""}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -615,6 +649,22 @@ const styles = StyleSheet.create({
   categoryBadge: {
     fontSize: 10.5,
     fontWeight: "700",
+  },
+  speakerGenderChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 3,
+    marginLeft: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: Colors.outlineVariant,
+  },
+  speakerGenderText: {
+    fontSize: 10.5,
+    fontWeight: "700",
+    color: Colors.onSurfaceVariant,
   },
   headerActionsRow: {
     flexDirection: "row",

@@ -61,6 +61,28 @@ export async function getUserProfile(): Promise<UserProfileData> {
   return cachedProfile;
 }
 
+const PLACEHOLDER_NAMES = ['client', 'cliente', 'expat friend', 'friend', 'user', 'panama resident'];
+
+/**
+ * The expat's own name as shown to the contractor on the /talk page ("Mensaje de …").
+ * Returns undefined when we don't know it, so the page falls back to "un cliente"
+ * instead of showing a wrong name.
+ */
+export async function getClientDisplayName(): Promise<string | undefined> {
+  const profile = await getUserProfile();
+  const name = profile.displayName?.trim();
+  if (!name || PLACEHOLDER_NAMES.includes(name.toLowerCase())) return undefined;
+  return name;
+}
+
+/** Saves the name the user typed during onboarding so it can be shown to contractors. */
+export async function saveClientDisplayName(name: string): Promise<void> {
+  const clean = name.trim();
+  if (!clean || PLACEHOLDER_NAMES.includes(clean.toLowerCase())) return;
+  const profile = await getUserProfile();
+  await saveUserProfile({ ...profile, displayName: clean });
+}
+
 export async function saveUserProfile(profile: UserProfileData): Promise<void> {
   cachedProfile = profile;
   try {

@@ -31,6 +31,7 @@ import { revenueCat } from './src/services/revenuecat';
 import { layersService } from './src/services/layersService';
 import { handleIncomingClaimDeepLink } from './src/services/deepLinks';
 import { walkieTalkieService } from './src/services/walkieTalkie';
+import { saveClientDisplayName } from './src/services/userService';
 
 const Tab = createBottomTabNavigator();
 
@@ -612,6 +613,8 @@ export default function App() {
 
   const handleCompleteOnboarding = (name: string, voice: VoiceOption, persona: UserPersona) => {
     setUserName(name);
+    // Remember the name so contractors see who they're talking to on the /talk page
+    saveClientDisplayName(name).catch(() => {});
     setUserVoice(voice);
     setUserPersonaState(persona);
     setUserPersona(persona);

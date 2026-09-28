@@ -14,7 +14,7 @@ import {
   subscribePhoneBookChanged,
   normalizePanamaPhoneNumber,
 } from '../services/storage';
-import { deductCreditForWalkieTalkie } from '../services/userService';
+import { deductCreditForWalkieTalkie, getClientDisplayName } from '../services/userService';
 import { generateGoogleGeminiAudio, GOOGLE_SPANISH_VOICES } from '../services/googleVoice';
 import * as FileSystem from 'expo-file-system/legacy';
 import { getOrCreateThreadForContact, addMessageToThread } from '../services/conversations';
@@ -110,7 +110,9 @@ export const DirectoryCard: React.FC<DirectoryCardProps> = React.memo(({ provide
       console.warn('Initial audio generation fallback in DirectoryCard:', audioErr);
     }
 
-    const session = walkieTalkieService.createSession(provider.name, inquiryTopicEn, inquiryTopic, inquiryTopicEn, initialAudioBase64);
+    // clientName is the EXPAT (shown to the contractor); provider.name is the contractor
+    const clientName = await getClientDisplayName();
+    const session = walkieTalkieService.createSession(clientName, inquiryTopicEn, inquiryTopic, inquiryTopicEn, initialAudioBase64, provider.name);
     const recipientName = provider.name.split(' ')[0] || 'Amigo';
     await shareWalkieTalkieToWhatsApp(session.shareUrl, recipientName, inquiryTopic, inquiryTopicEn);
     Alert.alert(

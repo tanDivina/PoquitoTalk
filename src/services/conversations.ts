@@ -2,6 +2,7 @@
 // Manages 2-way persistent chat threads per service contact (Plumber, Landlord, Boat Captain)
 
 import * as FileSystem from 'expo-file-system/legacy';
+import type { SpeakerGender } from '../utils/speakerGender';
 
 export interface ThreadMessage {
   id: string;
@@ -23,6 +24,8 @@ export interface ConversationThread {
   roomId?: string;
   whatsappNumber?: string;
   unreadCount?: number;
+  // Voice for this contact's incoming English audio. Unset = guessed from contactName.
+  speakerGender?: SpeakerGender;
 }
 
 function getStorageFilePath(): string {

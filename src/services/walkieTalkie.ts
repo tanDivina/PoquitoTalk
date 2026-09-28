@@ -20,6 +20,7 @@ export interface WalkieMessage {
 export interface WalkieSession {
   roomId: string;
   clientName: string;
+  contactName?: string; // The contractor, when known (e.g. from the Directory). Drives the incoming English voice.
   topic?: string;
   topicEs?: string;
   topicEn?: string;
@@ -72,7 +73,8 @@ class WalkieTalkieService {
     topic?: string,
     topicEs?: string,
     topicEn?: string,
-    initialAudioBase64?: string
+    initialAudioBase64?: string,
+    contactName?: string
   ): WalkieSession {
     const randomId = Math.random().toString(36).substring(2, 8);
     const roomId = `room_${randomId}`;
@@ -85,6 +87,7 @@ class WalkieTalkieService {
     this.activeSession = {
       roomId,
       clientName: isKnownName ? clientName!.trim() : 'un cliente',
+      contactName: contactName?.trim() || undefined,
       topic: cleanTopicEn || cleanTopicEs,
       topicEs: cleanTopicEs,
       topicEn: cleanTopicEn,

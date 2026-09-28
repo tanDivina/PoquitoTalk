@@ -36,6 +36,9 @@ import { translateWithGemma } from '../services/gemma';
 import { TranslationItem } from '../types';
 import { VoiceOption, GOOGLE_SPANISH_VOICES, generateGoogleGeminiAudio } from '../services/googleVoice';
 import { walkieTalkieService } from '../services/walkieTalkie';
+import { speakIncomingEnglish } from '../services/incomingVoice';
+import { getClientDisplayName } from '../services/userService';
+import { resolveSpeakerGender } from '../utils/speakerGender';
 import { shareWalkieTalkieToWhatsApp } from '../services/deepLinks';
 import { startVoiceRecording, stopVoiceRecording, transcribeAudioFile, cleanSpeechRepetitions, normalizeBocasTerminology } from '../services/transcriptionService';
 import { getPreferredVoiceGender } from '../services/storage';
@@ -165,14 +168,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const [clipboardReplyText, setClipboardReplyText] = useState<string | null>(null);
   const [isTranslatingCopiedReply, setIsTranslatingCopiedReply] = useState(false);
   const [lastCheckedClipboard, setLastCheckedClipboard] = useState<string>('');
-  const [userProfile, setUserProfile] = useState<{
-    name: string;
-    location: string;
-    chosenVoice?: string;
-  }>({
-    name: 'Sarah',
-    location: 'Isla Solarte',
-  });
   const [incomingWalkieSender, setIncomingWalkieSender] = useState<string | null>(() => {
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       return new URLSearchParams(window.location.search).get('walkieSender') || null;
@@ -510,7 +505,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       }
 
       const session = walkieTalkieService.createSession(
-        userProfile?.name || 'Client',
+        await getClientDisplayName(),
         finalTopicEn || finalTopicEs,
         finalTopicEs,
         finalTopicEn,
@@ -553,32 +548,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     }
   };
 
-  const handlePlayWalkieEnglish = async (text: string) => {
+  const handlePlayWalkieEnglish = async (text: string, fromContractor: boolean = true) => {
     if (!text) return;
     try {
       Speech.stop();
-      // Strip formatting and markdown punctuation that causes synthesizer stutter
-      const cleanText = text
-        .replace(/[*_#"`~]/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
-
-      const voices = await Speech.getAvailableVoicesAsync().catch(() => []);
-      const enVoice = voices.find(
-        (v) =>
-          v.language.startsWith('en') &&
-          (v.name.toLowerCase().includes('samantha') ||
-           v.name.toLowerCase().includes('ava') ||
-           v.name.toLowerCase().includes('daniel') ||
-           v.name.toLowerCase().includes('alex') ||
-           (v as any).quality === 'Enhanced')
-      ) || voices.find((v) => v.language.startsWith('en'));
-
-      Speech.speak(cleanText, {
-        language: 'en-US',
-        voice: enVoice ? enVoice.identifier : undefined,
-        rate: 1.0,
-      });
+      // Contractor replies play in a voice matching the contractor (guessed from their name,
+      // neutral when unknown). Never the user's own Diego/Sofia setting.
+      const gender = fromContractor
+        ? resolveSpeakerGender(undefined, walkieTalkieService.getActiveSession()?.contactName)
+        : 'NEUTRAL';
+      await speakIncomingEnglish(text, gender, { rate: 1.0 });
     } catch (e) {
       console.warn('Speech English playback error:', e);
     }
@@ -700,7 +679,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           activeWalkieSession.roomId,
           recognizedText,
           finalEs,
-          userProfile?.name || 'Client',
+          await getClientDisplayName(),
           audioBase64
         );
         if (sentMsg) {
@@ -784,7 +763,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         activeWalkieSession.roomId,
         normalizedEn,
         finalEs,
-        userProfile?.name || 'Client',
+        await getClientDisplayName(),
         audioBase64
       );
       if (sentMsg) {
@@ -840,7 +819,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         activeWalkieSession.roomId,
         inputText,
         outputText,
-        userProfile?.name || 'Client',
+        await getClientDisplayName(),
         audioBase64
       );
 
@@ -1237,7 +1216,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                       {primaryEnglish ? (
                         <TouchableOpacity
                           style={styles.channelAudioBtn}
-                          onPress={() => handlePlayWalkieEnglish(primaryEnglish)}
+                          onPress={() => handlePlayWalkieEnglish(primaryEnglish, !isExpat)}
                           activeOpacity={0.8}
                         >
                           <SpeakerIcon size={15} color="#047857" />
