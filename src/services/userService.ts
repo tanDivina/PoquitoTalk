@@ -201,3 +201,46 @@ export async function redeemWebPurchase(
   return updatedProfile;
 }
 
+const REDEEMED_RC_TXNS_FILE = `${FileSystem.documentDirectory || FileSystem.cacheDirectory}redeemed_rc_transactions.json`;
+
+export async function getRedeemedWebTransactionIds(): Promise<string[]> {
+  try {
+    const fileInfo = await FileSystem.getInfoAsync(REDEEMED_RC_TXNS_FILE);
+    if (fileInfo.exists) {
+      const content = await FileSystem.readAsStringAsync(REDEEMED_RC_TXNS_FILE);
+      const parsed = JSON.parse(content);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (e) {}
+  return [];
+}
+
+export async function markWebTransactionIdRedeemed(id: string): Promise<void> {
+  try {
+    const list = await getRedeemedWebTransactionIds();
+    if (!list.includes(id)) {
+      list.push(id);
+      await FileSystem.writeAsStringAsync(REDEEMED_RC_TXNS_FILE, JSON.stringify(list));
+    }
+  } catch (e) {
+    console.warn('Error saving redeemed transaction ID:', e);
+  }
+}
+
+export async function fulfillWebCreditsOnce(
+  transactionId: string,
+  amount: number = 50,
+  source: string = 'RevenueCat Web Checkout',
+  details: string = 'Purchased 50 Poquito Credits Pack'
+): Promise<{ alreadyApplied: boolean; profile: UserProfileData }> {
+  const redeemed = await getRedeemedWebTransactionIds();
+  if (redeemed.includes(transactionId)) {
+    const current = await getUserProfile();
+    return { alreadyApplied: true, profile: current };
+  }
+
+  await markWebTransactionIdRedeemed(transactionId);
+  const updated = await addCredits(amount, source, `${details} (Tx: ${transactionId})`, 'PURCHASE_WEB');
+  return { alreadyApplied: false, profile: updated };
+}
+

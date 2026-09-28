@@ -1,12 +1,14 @@
 // RevenueCat Integration Service for PoquitoTalk
 // Manages Pro Subscriptions, Entitlements, Paywalls, and Free Usage Limits
 
-import Purchases, { CustomerInfo, PurchasesOffering, PurchasesPackage } from 'react-native-purchases';
+import Purchases, { CustomerInfo, PurchasesOffering, PurchasesPackage, WebPurchaseRedemptionResultType } from 'react-native-purchases';
 import { Platform } from 'react-native';
-import { getUserProfile, setProSubscriber, addCredits } from './userService';
+import { getUserProfile, setProSubscriber, addCredits, fulfillWebCreditsOnce } from './userService';
 
 // RevenueCat Public App-Specific API Keys (Stripe Projects: dorien@rankbeacon.dev)
 const REVENUECAT_STRIPE_API_KEY = 'strp_oRCQHGzTOCydzvQECdMeNnbVXTI';
+// Live Stripe product sold in the RevenueCat Funnel (50 Poquito Credits Pack)
+const WEB_CREDITS_STRIPE_PRODUCT_ID = 'prod_V2ox5ofCGfROTh';
 const REVENUECAT_ANDROID_API_KEY = 'goog_AlpDvQBZbuFjLWDnWAAVexYDMQz';
 
 export interface SubscriptionState {
@@ -172,6 +174,139 @@ class RevenueCatService {
     }
     return false;
   }
+
+  async handleWebPurchaseRedemption(url: string): Promise<{
+    handled: boolean;
+    success: boolean;
+    resultType?: string;
+    message?: string;
+    isPro?: boolean;
+    creditsGranted?: number;
+    packageName?: string;
+  }> {
+    if (!url) return { handled: false, success: false };
+
+    try {
+      if (!this.isPurchasesConfigured) {
+        await this.initialize();
+      }
+
+      const webPurchaseRedemption = await Purchases.parseAsWebPurchaseRedemption(url);
+      if (!webPurchaseRedemption) {
+        return { handled: false, success: false };
+      }
+
+      console.log('[RevenueCat] Redeeming web purchase with link:', url);
+      const redemptionResult = await Purchases.redeemWebPurchase(webPurchaseRedemption);
+
+      switch (redemptionResult.result) {
+        case WebPurchaseRedemptionResultType.SUCCESS: {
+          const customerInfo = redemptionResult.customerInfo;
+          let isPro = false;
+          let creditsGranted = 0;
+          let packageName = 'PoquitoTalk Purchase';
+
+          // 1. Grant Pro access if Pro entitlement is active
+          if (
+            customerInfo.entitlements.active['pro'] !== undefined ||
+            customerInfo.entitlements.active['unlimited_translations'] !== undefined
+          ) {
+            isPro = true;
+            packageName = 'PoquitoTalk Pro Pass';
+            await setProSubscriber(true);
+          }
+
+          // 2. Find credits product in nonSubscriptionTransactions and add 50 credits idempotently
+          const nonSubTxns = customerInfo.nonSubscriptionTransactions || [];
+          for (const tx of nonSubTxns) {
+            const prodId = (tx.productIdentifier || '').toLowerCase();
+            // RevenueCat reports Stripe purchases under the Stripe product id (prod_...), not the package id
+            if (prodId === WEB_CREDITS_STRIPE_PRODUCT_ID.toLowerCase() || prodId.includes('credit') || prodId === '$rc_custom' || prodId === 'credits_50') {
+              const res = await fulfillWebCreditsOnce(
+                tx.transactionIdentifier,
+                50,
+                'RevenueCat Web Checkout',
+                '50 Poquito Credits Pack'
+              );
+              if (!res.alreadyApplied) {
+                creditsGranted += 50;
+                packageName = isPro ? `${packageName} + 50 Credits` : '50 Poquito Credits Pack';
+              }
+            }
+          }
+
+          return {
+            handled: true,
+            success: true,
+            resultType: 'SUCCESS',
+            isPro,
+            creditsGranted,
+            packageName,
+            message: 'Web purchase successfully unlocked!',
+          };
+        }
+
+        case WebPurchaseRedemptionResultType.INVALID_TOKEN: {
+          console.warn('[RevenueCat] Web redemption failed: INVALID_TOKEN');
+          return {
+            handled: true,
+            success: false,
+            resultType: 'INVALID_TOKEN',
+            message: 'This redemption link is invalid or has already been redeemed.',
+          };
+        }
+
+        case WebPurchaseRedemptionResultType.EXPIRED: {
+          const email = (redemptionResult as any).obfuscatedEmail || 'your email';
+          console.warn(`[RevenueCat] Web redemption link expired. Fresh link sent to ${email}`);
+          return {
+            handled: true,
+            success: false,
+            resultType: 'EXPIRED',
+            message: `This redemption link has expired. A fresh redemption link was sent to ${email}.`,
+          };
+        }
+
+        case WebPurchaseRedemptionResultType.PURCHASE_BELONGS_TO_OTHER_USER: {
+          console.warn('[RevenueCat] Web redemption: PURCHASE_BELONGS_TO_OTHER_USER');
+          return {
+            handled: true,
+            success: false,
+            resultType: 'PURCHASE_BELONGS_TO_OTHER_USER',
+            message: 'This purchase belongs to another user account. Please check your login credentials.',
+          };
+        }
+
+        case WebPurchaseRedemptionResultType.ERROR: {
+          const err = (redemptionResult as any).error;
+          console.error('[RevenueCat] Web redemption error:', err);
+          return {
+            handled: true,
+            success: false,
+            resultType: 'ERROR',
+            message: err?.message || 'An error occurred while redeeming your purchase.',
+          };
+        }
+
+        default: {
+          return {
+            handled: true,
+            success: false,
+            resultType: 'ERROR',
+            message: 'Unable to process redemption link.',
+          };
+        }
+      }
+    } catch (err: any) {
+      console.warn('[RevenueCat] Exception in handleWebPurchaseRedemption:', err);
+      return {
+        handled: false,
+        success: false,
+        message: err?.message || 'Error processing web purchase link.',
+      };
+    }
+  }
 }
 
 export const revenueCat = new RevenueCatService();
+

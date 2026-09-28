@@ -549,18 +549,55 @@ export default function App() {
       (window as any).__closePaywall = () => setPaywallVisible(false);
     }
 
-    // Deep Link Claim Listener
+    // Unified Deep Link & RevenueCat Web Purchase Redemption Listener
     const processDeepLink = async (url: string | null) => {
       if (!url) return;
-      const result = await handleIncomingClaimDeepLink(url);
-      if (result && result.success) {
-        if (result.isPro) setIsPro(true);
-        setClaimCelebration({
-          visible: true,
-          packageName: result.packageName,
-          creditsGranted: result.creditsGranted,
-          isPro: result.isPro,
-        });
+      console.log('[DeepLink] Processing incoming URL:', url);
+
+      // 1. Attempt RevenueCat Web Purchase Redemption (Purchases.parseAsWebPurchaseRedemption & redeemWebPurchase)
+      try {
+        const rcResult = await revenueCat.handleWebPurchaseRedemption(url);
+        if (rcResult.handled) {
+          if (rcResult.success) {
+            if (rcResult.isPro) setIsPro(true);
+            setClaimCelebration({
+              visible: true,
+              packageName: rcResult.packageName || (rcResult.isPro ? 'PoquitoTalk Pro Pass' : '50 Poquito Credits'),
+              creditsGranted: rcResult.creditsGranted,
+              isPro: rcResult.isPro,
+            });
+            Alert.alert(
+              '¡Wepa! Purchase Redeemed 🎉',
+              `Your ${rcResult.packageName || 'purchase'} is now unlocked and ready!`
+            );
+          } else {
+            Alert.alert(
+              'Redemption Notice',
+              rcResult.message || 'Could not redeem web purchase.'
+            );
+          }
+          return;
+        }
+      } catch (rcErr) {
+        console.warn('[RevenueCat] Web redemption error:', rcErr);
+      }
+
+      // 2. Fallback to existing website claim flow (poquitotalk://claim?token=...)
+      try {
+        const result = await handleIncomingClaimDeepLink(url);
+        if (result && result.success) {
+          if (result.isPro) setIsPro(true);
+          setClaimCelebration({
+            visible: true,
+            packageName: result.packageName,
+            creditsGranted: result.creditsGranted,
+            isPro: result.isPro,
+          });
+        } else if (result && !result.success && result.message) {
+          Alert.alert('Claim Error', result.message);
+        }
+      } catch (claimErr) {
+        console.warn('[Claim] Deep link error:', claimErr);
       }
     };
 

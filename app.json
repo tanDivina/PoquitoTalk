@@ -13,7 +13,7 @@
     },
     "android": {
       "package": "com.heroapps.poquitotalk",
-      "versionCode": 10,
+      "versionCode": 11,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -29,6 +29,21 @@
       ],
       "predictiveBackGestureEnabled": false,
       "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "poquitotalk"
+            },
+            {
+              "scheme": "rc-2b982f2c67"
+            }
+          ],
+          "category": [
+            "DEFAULT",
+            "BROWSABLE"
+          ]
+        },
         {
           "action": "SEND",
           "data": [
