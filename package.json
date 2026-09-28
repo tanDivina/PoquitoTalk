@@ -1,6 +1,6 @@
 {
   "name": "poquito-talk",
-  "version": "1.5.0",
+  "version": "1.5.10",
   "main": "index.ts",
   "dependencies": {
     "@expo/metro-runtime": "~57.0.15",
