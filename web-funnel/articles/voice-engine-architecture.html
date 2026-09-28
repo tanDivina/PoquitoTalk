@@ -109,7 +109,7 @@
   <pre class="diagram-ascii"><code>Expat&#x27;s phone (Expo app)                    Contractor&#x27;s phone (any browser)
 ┌──────────────────────────┐                ┌──────────────────────────────┐
 │ 1. Speak or type English │                │ /talk?r=room_xxxx            │
-│ 2. Speech-to-text        │                │ Hold to talk (MediaRecorder) │
+│ 2. Speech-to-text        │                │ Tap Poquito to talk          │
 │ 3. Translate + Panama    │                └──────────────┬───────────────┘
 │    dialect rules         │                               │
 │ 4. Spanish voice (TTS)   │                               │
@@ -188,7 +188,7 @@ text = text.replace(/\bwater tank\b/gi, &#x27;tanque de reserva&#x27;);</code></
 <p>The ready-made phrases in the Presets tab don't call any API at all. Their audio is generated once and served as files (over 300 clips on the server, plus a set bundled in the app), so the most common requests play instantly, even on a weak connection.</p>
 
 <h2>Step 4: A walkie-talkie the contractor can use without installing anything</h2>
-<p>When the expat starts a live conversation, the app creates a room ID and a link like <code>poquitotalk.hero-apps.com/talk?r=room_…</code>, which goes out in WhatsApp. The contractor taps it and gets one big hold-to-talk button in their browser, recorded with the standard <code>MediaRecorder</code> API.</p>
+<p>When the expat starts a live conversation, the app creates a room ID and a link like <code>poquitotalk.hero-apps.com/talk?r=room_…</code>, which goes out in WhatsApp. The contractor taps it and sees Poquito with one instruction: <em>"Toca a Poquito para hablar"</em> (tap Poquito to talk). Their voice is recorded in the browser with the standard <code>MediaRecorder</code> API.</p>
 <p>There are no WebSockets. Both sides post messages to <code>walkie.php</code> and poll for new ones every 2.5 seconds:</p>
 <div class="code-window">
   <div class="code-header">
