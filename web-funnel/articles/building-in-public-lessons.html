@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building in Public: How Community Feedback, Teardowns & Island Reality Shaped PoquitoTalk • PoquitoTalk</title>
+  <meta name="description" content="The complete living log of how building in public, Reddit feedback from local contractors, Jay's paywall teardowns, and speech stutter filtering shaped PoquitoTalk into a production-ready app." />
+  
+  <link rel="icon" type="image/svg+xml" href="../logo.svg" />
+  <link rel="alternate icon" type="image/png" href="../favicon.png" />
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="PoquitoTalk Engineering & Growth" />
+  <meta property="og:title" content="Building in Public: How Community Feedback, Teardowns & Island Reality Shaped PoquitoTalk • PoquitoTalk" />
+  <meta property="og:description" content="The complete living log of how building in public, Reddit feedback from local contractors, Jay's paywall teardowns, and speech stutter filtering shaped PoquitoTalk into a production-ready app." />
+  <meta property="og:image" content="https://poquitotalk.hero-apps.com/logo_v6_og.png" />
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@DorienVibecodes" />
+  <meta name="twitter:creator" content="@DorienVibecodes" />
+  <meta name="twitter:title" content="Building in Public: How Community Feedback, Teardowns & Island Reality Shaped PoquitoTalk • PoquitoTalk" />
+  <meta name="twitter:description" content="The complete living log of how building in public, Reddit feedback from local contractors, Jay's paywall teardowns, and speech stutter filtering shaped PoquitoTalk into a production-ready app." />
+  <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/logo_v6_og.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="article.css?v=1.0.5" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="article-nav">
+    <div class="nav-container">
+      <div class="nav-left">
+        <a href="index.html" class="brand-link" aria-label="PoquitoTalk Articles">
+          <img src="../logo.svg" width="34" height="34" alt="PoquitoTalk Logo" />
+          <span class="brand-wordmark">Poquito<span class="brand-talk">Talk</span></span>
+        </a>
+        <span class="nav-separator">/</span>
+        <a href="index.html" class="nav-back-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          All Articles
+        </a>
+      </div>
+      <div class="nav-right-actions">
+        <button class="btn-app-link" onclick="copyArticleRich(null, this)" style="background: #059669; border-color: #059669; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          Copy for HackerNoon
+        </button>
+        <a href="../index.html" class="btn-app-link" style="background: transparent; color: var(--terracotta); border-color: var(--border-light);">
+          App Home
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Article Body -->
+  <main class="article-shell">
+    <article>
+      <header class="article-header">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+          <div class="article-category-badge">Build in Public • Feedback Log</div>
+          <button class="btn-copy-for-hn" onclick="copyArticleRich(null, this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            1-Click Copy for HackerNoon (Rich Text)
+          </button>
+        </div>
+        <h1 class="article-title">Building in Public: How Community Feedback, Teardowns & Island Reality Shaped PoquitoTalk</h1>
+        
+        <div class="article-meta-row">
+          <a href="https://x.com/DorienVibecodes" target="_blank" rel="noopener" class="author-pill">
+            <img src="../favicon.png" alt="Dorien" class="author-avatar" onerror="this.src='../logo.svg'" />
+            <span>Dorien Van den Abbeele</span>
+            <span class="author-handle">@DorienVibecodes</span>
+          </a>
+          <span class="meta-divider">•</span>
+          <span>9 min read</span>
+          <span class="meta-divider">•</span>
+          <span>Living Documentation</span>
+        </div>
+      </header>
+
+      <div class="article-content">
+<p>This living document tracks how <strong>Building in Public (BiP)</strong>, community critiques, and direct user feedback have actively shaped, iterated, and improved <strong>PoquitoTalk</strong> from an initial concept into a high-converting, community-validated product for the <strong>RevenueCat Shipaton 2026</strong>.</p>
+<hr />
+<h2>🧭 Executive Overview: The Power of Building in Public</h2>
+<p>Building in public is not just marketing—it is <strong>rapid product validation and UX optimization</strong>. By sharing real mockups, paywall architectures, and workflow dilemmas with experienced founders, indie hackers, and local Bocas del Toro residents, PoquitoTalk bypassed months of guesswork.</p>
+<hr />
+<h2>👥 Community Contributors & Key Advice Streams</h2>
+<h3>1. Jay’s Paywall Architecture & Conversion Mastery</h3>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Feedback Topic</th>
+<th>Jay's Advice / Insight</th>
+<th>Why It Matters (Psychology & UX)</th>
+<th>Implementation in PoquitoTalk</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>Differentiated Paywalls</strong></td>
+<td><em>Onboarding paywall vs In-app paywall are two completely different experiences; the paywall must adapt.</em></td>
+<td><strong>Onboarding</strong> requires value framing (4-card benefit grid) because the user is exploring. <strong>In-app paywalls</strong> are triggered by high-intent feature locks and must be compact, non-intrusive bottom sheets.</td>
+<td>Implemented separate <code>SoftOnboardingPaywall.tsx</code> (fullscreen narrative + benefit grid) and <code>PaywallModal.tsx</code> (compact bottom-sheet drawer).</td>
+</tr>
+<tr>
+<td><strong>CTA Visual Salience & Color Contrast</strong></td>
+<td><em>Selection of options and main CTAs should use a color not occurring elsewhere to make it immediately tappable.</em></td>
+<td>If action buttons use the same color as directory badges or body elements, they blend into the background. A distinct color draws the eye instantly to the conversion action.</td>
+<td>Elevated main CTA buttons to <strong>Bright Royal Indigo (<code>#4F46E5</code>)</strong> while grounding plan cards in warm <strong>Terracotta Brown (<code>#964824</code> / <code>#FFF9F6</code>)</strong>.</td>
+</tr>
+<tr>
+<td><strong>"Never Expires" Value Anchor</strong></td>
+<td><em>The "Never expires" tag on credit packs matters a heck of a lot.</em></td>
+<td>Pay-as-you-go buyers fear losing unused balance. Explicitly stating "Never expires" eliminates purchase regret and boosts non-subscription conversion.</td>
+<td>Added dedicated Emerald Green (<code>#059669</code>) <strong>"Never expires"</strong> tag on the 50 Credits Pack across both paywalls.</td>
+</tr>
+<tr>
+<td><strong>"Try it first" vs "Free Version"</strong></td>
+<td><em>Change "Or continue with Free Version" to "Try it first". Don't mention "Free".</em></td>
+<td>1. Removes the stigma of "downgrading" to a free tier.<br>2. Keeps mental focus on the premium trial.<br>3. Translates compactly into every language without wrapping.</td>
+<td>Replaced all instances of <code>"Or continue with Free Version"</code> with <strong>"Try it first"</strong> (<code>PaywallModal.tsx</code> & <code>SoftOnboardingPaywall.tsx</code>).</td>
+</tr>
+<tr>
+<td><strong>Escape Hatch Strategy & A/B Testing</strong></td>
+<td><em>Avoid redundant top (X) close buttons on onboarding; use a subtle bottom "Try it first" link, then A/B test when live.</em></td>
+<td>Multiple escape routes lower paywall conversion. A clean bottom dismiss keeps attention focused on the primary CTA while providing an ethical exit.</td>
+<td>Modularized <code>showCloseButton</code> and <code>dismissText</code> props to facilitate rapid A/B testing via Remote Config.</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h3>2. Local Bocas del Toro Expat & Resident Community</h3>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Feedback Topic</th>
+<th>Community Feedback</th>
+<th>Why It Matters</th>
+<th>Implementation in PoquitoTalk</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>Voice Notes Over Text</strong></td>
+<td><em>Local boat captains, A/C techs, and plumbers rarely read Spanish text; they communicate via WhatsApp voice audio.</em></td>
+<td>Text translation apps fail in Latin America because local trade logistics happen through 10-second voice notes.</td>
+<td>Integrated <strong>ElevenLabs native Panamanian voice synthesis</strong> with direct <code>.mp3</code> OS file sharing into WhatsApp (<code>src/services/sharing.ts</code>).</td>
+</tr>
+<tr>
+<td><strong>Local Tradesmen Discovery</strong></td>
+<td><em>Expat feedback: "I need a gardener who knows how to use a grass cutter machine."</em></td>
+<td>Users don't just want a translator; they want a trusted gateway to vetted island service providers.</td>
+<td>Built the <strong>Bocas Verified Provider Directory</strong> (<code>directory.ts</code>) categorized by A/C, Boat Repairs, Starlink, Plumbing, Medical, and Emergency services.</td>
+</tr>
+<tr>
+<td><strong>Manual Voice Persona Selection</strong></td>
+<td><em>Users prefer manually selecting male vs female Spanish voices rather than automated guessing.</em></td>
+<td>In conversational contexts, users want full control over whether Poquito speaks as <em>Diego</em>, <em>Mateo</em>, <em>Sofia</em>, or <em>Valeria</em>.</td>
+<td>Added 1-tap Voice Persona toggles directly inside the app bar and settings drawer.</td>
+</tr>
+<tr>
+<td><strong>Zero App Install for Tradesmen</strong></td>
+<td><em>Local Panamanian workers will not download a bulky translation app from the App Store.</em></td>
+<td>If the local provider needs to install software, 2-way communication breaks down completely.</td>
+<td>Engineered the <strong>Web-to-App 2-Way Walkie-Talkie</strong> (<code>poquitotalk.hero-apps.com/talk?room=...</code>) running natively in any mobile browser with zero friction.</td>
+</tr>
+<tr>
+<td><strong>Speech Repetition & Stutter Filtering</strong></td>
+<td><em>When the user makes an obvious repetition, we don't need to put this in the text box.</em></td>
+<td>Speech stutters ("I, I need"), conversational repeats ("the the boat"), or Whisper repetition loops clutter the UI and produce awkward translations.</td>
+<td>Implemented automated <code>cleanSpeechRepetitions</code> algorithm in <code>transcriptionService.ts</code> and <code>HomeScreen.tsx</code> that cleans consecutive word/phrase repeats before populating the text box.</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h3>3. Indie Dev & Design Community Critiques</h3>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Feedback Topic</th>
+<th>Community Insight</th>
+<th>Implementation in PoquitoTalk</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>Ban on Tacky AI Buzzwords</strong></td>
+<td>Badges like <em>"Expert AI Super-Tool"</em> make apps feel like generic wrapper spam.</td>
+<td>Replaced all hyperbolic AI badges with grounded, human copy: <em>"Zero Language Barriers"</em>, <em>"Real Island Spanish"</em>, <em>"Fast Island Repairs"</em>.</td>
+</tr>
+<tr>
+<td><strong>Typography & Punctuation Polish</strong></td>
+<td>Long em dashes (<code>—</code>) look unnatural and clutter mobile preview bubbles.</td>
+<td>Cleaned up all UI text, signatures, and directory cards to use short hyphens (<code>-</code>) and clean domains (<code>poquitotalk.hero-apps.com</code>).</td>
+</tr>
+<tr>
+<td><strong>Device Frame Fidelity</strong></td>
+<td>Abstract CSS borders look amateurish in public update showcases.</td>
+<td>Created automated Puppeteer scripts generating pixel-accurate <strong>Apple iPhone 16 Pro Natural Titanium chassis</strong> with Dynamic Island and warm sand backdrops (<code>#FAF8F5</code>).</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>📈 Summary of Implemented Changes Timeline</h2>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">TEXT</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class="diagram-ascii"><code>[Initial Concept] ─────────► [Bocas Community Feedback] ─────────► [Jay&#x27;s Paywall Insights] ─────────► [Current State]
+• Text translator          • Added WhatsApp Audio Sharing         • Differentiated Paywall Modals      • High-converting,
+• Generic Latin Spanish    • Built Bocas Service Directory        • Royal Indigo CTA Salience          • Community-tested,
+• Standard Paywall         • Zero-install 2-Way Web Room          • &quot;Try it first&quot; Psychological Shift • Production-Ready</code></pre>
+</div>
+<hr />
+<h2>💡 How to Add New Community Feedback to this Document</h2>
+<p>When receiving new advice on X, Reddit, or direct message:</p>
+<ol>
+<li><strong>Source / Person</strong>: Who provided the insight?</li>
+<li><strong>Raw Comment</strong>: Paste the exact quote or advice received.</li>
+<li><strong>The 'Why'</strong>: What is the underlying conversion, UX, or technical rationale?</li>
+<li><strong>Action Taken</strong>: What code files, UI components, or copy lines were updated as a result?</li>
+</ol>
+<hr />
+<p><em>Document maintained by Dorien Van den Abbeele (<a href="https://x.com/DorienVibecodes" target="_blank" rel="noopener">@DorienVibecodes</a>) — PoquitoTalk Project Lead.</em></p>
+      </div>
+
+      <!-- Author Bio Footer Box -->
+      <div class="author-bio-card">
+        <img src="../logo.svg" alt="Dorien Van den Abbeele" class="bio-avatar" />
+        <div class="bio-content">
+          <h4>Written by Dorien Van den Abbeele</h4>
+          <p class="bio-text">Solo developer building <strong>PoquitoTalk</strong> in Bocas del Toro, Panama. Sharing real-world lessons in mobile monetization, voice AI engineering, and product distribution in public.</p>
+          <div class="bio-links">
+            <a href="https://x.com/DorienVibecodes" target="_blank" rel="noopener" style="color: #964824; text-decoration: none;">Follow on X (@DorienVibecodes) →</a>
+            <a href="../index.html" style="color: #059669; text-decoration: none;">Try PoquitoTalk Web Demo →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prev / Next Navigation -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-subtle); gap: 16px; flex-wrap: wrap;">
+        <a href="mastering-local-spanish.html" class="nav-back-link">← Prev: Mastering Local Spanish</a>
+        <a href="building-in-public-journal.html" class="btn-app-link" style="background: transparent; color: var(--terracotta); border: 1.5px solid var(--border-light);">Next: Launch Log & Comedy Pipeline →</a>
+      </div>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="article-footer">
+    <p>© 2026 PoquitoTalk • Built in Bocas del Toro, Panamá 🇵🇦 • <a href="index.html">Articles Directory</a> • <a href="../privacy.html">Privacy</a></p>
+  </footer>
+
+  <script src="clipboard-helper.js"></script>
+</body>
+</html>

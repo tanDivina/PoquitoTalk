@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>I Shared My Ugly App Paywall in Public. Here’s How the Community Fixed My Conversion. • PoquitoTalk</title>
+  <meta name="description" content="5 counter-intuitive paywall lessons from the indie hacker community that transformed our mobile conversion rate: context dichotomy, unique CTA colors, and loss aversion anchors." />
+  
+  <link rel="icon" type="image/svg+xml" href="../logo.svg" />
+  <link rel="alternate icon" type="image/png" href="../favicon.png" />
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="PoquitoTalk Engineering & Growth" />
+  <meta property="og:title" content="I Shared My Ugly App Paywall in Public. Here’s How the Community Fixed My Conversion. • PoquitoTalk" />
+  <meta property="og:description" content="5 counter-intuitive paywall lessons from the indie hacker community that transformed our mobile conversion rate: context dichotomy, unique CTA colors, and loss aversion anchors." />
+  <meta property="og:image" content="https://poquitotalk.hero-apps.com/paywall_evolution_before_after.png" />
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@DorienVibecodes" />
+  <meta name="twitter:creator" content="@DorienVibecodes" />
+  <meta name="twitter:title" content="I Shared My Ugly App Paywall in Public. Here’s How the Community Fixed My Conversion. • PoquitoTalk" />
+  <meta name="twitter:description" content="5 counter-intuitive paywall lessons from the indie hacker community that transformed our mobile conversion rate: context dichotomy, unique CTA colors, and loss aversion anchors." />
+  <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/paywall_evolution_before_after.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="article.css?v=1.0.5" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="article-nav">
+    <div class="nav-container">
+      <div class="nav-left">
+        <a href="index.html" class="brand-link" aria-label="PoquitoTalk Articles">
+          <img src="../logo.svg" width="34" height="34" alt="PoquitoTalk Logo" />
+          <span class="brand-wordmark">Poquito<span class="brand-talk">Talk</span></span>
+        </a>
+        <span class="nav-separator">/</span>
+        <a href="index.html" class="nav-back-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          All Articles
+        </a>
+      </div>
+      <div class="nav-right-actions">
+        <button class="btn-app-link" onclick="copyArticleRich(null, this)" style="background: #059669; border-color: #059669; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          Copy for HackerNoon
+        </button>
+        <a href="../index.html" class="btn-app-link" style="background: transparent; color: var(--terracotta); border-color: var(--border-light);">
+          App Home
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Article Body -->
+  <main class="article-shell">
+    <article>
+      <header class="article-header">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+          <div class="article-category-badge">Monetization • Mobile UX Teardown</div>
+          <button class="btn-copy-for-hn" onclick="copyArticleRich(null, this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            1-Click Copy for HackerNoon (Rich Text)
+          </button>
+        </div>
+        <h1 class="article-title">I Shared My Ugly App Paywall in Public. Here’s How the Community Fixed My Conversion.</h1>
+        
+        <div class="article-meta-row">
+          <a href="https://x.com/DorienVibecodes" target="_blank" rel="noopener" class="author-pill">
+            <img src="../favicon.png" alt="Dorien" class="author-avatar" onerror="this.src='../logo.svg'" />
+            <span>Dorien Van den Abbeele</span>
+            <span class="author-handle">@DorienVibecodes</span>
+          </a>
+          <span class="meta-divider">•</span>
+          <span>8 min read</span>
+          <span class="meta-divider">•</span>
+          <span>Published on HackerNoon</span>
+        </div>
+      </header>
+
+      <div class="article-content">
+<p><em>Founder of <a href="https://poquitotalk.hero-apps.com" target="_blank" rel="noopener">PoquitoTalk</a></em></p>
+<hr />
+<p>When you spend weeks engineering a mobile app—fine-tuning localized speech models, integrating walkie-talkie audio protocols, and polishing UI animations—the paywall is usually the last thing you build before shipping.</p>
+<p>Like most solo founders, I treated monetization as an afterthought. I whipped up a single generic modal in React Native, stuffed all our subscription tiers into it, slapped our primary brand color onto the purchase button, and told myself: <em>"If users love the product, they’ll pay."</em></p>
+<p>They didn't. Or rather, they hesitated.</p>
+<p>Conversion stalled, bounce rates on the pricing screen were painful, and I fell into the classic developer ego trap: assuming my users simply "didn't get" the value.</p>
+<p>Instead of brooding in isolation, I took a deep breath, grabbed screenshots of my raw, unvarnished paywall designs, and posted them publicly on X and indie founder forums, asking for brutal feedback.</p>
+<p>The teardowns were ruthless. Experienced monetization pros, mobile UX designers, and fellow indie hackers pointed out glaring psychological traps, cognitive friction points, and visual blunders I was completely blind to.</p>
+<p>Here are the <strong>5 counter-intuitive paywall lessons</strong> that transformed our monetization architecture in <strong>PoquitoTalk</strong> from a leaky bucket into a high-converting, friction-free engine.</p>
+<hr />
+<h2>The Baseline Flaws: What V1 Got Wrong</h2>
+<p>To understand how far we came, look at our initial mental model versus reality:</p>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">TEXT</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class="diagram-ascii"><code>[The Developer Illusion] ────────► Single paywall modal shown everywhere.
+                                  Brand colors used for buttons.
+                                  Vague credit terms.
+                                  Two dismiss buttons on screen.
+
+[The Community Teardown] ───────► Onboarding context is 100% different from in-app intent.
+                                  The CTA button blended into the screen.
+                                  Users suffered severe loss aversion on credits.
+                                  Multiple escape hatches leaked conversions.</code></pre>
+</div>
+<p>Let’s break down the five pivotal changes that rewrote our conversion rates.</p>
+<hr />
+<h2>Lesson 1: The Context Dichotomy (Onboarding Paywall &ne; In-App Paywall)</h2>
+<h3>The Mistake</h3>
+<p>In our first build, we used a single component—a standard pop-up modal—for every monetization trigger in the entire app. Whether a user had just finished our 3-step onboarding walkthrough or had just hit their daily limit while trying to dispatch an urgent WhatsApp audio note to an island boat captain, they saw the exact same screen.</p>
+<h3>The Community Insight</h3>
+<p>A user finishing onboarding has an entirely different mindset than a user caught in a live in-app workflow:</p>
+<ol>
+<li><strong>The Onboarding User is Exploring Value:</strong> They haven't used the core feature yet. They are hesitant, skeptical, and need reassurance. They need a 4-point benefit grid, trust reassurance, soft trial framing, and an airy, welcoming atmosphere.</li>
+<li><strong>The In-App User is High-Intent & In a Hurry:</strong> They just tried to send an 11th voice note or start a 2-way live audio room. They already know the product works. Shoving a full-screen onboarding narrative in front of them is annoying and introduces friction when they just want to complete their task.</li>
+</ol>
+<h3>The Architectural Solution</h3>
+<p>We completely decoupled our monetization layer into <strong>two distinct React Native components</strong>:</p>
+<ul>
+<li><strong><code>SoftOnboardingPaywall.tsx</code></strong>: A full-screen, warm canvas (<code>#FAF8F5</code>) that displays our animated parrot mascot, a 4-card value grid (<em>Voice on WhatsApp</em>, <em>Fast Island Repairs</em>, <em>Real Island Spanish</em>, <em>2-Way Live Audio</em>), and clear 7-day trial framing.</li>
+<li><strong><code>PaywallModal.tsx</code></strong>: A compact, laser-focused bottom-sheet drawer that slides up smoothly over their active workspace, preserving screen context and offering a fast 1-tap checkout.</li>
+</ul>
+<div class="article-media-container"><img src="paywall_evolution_before_after.png" alt="Paywall Evolution Before & After" /><div class="article-media-caption">Paywall Evolution Before & After</div></div>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">tsx</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class=""><code>// Decoupled architecture in App.tsx / Screen handlers:
+// 1. Soft Fullscreen Paywall for post-onboarding discovery
+&lt;SoftOnboardingPaywall
+  visible={showOnboardingPaywall}
+  onClose={() =&gt; setShowOnboardingPaywall(false)}
+  onSuccess={handleSubscriptionSuccess}
+/&gt;
+
+// 2. Compact Bottom Sheet for in-app trigger limits
+&lt;PaywallModal
+  visible={showInAppPaywall}
+  onClose={() =&gt; setShowInAppPaywall(false)}
+  onSuccess={handleSubscriptionSuccess}
+/&gt;</code></pre>
+</div>
+<p>Treating onboarding discovery and in-app gate limits as two distinct user states immediately reduced onboarding bounce rates and sped up in-app checkouts.</p>
+<hr />
+<h2>Lesson 2: The "Unique CTA Color" Rule (Eliminating Visual Noise)</h2>
+<h3>The Mistake</h3>
+<p>PoquitoTalk's brand palette is rooted in warm Caribbean terracotta (<code>#964824</code>), palm sage green (<code>#059669</code>), and warm linen (<code>#FAF8F5</code>). Naturally, when designing the primary <em>"Start 7-Day Free Trial"</em> button, I styled it in our primary terracotta brand color.</p>
+<h3>The Community Insight</h3>
+<p>When your Call-To-Action button shares a color with your navigation icons, category badges, chip filters, and header tags, <strong>it competes with the rest of your app for visual dominance</strong>.</p>
+<p>A user's eye scans a screen in milliseconds. If the button looks like just another decorative container or category pill, cognitive friction spikes. At the moment of conversion, there should be zero doubt about what the primary action is.</p>
+<blockquote><p><strong>The Rule:</strong> The primary CTA button on your paywall must use a color that appears <strong>nowhere else</strong> in the entire application.</p></blockquote>
+<h3>The Solution</h3>
+<p>We audited every hex code in our theme directory and introduced a brand-new, isolated accent: <strong>Bright Royal Indigo (<code>#4F46E5</code>)</strong>.</p>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">tsx</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class=""><code>// src/components/SoftOnboardingPaywall.tsx
+const styles = StyleSheet.create({
+  mainCtaButton: {
+    width: &#x27;100%&#x27;,
+    backgroundColor: &#x27;#4F46E5&#x27;, // Unique across the entire app
+    paddingVertical: 15,
+    borderRadius: 22,
+    alignItems: &#x27;center&#x27;,
+    justifyContent: &#x27;center&#x27;,
+    shadowColor: &#x27;#4F46E5&#x27;,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  ctaContentRow: {
+    flexDirection: &#x27;row&#x27;,
+    alignItems: &#x27;center&#x27;,
+    gap: 8,
+  },
+  mainCtaText: {
+    fontSize: 16.5,
+    fontWeight: &#x27;800&#x27;,
+    color: &#x27;#FFFFFF&#x27;,
+    letterSpacing: -0.2,
+  },
+});</code></pre>
+</div>
+<p>Against the warm cream backdrop, the Royal Indigo CTA immediately commands 100% of the visual hierarchy. It doesn't look like an island badge or a directory tag—it looks unmistakably like the single primary action on screen.</p>
+<hr />
+<h2>Lesson 3: The "Never Expires" Anchor for Credit Packs</h2>
+<h3>The Mistake</h3>
+<p>PoquitoTalk serves both long-term expats (who live in Panama year-round) and short-term backpackers or tourists (who stay in Bocas del Toro for a week or two).</p>
+<p>For tourists, forcing an annual or monthly recurring subscription is a conversion killer. So, we offered a <strong>50 Credits Pack for $4.99</strong>.</p>
+<p>However, our initial card simply read:</p>
+<blockquote><p><strong>50 Credits Pack — $4.99 once</strong></p></blockquote>
+<blockquote><p><em>50 Voice Notes • 10 Live Sessions</em></p></blockquote>
+<h3>The Community Insight</h3>
+<p>Pay-as-you-go buyers suffer from intense <strong>loss aversion</strong>. When someone sees "$4.99 for 50 credits," their immediate unspoken objection is:</p>
+<p><em>"Will these credits disappear at the end of the month if I don't use them all on this trip?"</em></p>
+<p>Uncertainty kills conversion faster than price.</p>
+<h3>The Solution</h3>
+<p>We added two simple words highlighted with an emerald badge: <strong>"Never expires"</strong>.</p>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">tsx</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class="diagram-ascii"><code>&lt;TouchableOpacity
+  style={[styles.planCard, selectedTier === &#x27;CREDITS&#x27; &amp;&amp; styles.planCardSelected]}
+  onPress={() =&gt; setSelectedTier(&#x27;CREDITS&#x27;)}
+  activeOpacity={0.85}
+&gt;
+  &lt;View style={styles.planCardContent}&gt;
+    &lt;View style={[styles.radioCircle, selectedTier === &#x27;CREDITS&#x27; &amp;&amp; styles.radioCircleActive]}&gt;
+      {selectedTier === &#x27;CREDITS&#x27; &amp;&amp; &lt;View style={styles.radioInnerDot} /&gt;}
+    &lt;/View&gt;
+
+    &lt;View style={styles.planInfo}&gt;
+      &lt;Text style={styles.planTitle}&gt;50 Credits Pack&lt;/Text&gt;
+      &lt;Text style={styles.planSubtitle}&gt;50 Voice Notes • 10 Live Sessions&lt;/Text&gt;
+    &lt;/View&gt;
+
+    &lt;View style={styles.priceColumn}&gt;
+      &lt;View style={styles.priceRow}&gt;
+        &lt;Text style={styles.priceAmount}&gt;$4.99&lt;/Text&gt;
+        &lt;Text style={styles.pricePeriod}&gt; once&lt;/Text&gt;
+      &lt;/View&gt;
+      &lt;Text style={styles.priceSubTextEmerald}&gt;Never expires&lt;/Text&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+&lt;/TouchableOpacity&gt;</code></pre>
+</div>
+<p>That tiny guarantee reframed the purchase from a "ticking clock" to a permanent island utility tool. Even if they only use 15 credits this week, the remaining 35 credits will be waiting for them when they return next season. Hesitation vanished.</p>
+<hr />
+<h2>Lesson 4: The Linguistic Shift ("Try it first" vs. "Free Version")</h2>
+<h3>The Mistake</h3>
+<p>Underneath our main CTA button, we wanted to give users a polite, ethical dismissal option so they weren't trapped. In V1, the secondary text link read:</p>
+<blockquote><p><em>"Or continue with Free Version"</em></p></blockquote>
+<h3>The Community Insight</h3>
+<p>Words carry emotional baggage:</p>
+<ol>
+<li>Mentioning "Free Version" explicitly introduces the idea of <strong>compromise and downgrade</strong>.</li>
+<li>It signals that the free experience is an inferior ghetto, while simultaneously planting the seed: <em>"Wait, if there's a free version, why should I even bother with the trial?"</em></li>
+<li>On smaller mobile viewports or in translated locales, "Or continue with Free Version" wraps into an awkward, clumsy two-line string.</li>
+</ol>
+<h3>The Solution</h3>
+<p>We killed the label and replaced it with three confident words:</p>
+<blockquote><p><strong>"Try it first"</strong></p></blockquote>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">tsx</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class=""><code>&lt;TouchableOpacity 
+  onPress={onClose} 
+  activeOpacity={0.7} 
+  style={styles.freeForeverBtn}
+&gt;
+  &lt;Text style={styles.freeForeverText}&gt;Try it first&lt;/Text&gt;
+&lt;/TouchableOpacity&gt;</code></pre>
+</div>
+<p>Why does this perform so much better?</p>
+<ul>
+<li><strong>It frames action over status:</strong> It invites the user to test the core value without prejudice.</li>
+<li><strong>It removes the downgrade stigma:</strong> It doesn't say "settle for less"; it says "explore first, decide later."</li>
+<li><strong>Zero layout breakage:</strong> It is short, clean, and fits comfortably on any device width.</li>
+</ul>
+<hr />
+<h2>Lesson 5: Escape Hatch Discipline (Eliminating Double Exits)</h2>
+<h3>The Mistake</h3>
+<p>In our early iterations, we had a round <code>(X)</code> close button at the top-right corner of the paywall <em>and</em> a dismissal link at the bottom beneath the CTA.</p>
+<p>Furthermore, the top exit was placed right where users naturally look first when navigating back.</p>
+<h3>The Community Insight</h3>
+<p>Multiple visual off-ramps create <strong>decision fatigue</strong>. When a user sees an exit at the top and another exit at the bottom, their brain instinctively prioritizes finding the fastest way out rather than evaluating the offer.</p>
+<p>You want your paywall to be transparent and fair, not coercive—but providing two competing exits right next to your core value proposition bleeds conversions unnecessarily.</p>
+<h3>The Solution</h3>
+<ol>
+<li><strong>Modularize the exit controls:</strong> We structured our paywall properties so that dismissal mechanics can be dynamically configured or A/B tested via RevenueCat / Firebase Remote Config.</li>
+<li><strong>Subtle bottom anchor:</strong> We kept the top <code>(X)</code> minimal, clean, and low-contrast, while directing natural focus down toward the primary CTA and the reassuring <em>"Try it first"</em> secondary link.</li>
+</ol>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">tsx</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class=""><code>interface SoftOnboardingPaywallProps {
+  visible: boolean;
+  onClose: () =&gt; void;
+  onSuccess: () =&gt; void;
+  showTopClose?: boolean;
+}
+
+// Low-contrast, high-utility top button:
+&lt;TouchableOpacity 
+  style={styles.closeCircle} 
+  onPress={onClose} 
+  activeOpacity={0.7} 
+  accessibilityLabel=&quot;Close paywall and continue&quot;
+&gt;
+  &lt;Ionicons name=&quot;close&quot; size={18} color=&quot;#6B5E51&quot; /&gt;
+&lt;/TouchableOpacity&gt;</code></pre>
+</div>
+<hr />
+<h2>Under the Hood: The React Native + RevenueCat Implementation</h2>
+<p>Here is how we tied this all together cleanly in our React Native / Expo codebase with strict TypeScript typings.</p>
+<h3>1. Unified Tier Definition</h3>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">typescript</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class=""><code>// src/types/paywall.ts
+export type PaywallTier = 
+  | &#x27;ANNUAL_TRIAL&#x27;  // $39.99/yr ($3.33/mo) with 7-Day Free Trial
+  | &#x27;MONTHLY&#x27;       // $9.99/mo recurring
+  | &#x27;TRAVEL_PASS&#x27;   // $4.99 non-renewing 7-day pass
+  | &#x27;CREDITS&#x27;;      // $4.99 one-time consumable (50 credits)</code></pre>
+</div>
+<h3>2. Dynamic CTA Copy Matching Selected Tier</h3>
+<p>Instead of a generic <em>"Continue"</em> button that leaves users guessing what they will be charged, our CTA dynamically reflects the exact financial commitment of the active selection:</p>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">tsx</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class=""><code>&lt;Text style={styles.mainCtaText}&gt;
+  {selectedTier === &#x27;ANNUAL_TRIAL&#x27; &amp;&amp; &#x27;Start 7-Day Free Trial&#x27;}
+  {selectedTier === &#x27;MONTHLY&#x27; &amp;&amp; &#x27;Get Monthly Pass ($9.99/mo)&#x27;}
+  {selectedTier === &#x27;TRAVEL_PASS&#x27; &amp;&amp; &#x27;Get 7-Day Travel Pass ($4.99)&#x27;}
+  {selectedTier === &#x27;CREDITS&#x27; &amp;&amp; &#x27;Get 50 Poquito Credits ($4.99)&#x27;}
+&lt;/Text&gt;</code></pre>
+</div>
+<h3>3. Graceful RevenueCat Execution & Error Handling</h3>
+<div class="code-window">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+    </div>
+    <span class="code-lang-label">typescript</span>
+    <button class="btn-copy-code" onclick="navigator.clipboard.writeText(this.closest('.code-window').querySelector('pre').innerText).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 2000); })">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class=""><code>const handleSubscribe = async () =&gt; {
+  setLoading(true);
+  try {
+    // 1. Mark optimistic local state
+    await setProSubscriber(true);
+
+    // 2. Dispatch to RevenueCat native purchase flow
+    const customerInfo = await revenueCat.purchasePackageForTier(selectedTier);
+    
+    if (customerInfo?.entitlements?.active[&#x27;pro_access&#x27;]) {
+      Alert.alert(
+        &#x27;¡Bienvenido a PoquitoTalk!&#x27;,
+        &#x27;Your access is now active. Enjoy unlimited voice notes and 2-way walkie-talkie!&#x27;,
+        [{ text: &#x27;Start Exploring&#x27;, onPress: () =&gt; { onSuccess(); onClose(); } }]
+      );
+    }
+  } catch (error: any) {
+    if (!error.userCancelled) {
+      Alert.alert(&#x27;Purchase Note&#x27;, &#x27;Could not complete transaction at this time.&#x27;);
+    }
+  } finally {
+    setLoading(false);
+  }
+};</code></pre>
+</div>
+<hr />
+<h2>The Takeaway Checklist for Indie Developers</h2>
+<p>If you are currently building or refactoring a mobile paywall, run your design through these 5 diagnostic filters before shipping:</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Filter</th>
+<th>Common Mistake</th>
+<th>High-Converting Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>Context</strong></td>
+<td>1 modal for onboarding and in-app triggers</td>
+<td>Split into full-screen onboarding vs. compact bottom-sheet drawer</td>
+</tr>
+<tr>
+<td><strong>CTA Color</strong></td>
+<td>Reusing your app’s primary brand color</td>
+<td>Use an isolated, high-contrast hue that appears <strong>nowhere else</strong></td>
+</tr>
+<tr>
+<td><strong>Consumables</strong></td>
+<td>Listing raw credit packs with no expiry context</td>
+<td>Anchor with explicit <strong>"Never expires"</strong> loss-aversion tag</td>
+</tr>
+<tr>
+<td><strong>Dismissal Copy</strong></td>
+<td>"Or continue with Free Version"</td>
+<td>Switch to active, low-friction <strong>"Try it first"</strong></td>
+</tr>
+<tr>
+<td><strong>Exit Routes</strong></td>
+<td>Cluttered top & bottom exit points</td>
+<td>Keep a single subtle exit path; don't compete with the CTA</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>Final Thoughts: The Power of Building in Public</h2>
+<p>As engineers, our natural instinct is to hide our work until it's "finished." We want to present a flawless product to the world.</p>
+<p>But monetization isn't an algorithm you can solve in a dark room. It’s an exercise in human psychology, visual clarity, and empathy for what the user is experiencing at the exact second they are asked to part with their hard-earned cash.</p>
+<p>If I hadn't posted our raw, imperfect paywalls on X and invited harsh critique, PoquitoTalk would still be losing users at the doorstep.</p>
+<p>Don't build your paywall in a silo. Share the screenshots. Listen to the teardowns. Your conversion rate will thank you.</p>
+<hr />
+<p><em>Dorien Van den Abbeele is an indie developer building <a href="https://poquitotalk.hero-apps.com" target="_blank" rel="noopener">PoquitoTalk</a> and sharing real-world mobile app experiments on X at <a href="https://x.com/DorienVibecodes" target="_blank" rel="noopener">@DorienVibecodes</a>.</em></p>
+      </div>
+
+      <!-- Author Bio Footer Box -->
+      <div class="author-bio-card">
+        <img src="../logo.svg" alt="Dorien Van den Abbeele" class="bio-avatar" />
+        <div class="bio-content">
+          <h4>Written by Dorien Van den Abbeele</h4>
+          <p class="bio-text">Solo developer building <strong>PoquitoTalk</strong> in Bocas del Toro, Panama. Sharing real-world lessons in mobile monetization, voice AI engineering, and product distribution in public.</p>
+          <div class="bio-links">
+            <a href="https://x.com/DorienVibecodes" target="_blank" rel="noopener" style="color: #964824; text-decoration: none;">Follow on X (@DorienVibecodes) →</a>
+            <a href="../index.html" style="color: #059669; text-decoration: none;">Try PoquitoTalk Web Demo →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prev / Next Navigation -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-subtle); gap: 16px; flex-wrap: wrap;">
+        <a href="building-in-the-void.html" class="nav-back-link">← Prev: Building in the Void</a>
+        <a href="reddit-epiphany.html" class="btn-app-link" style="background: transparent; color: var(--terracotta); border: 1.5px solid var(--border-light);">Next: Reddit 1-Way vs 2-Way Epiphany →</a>
+      </div>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="article-footer">
+    <p>© 2026 PoquitoTalk • Built in Bocas del Toro, Panamá 🇵🇦 • <a href="index.html">Articles Directory</a> • <a href="../privacy.html">Privacy</a></p>
+  </footer>
+
+  <script src="clipboard-helper.js"></script>
+</body>
+</html>

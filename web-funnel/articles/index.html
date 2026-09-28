@@ -20,6 +20,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@600;700;800;900&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="article.css?v=1.0.6" />
+  <style>
+    @media (max-width: 600px) {
+      .nav-right-actions a:first-child { display: none; }
+      .nav-left .nav-separator, .nav-left .nav-separator ~ * { display: none; }
+      .nav-right-actions .btn-app-link { white-space: nowrap; }
+    }
+  </style>
 </head>
 <body>
 
@@ -54,73 +61,57 @@
         HackerNoon & Engineering Publications
       </div>
       <h1>PoquitoTalk Build-in-Public & Engineering Library</h1>
-      <p>All 7 original publications, teardowns, and living documentation logs. Use the green buttons for <strong>1-Click Rich Text Copy for HackerNoon</strong>!</p>
+      <p>Articles about building PoquitoTalk in Bocas del Toro: two published on HackerNoon, plus ship logs and engineering notes from the build.</p>
     </div>
 
     <!-- Article Cards List -->
     <div class="articles-grid">
 
-      <!-- Featured Card: Building in the Void -->
-      <div class="article-card" style="border: 2px solid rgba(150, 72, 36, 0.25); background: #FFFDFB;">
-        <div class="card-top-row">
-          <span class="card-tag" style="background: rgba(150, 72, 36, 0.12); color: #964824; font-weight: 800;">⭐ Flagship Story • Build in Public</span>
-          <span class="card-read-time">11 min read</span>
-        </div>
-        <h2 class="card-title"><a href="building-in-the-void.html" style="color: inherit; text-decoration: none;">Building in the Void: What Public Teardowns, Ruthless Cuts, and a Caribbean Island Taught Me About Shipping</a></h2>
-        <p class="card-excerpt">The unvarnished reality of building in public: sharing raw paywall designs on X, Jay's ruthless 5-lesson conversion critique, cutting features to survive the launch void, and pivoting to a physical island B2B concierge network.</p>
-        <div class="card-footer">
-          <button class="card-copy-btn" onclick="copyArticleRich('building-in-the-void.html', this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            Copy for HackerNoon
-          </button>
-          <a href="building-in-the-void.html" class="card-cta">
-            Read Article
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card 2: Paywall Teardown -->
       <div class="article-card">
         <div class="card-top-row">
-          <span class="card-tag" style="color: #4F46E5; background: #EEF2FF;">Monetization • Mobile UX Teardown</span>
-          <span class="card-read-time">8 min read</span>
+          <span class="card-tag" style="color: #059669; background: #ECFDF5;">On HackerNoon</span>
+          <span class="card-read-time">HackerNoon</span>
         </div>
-        <h2 class="card-title"><a href="paywall-teardown.html" style="color: inherit; text-decoration: none;">I Shared My Ugly App Paywall in Public. Here’s How the Community Fixed My Conversion.</a></h2>
-        <p class="card-excerpt">5 counter-intuitive paywall lessons that transformed our monetization layer: separating onboarding from in-app gate states, the unique CTA color rule, the 'Never expires' anchor, and eliminating double exit routes.</p>
+        <h2 class="card-title"><a href="https://hackernoon.com/building-poquitotalk-a-zero-install-voice-translation-workflow-for-real-world-conversations" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Building PoquitoTalk, a Zero-Install Voice Translation Workflow for Real-World Conversations</a></h2>
+        <p class="card-excerpt">14 years in Bocas, the Zero-Burden Principle, and why the contractor never has to install anything.</p>
         <div class="card-footer">
-          <button class="card-copy-btn" onclick="copyArticleRich('paywall-teardown.html', this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            Copy for HackerNoon
-          </button>
-          <a href="paywall-teardown.html" class="card-cta">
-            Read Article
+          <span></span>
+          <a href="https://hackernoon.com/building-poquitotalk-a-zero-install-voice-translation-workflow-for-real-world-conversations" target="_blank" rel="noopener" class="card-cta">
+            Read on HackerNoon
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </a>
         </div>
       </div>
-
-      <!-- Card 3: Reddit Epiphany -->
       <div class="article-card">
         <div class="card-top-row">
-          <span class="card-tag">Product Architecture • Build in Public</span>
-          <span class="card-read-time">6 min read</span>
+          <span class="card-tag" style="color: #059669; background: #ECFDF5;">On HackerNoon</span>
+          <span class="card-read-time">HackerNoon</span>
         </div>
-        <h2 class="card-title"><a href="reddit-epiphany.html" style="color: inherit; text-decoration: none;">I Built a 1-Way AI Translator for Expats in Panama. Then Reddit Showed Me I Was Solving Only 50% of the Problem.</a></h2>
-        <p class="card-excerpt">How validating with local Panamanian contractors on Reddit shattered my assumptions, exposed the embarrassment on both sides, and forced a complete pivot to a zero-install 2-way Magic Web Walkie-Talkie.</p>
+        <h2 class="card-title"><a href="https://hackernoon.com/from-words-to-code-pivoting-my-translation-career-through-shipaton-2026" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">From Words to Code: Pivoting My Translation Career Through Shipaton 2026</a></h2>
+        <p class="card-excerpt">How a freelance translator in Bocas del Toro started building apps.</p>
         <div class="card-footer">
-          <button class="card-copy-btn" onclick="copyArticleRich('reddit-epiphany.html', this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            Copy for HackerNoon
-          </button>
-          <a href="reddit-epiphany.html" class="card-cta">
+          <span></span>
+          <a href="https://hackernoon.com/from-words-to-code-pivoting-my-translation-career-through-shipaton-2026" target="_blank" rel="noopener" class="card-cta">
+            Read on HackerNoon
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+      </div>
+      <div class="article-card">
+        <div class="card-top-row">
+          <span class="card-tag" style="color: #964824; background: #FFF4EE;">Ship Log</span>
+          <span class="card-read-time">5 min read</span>
+        </div>
+        <h2 class="card-title"><a href="google-play-rejection-and-v159.html" style="color: inherit; text-decoration: none;">Playing AI Tennis, Surviving a Google Play Rejection, and Shipping PoquitoTalk v1.5.9</a></h2>
+        <p class="card-excerpt">A Sunday-morning rejection, what caused it, the billing bug a second review caught, and the first web sale.</p>
+        <div class="card-footer">
+          <span></span>
+          <a href="google-play-rejection-and-v159.html" class="card-cta">
             Read Article
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </a>
         </div>
       </div>
-
-      <!-- Card 4: Voice Engine Architecture -->
       <div class="article-card">
         <div class="card-top-row">
           <span class="card-tag" style="color: #059669; background: #ECFDF5;">Engineering • Architecture</span>
@@ -129,71 +120,8 @@
         <h2 class="card-title"><a href="voice-engine-architecture.html" style="color: inherit; text-decoration: none;">How PoquitoTalk Turns English Into Panamanian Spanish Voice Notes</a></h2>
         <p class="card-excerpt">What actually shipped: layered speech-to-text, a phrase map plus Panamanian dialect rules, ElevenLabs voices, and a zero-install walkie-talkie running on plain PHP.</p>
         <div class="card-footer">
-          <button class="card-copy-btn" onclick="copyArticleRich('voice-engine-architecture.html', this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            Copy for HackerNoon
-          </button>
+          <span></span>
           <a href="voice-engine-architecture.html" class="card-cta">
-            Read Article
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card 5: Mastering Local Spanish -->
-      <div class="article-card">
-        <div class="card-top-row">
-          <span class="card-tag" style="color: #D97706; background: #FFFBEB;">Community Guide • Expat Living</span>
-          <span class="card-read-time">5 min read</span>
-        </div>
-        <h2 class="card-title"><a href="mastering-local-spanish.html" style="color: inherit; text-decoration: none;">Mastering Local Spanish in Bocas del Toro: How to Communicate Effortlessly with Plumbers, Boat Captains & Landlords</a></h2>
-        <p class="card-excerpt">Practical guide for Caribbean residents: why textbook Spanish fails on WhatsApp, 5 everyday island scenarios (A/C leaks, water taxis, Starlink), and using zero-install walkie links.</p>
-        <div class="card-footer">
-          <button class="card-copy-btn" onclick="copyArticleRich('mastering-local-spanish.html', this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            Copy for HackerNoon
-          </button>
-          <a href="mastering-local-spanish.html" class="card-cta">
-            Read Article
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card 6: Building in Public Lessons -->
-      <div class="article-card">
-        <div class="card-top-row">
-          <span class="card-tag" style="color: #964824; background: #FFF9F6; border: 1px solid rgba(150, 72, 36, 0.2);">Build in Public • Product Evolution</span>
-          <span class="card-read-time">9 min read</span>
-        </div>
-        <h2 class="card-title"><a href="building-in-public-lessons.html" style="color: inherit; text-decoration: none;">Building in Public: How Community Feedback, Teardowns & Island Reality Shaped PoquitoTalk</a></h2>
-        <p class="card-excerpt">The complete living log of how building in public, Reddit feedback from local contractors, Jay's paywall teardowns, and speech stutter filtering shaped PoquitoTalk from an initial idea into a high-converting product.</p>
-        <div class="card-footer">
-          <button class="card-copy-btn" onclick="copyArticleRich('building-in-public-lessons.html', this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            Copy for HackerNoon
-          </button>
-          <a href="building-in-public-lessons.html" class="card-cta">
-            Read Article
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card 7: Building in Public Journal & Launch Log -->
-      <div class="article-card">
-        <div class="card-top-row">
-          <span class="card-tag" style="color: #7C3AED; background: #F5F3FF;">Shipathon 2026 • Launch Log & Distribution</span>
-          <span class="card-read-time">6 min read</span>
-        </div>
-        <h2 class="card-title"><a href="building-in-public-journal.html" style="color: inherit; text-decoration: none;">Build in Public Journal & Launch Log: From Reddit Research to Viral Comedy Distribution</a></h2>
-        <p class="card-excerpt">The day-by-day evolution of PoquitoTalk: transitioning from dry demo videos to character-consistent viral comedy reels, 1-tap WhatsApp workflows, and community research.</p>
-        <div class="card-footer">
-          <button class="card-copy-btn" onclick="copyArticleRich('building-in-public-journal.html', this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            Copy for HackerNoon
-          </button>
-          <a href="building-in-public-journal.html" class="card-cta">
             Read Article
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </a>
