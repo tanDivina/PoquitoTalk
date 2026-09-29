@@ -46,7 +46,6 @@
   "hola les puedo mandar mi lista de compras por whatsapp para que me la preparen y envíen a domicilio": "groceries_whatsapp_delivery_list",
   "buenas quisiera reservar una mesa para 4 personas hoy a las 7:30 de la noche por favor": "dining_table_reservation",
   "buenas nos podría dividir la cuenta entre 2 tarjetas y el total ya incluye la propina": "dining_split_bill_tip",
-  "emergencia necesitamos asistencia médica urgente o una ambulancia para llevar a un paciente herido al hospital de bocas ya": "med_emergency_ambulance",
   "buenas tengo un dolor de muela muy fuerte y una muela partida tienen citas odontológicas de urgencia hoy": "dent_urgent_toothache",
   "hola tienen amoxicilina ibuprofeno o medicamentos para la fiebre en la farmacia y hasta qué hora abren hoy": "med_pharmacy_meds",
   "hola tienen repelente fuerte con deet y crema antihistamínica para picaduras de chitras o mosquitos": "pharmacy_mosquito_dengue_repellent",
@@ -66,8 +65,9 @@
   "urgente mi perro mordió un sapo venenoso y está botando espuma por el hocico me puede decir qué primeros auxilios le aplico ya": "pet_toad_snake_toxicity",
   "buenas me puede decir cómo están reventando las olas en paunch bluff o la punta de carenero hoy y a qué hora es marea alta": "community_surf_swell_tides",
   "buenas sabe qué días y a qué horas pasa la lancha o el camión recolector de basura por nuestro muelle": "community_garbage_boat_schedule",
-  "hola sabe cuándo y en qué lugar se realiza el mercado orgánico de productores agrícolas locales en bocas town u old bank": "community_artisan_farmers_market",
   "buenas tengo fiebre alta un dolor de barriga bien fuerte y creo que me estoy deshidratando habrá un doctor que me pueda atender hoy": "med_doctor_visit",
   "buenas tengo la barriga mala y diarrea tienen suero oral con electrolitos y probióticos": "pharmacy_rehydration_electrolytes",
-  "buenas alguien sabe si el cajero de banco nacional en bocas town tiene plata ahorita": "banking_atm_banconal"
+  "buenas alguien sabe si el cajero de banco nacional en bocas town tiene plata ahorita": "banking_atm_banconal",
+  "emergencia necesitamos una ambulancia ya hay un herido y hay que llevarlo al hospital de bocas": "med_emergency_ambulance",
+  "buenas hay algún mercado orgánico en bocas town o en old bank": "community_artisan_farmers_market"
 }
