@@ -25,7 +25,7 @@ export const ELEVENLABS_PERSONAS: Record<string, string> = {
   Sofia: 'cgSgspJ2msm6clMCkdW9',
 };
 
-let elevenLabsApiKey = process.env.EXPO_PUBLIC_ELEVENLABS_API_KEY || 'REMOVED';
+let elevenLabsApiKey = process.env.EXPO_PUBLIC_ELEVENLABS_API_KEY || '';
 
 export function setElevenLabsApiKey(key: string) {
   elevenLabsApiKey = key.trim();
