@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Modal,
   View,
@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Dimensions,
+  Animated,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../theme/colors';
@@ -26,6 +26,18 @@ export const ClaimCelebrationModal: React.FC<ClaimCelebrationModalProps> = ({
   creditsGranted = 50,
   isPro = true,
 }) => {
+  // Pop the card in with a small bounce each time it opens
+  const pop = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    if (!visible) return;
+    pop.setValue(0);
+    Animated.spring(pop, { toValue: 1, friction: 5, tension: 80, useNativeDriver: true }).start();
+  }, [visible, pop]);
+  const cardMotion = {
+    opacity: pop.interpolate({ inputRange: [0, 1], outputRange: [0, 1], extrapolate: 'clamp' }),
+    transform: [{ scale: pop.interpolate({ inputRange: [0, 1], outputRange: [0.85, 1] }) }],
+  };
+
   return (
     <Modal
       visible={visible}
@@ -34,7 +46,7 @@ export const ClaimCelebrationModal: React.FC<ClaimCelebrationModalProps> = ({
       onRequestClose={onClose}
     >
       <View style={styles.backdrop}>
-        <View style={styles.card}>
+        <Animated.View style={[styles.card, cardMotion]}>
           {/* Top Green Accent Bar */}
           <View style={styles.accentBar} />
 
@@ -85,7 +97,7 @@ export const ClaimCelebrationModal: React.FC<ClaimCelebrationModalProps> = ({
             </View>
             <View style={styles.statChip}>
               <Ionicons name="mic" size={16} color="#2E402D" />
-              <Text style={styles.statText}>4 Studio Personas</Text>
+              <Text style={styles.statText}>2 Island Voices</Text>
             </View>
           </View>
 
@@ -98,7 +110,7 @@ export const ClaimCelebrationModal: React.FC<ClaimCelebrationModalProps> = ({
             <Text style={styles.ctaText}>Start Talking en Español</Text>
             <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
           </TouchableOpacity>
-        </View>
+        </Animated.View>
       </View>
     </Modal>
   );
@@ -136,9 +148,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#25D366',
   },
   mascotContainer: {
-    width: 140,
-    height: 140,
-    marginVertical: 12,
+    width: 180,
+    height: 180,
+    marginTop: 4,
+    marginBottom: 8,
     justifyContent: 'center',
     alignItems: 'center',
   },
