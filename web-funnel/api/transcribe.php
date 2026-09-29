@@ -32,7 +32,14 @@ if (!file_exists($tmpPath) || filesize($tmpPath) === 0) {
 }
 
 // 1. ElevenLabs Scribe Speech-to-Text API
-$elevenLabsKey = getenv("ELEVENLABS_API_KEY") ?: "REMOVED";
+$elevenLabsKey = getenv("ELEVENLABS_API_KEY") ?: "";
+if (empty($elevenLabsKey)) {
+    // Settings file kept outside the public web folder (e.g. /home/<user>/poquitotalk_config.php)
+    $config = @include(dirname(__DIR__, 3) . "/poquitotalk_config.php");
+    if (is_array($config)) {
+        $elevenLabsKey = $config["ELEVENLABS_API_KEY"] ?? "";
+    }
+}
 if (!empty($elevenLabsKey)) {
     $cFile = new CURLFile($tmpPath, $file["type"] ?? "audio/m4a", $file["name"] ?? "voice.m4a");
     $ch = curl_init();
