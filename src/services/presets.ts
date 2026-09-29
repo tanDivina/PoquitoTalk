@@ -602,7 +602,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'ATMs & Cash',
         title: 'Banco Nacional ATM Cash Status',
         input: 'Hi! Does anyone know if the Banco Nacional ATM in Bocas Town currently has USD cash dispensing?',
-        output: '¡Buenas! ¿Alguien sabe si el cajero automático de Banco Nacional en Bocas Town tiene dinero en efectivo ahorita?',
+        output: '¡Buenas! ¿Alguien sabe si el cajero de Banco Nacional en Bocas Town tiene plata ahorita?',
         fullPanamenoOutput: '¡Buenas gente! ¿El cajero de Banco Nacional en Bocas tiene plata ahorita o tá seco?',
       },
       {
@@ -757,7 +757,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Doctor & Clinic',
         title: 'Urgent Doctor Consultation',
         input: 'Hi! I have a high fever, dehydration, and severe stomach pain. Is a general doctor available for a consultation today?',
-        output: '¡Buenas! Tengo fiebre alta, deshidratación y dolor estomacal fuerte. ¿Habrá un médico general disponible para consulta hoy?',
+        output: '¡Buenas! Tengo fiebre alta, un dolor de barriga bien fuerte y creo que me estoy deshidratando. ¿Habrá un doctor que me pueda atender hoy?',
         fullPanamenoOutput: '¡Buenas doctor! Tengo fiebre y un dolor de estómago bien fuerte. ¿Me podrá atender una consulta hoy?',
       },
       {
@@ -793,7 +793,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Pharmacy & Meds',
         title: 'Electrolytes & Stomach Infection',
         input: 'Hi! Do you have oral rehydration electrolyte salts (suero oral) and probiotics for food poisoning or traveler diarrhea?',
-        output: '¡Buenas! ¿Tienen suero oral de rehidratación con electrolitos y probióticos para infección estomacal o diarrea?',
+        output: '¡Buenas! Tengo la barriga mala y diarrea. ¿Tienen suero oral con electrolitos y probióticos?',
         fullPanamenoOutput: '¡Buenas! ¿Tienen sobres de suero oral y algo pa cortar la soltura de estómago?',
       },
       {
