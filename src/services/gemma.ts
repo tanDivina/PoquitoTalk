@@ -246,14 +246,14 @@ function polishPanamaSpanish(translatedText: string, fromLang: string, toLang: s
   text = text.replace(/\bwater tank\b/gi, 'tanque de reserva');
   text = text.replace(/\bdormitorio\b/gi, 'recámara');
   text = text.replace(/\bhabitación principal\b/gi, 'recámara principal');
+  // Water cuts are "se fue el agua" in Panama, not the textbook "el agua se detuvo"
+  text = text.replace(/(^|[.!?]\s+)el agua se (detuvo|paró|cortó)/gi, '$1Se fue el agua');
+  text = text.replace(/\bel agua se (detuvo|paró|cortó)/gi, 'se fue el agua');
 
-  // Proper Spanish punctuation: ensure leading ¿ for questions and ¡ for exclamations
-  if (text.endsWith('?') && !text.startsWith('¿')) {
-    text = `¿${text}`;
-  }
-  if (text.endsWith('!') && !text.startsWith('¡')) {
-    text = `¡${text}`;
-  }
+  // Proper Spanish punctuation: open each question/exclamation sentence with ¿/¡,
+  // not the whole message ("Se fue el agua. ¿Puede...?", not "¿Se fue el agua. Puede...?")
+  text = text.replace(/(^|[.!?]\s+)([^.!?¿¡]+\?)/g, '$1¿$2');
+  text = text.replace(/(^|[.!?]\s+)([^.!?¿¡]+!)/g, '$1¡$2');
 
   return text;
 }
