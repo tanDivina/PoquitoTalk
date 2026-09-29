@@ -21,6 +21,7 @@ import {
   VoiceNoteDecodeResult,
 } from '../services/gemma';
 import { getPlaybackSpeed, setPlaybackSpeed } from '../services/storage';
+import { getWebParam, getWebSearchParams } from '../utils/webParams';
 
 interface VoiceNoteDecoderModalProps {
   visible: boolean;
@@ -39,8 +40,8 @@ export const VoiceNoteDecoderModal: React.FC<VoiceNoteDecoderModalProps> = ({
 }) => {
   const [isDecoding, setIsDecoding] = useState<boolean>(false);
   const [result, setResult] = useState<VoiceNoteDecodeResult | null>(() => {
-    if (typeof window !== 'undefined') {
-      const p = new URLSearchParams(window.location.search);
+    const p = getWebSearchParams();
+    if (p) {
       if (p.get('decoderSample') === 'true') {
         return {
           senderContext: 'Boat Captain / Water Taxi Driver',
@@ -271,7 +272,7 @@ export const VoiceNoteDecoderModal: React.FC<VoiceNoteDecoderModalProps> = ({
                   <Text style={styles.englishMeaningText}>{result.englishMeaning}</Text>
 
                   <View style={styles.englishActionsRow}>
-                    {!(typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('hideAudioBtn') === 'true') && (
+                    {getWebParam('hideAudioBtn') !== 'true' && (
                       <TouchableOpacity
                         style={[styles.playEnglishBtn, isPlayingEnglish && styles.playEnglishBtnActive]}
                         onPress={() => handlePlayEnglishAudio(result.englishMeaning)}
