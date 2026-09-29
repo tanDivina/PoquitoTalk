@@ -36,53 +36,9 @@ function getStorageFilePath(): string {
   return `${base}poquitotalk_threads.json`;
 }
 
-export const DEFAULT_PRESET_THREADS: ConversationThread[] = [
-  {
-    id: 'thread_ac_carlos',
-    roomId: 'room_ac_carlos',
-    contactName: 'Carlos (A/C Repair)',
-    category: 'A/C Repair',
-    avatarIcon: 'snow-outline',
-    whatsappNumber: '+507 6885-8607',
-    lastUpdated: Date.now() - 3600000,
-    messages: [
-      {
-        id: 'msg_1',
-        sender: 'EXPAT',
-        textEnglish: 'Hi Carlos! My air conditioning unit in the main bedroom is leaking water inside.',
-        textSpanish: '¡Buenas Carlos! El aire acondicionado en la recámara principal está goteando agua por dentro. ¿Cuándo podría revisarlo?',
-        personaName: 'Diego',
-        timestamp: Date.now() - 3600000,
-      },
-      {
-        id: 'msg_2',
-        sender: 'SERVICE_PROVIDER',
-        textEnglish: 'Hello! I can drop by today at 3:00 PM. Please confirm your location on Isla Colón.',
-        textSpanish: '¡Buenas! Puedo pasar a revisar el aire hoy a las 3 de la tarde. ¿Me confirma su ubicación en Isla Colón?',
-        timestamp: Date.now() - 1800000,
-      },
-    ],
-  },
-  {
-    id: 'thread_boat_juan',
-    roomId: 'room_boat_juan',
-    contactName: 'Captain Juan (Water Taxi)',
-    category: 'Boat / Water Taxi',
-    avatarIcon: 'boat-outline',
-    whatsappNumber: '+507 6712-3456',
-    lastUpdated: Date.now() - 86400000,
-    messages: [
-      {
-        id: 'msg_3',
-        sender: 'EXPAT',
-        textEnglish: 'Hello Captain Juan! What time is your first boat leaving from Isla Carenero tomorrow morning?',
-        textSpanish: '¡Buenas Capitán Juan! ¿A qué hora sale su primera lancha desde Isla Carenero mañana en la mañana?',
-        personaName: 'Diego',
-        timestamp: Date.now() - 86400000,
-      },
-    ],
-  },
-];
+// Early builds seeded two made-up demo threads with invented WhatsApp numbers.
+// They are dropped from stored threads so no one messages those numbers by accident.
+const LEGACY_DEMO_THREAD_IDS = new Set(['thread_ac_carlos', 'thread_boat_juan']);
 
 let cachedThreads: ConversationThread[] | null = null;
 type ThreadUpdateListener = (event: { thread: ConversationThread; newMessage?: ThreadMessage; isIncomingReply?: boolean }) => void;
@@ -111,7 +67,7 @@ export function cleanRoomId(raw: string): string {
 }
 
 export async function loadConversationThreads(): Promise<ConversationThread[]> {
-  if (cachedThreads && cachedThreads.length > 0) {
+  if (cachedThreads) {
     return cachedThreads;
   }
 
@@ -121,18 +77,12 @@ export async function loadConversationThreads(): Promise<ConversationThread[]> {
     if (fileInfo.exists) {
       const content = await FileSystem.readAsStringAsync(filePath);
       const parsed = JSON.parse(content);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        // Auto-migrate legacy "3:00 PM" string and missing WhatsApp numbers on existing stored threads
+      if (Array.isArray(parsed)) {
         let mutated = false;
-        parsed.forEach((t: ConversationThread) => {
-          if (t.id === 'thread_ac_carlos' && !t.whatsappNumber) {
-            t.whatsappNumber = '+507 6885-8607';
-            mutated = true;
-          }
-          if (t.id === 'thread_boat_juan' && !t.whatsappNumber) {
-            t.whatsappNumber = '+507 6712-3456';
-            mutated = true;
-          }
+        const threads = parsed.filter((t: ConversationThread) => !LEGACY_DEMO_THREAD_IDS.has(t.id));
+        if (threads.length !== parsed.length) mutated = true;
+        // Auto-migrate legacy "3:00 PM" strings on existing stored threads
+        threads.forEach((t: ConversationThread) => {
           t.messages.forEach((m: ThreadMessage) => {
             if (m.textSpanish && m.textSpanish.includes('3:00 PM')) {
               m.textSpanish = m.textSpanish.replace(/3:00\s*PM/g, '3 de la tarde');
@@ -141,17 +91,17 @@ export async function loadConversationThreads(): Promise<ConversationThread[]> {
           });
         });
         if (mutated) {
-          await saveConversationThreads(parsed);
+          await saveConversationThreads(threads);
         }
-        cachedThreads = parsed;
-        return parsed;
+        cachedThreads = threads;
+        return threads;
       }
     }
   } catch (e) {
     console.warn('Error loading threads file:', e);
   }
-  cachedThreads = DEFAULT_PRESET_THREADS;
-  return DEFAULT_PRESET_THREADS;
+  cachedThreads = [];
+  return cachedThreads;
 }
 
 export async function saveConversationThreads(threads: ConversationThread[]): Promise<void> {

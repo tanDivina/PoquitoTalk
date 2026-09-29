@@ -297,56 +297,9 @@ function notifyPhoneBookChanged(contacts: PhoneBookContact[]) {
   });
 }
 
-export const DEFAULT_INITIAL_CONTACTS: PhoneBookContact[] = [
-  {
-    id: 'seed-1',
-    name: 'Capt. Luis - Bocas Water Taxi',
-    phoneNumber: '+507 6712-4491',
-    whatsappNumber: '+507 6712-4491',
-    normalizedPhone: '50767124491',
-    category: 'boat_repair',
-    notes: '24/7 fast boat between Isla Colón, Carenero & Bastimentos',
-    isFavorite: true,
-    isVerifiedDirectory: true,
-    createdAt: Date.now() - 100000,
-  },
-  {
-    id: 'seed-2',
-    name: 'Carlos - Master Electrician & A/C',
-    phoneNumber: '+507 6823-1190',
-    whatsappNumber: '+507 6823-1190',
-    normalizedPhone: '50768231190',
-    category: 'home_trades',
-    notes: 'Reliable solar inverter & inverter A/C repair',
-    isFavorite: true,
-    isVerifiedDirectory: true,
-    createdAt: Date.now() - 200000,
-  },
-  {
-    id: 'seed-3',
-    name: 'Bocas Organic Soil & Compost',
-    phoneNumber: '+507 6590-3321',
-    whatsappNumber: '+507 6590-3321',
-    normalizedPhone: '50765903321',
-    category: 'home_trades',
-    notes: 'Living soils, compost & permaculture delivery',
-    isFavorite: false,
-    isVerifiedDirectory: false,
-    createdAt: Date.now() - 300000,
-  },
-  {
-    id: 'seed-4',
-    name: 'Island Veterinary Clinic',
-    phoneNumber: '+507 6445-8812',
-    whatsappNumber: '+507 6445-8812',
-    normalizedPhone: '50764458812',
-    category: 'other',
-    notes: 'Emergency pet care & vaccinations',
-    isFavorite: false,
-    isVerifiedDirectory: true,
-    createdAt: Date.now() - 400000,
-  },
-];
+// Early builds seeded the phone book with made-up demo contacts (ids "seed-1".."seed-4").
+// Their numbers could belong to real strangers, so they are dropped from stored lists.
+const isLegacyDemoContact = (c: PhoneBookContact) => typeof c?.id === 'string' && c.id.startsWith('seed-');
 
 let phoneBookPromise: Promise<PhoneBookContact[]> | null = null;
 
@@ -362,7 +315,7 @@ async function persistPhoneBook(list: PhoneBookContact[]): Promise<void> {
 }
 
 export async function getPhoneBookContacts(): Promise<PhoneBookContact[]> {
-  if (cachedPhoneBook && cachedPhoneBook.length > 0) return cachedPhoneBook;
+  if (cachedPhoneBook) return cachedPhoneBook;
   if (phoneBookPromise) return phoneBookPromise;
 
   phoneBookPromise = (async () => {
@@ -371,8 +324,9 @@ export async function getPhoneBookContacts(): Promise<PhoneBookContact[]> {
         const raw = localStorage.getItem('poquito_phonebook_v1');
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            cachedPhoneBook = parsed;
+          if (Array.isArray(parsed)) {
+            cachedPhoneBook = parsed.filter((c: PhoneBookContact) => !isLegacyDemoContact(c));
+            if (cachedPhoneBook.length !== parsed.length) persistPhoneBook(cachedPhoneBook);
             return cachedPhoneBook;
           }
         }
@@ -383,8 +337,9 @@ export async function getPhoneBookContacts(): Promise<PhoneBookContact[]> {
 
     try {
       const parsed = await readJsonFile<PhoneBookContact[]>('poquito_phonebook_v1.json');
-      if (parsed && Array.isArray(parsed) && parsed.length > 0) {
-        cachedPhoneBook = parsed;
+      if (parsed && Array.isArray(parsed)) {
+        cachedPhoneBook = parsed.filter((c) => !isLegacyDemoContact(c));
+        if (cachedPhoneBook.length !== parsed.length) persistPhoneBook(cachedPhoneBook);
         return cachedPhoneBook;
       }
     } catch (e) {
@@ -393,9 +348,8 @@ export async function getPhoneBookContacts(): Promise<PhoneBookContact[]> {
       phoneBookPromise = null;
     }
 
-    // Default seed on initial launch
-    cachedPhoneBook = [...DEFAULT_INITIAL_CONTACTS];
-    persistPhoneBook(cachedPhoneBook);
+    // First launch: start with an empty phone book
+    cachedPhoneBook = [];
     return cachedPhoneBook;
   })();
 

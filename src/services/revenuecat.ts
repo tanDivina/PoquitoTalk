@@ -9,6 +9,17 @@ import { getUserProfile, setProSubscriber, addCredits, fulfillWebCreditsOnce } f
 const REVENUECAT_STRIPE_API_KEY = 'strp_oRCQHGzTOCydzvQECdMeNnbVXTI';
 // Live Stripe product sold in the RevenueCat Funnel (50 Poquito Credits Pack)
 const WEB_CREDITS_STRIPE_PRODUCT_ID = 'prod_V2ox5ofCGfROTh';
+
+// Pro comes only from a subscription or pass. If the credits pack is ever attached to a
+// Pro entitlement in the RevenueCat dashboard, ignore it so a credits purchase never unlocks Pro.
+function hasProEntitlement(customerInfo: CustomerInfo): boolean {
+  return ['pro', 'unlimited_translations'].some((id) => {
+    const ent = customerInfo.entitlements.active[id];
+    if (!ent) return false;
+    const productId = (ent.productIdentifier || '').toLowerCase();
+    return productId !== WEB_CREDITS_STRIPE_PRODUCT_ID.toLowerCase() && !productId.includes('credit');
+  });
+}
 const REVENUECAT_ANDROID_API_KEY = 'goog_AlpDvQBZbuFjLWDnWAAVexYDMQz';
 
 export interface SubscriptionState {
@@ -71,8 +82,7 @@ class RevenueCatService {
     if (this.isPurchasesConfigured) {
       try {
         const customerInfo = await Purchases.getCustomerInfo();
-        const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined' ||
-                      typeof customerInfo.entitlements.active['unlimited_translations'] !== 'undefined';
+        const isPro = hasProEntitlement(customerInfo);
         await setProSubscriber(isPro);
         return isPro;
       } catch (error) {
@@ -134,8 +144,7 @@ class RevenueCatService {
             return { success: true };
           }
 
-          const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined' ||
-                        typeof customerInfo.entitlements.active['unlimited_translations'] !== 'undefined';
+          const isPro = hasProEntitlement(customerInfo);
           if (isPro) {
             await setProSubscriber(true);
             return { success: true };
@@ -163,8 +172,7 @@ class RevenueCatService {
     if (this.isPurchasesConfigured) {
       try {
         const customerInfo = await Purchases.restorePurchases();
-        const isPro = typeof customerInfo.entitlements.active['pro'] !== 'undefined' ||
-                      typeof customerInfo.entitlements.active['unlimited_translations'] !== 'undefined';
+        const isPro = hasProEntitlement(customerInfo);
         await setProSubscriber(isPro);
         return isPro;
       } catch (error) {
@@ -207,10 +215,7 @@ class RevenueCatService {
           let packageName = 'PoquitoTalk Purchase';
 
           // 1. Grant Pro access if Pro entitlement is active
-          if (
-            customerInfo.entitlements.active['pro'] !== undefined ||
-            customerInfo.entitlements.active['unlimited_translations'] !== undefined
-          ) {
+          if (hasProEntitlement(customerInfo)) {
             isPro = true;
             packageName = 'PoquitoTalk Pro Pass';
             await setProSubscriber(true);
