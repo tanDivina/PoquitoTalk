@@ -14,7 +14,7 @@
   "hola podemos pedir botellones de 5 galones de agua purificada con entrega a domicilio": "water_jugs_delivery",
   "buenas la bomba hidroneumática se queda encendida pero se descebó y no sube presión de agua a la casa": "water_pump_lost_prime",
   "hola necesito cambio de filtros de sedimentos y revisión del bombillo uv del sistema de filtrado de agua": "water_filter_maintenance",
-  "emergencia se reventó un tubo principal de pvc debajo de la casa y está botando agua puede venir un fontanero ya": "water_leak_pipe_emergency",
+  "emergencia se reventó un tubo principal de pvc debajo de la casa y está botando agua puede venir un plomero ya": "water_leak_pipe_emergency",
   "buenas el aire acondicionado está botando agua hacia adentro de la habitación podría venir a revisar el desagüe": "ac_leaking_water",
   "hola el aire acondicionado enciende pero solo tira aire tibio creo que necesita recarga de gas refrigerante": "ac_gas_refill",
   "buenas se fue la luz por su sector también o habrá sido solo un breaker que se disparó en mi casa": "power_blackout_status",

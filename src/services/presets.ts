@@ -271,7 +271,7 @@ export const SERVICE_PRESETS: ServicePreset[] = [
         subCategoryLabel: 'Leak & Pump Repair',
         title: 'Pipe Burst / High Pressure Leak',
         input: 'Emergency: A main PVC water pipe burst under the house and water is spraying everywhere. Can a plumber come now?',
-        output: '¡Emergencia! Se reventó un tubo principal de PVC debajo de la casa y está botando agua. ¿Puede venir un fontanero ya?',
+        output: '¡Emergencia! Se reventó un tubo principal de PVC debajo de la casa y está botando agua. ¿Puede venir un plomero ya?',
         fullPanamenoOutput: '¡Urgente maestro! Se reventó un tubo de PVC y tengo una fuga bárbara de agua. ¿Puede venir volando?',
       },
     ],
@@ -1003,6 +1003,7 @@ export function getCategoryUnifiedMeta(categoryOrId?: string): CategoryMeta {
     key.includes("water_supply") ||
     key.includes("cistern") ||
     key.includes("fontanero") ||
+    key.includes("plomero") ||
     key.includes("bomba") ||
     key.includes("agua")
   ) {

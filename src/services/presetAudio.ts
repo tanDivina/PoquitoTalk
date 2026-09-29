@@ -8,7 +8,6 @@ const SERVER_CDN_BASE = 'https://poquitotalk.hero-apps.com/audio/presets';
 
 export const PRESET_AUDIO_ALIASES: Record<string, string> = {
   boat_engine_not_starting: 'boat_motor_wont_start',
-  boat_propeller_impeller_change: 'boat_hull_propeller',
   car_battery_jump_start: 'car_battery_jump',
   car_flat_tire_patch: 'car_tire_puncture',
   water_cistern_low: 'water_cistern_truck',
