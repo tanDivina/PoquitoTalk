@@ -34,6 +34,7 @@ import { shareVoiceNoteToWhatsApp, sendTextToWhatsApp } from '../services/sharin
 import { RecipientDispatchModal } from './RecipientDispatchModal';
 import { getPlaybackSpeed, getPreferredVoiceGender, setPreferredVoiceGender } from '../services/storage';
 import { deductCreditForWalkieTalkie } from '../services/userService';
+import { getWebParam } from '../utils/webParams';
 
 interface TranslationCardProps {
   inputText: string;
@@ -72,10 +73,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
   const [isSharingVoice, setIsSharingVoice] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showDispatchModal, setShowDispatchModal] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return new URLSearchParams(window.location.search).get('dispatch') === 'true';
-    }
-    return false;
+    return getWebParam('dispatch') === 'true';
   });
   const [dispatchType, setDispatchType] = useState<'voice_note' | 'text'>('voice_note');
   const [preparedAudioUri, setPreparedAudioUri] = useState<string | null>(null);

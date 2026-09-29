@@ -36,6 +36,7 @@ import {
 } from '../services/googleVoice';
 import { AddContactModal } from './AddContactModal';
 import { ImportContactsModal } from './ImportContactsModal';
+import { getWebParam } from '../utils/webParams';
 
 interface RecipientDispatchModalProps {
   visible: boolean;
@@ -375,7 +376,7 @@ export const RecipientDispatchModal: React.FC<RecipientDispatchModalProps> = ({
                   <Text style={styles.subtitle} numberOfLines={1}>
                     "{spanishText}"
                   </Text>
-                  {!(typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('hideAudioPreview') === 'true') && (
+                  {getWebParam('hideAudioPreview') !== 'true' && (
                     <TouchableOpacity
                       style={[styles.listenPreviewBtn, isPlayingPreview && styles.listenPreviewBtnActive]}
                       onPress={handleTogglePreviewAudio}
