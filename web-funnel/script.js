@@ -454,31 +454,31 @@ function initiateStripeCheckout(plan) {
     'annual_pass': {
       name: 'PoquitoTalk Annual Explorer Pass',
       price: '$39.99/year ($3.33/mo)',
-      stripeUrl: 'https://buy.stripe.com/test_3cIaEXcXX4Ka31k0534sE01',
+      stripeUrl: 'https://play.google.com/store/apps/details?id=com.heroapps.poquitotalk', // in-app subscription: sold on Google Play
       isDirectPay: true
     },
     'monthly_pass': {
       name: 'PoquitoTalk Monthly Resident Pass',
       price: '$9.99/month',
-      stripeUrl: 'https://buy.stripe.com/test_28EaEX5vv7WmcBUdVT4sE02',
+      stripeUrl: 'https://play.google.com/store/apps/details?id=com.heroapps.poquitotalk', // in-app subscription: sold on Google Play
       isDirectPay: true
     },
     'tourist_weekly': { 
       name: '7-Day Travel Pass', 
       price: '$4.99 (7 Days Access • 100 Notes / 20 Live Sessions)', 
-      stripeUrl: 'https://buy.stripe.com/test_8x24gz3nn7WmgSa8Bz4sE03',
+      stripeUrl: 'https://play.google.com/store/apps/details?id=com.heroapps.poquitotalk', // prepaid pass: sold on Google Play
       isDirectPay: true 
     },
     'credits_50': { 
       name: '50 Poquito Credits Pack (Never Expires)', 
-      price: '$3.74 (Reg. $4.99 • 25% Off Web Promo)', 
-      stripeUrl: 'https://buy.stripe.com/8x214n3nngsS6dw8Bz4sE0b',
+      price: '$3.74 launch price until Oct 15 ($4.99 in the app)',
+      stripeUrl: 'https://signup.cat/YmXZFhTDVmXQhmre/', // RevenueCat Web Funnel (Stripe Billing), redeemable in the app
       isDirectPay: true 
     }
   };
   const selected = planNames[plan] || planNames['credits_50'];
 
-  // Direct Pay for all plans (Zero friction - goes straight to Stripe Checkout)
+  // Subscriptions and passes open Google Play; the credits pack opens the RevenueCat web funnel
   if (selected.isDirectPay && selected.stripeUrl) {
     window.location.href = selected.stripeUrl;
     return;
