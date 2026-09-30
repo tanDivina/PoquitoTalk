@@ -25,7 +25,7 @@ import { ConversationThread, ThreadMessage } from "../services/conversations";
 import { getCategoryUnifiedMeta } from "../services/presets";
 import { speakIncomingEnglish } from "../services/incomingVoice";
 import { resolveSpeakerGender, SpeakerGender } from "../utils/speakerGender";
-import { translateWithGemma } from "../services/gemma";
+import { translateText } from "../services/translation";
 import {
   generateGoogleGeminiAudio,
   playGoogleAudioFile,
@@ -184,7 +184,7 @@ export const ThreadViewModal: React.FC<ThreadViewModalProps> = ({
     setIsSharing(true);
 
     try {
-      const translatedSpanish = await translateWithGemma(userText, "en", "es");
+      const translatedSpanish = await translateText(userText, "en", "es");
       const newMsg: ThreadMessage = {
         id: `msg_${Date.now()}`,
         sender: "EXPAT",

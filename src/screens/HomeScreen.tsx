@@ -32,7 +32,7 @@ import { PostWhatsAppModal } from '../components/PostWhatsAppModal';
 import { MicButton } from '../components/MicButton';
 import { AnimatedParrotMascot } from '../components/AnimatedParrotMascot';
 import { PoquitoAvatar } from '../components/PoquitoAvatar';
-import { translateWithGemma } from '../services/gemma';
+import { translateText } from '../services/translation';
 import { TranslationItem } from '../types';
 import { VoiceOption, GOOGLE_SPANISH_VOICES, generateGoogleGeminiAudio } from '../services/googleVoice';
 import { walkieTalkieService } from '../services/walkieTalkie';
@@ -653,7 +653,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       }
 
       // Translate to Spanish
-      const translated = await translateWithGemma(recognizedText, 'en', 'es');
+      const translated = await translateText(recognizedText, 'en', 'es');
       const finalEs = translated || recognizedText;
 
       // Generate Spanish audio base64
@@ -740,7 +740,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     try {
       setIsTranslating(true);
       const normalizedEn = cleanSpeechRepetitions(normalizeBocasTerminology(inputText.trim()));
-      const translated = await translateWithGemma(normalizedEn, 'en', 'es');
+      const translated = await translateText(normalizedEn, 'en', 'es');
       const finalEs = translated || normalizedEn;
 
       let audioBase64 = '';
@@ -929,7 +929,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     setIsTranslating(true);
 
     try {
-      const translated = await translateWithGemma(text, srcLang, tgtLang);
+      const translated = await translateText(text, srcLang, tgtLang);
       setOutputText(translated);
     } catch (error) {
       setOutputText(text);

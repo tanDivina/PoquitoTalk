@@ -1,4 +1,4 @@
-// Gemma AI Translation Engine Service
+// Translation service: island phrase map, then MyMemory, our proxy and Google Translate, polished for Panamanian Spanish
 // Tailored for Bocas del Toro, Panama (Spanish - Panamanian / Latin American Regional Focus)
 
 import { normalizeBocasTerminology } from './transcriptionService';
@@ -8,7 +8,7 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸' },
 ];
 
-export async function translateWithGemma(
+export async function translateText(
   inputText: string,
   fromLangCode: string = 'en',
   toLangCode: string = 'es',
@@ -56,7 +56,7 @@ export async function translateWithGemma(
     'hi! do you have a water tanker truck available to fill a reserve cistern tank at my property today?': '¡Buenas! ¿Tendrá disponible un camión cisterna para llenar un tanque de reserva de 1,500 galones en mi propiedad hoy?',
     'hi! do you have a water truck available to fill a reserve cistern tank at my house today?': '¡Buenas! ¿Tendrá disponible un camión cisterna para llenar el tanque de reserva de agua en mi casa hoy?',
     'hello, the air conditioner in the main bedroom is leaking water and not cooling. can someone inspect it today?': '¡Buenas! El aire acondicionado de la recámara principal está botando agua y no enfría. ¿Podría venir alguien a revisarlo hoy?',
-    'hi captain! are you available to take two of us to old bank on bastimentos tonight, and how much would it be for the two of us?': '¡Buenas Capitán! ¿Tiene disponibilidad para llevarnos a dos personas a Old Bank en Bastimentos esta noche, y cuánto nos saldría?',
+    'hi captain! are you available to take two of us to old bank on bastimentos tonight, and how much would it be for the two of us?': '¡Buenas, capitán! ¿Tiene disponibilidad para llevarnos a dos personas a Old Bank en Bastimentos esta noche, y cuánto nos saldría?',
     'hello! my dog is showing signs of cane toad contact / fever. is the vet clinic open right now?': '¡Buenas! Mi perro tuvo contacto con un sapo de caña / tiene fiebre. ¿La clínica veterinaria está abierta en este momento?',
     'hello! my dog is showing signs of cane toad contact. is the vet clinic open right now?': '¡Buenas! Mi perro tuvo contacto con un sapo de caña. ¿La clínica veterinaria está abierta en este momento?',
     'hi! are you available for a land taxi ride to playa bluff from bocas town today?': '¡Buenas! ¿Tendrá disponibilidad para un viaje en taxi a Playa Bluff desde Bocas Town hoy?',
@@ -210,7 +210,7 @@ export async function translateWithGemma(
   }
 
   // 6. Clean Fallback: Local Panama inference
-  return panamaGemmaInference(inputText);
+  return panamaLocalInference(inputText);
 }
 
 function polishPanamaSpanish(translatedText: string, fromLang: string, toLang: string, originalInput: string = ''): string {
@@ -287,7 +287,7 @@ function polishPanamaEnglish(translatedText: string, originalSpanish: string = '
   return text;
 }
 
-function panamaGemmaInference(input: string): string {
+function panamaLocalInference(input: string): string {
   const lower = input.toLowerCase();
   const hasGreeting = /^(hi|hello|hey|good morning|good afternoon|good evening|buenas|hola)\b/i.test(lower);
   const greeting = hasGreeting ? '¡Buenas! ' : '';

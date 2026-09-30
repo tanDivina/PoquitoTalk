@@ -3,7 +3,7 @@
  * Verifies:
  * 1. WhatsApp link generation (URL structure, room ID, encoded parameters, share message)
  * 2. Audio transmission (Asset integrity, simulated audio encoding/decoding, transmission payload)
- * 3. Spanish-to-English translation (Contractor Spanish voice note decoding via Gemma & Translation logic)
+ * 3. Spanish-to-English translation (Contractor Spanish voice note decoding via the translation logic)
  * 4. End-to-end Walkie-Talkie session flow
  */
 
@@ -170,7 +170,7 @@ async function testAudioTransmission() {
 async function testSpanishToEnglishTranslation() {
   logStep(3, 'Verifying Spanish-to-English Translation Engine (Contractor -> Expat)');
 
-  // Gemma Voice Note Decoder logic aligned with src/services/gemma.ts
+  // Voice Note Decoder logic aligned with src/services/translation.ts
   function decodeVoiceNote(inputAudioOrText) {
     const lower = inputAudioOrText.toLowerCase();
 

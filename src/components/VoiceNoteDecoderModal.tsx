@@ -19,7 +19,7 @@ import { Colors } from '../theme/colors';
 import {
   decodeVoiceNote,
   VoiceNoteDecodeResult,
-} from '../services/gemma';
+} from '../services/translation';
 import { getPlaybackSpeed, setPlaybackSpeed } from '../services/storage';
 import { getWebParam, getWebSearchParams } from '../utils/webParams';
 

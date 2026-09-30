@@ -154,7 +154,7 @@ const BOCAS_WHISPER_PROMPT =
 <p>The prompt lists local place names and island words like <em>lancha</em> and <em>muelle</em>, so the engine expects them instead of guessing. After transcription, two small cleanup steps run: one removes stutters and repeats ("I, I need the the boat"), and one normalizes local place names.</p>
 
 <h2>Step 2: Translation with a phrase map and dialect rules</h2>
-<p>The first plan was an on-device LLM; the translation file is still called <code>gemma.ts</code>. What shipped is simpler and more predictable for short service messages:</p>
+<p>The first plan was an on-device LLM; the translation file was called <code>gemma.ts</code> until v1.5.11, when it became <code>translation.ts</code>. What shipped is simpler and more predictable for short service messages:</p>
 <ol>
 <li><strong>A hand-written phrase map</strong> of about 85 common island requests (water pressure, Starlink outages, table reservations, plants for the garden), each with a natural Panamanian version.</li>
 <li><strong>Language direction detection</strong>, so an English sentence never gets "translated" from Spanish to English by accident.</li>
@@ -174,7 +174,7 @@ const BOCAS_WHISPER_PROMPT =
       Copy
     </button>
   </div>
-  <pre class=""><code>// src/services/gemma.ts: polishPanamaSpanish() (excerpt)
+  <pre class=""><code>// src/services/translation.ts: polishPanamaSpanish() (excerpt)
 text = text.replace(/\bel\s+barco\b/gi, &#x27;la lancha&#x27;);
 text = text.replace(/\btaxi\s+acuático\b/gi, &#x27;lancha&#x27;);
 text = text.replace(/\bwater\s+taxi\b/gi, &#x27;lancha&#x27;);

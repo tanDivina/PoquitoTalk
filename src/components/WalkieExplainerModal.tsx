@@ -17,7 +17,7 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 import { WalkieTalkieIcon } from './WalkieTalkieIcon';
 import { Colors } from '../theme/colors';
 import { PoquitoAvatar } from './PoquitoAvatar';
-import { translateWithGemma } from '../services/gemma';
+import { translateText } from '../services/translation';
 import { generateGoogleGeminiAudio } from '../services/googleVoice';
 
 interface WalkieExplainerModalProps {
@@ -88,7 +88,7 @@ export const WalkieExplainerModal: React.FC<WalkieExplainerModalProps> = ({
     }
     setIsTranslating(true);
     try {
-      const translated = await translateWithGemma(text.trim(), 'en', 'es');
+      const translated = await translateText(text.trim(), 'en', 'es');
       setTopicEs(translated);
       setCachedAudioB64('');
     } catch (e) {
@@ -170,7 +170,7 @@ export const WalkieExplainerModal: React.FC<WalkieExplainerModalProps> = ({
 
     if (!finalEs && finalEn) {
       try {
-        finalEs = await translateWithGemma(finalEn, 'en', 'es');
+        finalEs = await translateText(finalEn, 'en', 'es');
       } catch (e) {
         finalEs = finalEn;
       }

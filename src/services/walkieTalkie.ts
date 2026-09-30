@@ -1,4 +1,4 @@
-import { translateWithGemma } from './gemma';
+import { translateText } from './translation';
 import { generateGoogleGeminiAudio } from './googleVoice';
 
 export interface WalkieMessage {
@@ -307,8 +307,8 @@ class WalkieTalkieService {
     // Record turn & verify session status
     this.recordTurn();
 
-    // Run through Gemma translation & accent cleaner engine (es -> en)
-    const cleanedEnglish = await translateWithGemma(rawAudioText, 'es', 'en');
+    // Run through the translation & accent cleaner engine (es -> en)
+    const cleanedEnglish = await translateText(rawAudioText, 'es', 'en');
 
     const msg: WalkieMessage = {
       id: `msg_${Date.now()}`,

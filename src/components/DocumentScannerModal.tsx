@@ -17,7 +17,7 @@ import {
   scanDocumentOrBill,
   SAMPLE_DOCUMENTS,
   DocumentScanResult,
-} from '../services/gemma';
+} from '../services/translation';
 
 interface DocumentScannerModalProps {
   visible: boolean;
