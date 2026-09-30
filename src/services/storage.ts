@@ -67,6 +67,7 @@ interface AppSettingsStorage {
   userPersona?: UserPersona;
   includeAppSignature?: boolean;
   preferredVoiceGender?: 'MALE' | 'FEMALE';
+  onboardingComplete?: boolean;
 }
 
 const DEFAULT_SETTINGS: AppSettingsStorage = {
@@ -183,6 +184,17 @@ export async function getPreferredVoiceGender(): Promise<'MALE' | 'FEMALE'> {
 export async function setPreferredVoiceGender(gender: 'MALE' | 'FEMALE'): Promise<void> {
   const settings = await getAppSettings();
   settings.preferredVoiceGender = gender;
+  await saveAppSettings(settings);
+}
+
+export async function getOnboardingComplete(): Promise<boolean> {
+  const settings = await getAppSettings();
+  return settings.onboardingComplete === true;
+}
+
+export async function setOnboardingComplete(done: boolean): Promise<void> {
+  const settings = await getAppSettings();
+  settings.onboardingComplete = done;
   await saveAppSettings(settings);
 }
 

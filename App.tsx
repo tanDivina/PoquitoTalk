@@ -21,7 +21,7 @@ import { RestorePurchasesModal } from './src/components/RestorePurchasesModal';
 import { ClaimCelebrationModal } from './src/components/ClaimCelebrationModal';
 import { TranslationItem, UserPersona } from './src/types';
 import { GOOGLE_SPANISH_VOICES, VoiceOption } from './src/services/googleVoice';
-import { getUserPersona, setUserPersona, getSavedTranslations, toggleSavedTranslationItem } from './src/services/storage';
+import { getUserPersona, setUserPersona, getSavedTranslations, toggleSavedTranslationItem, getOnboardingComplete, setOnboardingComplete } from './src/services/storage';
 import {
   loadConversationThreads,
   syncAllThreadsWithServer,
@@ -530,6 +530,17 @@ export default function App() {
     // Load saved persona
     getUserPersona().then((p) => setUserPersonaState(p));
 
+    // Skip the intake flow for people who already finished it
+    const forceOnboarding =
+      Platform.OS === 'web' &&
+      typeof window !== 'undefined' &&
+      new URLSearchParams(window.location.search).get('onboarding') === 'true';
+    if (!forceOnboarding) {
+      getOnboardingComplete().then((done) => {
+        if (done) setShowOnboarding(false);
+      });
+    }
+
     // Load saved / bookmarked translations
     getSavedTranslations().then((saved) => {
       if (saved && saved.length > 0) {
@@ -618,6 +629,7 @@ export default function App() {
     setUserVoice(voice);
     setUserPersonaState(persona);
     setUserPersona(persona);
+    setOnboardingComplete(true).catch(() => {});
     setShowOnboarding(false);
   };
 
