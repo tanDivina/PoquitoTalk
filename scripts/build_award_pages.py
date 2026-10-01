@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / "web-funnel"
-YT = "UrmFb_ddG0o"
+YT = "fTFZ1pqm_HQ"
 
 base = (WEB / "growth-loop.html").read_text()
 HEAD = base[: base.index("  <!-- Page Main Shell -->")]
