@@ -1192,7 +1192,7 @@
 <li><strong>Data feedback</strong>: views, saves and engagement flow back into Layers, which reviews each post against our own account's median and points to the hooks and formats to double down on. The Layers SDK adds installs and opens from the app, so a post can eventually be tied to an install.</li>
 </ol>
 </li>
-<li><strong>Experiment</strong>: Compare the automated daily clips against each other and against our hand-made formats, using TikTok view data. Our first experiment came from a Layers opportunity on September 14: an "expat emergency repair" hook, registered before posting. Later we registered six more posts in Layers as tracked experiments, each testing one variable: hook, format, posting time, or posting frequency.</li>
+<li><strong>Experiment</strong>: Compare the automated daily clips against each other and against our hand-made formats, using TikTok view data. Our first experiment came from a Layers opportunity on September 14: an "expat emergency repair" hook, registered before posting. Later we registered six more posts in Layers as tracked experiments, each testing one variable: hook, format, posting time, or posting frequency. Next to the loop, I also ran a handmade challenger: a bar skit that ends with a "save this" cheat sheet.</li>
 <li><strong>Intended outcome</strong>: Find the hooks and formats that clearly beat our account's median, then feed them back into the daily loop. Once the winners are clear, connect posts to installs with Layers tracking links.</li>
 </ul>
 <h3 id="sdk">SDK installation and observability</h3>
@@ -1213,6 +1213,7 @@
 <li>The SDK's optional storage package (<code>@react-native-async-storage/async-storage</code>) was missing, so every app launch counted as a new install. It is now installed and ships in v1.5.11, the next update.</li>
 <li>Layers has recorded our first web revenue through Stripe (September 27), but no RevenueCat events yet: Android in-app purchases did not work in the earlier live build. The fix went live in v1.5.10, approved on September 29, so RevenueCat purchase events can now reach Layers.</li>
 <li>Layers cannot yet tie an install to a specific post. We have not placed a tracking link yet (TikTok needs 1,000 followers for a clickable bio link; we have 844).</li>
+<li><strong>Installs so far</strong>: 6 on Google Play, with no paid ads. That's small on purpose: PoquitoTalk is hyper-local. The Bocas del Toro archipelago has roughly 13,000 to 16,000 permanent residents, and the full-time expat community, our core market, is an estimated 1,000 to 1,500 people. Late September is also the middle of the low season, with few tourists and many part-time residents away until November or December.</li>
 </ul>
 </li>
 </ul>
