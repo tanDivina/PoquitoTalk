@@ -105,7 +105,7 @@ FUNNEL = f"""
       </div>
       <div class="phones">
         <figure><img src="funnel/slide1.jpg" alt="Funnel slide: Speak Bocas Spanish" loading="lazy" /><figcaption><b>1. Speak Bocas Spanish</b>What PoquitoTalk does, with Poquito talking.</figcaption></figure>
-        <figure><img src="funnel/slide2.jpg" alt="Funnel slide: Boats, water and repairs" loading="lazy" /><figcaption><b>2. Boats, water &amp; repairs</b>The ready-made phrases a visitor actually needs.</figcaption></figure>
+        <figure><img src="funnel/slide2.jpg" alt="Funnel slide: Boats, food and help" loading="lazy" /><figcaption><b>2. Boats, food &amp; help</b>The ready-made phrases a visitor actually needs.</figcaption></figure>
         <figure><img src="funnel/checkout.jpg" alt="Stripe checkout with Google Pay for the 50 Poquito Credits Pack" loading="lazy" /><figcaption><b>3. Checkout</b>Stripe, with Google Pay: one tap on a phone.</figcaption></figure>
         <figure><img src="funnel/thank_you.jpg" alt="Thank-you page: your 50 credits are on their way" loading="lazy" /><figcaption><b>4. Thank you</b>Install the app, then tap "Open in PoquitoTalk": the credits arrive. Video: {yt('1:05')}.</figcaption></figure>
       </div>
