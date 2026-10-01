@@ -141,6 +141,7 @@ FUNNEL = f"""
         <h2 class="section-title">It's Live, and It Works</h2>
       </div>
       <figure class="fig"><img src="funnel/revenuecat_dashboard.jpg" alt="RevenueCat dashboard: revenue, new and active customers, and a 50 Poquito Credits Pack transaction through Stripe for $3.74" loading="lazy" /><figcaption>RevenueCat dashboard: a 50 Poquito Credits Pack sold through Stripe, one-time, $3.74. Our first customer. Video: {yt('0:54')} and {yt('1:08')}.</figcaption></figure>
+      <figure class="fig" style="margin-top:18px"><img src="funnel/step_metrics.jpg" alt="RevenueCat funnel step-by-step metrics: paywall 10 views, 8 continued to checkout; checkout 9 views, 1 purchase; thank-you screen 1 view" loading="lazy" /><figcaption>The funnel's step-by-step metrics in RevenueCat: 10 paywall views, 8 continued to Stripe checkout (80%), and 1 purchase on September 29, redeemed in the app the same day. Small numbers in the low season, and they include our own test visits, but every step of the path works.</figcaption></figure>
       <figure class="fig" style="margin-top:18px"><img src="funnel/stripe_leaderboard.jpg" alt="Stripe Projects leaderboard for RevenueCat Shipaton 2026 with poquito-talk in third place" loading="lazy" /><figcaption>Built with Stripe Projects: poquito-talk is #3 on the Stripe Projects leaderboard for RevenueCat Shipaton 2026. Video: {yt('0:50')}.</figcaption></figure>
     </section>
 
