@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How Layers Runs Our Growth Loop • PoquitoTalk</title>
-  <meta name="description" content="How PoquitoTalk uses Layers to auto-generate, post and measure short videos, what the data showed, and what we are testing next." />
+  <title>From the Web to the App • PoquitoTalk Funnel Vision</title>
+  <meta name="description" content="How PoquitoTalk sells credits on the web through a RevenueCat funnel with Stripe, and how those purchases land in the Android app." />
 
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
   <link rel="alternate icon" type="image/png" href="favicon.png" />
@@ -12,17 +12,17 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="PoquitoTalk • Shipaton 2026" />
-  <meta property="og:title" content="How Layers Runs Our Growth Loop • PoquitoTalk" />
-  <meta property="og:description" content="How PoquitoTalk uses Layers to auto-generate, post and measure short videos, and what the data showed." />
-  <meta property="og:image" content="https://poquitotalk.hero-apps.com/layers/layers_clips.jpg" />
+  <meta property="og:title" content="From the Web to the App • PoquitoTalk Funnel Vision" />
+  <meta property="og:description" content="How PoquitoTalk sells credits on the web through a RevenueCat funnel with Stripe, and how those purchases land in the Android app." />
+  <meta property="og:image" content="https://poquitotalk.hero-apps.com/funnel/revenuecat_dashboard.jpg" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@DorienVibecodes" />
   <meta name="twitter:creator" content="@DorienVibecodes" />
-  <meta name="twitter:title" content="How Layers Runs Our Growth Loop • PoquitoTalk" />
-  <meta name="twitter:description" content="How PoquitoTalk uses Layers to auto-generate, post and measure short videos, and what the data showed." />
-  <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/layers/layers_clips.jpg" />
+  <meta name="twitter:title" content="From the Web to the App • PoquitoTalk Funnel Vision" />
+  <meta name="twitter:description" content="How PoquitoTalk sells credits on the web through a RevenueCat funnel with Stripe, and how those purchases land in the Android app." />
+  <meta name="twitter:image" content="https://poquitotalk.hero-apps.com/funnel/revenuecat_dashboard.jpg" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1112,6 +1112,22 @@
     .wu code{background:#F4F1EA;border-radius:6px;padding:1px 6px;font-size:.88em;word-break:break-all}
     .wu a{color:#047857;font-weight:600}
     @media (max-width:820px){.wu{padding:22px 18px;font-size:16px}.wu h3{font-size:21px}}
+    .phones{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:start}
+    .phones figure{margin:0;text-align:center}
+    .phones img{width:100%;max-width:240px;display:block;margin:0 auto;border-radius:26px;box-shadow:0 18px 40px rgba(26,18,8,.14)}
+    .phones figcaption{margin-top:12px;color:#5C4E3A;font-size:14.5px;line-height:1.5}
+    .phones b{display:block;color:#1A1208;font-size:15.5px;margin-bottom:2px}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .path{background:#fff;border:2px solid rgba(150,72,36,.12);border-radius:24px;padding:24px;display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center;box-shadow:0 12px 30px rgba(0,0,0,.05)}
+    .path img{width:150px;border-radius:20px;box-shadow:0 12px 26px rgba(26,18,8,.14)}
+    .path h3{font-family:'Lexend',sans-serif;margin:6px 0 8px;font-size:21px;color:#1A1208}
+    .path p{margin:0;color:#5C4E3A;line-height:1.55;font-size:15.5px}
+    .path .who{font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;font-weight:800;color:#047857}
+    .flow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .flow span{background:#fff;border:2px solid rgba(150,72,36,.12);border-radius:14px;padding:10px 14px;font-weight:700;color:#1A1208;font-size:15px}
+    .flow i{font-style:normal;color:#964824;font-weight:900}
+    .vid{width:100%;border-radius:20px;display:block;box-shadow:0 12px 30px rgba(0,0,0,.08)}
+    @media (max-width:820px){.phones{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.path{grid-template-columns:110px 1fr}.path img{width:110px}}
   </style>
 </head>
 <body>
@@ -1143,225 +1159,103 @@
 
     <section class="hero-box">
       <div class="award-pill">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-        RevenueCat Shipaton 2026 &bull; Growth Loop Award Entry
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8.5V19l-4 2v-8.5z"/></svg>
+        RevenueCat Shipaton 2026 &bull; Funnel Vision Award Entry
       </div>
-      <h1 class="hero-title">How Layers Runs Our Growth Loop</h1>
-      <p class="hero-subtitle">PoquitoTalk sends polite island-Spanish voice notes on WhatsApp for people in Bocas del Toro, Panama. This page shows how Layers makes, posts and measures our short videos, what the data showed, including the parts that didn't work, and what we're testing next.</p>
+      <h1 class="hero-title">From the Web to the App</h1>
+      <p class="hero-subtitle">PoquitoTalk has two kinds of customers. Residents subscribe in the app on Google Play. Tourists, here for a few days, buy credits on the web through a RevenueCat funnel with Stripe, and land in the app with their credits ready.</p>
       <div class="founder-meta">
         <span>Built by <strong>Dorien Van den Abbeele</strong></span><span>&bull;</span>
-        <a href="https://www.tiktok.com/@dorienvibecodes" target="_blank" rel="noopener">TikTok @dorienvibecodes</a><span>&bull;</span>
+        <a href="https://play.google.com/store/apps/details?id=com.heroapps.poquitotalk" target="_blank" rel="noopener">Live on Google Play</a><span>&bull;</span>
         <span>Bocas del Toro, Panama 🇵🇦</span>
       </div>
     </section>
 
     <div class="stats-ribbon">
-      <div class="stat-card"><div class="stat-num">88%</div><div class="stat-label">Layers signal strength</div></div>
-      <div class="stat-card"><div class="stat-num">1/day</div><div class="stat-label">Auto-posted since Sep 14</div></div>
-      <div class="stat-card"><div class="stat-num">805</div><div class="stat-label">Views on our breakout</div></div>
-      <div class="stat-card"><div class="stat-num">1.3K</div><div class="stat-label">Facebook viewers in Sept.</div></div>
-      <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">SDK blockers</div></div>
+      <div class="stat-card"><div class="stat-num">$3.74</div><div class="stat-label">Web launch price</div></div>
+      <div class="stat-card"><div class="stat-num">$4.99</div><div class="stat-label">Same pack in the app</div></div>
+      <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Slides to checkout</div></div>
+      <div class="stat-card"><div class="stat-num">1 tap</div><div class="stat-label">To redeem in the app</div></div>
+      <div class="stat-card"><div class="stat-num">#3</div><div class="stat-label">Stripe Projects leaderboard</div></div>
     </div>
 
     <section>
       <div class="section-header">
         <span class="section-tag">In the demo</span>
-        <h2 class="section-title">The Loop in 27 Seconds</h2>
-        <p class="section-desc">The Layers part of our Shipaton demo, from the brief to the SDK.</p>
+        <h2 class="section-title">The Funnel in 21 Seconds</h2>
+        <p class="section-desc">The Funnel Vision part of our Shipaton demo.</p>
       </div>
-      <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/UrmFb_ddG0o?start=71&end=98&rel=0" title="PoquitoTalk demo: the Layers growth loop" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-    </section>
-
-<!-- WRITEUP:START -->
-    <section id="writeup">
-      <div class="section-header">
-        <span class="section-tag">Submission write-up</span>
-        <h2 class="section-title">The Write-up, in Full</h2>
-        <p class="section-desc">Our Growth Loop Award entry, in the four parts Layers asked for. The sections further down show the screenshots behind each claim.</p>
-      </div>
-      <nav class="wu-toc" aria-label="Write-up parts"><a href="#audience">1. Audience and growth hypothesis</a><a href="#loop">2. The loop</a><a href="#sdk">3. SDK installation and observability</a><a href="#learning">4. Learning and iteration</a></nav>
-      <article class="wu">
-<h3 id="audience">Audience and growth hypothesis</h3>
-<p>PoquitoTalk helps English-speaking expats, off-grid homeowners and travelers in Bocas del Toro, Panama, send polite, natural voice notes to local service providers without struggling through broken Spanish that leaves everyone guessing. They depend on boat captains, plumbers, electricians and solar techs, and a formal translated text often goes unanswered, whether the water pump just died or a tourist needs a boat to Bastimentos today. Growth hypothesis: the island's community chats ask the same questions every day ("Who can recommend an electrician?", "Does the ATM have cash?", "Which captain can take us?"), so practical island tips earn organic reach, and every voice note a user sends shows PoquitoTalk to a local worker and the people around them.</p>
-<h3 id="loop">The loop</h3>
-<ul>
-<li><strong>Message</strong>: "When your water pump dies or your boat engine cuts out in Bocas del Toro, finding and texting local trades in formal textbook Spanish gets left on read. PoquitoTalk gives you the verified island directory and generates natural Panamanian WhatsApp audio with zero-install 2-way replies."</li>
-<li><strong>Channel or product surface</strong>: the Layers autopilot on our TikTok (@dorienvibecodes), a closed loop in three parts:<ol>
-<li><strong>Auto-generation</strong>: Layers creates each clip itself from our brand assets and app screens, modelled on formats that already work: on TikTok, my own best posts (local parade videos); on Instagram, what works for the eight accounts Layers tracks (translator apps Owll and SayHi, Babbel, Duolingo, The Bocas Breeze and three local creators). It works from our App Description, which we rewrote to name a specific person, job and frustration, using Scott's formula; Layers' signal strength for the project is 88%.</li>
-<li><strong>Posting cadence</strong>: one clip a day at 9:00 since September 14, published with no manual step. Instagram runs the same loop, with each post waiting in the review queue for my approval. Layers can't connect a Facebook page directly, so our Instagram shares each post to the PoquitoTalk Facebook page: both accounts carry the same reels.</li>
-<li><strong>Data feedback</strong>: views, saves and engagement flow back into Layers, which reviews each post against our own account's median and points to the hooks and formats to double down on. The Layers SDK adds installs and opens from the app, so a post can eventually be tied to an install.</li>
-</ol>
-</li>
-<li><strong>Experiment</strong>: Compare the automated daily clips against each other and against our hand-made formats, using TikTok view data. Our first experiment came from a Layers opportunity on September 14: an "expat emergency repair" hook, registered before posting. Later we registered six more posts in Layers as tracked experiments, each testing one variable: hook, format, posting time, or posting frequency.</li>
-<li><strong>Intended outcome</strong>: Find the hooks and formats that clearly beat our account's median, then feed them back into the daily loop. Once the winners are clear, connect posts to installs with Layers tracking links.</li>
-</ul>
-<h3 id="sdk">SDK installation and observability</h3>
-<p>The Layers Growth SDK (<code>@layers/expo</code> v3.3.0) is installed and reporting from the Android app:</p>
-<ul>
-<li><strong>Project ID</strong>: <code>prj_8272a6db-780a-462c-bd60-39b0434ccc1a</code> (<code>.layers/project.json</code>)</li>
-<li><strong>App ID</strong>: <code>app_14732857b75e24a0</code> (<a href="https://github.com/tanDivina/PoquitoTalk/blob/main/src/services/layersService.ts">src/services/layersService.ts</a>)</li>
-<li><strong>Verification check</strong>: Running <code>layers call install_growth_measurement '{"action":"verify"}'</code> confirms:<ul>
-<li><code>outcome</code>: <code>"reporting"</code></li>
-<li><code>installState</code>: <code>"reporting"</code></li>
-<li><code>blockers</code>: <code>[]</code> (0 blockers)</li>
-<li><code>observedEvents</code>: <code>["app_install", "app_open", "install_referrer", "$sdk_health", "$first_open", "$app_foreground", "$app_background"]</code></li>
-<li>First event September 14; latest reading on September 30: still reporting, last event September 29.</li>
-</ul>
-</li>
-<li><strong>What it measures</strong>: App lifecycle events (<code>app_open</code>, <code>$app_foreground</code>, <code>$app_background</code>), purchase events via <code>layersService.track('purchase_success')</code>, and a RevenueCat connection via <code>connectRevenueCat</code>.</li>
-<li><strong>Honest limits we found and are fixing</strong>:<ul>
-<li>The SDK's optional storage package (<code>@react-native-async-storage/async-storage</code>) was missing, so every app launch counted as a new install. It is now installed and ships in v1.5.11, the next update.</li>
-<li>Layers has recorded our first web revenue through Stripe (September 27), but no RevenueCat events yet: Android in-app purchases did not work in the earlier live build. The fix went live in v1.5.10, approved on September 30, so RevenueCat purchase events can now reach Layers.</li>
-<li>Layers cannot yet tie an install to a specific post. We have not placed a tracking link yet (TikTok needs 1,000 followers for a clickable bio link; we have 844).</li>
-</ul>
-</li>
-</ul>
-<h3 id="learning">Learning and iteration</h3>
-<ul>
-<li><strong>What the data showed</strong> (TikTok Studio, September 14–27):<ul>
-<li>The daily autopilot clips settled at a stable baseline of about 210 views per post (most between 130 and 350).</li>
-<li>One autopilot clip clearly broke out: "Don't end up in a messy situation 💩" reached <strong>805 views, about 4× our median</strong>, but only 2 likes. A humorous, problem-avoidance hook got more views than calm product benefits, but people watched and scrolled on.</li>
-<li>Hand-made comedy skits (textbook Spanish vs island Spanish, "embarazada" vs "embarrassed") landed between 177 and 322 views: in line with the baseline, not above it.</li>
-<li>A practical tips post ("Cash in Bocas del Toro: 3 things nobody tells you") earned our first save: 225 views, 1 save.</li>
-<li>Our TikTok is my existing personal account (@dorienvibecodes). Following Scott's advice on the Discord to connect more accounts, I created dedicated PoquitoTalk accounts on Instagram and Facebook, starting from zero followers. Layers can't connect Facebook directly, so Instagram shares every post to the Facebook page, and both carry exactly the same reels. The brand-new Facebook page turned out to be the bigger audience: <strong>1.5K views and 1.3K viewers</strong> from September 1 to 28 (Meta Insights), about 200 people per reel, against 3 to 31 for the same reels on Instagram.</li>
-<li><strong>Instagram, honestly, is a mess.</strong> I treated the new Instagram account as a place to throw spaghetti at the wall. Layers created three different AI influencer personas for us, and all three ended up posting on the same account, so it never had one recognisable face, voice or style. My TikTok, with one clear style, held up much better. The lesson: one account, one presenter, one family of formats.</li>
-<li><strong>Real footage beat the remakes.</strong> On my existing TikTok account, Layers modelled its clips on my most successful posts: real videos of local marching parades (where the jingle in our demo comes from). For the new Instagram and Facebook accounts, it drew more on what worked for the accounts it tracks. Honest observation: none of the generated remakes came close to my real parade videos. In a small, close-knit community, real local footage seems to land better than AI-generated video, while AI-made content did better in comedy skits: our best AI-generated post so far is a comedy skit with a "save this" cheat sheet at the end (see below).</li>
-<li>On September 25 we posted nine clips in one day, and the later posts got only <strong>6 and 7 views</strong>. Posting too often may have played a part: Layers' posting research (12.68M videos from 189,718 creators) shows that three posts a day bring about 3.3× the total daily reach of one, but nine is far beyond what that research covers. A better clue came on September 29: a video I had uploaded by hand from my desktop stalled at 0 views twice, then got views within minutes when re-uploaded from the TikTok phone app. The posts Layers publishes automatically never stalled. My guess is the desktop upload, possibly while I was connected to my work VPN, which can make TikTok place the post in the wrong country. So we suspect two things at once: the upload conditions, and simply posting far more than three times a day. That re-uploaded video (the bar skit, re-cut with a "Panama bar cheat sheet" ending to earn saves) now has 332 views, 7 likes, 1 comment and 1 save (2.7% engagement). Not spectacular in views, but it is the best-performing AI-generated video we have posted so far, in any genre: parade remakes, comedy skits with or without a cheat sheet, and practical tips. Compared with the 805-view breakout, it has less than half the views but 3.5 times the likes, plus a save: views and engagement tell different stories, and a useful ending (the cheat sheet) seems to turn a laugh into a like or a save.</li>
-<li><strong>A handmade challenger, next to the loop.</strong> The bar skit wasn't made by the autopilot: I made it myself, as a challenger running alongside the Layers loop, not a replacement for it. Its numbers flow back into Layers like every other post, so Layers can learn from it and carry what works into the clips it generates next. The first signals are small but promising (7 likes, a comment and a save on 332 views), so we'll keep testing this format: a short skit that ends with a practical cheat sheet people want to save.</li>
-</ul>
-</li>
-<li><strong>What Layers could confirm</strong>: Layers has returned two verdicts so far, and both are <strong>inconclusive</strong>: the September 14 "expat emergency repair" hook, and the humorous "messy situation" hook behind our 805-view breakout. On the 805-view test, Layers put it this way: <em>"This imported post is a retrospective observation and cannot establish a causal winner."</em> In other words, one post that took off, registered after the fact, doesn't prove the hook caused it, and Layers doesn't pretend otherwise. The other five experiments were registered after their posts went live, so Layers treats them as retrospective observations; they were still awaiting results at submission time, so the numbers above come from TikTok Studio.</li>
-<li><strong>Why we held back on paid ads</strong>: As Scott (Layers) put it, "paid amplifies whichever part is already working." We had one breakout post, not a repeatable winner, so we kept paid media off and focused on the organic loop.</li>
-<li><strong>What we learned</strong>: Scott shared on the Shipaton Discord that <em>what you post explains five times more than when you post</em>, and that 1 in 100 posts earns half of an account's total views. Layers' posting research (<a href="https://layers.com/research/posting/deck/full/">TikTok posting rules</a>, 12.68M videos from 189,718 creators) puts it plainly: <em>"When you post is noise. What you post is signal."</em> Our small sample points the same way: the hook mattered far more than the format or the posting time. It is a small proof, not a conclusion, but it gives us a clear direction to iterate on.</li>
-<li><strong>What we'd try next</strong> (the next 4 weeks, as a solo founder):<ol>
-<li><strong>Real footage vs. remakes, head to head.</strong> Film real island moments myself (the docks, a water taxi ride, the next parade) and put a POV caption on them. Post 3 of those and 3 Layers-generated clips in the same weeks, and compare views and saves.</li>
-<li><strong>Retest the humor hook properly.</strong> The "messy situation" hook got 805 views once, but Layers rightly called it inconclusive. Run that style 3 more times, registered in Layers <em>before</em> posting, to see if it holds up.</li>
-<li><strong>Register every test before it goes live</strong>, so Layers can give a real verdict instead of a retrospective one.</li>
-<li><strong>Keep the daily autopilot, add my own posts on top</strong>: about 2 posts a day in total, manual uploads from the phone app and never over a VPN.</li>
-<li><strong>End every tips video with a "save this" card</strong> and track saves, since saves are the strongest signal in Layers' research and our cash tips post earned the first one.</li>
-<li><strong>Connect posts to installs</strong>: add a Layers tracking link to our website and X profile now, and to the TikTok bio once we pass 1,000 followers.</li>
-<li><strong>No paid ads yet.</strong> Only when one format beats our median several times in a row, and the SDK shows installs following it.</li>
-<li><strong>Clean up Instagram.</strong> Archive the off-brand posts (reversible, and the handle and the Facebook link stay), keep one presenter, and restart the loop there with the formats that worked on TikTok.</li>
-</ol>
-</li>
-</ul>
-      </article>
-    </section>
-    <!-- WRITEUP:END -->
-
-    <section>
-      <div class="section-header">
-        <span class="section-tag">Audience</span>
-        <h2 class="section-title">Who It's For, and Why Short Video</h2>
-        <p class="section-desc">PoquitoTalk helps English-speaking expats, off-grid homeowners and travelers in Bocas del Toro send polite, natural voice notes to local service providers. They depend on boat captains, plumbers, electricians and solar techs, and a formal translated text often goes unanswered.</p>
-      </div>
-      <div class="quote-card">Growth hypothesis: the island's community chats ask the same questions every day ("Who can recommend an electrician?", "Does the ATM have cash?", "Which captain can take us?"), so practical island tips earn organic reach, and every voice note a user sends shows PoquitoTalk to a local worker and the people around them.</div>
+      <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/UrmFb_ddG0o?start=50&end=71&rel=0" title="PoquitoTalk demo: from the web to the app" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
     </section>
 
     <section>
       <div class="section-header">
-        <span class="section-tag">The loop</span>
-        <h2 class="section-title">One Closed Loop, Three Parts</h2>
-        <p class="section-desc">The Layers autopilot runs on our TikTok (@dorienvibecodes), with Instagram and Facebook alongside.</p>
+        <span class="section-tag">Two customers</span>
+        <h2 class="section-title">Two Paths, One App</h2>
+        <p class="section-desc">Someone visiting Bocas for five days will never commit to a yearly subscription. Someone who lives here uses PoquitoTalk every week. So each gets the path that fits.</p>
       </div>
-      <div class="loop-grid">
-        <article class="loop-card"><span class="num">1</span><h3>Auto-generation</h3><p>Layers creates each clip itself from our brand assets and app screens, modelled on formats that already work: on TikTok, my own best posts; on Instagram, what works for eight accounts Layers tracks (Owll, SayHi, Babbel, Duolingo, The Bocas Breeze and three local creators). We rewrote our App Description to name a specific person, job and frustration, and Layers' signal strength rose to 88%.</p></article>
-        <article class="loop-card"><span class="num">2</span><h3>Posting cadence</h3><p>One clip a day at 9:00 since September 14, published with no manual step. Instagram runs the same loop, with each post waiting for my approval. Layers can't connect a Facebook page directly, so Instagram shares each post to our Facebook page.</p></article>
-        <article class="loop-card"><span class="num">3</span><h3>Data feedback</h3><p>Views, saves and engagement flow back into Layers, which reviews each post against our own account's median and points to the hooks and formats to double down on. The Layers SDK adds installs and opens from the app, so a post can eventually be tied to an install.</p></article>
-      </div>
-      <div class="kv">
-        <div><b>Experiment</b><p>Compare the automated daily clips against each other and against our handmade formats. Our first experiment came from a Layers opportunity on September 14, an "expat emergency repair" hook, registered before posting. Six more posts were later registered as tracked experiments, each testing one variable: hook, format, time or frequency.</p></div>
-        <div><b>Intended outcome</b><p>Find the hooks and formats that clearly beat our median, feed them back into the daily loop, and once the winners are clear, connect posts to installs with Layers tracking links.</p></div>
-      </div>
-      <figure class="fig" style="margin-top:18px"><img src="layers/discord_scott_accounts.jpg" alt="Shipaton Discord: Scott from Layers says the more social accounts are connected and publishing, the more signal Layers has to power the growth loops" loading="lazy" /><figcaption>Shipaton Discord, Aug 25: Scott (Layers) on connecting more accounts. That's why we added Instagram and Facebook next to my TikTok.</figcaption></figure>
-    </section>
-
-    <section>
-      <div class="section-header">
-        <span class="section-tag">SDK</span>
-        <h2 class="section-title">Installed, Verified, Reporting</h2>
-        <p class="section-desc">The Layers Growth SDK (<code>@layers/expo</code> v3.3.0) runs in the Android app. <code>layers call install_growth_measurement '{"action":"verify"}'</code> returns <strong>reporting</strong> with <strong>0 blockers</strong>. Video: <a href="https://youtu.be/UrmFb_ddG0o?t=95" target="_blank" rel="noopener">1:35</a>.</p>
-      </div>
-      <figure class="fig"><img src="layers/sdk_verify.png" alt="Terminal output of the Layers verify call: outcome reporting, install state reporting, no blockers" loading="lazy" /><figcaption>The real verify output: outcome and install state "reporting", no blockers, with app_install, app_open, install_referrer, $first_open and lifecycle events observed.</figcaption></figure>
-      <div class="fig-row" style="margin-top:18px">
-        <figure class="fig"><img src="layers/events_table.jpg" alt="Layers events table showing SDK events from the Android app" loading="lazy" /><figcaption>Events table. Honest limits: a missing storage package made each launch count as a new install (fixed in v1.5.11), and posts aren't tied to installs yet because we haven't placed a tracking link (TikTok needs 1,000 followers for a clickable bio link).</figcaption></figure>
-        <figure class="fig"><img src="layers/events_globe.jpg" alt="Layers dashboard with live event types and a globe of activity" loading="lazy" /><figcaption>Live events in the Layers dashboard (September 27).</figcaption></figure>
+      <div class="two">
+        <article class="path"><img src="funnel/paywall_play.jpg" alt="PoquitoTalk paywall in the Android app with three plans" loading="lazy" /><div><span class="who">Residents &middot; in the app</span><h3>Subscriptions on Google Play</h3><p>RevenueCat SDK with Google Play Billing. One offering, three packages: Annual Explorer Pass ($39.99/year, 7-day free trial), Monthly Resident Pass ($9.99) and the 7-Day Travel Pass ($4.99, non-renewing). Video: <a href="https://youtu.be/UrmFb_ddG0o?t=53" target="_blank" rel="noopener">0:53</a>.</p></div></article>
+        <article class="path"><img src="funnel/web_credits.jpg" alt="The 50 Credits Pack on the PoquitoTalk website at $3.74" loading="lazy" /><div><span class="who">Tourists &middot; on the web</span><h3>Credits, no subscription</h3><p>A one-time 50 Poquito Credits pack that never expires. With no store fee on the web, it's $3.74 as a launch price until October 15, against $4.99 in the app. Video: <a href="https://youtu.be/UrmFb_ddG0o?t=54" target="_blank" rel="noopener">0:54</a>.</p></div></article>
       </div>
     </section>
 
     <section>
       <div class="section-header">
-        <span class="section-tag">The data</span>
-        <h2 class="section-title">What the Numbers Showed</h2>
-        <p class="section-desc">TikTok Studio and Meta Insights, September 14 to 29. The daily autopilot clips settled at a stable baseline of about 210 views per post.</p>
+        <span class="section-tag">The funnel</span>
+        <h2 class="section-title">Three Quick Slides, Then Checkout</h2>
+        <p class="section-desc">A RevenueCat Web Funnel with Stripe billing, live since September 28. Video: <a href="https://youtu.be/UrmFb_ddG0o?t=59" target="_blank" rel="noopener">0:59</a>.</p>
       </div>
-      <div class="post-grid">
-        <article class="post-card">
-          <img src="layers/post_805.jpg" alt="TikTok autopilot clip with 805 views" loading="lazy" />
-          <div class="post-body">
-            <span class="evo-step">Breakout &middot; video <a href="https://youtu.be/UrmFb_ddG0o?t=87" target="_blank" rel="noopener">1:27</a></span>
-            <h3>805 views, about 4&times; our median</h3>
-            <p>A humorous problem-avoidance hook, "Don't end up in a messy situation", got the most views, but only 2 likes: people watched and scrolled on.</p>
-            <span class="post-change"><span class="stamp red">INCONCLUSIVE</span><br><br>Layers: "This imported post is a retrospective observation and cannot establish a causal winner."</span>
-          </div>
-        </article>
-        <article class="post-card">
-          <img src="layers/bar_skit_stats.jpg" alt="Bar skit stats: 332 views, 7 likes, 1 comment, 1 save, 2.7% engagement" loading="lazy" />
-          <div class="post-body">
-            <span class="evo-step">Handmade challenger &middot; video <a href="https://youtu.be/UrmFb_ddG0o?t=91" target="_blank" rel="noopener">1:31</a></span>
-            <h3>A bar skit that ends in a cheat sheet</h3>
-            <p>I made this one myself, next to the loop, not instead of it. 332 views, 7 likes, a comment and a save: less than half the views of the breakout, but 3.5&times; the likes. Its data flows back into Layers like every other post.</p>
-            <span class="post-change"><span class="stamp green">PROMISING</span><br><br>Our read, not a Layers verdict: a useful ending turns a laugh into a save.</span>
-          </div>
-        </article>
-        <article class="post-card">
-          <img src="layers/facebook_insights.jpg" alt="Meta Insights for the PoquitoTalk Facebook page: 1.5K views and 1.3K viewers" loading="lazy" />
-          <div class="post-body">
-            <span class="evo-step">More accounts &middot; video <a href="https://youtu.be/UrmFb_ddG0o?t=84" target="_blank" rel="noopener">1:24</a></span>
-            <h3>The brand-new Facebook page reached 1.3K</h3>
-            <p>1.5K views and 1.3K viewers in September, from zero followers: about 200 people per reel, against 3 to 31 for the same reels on Instagram.</p>
-            <span class="post-change">Same reels, very different audiences.</span>
-          </div>
-        </article>
-      </div>
-      <figure class="fig" style="margin-top:18px"><img src="layers/layers_clips.jpg" alt="Contact sheet of short videos Layers generated for PoquitoTalk" loading="lazy" /><figcaption>Clips Layers generated for us. Honest observation: none of the AI remakes came close to my real parade videos. In a small, close-knit community, real local footage lands better; AI-made content did better in comedy skits.</figcaption></figure>
-    </section>
-
-    <section>
-      <div class="section-header">
-        <span class="section-tag">Honest log</span>
-        <h2 class="section-title">What Didn't Work</h2>
-        <p class="section-desc">Shared as it happened.</p>
-      </div>
-      <div class="fail-grid">
-        <article class="fail-card"><span class="fail-date">Sep 25</span><h3>Nine posts in one day</h3><p>The later posts got 6 and 7 views. Layers' research shows three posts a day bring more reach than one, but nine is far beyond that, so frequency may have played a part. A hand-uploaded video also stalled at 0 views twice, even on its own, and worked within minutes from the phone app.</p><p class="fail-lesson">Two suspects: posting far more than three a day, and desktop uploads, possibly over my work VPN.</p></article>
-        <article class="fail-card"><span class="fail-date">September</span><h3>Instagram, honestly, is a mess</h3><p>I threw spaghetti at the wall. Layers created three different AI influencer personas, and all three posted on the same account, so it never had one recognisable face, voice or style. My TikTok, with one clear style, held up much better.</p><p class="fail-lesson">One account, one presenter, one family of formats.</p></article>
+      <div class="phones">
+        <figure><img src="funnel/slide1.jpg" alt="Funnel slide: Speak Bocas Spanish" loading="lazy" /><figcaption><b>1. Speak Bocas Spanish</b>What PoquitoTalk does, with Poquito talking.</figcaption></figure>
+        <figure><img src="funnel/slide2.jpg" alt="Funnel slide: Boats, water and repairs" loading="lazy" /><figcaption><b>2. Boats, water &amp; repairs</b>The ready-made phrases a visitor actually needs.</figcaption></figure>
+        <figure><img src="funnel/checkout.jpg" alt="Stripe checkout with Google Pay for the 50 Poquito Credits Pack" loading="lazy" /><figcaption><b>3. Checkout</b>Stripe, with Google Pay: one tap on a phone.</figcaption></figure>
+        <figure><img src="funnel/thank_you.jpg" alt="Thank-you page: your 50 credits are on their way" loading="lazy" /><figcaption><b>4. Thank you</b>Install the app and open it: the credits arrive. Video: <a href="https://youtu.be/UrmFb_ddG0o?t=65" target="_blank" rel="noopener">1:05</a>.</figcaption></figure>
       </div>
     </section>
 
     <section>
       <div class="section-header">
-        <span class="section-tag">What we learned</span>
-        <h2 class="section-title">What You Post Beats When You Post</h2>
+        <span class="section-tag">Why it matters</span>
+        <h2 class="section-title">Why the Funnel Matters</h2>
       </div>
-      <div class="quote-card">"When you post is noise. What you post is signal."<small>Layers posting research, 12.68M videos from 189,718 creators. Scott shared on the Shipaton Discord that what you post explains five times more than when you post, and that 1 in 100 posts earns half of an account's views.</small></div>
-      <p class="section-desc" style="margin-top:16px">Our small sample points the same way: the hook mattered far more than the format or the posting time. We kept paid ads off, because, as Scott put it, "paid amplifies whichever part is already working", and we don't have a repeatable winner yet.</p>
+      <div class="quote-card">A payment on its own isn't enough. If nothing links the web purchase to the app, the buyer pays and then has nothing to open. In a RevenueCat funnel the purchase becomes something the app can redeem, so a tourist who pays on the web lands in the app with their credits ready. That's why every web purchase goes through the funnel.</div>
     </section>
 
     <section>
       <div class="section-header">
-        <span class="section-tag">Next 4 weeks</span>
-        <h2 class="section-title">What We're Testing Next</h2>
+        <span class="section-tag">Under the hood</span>
+        <h2 class="section-title">How the Purchase Reaches the App</h2>
+      </div>
+      <div class="flow"><span>Funnel slides</span><i>&rarr;</i><span>Stripe checkout</span><i>&rarr;</i><span>RevenueCat records the purchase</span><i>&rarr;</i><span>Thank-you link</span><i>&rarr;</i><span>App redeems it</span><i>&rarr;</i><span>+50 credits</span></div>
+      <ol class="steps" style="margin-top:18px">
+        <li><strong>Web Purchase Redemption.</strong> The app handles the thank-you link with RevenueCat's <code>parseAsWebPurchaseRedemption</code> and <code>redeemWebPurchase</code>.</li>
+        <li><strong>Credits added once.</strong> The app finds the credits purchase among the customer's one-time transactions by its Stripe product, and adds 50 credits once per transaction, so a link opened twice doesn't pay out twice.</li>
+        <li><strong>Credits never unlock Pro.</strong> A guard checks that Pro comes only from a subscription or a pass, never from a credits purchase.</li>
+        <li><strong>Fair use.</strong> A live 2-way voice session stays free until the first voice message is sent, so credits are only spent on real conversations.</li>
+        <li><strong>Revenue meets growth.</strong> RevenueCat is connected to the Layers SDK, so revenue can be tied back to the posts that brought people in.</li>
+      </ol>
+      <p class="section-desc" style="margin-top:14px">Live in v1.5.10, approved on Google Play on September 30, with working in-app purchases and web redemption.</p>
+    </section>
+
+    <section>
+      <div class="section-header">
+        <span class="section-tag">Proof</span>
+        <h2 class="section-title">It's Live, and It Works</h2>
+      </div>
+      <figure class="fig"><img src="funnel/revenuecat_dashboard.jpg" alt="RevenueCat dashboard: revenue, new and active customers, and a 50 Poquito Credits Pack transaction through Stripe for $3.74" loading="lazy" /><figcaption>RevenueCat dashboard: a 50 Poquito Credits Pack sold through Stripe, one-time, $3.74. Our first customer. Video: <a href="https://youtu.be/UrmFb_ddG0o?t=54" target="_blank" rel="noopener">0:54</a> and <a href="https://youtu.be/UrmFb_ddG0o?t=68" target="_blank" rel="noopener">1:08</a>.</figcaption></figure>
+      <figure class="fig" style="margin-top:18px"><img src="funnel/stripe_leaderboard.jpg" alt="Stripe Projects leaderboard for RevenueCat Shipaton 2026 with poquito-talk in third place" loading="lazy" /><figcaption>Built with Stripe Projects: poquito-talk is #3 on the Stripe Projects leaderboard for RevenueCat Shipaton 2026. Video: <a href="https://youtu.be/UrmFb_ddG0o?t=50" target="_blank" rel="noopener">0:50</a>.</figcaption></figure>
+    </section>
+
+    <section>
+      <div class="section-header">
+        <span class="section-tag">Next</span>
+        <h2 class="section-title">What's Next</h2>
       </div>
       <ol class="steps">
-        <li><strong>Real footage vs. remakes, head to head.</strong> Three real island clips with a POV caption against three Layers clips in the same weeks; compare views and saves.</li>
-        <li><strong>Retest the humor hook properly,</strong> three more times, registered in Layers before posting.</li>
-        <li><strong>Register every test before it goes live,</strong> so Layers can give a real verdict instead of a retrospective one.</li>
-        <li><strong>Keep the daily autopilot, add my own posts on top:</strong> about two a day, uploaded from the phone app, never over a VPN.</li>
-        <li><strong>End every tips video with a "save this" card</strong> and track saves.</li>
-        <li><strong>Connect posts to installs:</strong> Layers tracking links on the website and X now, TikTok at 1,000 followers.</li>
-        <li><strong>No paid ads yet,</strong> until one format beats our median several times in a row and the SDK shows installs following it.</li>
-        <li><strong>Clean up Instagram:</strong> archive the off-brand posts, keep one presenter, restart the loop with what worked on TikTok.</li>
+        <li><strong>Every buy button through the funnel,</strong> so every web buyer can redeem in the app.</li>
+        <li><strong>An "Open in PoquitoTalk" button</strong> on the thank-you page, now that redemption is live.</li>
+        <li><strong>iPhone next.</strong> The <a href="index.html#playstore">iPhone waitlist</a> is open; the funnel will serve both stores.</li>
       </ol>
     </section>
 
@@ -1442,15 +1336,13 @@
       } catch (e) {}
 
       var sectionLines = {
-        'Loop in 27': 'Twenty-seven seconds. I counted. Twice.',
-        'Write-up, in Full': 'The whole story in one place. Grab a coffee.',
-        'Who It': 'Expats, homeowners, travelers... and one very chatty bird.',
-        'Three Parts': 'Make it, post it, measure it. Then do it again tomorrow.',
-        'Installed, Verified': 'Zero blockers. I checked the logs myself.',
-        'What the Numbers': '805 views and two likes. Ouch, but useful.',
-        'What Didn': 'Three influencers on one account. We do not talk about Instagram.',
-        'What You Post': 'Noise or signal? I vote signal.',
-        'Testing Next': 'Next up: save-this cards. Save me too, please.'
+        'Funnel in 21': 'Twenty-one seconds. Shorter than my morning coffee.',
+        'Two Paths': 'Residents subscribe, tourists buy credits. Everyone talks.',
+        'Three Quick': 'Three slides, one tap. Even I could do it, and I have wings.',
+        'Why the Funnel': 'Paying is easy. Getting it into the app is the trick.',
+        'Reaches the App': 'Credits once, never twice. I checked the receipts.',
+        'Live, and It': 'Our first customer! Thanks, Mom.',
+        'What's Next': 'iPhone people, I see you. Join the waitlist!'
       };
       var tapLines = [
         '&iexcl;Wepa! You found me.',
