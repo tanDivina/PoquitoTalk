@@ -1211,7 +1211,7 @@
 <li><strong>What it measures</strong>: App lifecycle events (<code>app_open</code>, <code>$app_foreground</code>, <code>$app_background</code>), purchase events via <code>layersService.track('purchase_success')</code>, and a RevenueCat connection via <code>connectRevenueCat</code>.</li>
 <li><strong>Honest limits we found and are fixing</strong>:<ul>
 <li>The SDK's optional storage package (<code>@react-native-async-storage/async-storage</code>) was missing, so every app launch counted as a new install. It is now installed and ships in v1.5.11, the next update.</li>
-<li>Layers has recorded our first web revenue through Stripe (September 27), but no RevenueCat events yet: Android in-app purchases did not work in the earlier live build. The fix went live in v1.5.10, approved on September 30, so RevenueCat purchase events can now reach Layers.</li>
+<li>Layers has recorded our first web revenue through Stripe (September 27), but no RevenueCat events yet: Android in-app purchases did not work in the earlier live build. The fix went live in v1.5.10, approved on September 29, so RevenueCat purchase events can now reach Layers.</li>
 <li>Layers cannot yet tie an install to a specific post. We have not placed a tracking link yet (TikTok needs 1,000 followers for a clickable bio link; we have 844).</li>
 </ul>
 </li>
