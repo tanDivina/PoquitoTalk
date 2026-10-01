@@ -713,9 +713,9 @@ async function submitNewsletterSignup(e, formId) {
   }
 
   const payload = {
-    _subject: `[PoquitoTalk Newsletter] New Future Plans Subscriber`,
+    _subject: `[PoquitoTalk] New iPhone waitlist signup`,
     Email: email,
-    Source: 'PoquitoTalk Web Funnel - Future Plans',
+    Source: 'PoquitoTalk website - iPhone waitlist',
     Language: isSpanish ? 'Spanish (es-PA)' : 'English (en-US)',
     SubmittedAt: new Date().toLocaleString('en-US', { timeZone: 'America/Panama' }),
     PageURL: window.location.href,
@@ -738,7 +738,7 @@ async function submitNewsletterSignup(e, formId) {
     await fetch(apiPath, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...payload, Type: 'newsletter' })
+      body: JSON.stringify({ ...payload, Type: 'ios' })
     });
   } catch (err) {
     console.warn('Server API newsletter error:', err);
@@ -753,7 +753,7 @@ async function submitNewsletterSignup(e, formId) {
 
   // Track event
   if (window.PoquitoTracker) {
-    window.PoquitoTracker.track('newsletter_submit', {
+    window.PoquitoTracker.track('ios_waitlist_submit', {
       language: isSpanish ? 'es' : 'en',
       form: formId
     });

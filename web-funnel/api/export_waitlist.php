@@ -213,6 +213,11 @@ if ($action === 'broadcast_launch') {
             continue;
         }
 
+        // iPhone waitlist signups must not get the Google Play launch email
+        if (($item['type'] ?? '') === 'ios') {
+            continue;
+        }
+
         if (!$targetId && ($isNotified || empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL))) {
             continue;
         }
@@ -551,7 +556,7 @@ header('Content-Type: text/html; charset=utf-8');
 
     <?php else: ?>
       <?php 
-        $pendingCount = count(array_filter($waitlist, fn($r) => !($r['notified'] ?? false) && !empty($r['email'] ?: ($r['payload']['Email'] ?? '')) && !str_contains($r['email'] ?: ($r['payload']['Email'] ?? ''), 'example.com')));
+        $pendingCount = count(array_filter($waitlist, fn($r) => ($r['type'] ?? '') !== 'ios' && !($r['notified'] ?? false) && !empty($r['email'] ?: ($r['payload']['Email'] ?? '')) && !str_contains($r['email'] ?: ($r['payload']['Email'] ?? ''), 'example.com')));
       ?>
       <!-- Play Store Launch Broadcast Controller -->
       <div class="broadcast-panel">
