@@ -1077,6 +1077,7 @@
     .fig img{width:100%;display:block;border-radius:12px}
     .fig figcaption{padding:12px 6px 4px;color:#5C4E3A;font-size:14.5px;line-height:1.5}
     .fig figcaption p{margin:0}
+    @media (max-width:820px){.fig-row{grid-template-columns:1fr!important}}
   </style>
 </head>
 <body>
@@ -1436,12 +1437,16 @@
       <div class="stats-ribbon" style="margin-bottom:22px">
         <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">People on the Android waitlist</div></div>
         <div class="stat-card"><div class="stat-num">7</div><div class="stat-label">Providers live in the directory</div></div>
-        <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">More waiting for review</div></div>
+        <div class="stat-card"><div class="stat-num">2</div><div class="stat-label">More waiting for review</div></div>
       </div>
       <figure class="fig" style="margin:0 0 22px">
         <img src="bip/waitlist_aug11.jpg" alt="The PoquitoTalk website on August 11: Get notified when PoquitoTalk hits Google Play, with an email field and a Notify Me button" loading="lazy" style="width:100%;border-radius:18px;display:block" />
         <figcaption><p>The website on August 11: "Get notified when PoquitoTalk hits Google Play", with the provider sign-up right below it. We count only real sign-ups: our own test entries are left out. Two of the six were local providers themselves. Now that Android is live, the same spot holds the <a href="index.html#playstore">iPhone waitlist</a>.</p></figcaption>
       </figure>
+      <div class="fig-row" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px">
+        <figure class="fig"><a href="bip/admin_waitlist_blurred.jpg" target="_blank" rel="noopener"><img src="bip/admin_waitlist_blurred.jpg" alt="Our admin page: Android waitlist sign-ups, emails blurred" loading="lazy" /></a><figcaption><p>Our admin page: the Android waitlist, with emails blurred.</p></figcaption></figure>
+        <figure class="fig"><div style="max-height:520px;overflow:auto;border-radius:12px"><img src="bip/admin_providers_blurred.jpg" alt="Our admin page: approved providers with trade, location and description, contact details blurred" loading="lazy" /></div><figcaption><p>The approved providers in our admin page, contact details blurred. Scroll to see all seven.</p></figcaption></figure>
+      </div>
       <p class="section-desc" style="margin-bottom:14px">The first seven providers who signed up through the website, listed in the <a href="directory.html">free directory</a>:</p>
       <div class="fail-grid">
           <article class="fail-card"><span class="fail-date">Isla Colón</span><h3>Water taxi &amp; eco-tours</h3><p>Ten years of tours across the archipelago, from bioluminescence to manatees.</p></article>
