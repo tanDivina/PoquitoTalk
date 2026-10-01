@@ -178,7 +178,7 @@ PEACE = f"""
       <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">Apps they must install</div></div>
       <div class="stat-card"><div class="stat-num">76</div><div class="stat-label">Phrases that work offline</div></div>
       <div class="stat-card"><div class="stat-num">5 of 6</div><div class="stat-label">Captains replied</div></div>
-      <div class="stat-card"><div class="stat-num">1.3K</div><div class="stat-label">Facebook viewers in Sept.</div></div>
+      <div class="stat-card"><div class="stat-num">287</div><div class="stat-label">Directory listings</div></div>
     </div>
 
     <section>
@@ -213,7 +213,7 @@ PEACE = f"""
         <article class="loop-card"><span class="num">3</span><h3>Works without signal</h3><p>76 ready-made phrases for emergencies, boats, water and power are voiced and built into the app, so they play on a boat or in the jungle with no connection. Video: {yt('0:36')}.</p></article>
       </div>
       <div class="kv">
-        <div><b>A free directory</b><p>Captains, plumbers, electricians, clinics and more, in 12 categories. Listing is free, with no commission, and contact goes straight to the provider's WhatsApp. The <a href="directory.html">online directory</a> also makes them findable on Google.</p></div>
+        <div><b>A free directory</b><p>287 listings so far: 77 boat captains and water taxis, hotels, restaurants, hardware stores, contractors, clinics and more. Listing is free, with no commission, and contact goes straight to the provider's WhatsApp. The <a href="directory.html">online directory</a> also makes them findable on Google.</p></div>
         <div><b>Replies in their own voice</b><p>When a female boat operator or clinic receptionist replies, you hear her in a female voice in English, not in the app user's voice (ships in v1.5.11).</p></div>
       </div>
     </section>
