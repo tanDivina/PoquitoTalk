@@ -107,7 +107,7 @@ FUNNEL = f"""
         <figure><img src="funnel/slide1.jpg" alt="Funnel slide: Speak Bocas Spanish" loading="lazy" /><figcaption><b>1. Speak Bocas Spanish</b>What PoquitoTalk does, with Poquito talking.</figcaption></figure>
         <figure><img src="funnel/slide2.jpg" alt="Funnel slide: Boats, water and repairs" loading="lazy" /><figcaption><b>2. Boats, water &amp; repairs</b>The ready-made phrases a visitor actually needs.</figcaption></figure>
         <figure><img src="funnel/checkout.jpg" alt="Stripe checkout with Google Pay for the 50 Poquito Credits Pack" loading="lazy" /><figcaption><b>3. Checkout</b>Stripe, with Google Pay: one tap on a phone.</figcaption></figure>
-        <figure><img src="funnel/thank_you.jpg" alt="Thank-you page: your 50 credits are on their way" loading="lazy" /><figcaption><b>4. Thank you</b>Install the app and open it: the credits arrive. Video: {yt('1:05')}.</figcaption></figure>
+        <figure><img src="funnel/thank_you.jpg" alt="Thank-you page: your 50 credits are on their way" loading="lazy" /><figcaption><b>4. Thank you</b>Install the app, then tap "Open in PoquitoTalk": the credits arrive. Video: {yt('1:05')}.</figcaption></figure>
       </div>
     </section>
 
@@ -150,8 +150,8 @@ FUNNEL = f"""
         <h2 class="section-title">What's Next</h2>
       </div>
       <ol class="steps">
-        <li><strong>Every buy button through the funnel,</strong> so every web buyer can redeem in the app.</li>
-        <li><strong>An "Open in PoquitoTalk" button</strong> on the thank-you page, now that redemption is live.</li>
+        <li><strong>Bring the funnel to the high season.</strong> From December, put the funnel link where tourists already are: island tips videos and the online directory.</li>
+        <li><strong>Measure every channel</strong> with Layers tracking links, so we can see which one brings buyers.</li>
         <li><strong>iPhone next.</strong> The <a href="index.html#playstore">iPhone waitlist</a> is open; the funnel will serve both stores.</li>
       </ol>
     </section>
