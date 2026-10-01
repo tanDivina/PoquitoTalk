@@ -1,0 +1,5 @@
+• Onboarding now remembers you: no more setup screens every time you reopen the app.
+• Replies from captains and contractors are read back in a voice that matches who sent them.
+• More natural island Spanish in ready-made phrases ("plomero", "dolor de barriga", "¡Buenas, capitán!").
+• Credits bought on the web are added once and never unlock Pro by mistake.
+• Stability and analytics fixes.

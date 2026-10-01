@@ -21,7 +21,7 @@ DEFAULT_RELEASE_NOTES = """• Clear and transparent subscription pricing format
 • Enhanced paywall experience with animated vector mascot and offline stability improvements.
 • Post-WhatsApp return flow guidance and offline Bocas del Toro contractor shortcuts."""
 
-def publish_bundle(aab_path, track='internal', release_notes=DEFAULT_RELEASE_NOTES):
+def publish_bundle(aab_path, track='internal', release_notes=DEFAULT_RELEASE_NOTES, version_name='1.5.10'):
     if not os.path.exists(aab_path):
         print(f"Error: AAB file not found at {aab_path}")
         sys.exit(1)
@@ -74,7 +74,7 @@ def publish_bundle(aab_path, track='internal', release_notes=DEFAULT_RELEASE_NOT
         # 3. Create or update the release in the target track
         print(f"Assigning bundle to track '{track}'...")
         release_obj = {
-            'name': f"Release {version_code} (v1.5.10)",
+            'name': f"Release {version_code} (v{version_name})",
             'versionCodes': [str(version_code)],
             'status': 'completed',
             'releaseNotes': [
@@ -134,6 +134,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Publish AAB to Google Play")
     parser.add_argument('aab_path', help="Path to .aab file")
     parser.add_argument('--track', default='internal', choices=['internal', 'production', 'beta', 'alpha'], help="Release track")
+    parser.add_argument('--version-name', default='1.5.10', help="Version name shown in the release name")
+    parser.add_argument('--notes-file', help="Text file with en-US release notes (max 500 characters)")
     args = parser.parse_args()
 
-    publish_bundle(args.aab_path, track=args.track)
+    notes = DEFAULT_RELEASE_NOTES
+    if args.notes_file:
+        with open(args.notes_file) as f:
+            notes = f.read().strip()
+    if len(notes) > 500:
+        sys.exit(f"Release notes are {len(notes)} characters; Google Play allows 500.")
+    publish_bundle(args.aab_path, track=args.track, release_notes=notes, version_name=args.version_name)
